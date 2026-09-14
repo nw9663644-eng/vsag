@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 get_filename_component(VSAG_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 option(ENABLE_TESTS "Build Lite tests with the repository's Catch2" OFF)
 option(ENABLE_COVERAGE "Instrument Lite sources for gcov" OFF)
+option(ENABLE_QUANTIZATION_PROBE "Build the standalone SQ8 candidate probe" OFF)
 
 set(VSAG_LITE_SOURCES
     "${VSAG_ROOT}/src/lite/bruteforce_backend.cpp"
@@ -45,6 +46,16 @@ if(ENABLE_TESTS)
     add_test(NAME lite_unit COMMAND lite_tests "[lite]")
     add_test(NAME lite_scale COMMAND lite_tests "[lite-scale]")
     add_test(NAME lite_graph COMMAND lite_graph_tests "[lite-graph]")
+endif()
+
+if(ENABLE_QUANTIZATION_PROBE)
+    add_executable(lite_sq8_probe "${VSAG_ROOT}/lite/benchmark/sq8_probe.cpp")
+    target_compile_features(lite_sq8_probe PRIVATE cxx_std_17)
+    target_include_directories(lite_sq8_probe PRIVATE "${VSAG_ROOT}/src")
+    target_compile_options(lite_sq8_probe PRIVATE -Wall -Wextra -Wpedantic)
+    if(ENABLE_TESTS)
+        add_test(NAME lite_sq8_probe_self_test COMMAND lite_sq8_probe --self-test)
+    endif()
 endif()
 
 include(GNUInstallDirs)
