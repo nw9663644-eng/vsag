@@ -11,6 +11,7 @@ option(ENABLE_COVERAGE "Instrument Lite sources for gcov" OFF)
 
 set(VSAG_LITE_SOURCES
     "${VSAG_ROOT}/src/lite/bruteforce_backend.cpp"
+    "${VSAG_ROOT}/src/lite/graph_backend.cpp"
     "${VSAG_ROOT}/src/lite/index.cpp")
 add_library(vsag_lite_objects OBJECT ${VSAG_LITE_SOURCES})
 add_library(vsag_lite SHARED $<TARGET_OBJECTS:vsag_lite_objects>)
@@ -36,10 +37,14 @@ if(ENABLE_TESTS)
     include("${VSAG_ROOT}/cmake/VSAGThirdPartyOverride.cmake")
     include("${VSAG_ROOT}/extern/catch2/catch2.cmake")
     add_executable(lite_tests "${VSAG_ROOT}/src/lite/index_test.cpp")
+    add_executable(lite_graph_tests "${VSAG_ROOT}/src/lite/graph_backend_test.cpp")
     target_link_libraries(lite_tests PRIVATE vsag::lite Catch2::Catch2WithMain)
+    target_include_directories(lite_graph_tests PRIVATE "${VSAG_ROOT}/src")
+    target_link_libraries(lite_graph_tests PRIVATE vsag::lite Catch2::Catch2WithMain)
     enable_testing()
     add_test(NAME lite_unit COMMAND lite_tests "[lite]")
     add_test(NAME lite_scale COMMAND lite_tests "[lite-scale]")
+    add_test(NAME lite_graph COMMAND lite_graph_tests "[lite-graph]")
 endif()
 
 include(GNUInstallDirs)
