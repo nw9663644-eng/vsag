@@ -59,8 +59,8 @@ public:
     Dim() const;
 
 private:
-    explicit Index(uint64_t dim);
     struct Impl;
+    explicit Index(std::unique_ptr<Impl> impl);
     std::unique_ptr<Impl> impl_;
 };
 

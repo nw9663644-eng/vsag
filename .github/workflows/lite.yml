@@ -33,6 +33,8 @@ jobs:
         run: |
           clang-format-15 --dry-run --Werror \
             include/vsag/lite/index.h \
+            src/lite/backend.h \
+            src/lite/bruteforce_backend.cpp \
             src/lite/index.cpp \
             src/lite/index_test.cpp \
             lite/example/main.cpp
@@ -44,7 +46,7 @@ jobs:
             -DENABLE_TESTS=ON
       - name: Run clang-tidy
         run: |
-          clang-tidy-15 src/lite/index.cpp src/lite/index_test.cpp \
+          clang-tidy-15 src/lite/bruteforce_backend.cpp src/lite/index.cpp src/lite/index_test.cpp \
             -p build-lite-first-debug \
             --header-filter='.*/include/vsag/lite/.*'
       - name: Build and test Debug

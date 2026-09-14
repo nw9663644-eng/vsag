@@ -9,7 +9,9 @@ get_filename_component(VSAG_ROOT "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 option(ENABLE_TESTS "Build Lite tests with the repository's Catch2" OFF)
 option(ENABLE_COVERAGE "Instrument Lite sources for gcov" OFF)
 
-set(VSAG_LITE_SOURCES "${VSAG_ROOT}/src/lite/index.cpp")
+set(VSAG_LITE_SOURCES
+    "${VSAG_ROOT}/src/lite/bruteforce_backend.cpp"
+    "${VSAG_ROOT}/src/lite/index.cpp")
 add_library(vsag_lite_objects OBJECT ${VSAG_LITE_SOURCES})
 add_library(vsag_lite SHARED $<TARGET_OBJECTS:vsag_lite_objects>)
 add_library(vsag_lite_static STATIC $<TARGET_OBJECTS:vsag_lite_objects>)
