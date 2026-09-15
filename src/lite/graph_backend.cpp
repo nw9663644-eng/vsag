@@ -11,7 +11,9 @@
 #include <unordered_map>
 
 #include "lite/backend.h"
+#include "lite/fp16_codec.h"
 #include "simd/kernels/compute_l2.h"
+#include "simd/kernels/half_compute.h"
 #include "simd/traits/simd_traits_generic.h"
 
 namespace vsag::lite::detail {
@@ -57,8 +59,12 @@ farther(const Candidate& left, const Candidate& right) {
 
 class GraphBackend final : public Backend {
 public:
-    GraphBackend(uint64_t dimension, uint64_t max_degree, uint64_t ef_search)
-        : dim_(dimension), max_degree_(max_degree), ef_search_(ef_search) {
+    GraphBackend(uint64_t dimension, uint64_t max_degree, uint64_t ef_search, bool fp16 = false)
+        : dim_(dimension),
+          max_degree_(max_degree),
+          ef_search_(ef_search),
+          fp16_(fp16),
+          decoded_(fp16 ? dimension : 0) {
     }
 
     tl::expected<void, Error>
@@ -70,26 +76,41 @@ public:
         if (slots_.count(id) != 0) {
             return failure(ErrorType::INVALID_ARGUMENT, "duplicate ID");
         }
-        if (Size() >= vectors_.max_size() / dim or Size() >= ids_.max_size() or
-            Size() >= extras_.max_size()) {
+        if (Size() >= ids_.max_size() or Size() >= extras_.max_size() or
+            (fp16_ ? Size() >= fp16_vectors_.max_size() / dim
+                   : Size() >= vectors_.max_size() / dim)) {
             return failure(ErrorType::NO_ENOUGH_MEMORY, "index capacity exceeded");
         }
         try {
+            std::vector<uint16_t> encoded;
+            if (fp16_) {
+                encoded = encode(vector);
+            }
             auto neighbors = nearest(vector, max_degree_);
-            grow(vectors_, (Size() + 1) * dim);
+            if (fp16_) {
+                grow(fp16_vectors_, (Size() + 1) * dim);
+            } else {
+                grow(vectors_, (Size() + 1) * dim);
+            }
             grow(ids_, Size() + 1);
             grow(extras_, Size() + 1);
             for (uint64_t neighbor : neighbors) {
                 extras_[neighbor].reserve(max_degree_ + 1);
             }
             slots_.emplace(id, Size());
-            vectors_.insert(vectors_.end(), vector, vector + dim);
+            if (fp16_) {
+                fp16_vectors_.insert(fp16_vectors_.end(), encoded.begin(), encoded.end());
+            } else {
+                vectors_.insert(vectors_.end(), vector, vector + dim);
+            }
             ids_.push_back(id);
             extras_.push_back(std::move(neighbors));
             for (uint64_t neighbor : extras_.back()) {
                 link(neighbor, Size() - 1);
             }
             return {};
+        } catch (const std::invalid_argument&) {
+            return failure(ErrorType::INVALID_ARGUMENT, "vector exceeds FP16 range");
         } catch (const std::bad_alloc&) {
             return failure(ErrorType::NO_ENOUGH_MEMORY, "add allocation failed");
         } catch (const std::length_error&) {
@@ -108,16 +129,26 @@ public:
             return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
         }
         try {
+            std::vector<uint16_t> encoded;
+            if (fp16_) {
+                encoded = encode(vector);
+            }
             auto neighbors = nearest(vector, max_degree_, found->second);
             for (uint64_t neighbor : neighbors) {
                 extras_[neighbor].reserve(max_degree_ + 1);
             }
-            std::copy_n(vector, dim, vectors_.data() + found->second * dim);
+            if (fp16_) {
+                std::copy_n(encoded.data(), dim, fp16_vectors_.data() + found->second * dim);
+            } else {
+                std::copy_n(vector, dim, vectors_.data() + found->second * dim);
+            }
             extras_[found->second] = std::move(neighbors);
             for (uint64_t neighbor : extras_[found->second]) {
                 link(neighbor, found->second);
             }
             return {};
+        } catch (const std::invalid_argument&) {
+            return failure(ErrorType::INVALID_ARGUMENT, "vector exceeds FP16 range");
         } catch (const std::bad_alloc&) {
             return failure(ErrorType::NO_ENOUGH_MEMORY, "update allocation failed");
         } catch (const std::length_error&) {
@@ -142,14 +173,24 @@ public:
             }
         }
         if (slot != last) {
-            std::copy_n(vectors_.data() + last * Dim(), Dim(), vectors_.data() + slot * Dim());
+            if (fp16_) {
+                std::copy_n(fp16_vectors_.data() + last * Dim(),
+                            Dim(),
+                            fp16_vectors_.data() + slot * Dim());
+            } else {
+                std::copy_n(vectors_.data() + last * Dim(), Dim(), vectors_.data() + slot * Dim());
+            }
             ids_[slot] = ids_[last];
             extras_[slot] = std::move(extras_[last]);
             slots_.at(ids_[slot]) = slot;
         }
         slots_.erase(found);
         ids_.pop_back();
-        vectors_.resize(last * Dim());
+        if (fp16_) {
+            fp16_vectors_.resize(last * Dim());
+        } else {
+            vectors_.resize(last * Dim());
+        }
         extras_.pop_back();
         return true;
     }
@@ -170,13 +211,17 @@ public:
             std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(
                 &farther);
             std::vector<uint8_t> visited(Size(), 0);
+            std::vector<uint16_t> encoded_query;
+            if (fp16_) {
+                encoded_query = encode(query);
+            }
 
             auto visit = [&](uint64_t slot) {
                 if (visited[slot] != 0) {
                     return;
                 }
                 visited[slot] = 1;
-                Candidate next{slot, distance(query, VectorAt(slot))};
+                Candidate next{slot, distance(query, encoded_query, slot)};
                 candidates.push(next);
                 best.push(next);
                 if (best.size() > ef) {
@@ -219,6 +264,8 @@ public:
                 });
             result.resize(k);
             return result;
+        } catch (const std::invalid_argument&) {
+            return failure(ErrorType::INVALID_ARGUMENT, "query exceeds FP16 range");
         } catch (const std::bad_alloc&) {
             return failure(ErrorType::NO_ENOUGH_MEMORY, "search allocation failed");
         } catch (const std::length_error&) {
@@ -284,7 +331,13 @@ public:
 
     [[nodiscard]] const float*
     VectorAt(uint64_t slot) const override {
-        return vectors_.data() + slot * Dim();
+        if (not fp16_) {
+            return vectors_.data() + slot * Dim();
+        }
+        for (uint64_t d = 0; d < Dim(); ++d) {
+            decoded_[d] = decode_fp16(fp16_vectors_[slot * Dim() + d]);
+        }
+        return decoded_.data();
     }
 
 private:
@@ -300,9 +353,37 @@ private:
         }
     }
 
+    std::vector<uint16_t>
+    encode(const float* vector) const {
+        std::vector<uint16_t> result(Dim());
+        for (uint64_t d = 0; d < Dim(); ++d) {
+            result[d] = encode_fp16(vector[d]);
+        }
+        return result;
+    }
+
     [[nodiscard]] float
-    distance(const float* left, const float* right) const {
-        return simd::ComputeL2SqrImpl<simd::SimdTraits<simd::GenericTag>>(left, right, Dim());
+    distance(const float* query, const std::vector<uint16_t>& encoded_query, uint64_t slot) const {
+        if (fp16_) {
+            return simd::HalfComputeL2SqrImpl<simd::FP16Traits<simd::GenericFP16Tag>>(
+                reinterpret_cast<const uint8_t*>(encoded_query.data()),
+                reinterpret_cast<const uint8_t*>(fp16_vectors_.data() + slot * Dim()),
+                Dim());
+        }
+        return simd::ComputeL2SqrImpl<simd::SimdTraits<simd::GenericTag>>(
+            query, vectors_.data() + slot * Dim(), Dim());
+    }
+
+    [[nodiscard]] float
+    distance(uint64_t left, uint64_t right) const {
+        if (fp16_) {
+            return simd::HalfComputeL2SqrImpl<simd::FP16Traits<simd::GenericFP16Tag>>(
+                reinterpret_cast<const uint8_t*>(fp16_vectors_.data() + left * Dim()),
+                reinterpret_cast<const uint8_t*>(fp16_vectors_.data() + right * Dim()),
+                Dim());
+        }
+        return simd::ComputeL2SqrImpl<simd::SimdTraits<simd::GenericTag>>(
+            vectors_.data() + left * Dim(), vectors_.data() + right * Dim(), Dim());
     }
 
     std::vector<uint64_t>
@@ -341,7 +422,7 @@ private:
             // max_degree_ is at most 64; cache each distance once before sorting.
             std::array<Candidate, 65> ranked{};
             for (uint64_t i = 0; i < neighbors.size(); ++i) {
-                ranked[i] = {neighbors[i], distance(VectorAt(source), VectorAt(neighbors[i]))};
+                ranked[i] = {neighbors[i], distance(source, neighbors[i])};
             }
             std::sort(ranked.begin(),
                       ranked.begin() + static_cast<std::ptrdiff_t>(neighbors.size()),
@@ -356,7 +437,10 @@ private:
     uint64_t dim_;
     uint64_t max_degree_;
     uint64_t ef_search_;
+    bool fp16_;
     std::vector<float> vectors_;
+    std::vector<uint16_t> fp16_vectors_;
+    mutable std::vector<float> decoded_;
     std::vector<int64_t> ids_;
     std::unordered_map<int64_t, uint64_t> slots_;
     std::vector<std::vector<uint64_t>> extras_;
@@ -383,6 +467,28 @@ make_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_searc
         return failure(ErrorType::NO_ENOUGH_MEMORY, "graph allocation failed");
     } catch (const std::length_error&) {
         return failure(ErrorType::NO_ENOUGH_MEMORY, "graph capacity exceeded");
+    }
+}
+
+tl::expected<std::unique_ptr<Backend>, Error>
+make_fp16_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_search) {
+    if (source.Kind() != BackendKind::BRUTE_FORCE or source.Dim() == 0 or max_degree < 2 or
+        max_degree > 64 or ef_search < max_degree) {
+        return failure(ErrorType::INVALID_ARGUMENT, "invalid FP16 graph options");
+    }
+    try {
+        auto graph = std::make_unique<GraphBackend>(source.Dim(), max_degree, ef_search, true);
+        for (uint64_t slot = 0; slot < source.Size(); ++slot) {
+            auto added = graph->Add(source.IdAt(slot), source.VectorAt(slot), source.Dim());
+            if (not added) {
+                return tl::unexpected(added.error());
+            }
+        }
+        return std::unique_ptr<Backend>(std::move(graph));
+    } catch (const std::bad_alloc&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "FP16 graph allocation failed");
+    } catch (const std::length_error&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "FP16 graph capacity exceeded");
     }
 }
 
