@@ -1044,14 +1044,6 @@ private:
         return result;
     }
 
-    [[nodiscard]] float
-    pair_distance(uint64_t source, uint64_t target) const {
-        const auto query = decode_query(source);
-        const auto code = codes_.At(target);
-        const auto coarse = filter_estimate(query, codes_.At(source).metadata.norm, code);
-        return full_distance(query, codes_.At(source).metadata.norm, code, coarse.centered_ip);
-    }
-
     [[nodiscard]] std::vector<uint64_t>
     nearest_exhaustive(const std::vector<float>& query,
                        float query_norm,
@@ -1158,10 +1150,15 @@ private:
         }
         neighbors.push_back(target);
         if (neighbors.size() > max_degree_) {
+            const auto query = decode_query(source);
+            const float query_norm = codes_.At(source).metadata.norm;
             std::vector<Candidate> ranked;
             ranked.reserve(neighbors.size());
             for (uint64_t neighbor : neighbors) {
-                ranked.push_back({neighbor, pair_distance(source, neighbor)});
+                const auto code = codes_.At(neighbor);
+                const auto coarse = filter_estimate(query, query_norm, code);
+                ranked.push_back(
+                    {neighbor, full_distance(query, query_norm, code, coarse.centered_ip)});
             }
             std::sort(ranked.begin(), ranked.end(), better);
             neighbors.resize(max_degree_);
