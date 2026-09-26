@@ -632,3 +632,49 @@ evidence that incremental CRUD repair caused the quality gap; the dominant
 factor is the `16/128` graph/search configuration. This result does not prove
 equivalence after long churn or adversarial updates. Raw evidence is in
 `/home/ubuntu/project/vsag-lite-rabitq-gist-crud-control-20260926-ae9a1d3`.
+
+### Long-churn adjacency repair
+
+At commit `dafc2778502dfee06816c7546ad3023def06dc89`, the mutable
+RaBitQ graph and the public Lite graph repair adjacency entries removed by
+Update and Remove. Repair preserves surviving links and fills only vacated
+degree slots from the affected local neighborhood. This follows the bounded
+repair scope used by Full HGraph force removal while avoiding whole-graph
+rebuilds and broad topology replacement.
+
+A CPU-0 GIST control used the same `16/128` configuration as the earlier
+long-churn diagnostic. The 10k run performed 10 rounds of 100 CRUD operations;
+the 100k run performed 3 rounds of 100 operations. Each round used 100
+self-query diagnostics and a freshly rebuilt topology control.
+
+| Scale | Incremental edges | Rebuilt edges | Final incremental / rebuilt Top-1 | Median incremental self Top-1 | Median rebuilt self Top-1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10k | 159,972-160,000 | 160,000 | 0.930 | 0.645 | 0.645 |
+| 100k | 1,599,997-1,599,999 | 1,600,000 | 0.960 | 0.360 | 0.340 |
+
+Before repair, snapshot deltas showed losses of 13,569 adjacency entries after
+the 10k workload and 3,892 after the 100k workload. After repair, the maximum
+observed deficits were 28 and 3 entries, respectively, and the 10k run ended
+at the full 160,000 edges. The repair does not make the incremental topology
+identical to a rebuild, but it removes the monotonic sparsification failure
+without changing median self-query quality at either scale.
+
+Commit `a26a05238783e2f10bee59e02347f686ac632d57` then caches the
+decoded source record while pruning each full reverse-neighbor list. Compared
+with `dafc277`, all per-round result checksums, edge counts, snapshots, and
+quality fields were identical. Observed mutation P50 medians changed as
+follows:
+
+| Scale | Update P50 | Add P50 | Remove P50 |
+| --- | ---: | ---: | ---: |
+| 10k | 2,364.776 -> 1,392.641 us (-41.1%) | 2,078.101 -> 1,198.701 us (-42.3%) | 238.556 -> 249.374 us (+4.5%) |
+| 100k | 4,817.310 -> 3,640.397 us (-24.4%) | 3,811.256 -> 2,769.428 us (-27.3%) | 1,199.740 -> 1,409.153 us (+17.5%) |
+
+These are paired deterministic single-process observations, not a statistical
+latency distribution. Search timing also changed even though the search path
+did not, so it is not attributed to the source-decode optimization. Both runs
+used 99% of one logical CPU, produced empty stderr, passed exact Save/Load
+result checks, and have verified SHA-256 manifests. Raw evidence is in
+`/home/ubuntu/project/vsag-lite-rabitq-gist-crud-repair-20260926-dafc277`
+and
+`/home/ubuntu/project/vsag-lite-rabitq-link-cache-validation-20260926-a26a052`.
