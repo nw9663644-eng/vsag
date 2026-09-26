@@ -613,3 +613,21 @@ timers. They intentionally increase runtime, transient memory, and process peak
 RSS, so control-mode resource values must not be reported as the mutable
 backend's steady footprint. The original `--crud` schema and runner remain
 unchanged.
+
+At commit `ae9a1d37ededb79942ed1ced6fbfa2dae9ca50fe`, one CPU-0
+control run per GIST scale used 20 Update-Remove-Add cycles, 100 self queries,
+degree 16, and `ef_search=128`:
+
+| Scale | Incremental self Top-1 | Rebuilt self Top-1 | Incremental / rebuilt Top-1 agreement | Incremental / rebuilt positional agreement | Initial / control rebuild |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10k | 0.580 | 0.570 | 0.990 | 0.510 / 0.512 | 1.783 / 1.746 s |
+| 100k | 0.370 | 0.370 | 0.990 | 0.208 / 0.208 | 39.216 / 39.412 s |
+
+Both processes used 99-100% of one logical CPU, had zero mutation fallbacks,
+produced empty stderr, passed Save/Load identity checks, and have verified
+SHA-256 manifests. The rebuilt topology did not recover the low default-parameter
+GIST self-query score. For this bounded 20-operation workload, there is no
+evidence that incremental CRUD repair caused the quality gap; the dominant
+factor is the `16/128` graph/search configuration. This result does not prove
+equivalence after long churn or adversarial updates. Raw evidence is in
+`/home/ubuntu/project/vsag-lite-rabitq-gist-crud-control-20260926-ae9a1d3`.
