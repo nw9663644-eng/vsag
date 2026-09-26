@@ -225,6 +225,49 @@ TEST_CASE("Lite graph update removes obsolete reverse links", "[lite-graph]") {
     REQUIRE(obsolete > 0);
 }
 
+TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]") {
+    constexpr uint64_t dim = 8;
+    constexpr uint64_t count = 256;
+    constexpr uint64_t max_degree = 12;
+    auto flat = make_brute_force_backend(dim);
+    REQUIRE(flat);
+    std::mt19937 rng(20260926);
+    std::normal_distribution<float> normal(0.0F, 1.0F);
+    std::array<float, dim> values{};
+    for (uint64_t id = 0; id < count; ++id) {
+        for (float& value : values) {
+            value = normal(rng);
+        }
+        REQUIRE((*flat)->Add(static_cast<int64_t>(id), values.data(), dim));
+    }
+    auto graph = make_graph_backend(**flat, max_degree, 64);
+    REQUIRE(graph);
+    auto edge_count = [&graph]() {
+        uint64_t total = 0;
+        for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
+            total += (*graph)->LinkCountAt(slot);
+        }
+        return total;
+    };
+    const uint64_t initial_edges = edge_count();
+    for (uint64_t step = 0; step < 200; ++step) {
+        for (float& value : values) {
+            value = normal(rng);
+        }
+        REQUIRE((*graph)->Update(static_cast<int64_t>(step), values.data(), dim));
+        REQUIRE((*graph)->Remove(static_cast<int64_t>(step)));
+        REQUIRE((*graph)->Add(static_cast<int64_t>(count + step), values.data(), dim));
+    }
+    REQUIRE((*graph)->Size() == count);
+    REQUIRE(edge_count() + max_degree >= initial_edges);
+    for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
+        for (uint64_t edge = 0; edge < (*graph)->LinkCountAt(slot); ++edge) {
+            REQUIRE((*graph)->LinkAt(slot, edge) < (*graph)->Size());
+            REQUIRE((*graph)->LinkAt(slot, edge) != slot);
+        }
+    }
+}
+
 TEST_CASE("Lite graph backend validates restored adjacency bounds", "[lite-graph]") {
     using vsag::lite::detail::restore_graph_backend;
     REQUIRE_FALSE(restore_graph_backend(0, 2, 16, {}, {}, {}));

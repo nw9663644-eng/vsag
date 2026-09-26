@@ -126,9 +126,19 @@ public:
             for (uint64_t neighbor : *neighbors) {
                 extras_[neighbor].reserve(max_degree_ + 1);
             }
-            for (uint64_t old_neighbor : extras_[slot]) {
-                auto& reverse = extras_[old_neighbor];
+            const auto old_neighbors = extras_[slot];
+            std::vector<uint64_t> affected_nodes;
+            affected_nodes.reserve(old_neighbors.size());
+            for (uint64_t source = 0; source < extras_.size(); ++source) {
+                if (source == slot) {
+                    continue;
+                }
+                auto& reverse = extras_[source];
+                const auto old_size = reverse.size();
                 reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
+                if (reverse.size() != old_size) {
+                    affected_nodes.push_back(source);
+                }
             }
             if (fp16_) {
                 std::copy_n(encoded.data(), dim, fp16_vectors_.data() + slot * dim);
@@ -139,6 +149,7 @@ public:
             for (uint64_t neighbor : extras_[slot]) {
                 link(neighbor, slot);
             }
+            repair(std::move(affected_nodes), old_neighbors);
             return {};
         } catch (const std::invalid_argument&) {
             return failure(ErrorType::INVALID_ARGUMENT, "vector exceeds FP16 range");
@@ -157,10 +168,17 @@ public:
         }
         const uint64_t slot = found->second;
         const uint64_t last = Size() - 1;
+        const auto removed_neighbors = extras_[slot];
+        std::vector<uint64_t> affected_nodes = removed_neighbors;
         // Degree pruning and restored snapshots may be asymmetric, so outgoing neighbors do not
         // identify every edge that points to slot or last. Scan all stored edges for correctness.
-        for (auto& neighbors : extras_) {
+        for (uint64_t source = 0; source < extras_.size(); ++source) {
+            auto& neighbors = extras_[source];
+            const auto old_size = neighbors.size();
             neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot), neighbors.end());
+            if (neighbors.size() != old_size) {
+                affected_nodes.push_back(source);
+            }
             for (auto& neighbor : neighbors) {
                 if (neighbor == last) {
                     neighbor = slot;
@@ -189,6 +207,16 @@ public:
             vectors_.resize(last * Dim());
         }
         extras_.pop_back();
+        auto remap = [slot, last](uint64_t node) { return node == last ? slot : node; };
+        for (auto& node : affected_nodes) {
+            node = remap(node);
+        }
+        std::vector<uint64_t> repair_candidates;
+        repair_candidates.reserve(removed_neighbors.size());
+        for (const uint64_t old_candidate : removed_neighbors) {
+            repair_candidates.push_back(remap(old_candidate));
+        }
+        repair(std::move(affected_nodes), repair_candidates);
         return true;
     }
 
@@ -414,6 +442,40 @@ public:
     }
 
 private:
+    void
+    repair(std::vector<uint64_t> affected_nodes,
+           const std::vector<uint64_t>& additional_candidates) {
+        std::sort(affected_nodes.begin(), affected_nodes.end());
+        affected_nodes.erase(std::unique(affected_nodes.begin(), affected_nodes.end()),
+                             affected_nodes.end());
+        for (const uint64_t source : affected_nodes) {
+            if (source >= Size()) {
+                continue;
+            }
+            // Preserve valid links to limit topology drift; rank only candidates that can
+            // refill the degree lost by the mutation.
+            auto& repaired = extras_[source];
+            if (repaired.size() >= max_degree_) {
+                continue;
+            }
+            std::vector<Candidate> ranked;
+            ranked.reserve(additional_candidates.size());
+            for (const uint64_t candidate : additional_candidates) {
+                if (candidate < Size() and candidate != source and
+                    std::find(repaired.begin(), repaired.end(), candidate) == repaired.end()) {
+                    ranked.push_back({candidate, distance(source, candidate)});
+                }
+            }
+            std::sort(ranked.begin(), ranked.end(), closer);
+            const uint64_t needed = max_degree_ - repaired.size();
+            const uint64_t retained = std::min(needed, ranked.size());
+            repaired.reserve(repaired.size() + retained);
+            for (uint64_t i = 0; i < retained; ++i) {
+                repaired.push_back(ranked[i].slot);
+            }
+        }
+    }
+
     template <typename T>
     static void
     grow(std::vector<T>& values, uint64_t required) {

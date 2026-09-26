@@ -860,14 +860,26 @@ public:
         float query_norm = 0.0F;
         const auto query = normalize(model_, vector, query_norm);
         const auto neighbors = nearest(query, query_norm, slot, max_degree_);
-        for (auto& reverse : adjacency_) {
+        const auto old_neighbors = adjacency_[slot];
+        std::vector<uint64_t> affected_nodes;
+        affected_nodes.reserve(old_neighbors.size());
+        for (uint64_t source = 0; source < adjacency_.size(); ++source) {
+            if (source == slot) {
+                continue;
+            }
+            auto& reverse = adjacency_[source];
+            const auto old_size = reverse.size();
             reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
+            if (reverse.size() != old_size) {
+                affected_nodes.push_back(source);
+            }
         }
         codes_.Replace(slot, encode(model_, vector));
         adjacency_[slot] = neighbors;
         for (uint64_t neighbor : neighbors) {
             link(neighbor, slot);
         }
+        repair(std::move(affected_nodes), old_neighbors);
         return true;
     }
 
@@ -879,8 +891,15 @@ public:
         }
         const uint64_t slot = found->second;
         const uint64_t last = Size() - 1;
-        for (auto& neighbors : adjacency_) {
+        const auto removed_neighbors = adjacency_[slot];
+        std::vector<uint64_t> affected_nodes = removed_neighbors;
+        for (uint64_t source = 0; source < adjacency_.size(); ++source) {
+            auto& neighbors = adjacency_[source];
+            const auto old_size = neighbors.size();
             neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot), neighbors.end());
+            if (neighbors.size() != old_size) {
+                affected_nodes.push_back(source);
+            }
             for (uint64_t& neighbor : neighbors) {
                 if (neighbor == last) {
                     neighbor = slot;
@@ -899,6 +918,16 @@ public:
         ids_.pop_back();
         adjacency_.pop_back();
         codes_.RemoveSwap(slot);
+        auto remap = [slot, last](uint64_t node) { return node == last ? slot : node; };
+        for (auto& node : affected_nodes) {
+            node = remap(node);
+        }
+        std::vector<uint64_t> repair_candidates;
+        repair_candidates.reserve(removed_neighbors.size());
+        for (const uint64_t old_candidate : removed_neighbors) {
+            repair_candidates.push_back(remap(old_candidate));
+        }
+        repair(std::move(affected_nodes), repair_candidates);
         return true;
     }
 
@@ -1079,6 +1108,45 @@ private:
         }
         ++mutation_fallbacks_;
         return nearest_exhaustive(query, query_norm, excluded, count);
+    }
+
+    void
+    repair(std::vector<uint64_t> affected_nodes,
+           const std::vector<uint64_t>& additional_candidates) {
+        std::sort(affected_nodes.begin(), affected_nodes.end());
+        affected_nodes.erase(std::unique(affected_nodes.begin(), affected_nodes.end()),
+                             affected_nodes.end());
+        for (const uint64_t source : affected_nodes) {
+            if (source >= Size()) {
+                continue;
+            }
+            // Preserve valid links to limit topology drift; rank only candidates that can
+            // refill the degree lost by the mutation.
+            auto& repaired = adjacency_[source];
+            if (repaired.size() >= max_degree_) {
+                continue;
+            }
+            const auto query = decode_query(source);
+            const float query_norm = codes_.At(source).metadata.norm;
+            std::vector<Candidate> ranked;
+            ranked.reserve(additional_candidates.size());
+            for (const uint64_t candidate : additional_candidates) {
+                if (candidate < Size() and candidate != source and
+                    std::find(repaired.begin(), repaired.end(), candidate) == repaired.end()) {
+                    const auto code = codes_.At(candidate);
+                    const auto coarse = filter_estimate(query, query_norm, code);
+                    ranked.push_back(
+                        {candidate, full_distance(query, query_norm, code, coarse.centered_ip)});
+                }
+            }
+            std::sort(ranked.begin(), ranked.end(), better);
+            const uint64_t needed = max_degree_ - repaired.size();
+            const uint64_t retained = std::min(needed, ranked.size());
+            repaired.reserve(repaired.size() + retained);
+            for (uint64_t i = 0; i < retained; ++i) {
+                repaired.push_back(ranked[i].id);
+            }
+        }
     }
 
     void
@@ -2134,7 +2202,7 @@ run_crud(const std::filesystem::path& root,
                      "rebuilt_search_p50_us,rebuilt_search_cpu_p50_us,"
                      "rebuilt_graph_self_top1_recall,rebuilt_graph_full_top1_agreement,"
                      "rebuilt_graph_full_positional_agreement,"
-                     "incremental_rebuilt_top1_agreement";
+                     "incremental_rebuilt_top1_agreement,incremental_edges,rebuilt_edges";
     }
     std::cout << ",save_ms,load_ms,snapshot_bytes,state_rss_kib,roundtrip_rss_kib,"
                  "peak_rss_kib,result_checksum\n";
@@ -2368,7 +2436,9 @@ run_crud(const std::filesystem::path& root,
                              static_cast<double>(opportunities)
                       << ','
                       << static_cast<double>(incremental_rebuilt_top1_agreement) /
-                             static_cast<double>(query_count);
+                             static_cast<double>(query_count)
+                      << ',' << topology.neighbors.size() << ','
+                      << rebuilt_topology.neighbors.size();
         }
         std::cout << ',' << save_ms << ',' << load_ms << ',' << snapshot_bytes << ','
                   << state_rss_kib << ',' << current_rss_kib() << ',' << peak_rss_kib() << ','

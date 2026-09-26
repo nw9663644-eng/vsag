@@ -606,7 +606,8 @@ mapping and invokes the existing FP32 Lite graph builder with the same degree
 and `ef_search`. Incremental and rebuilt topologies then search the same
 RaBitQ codes and queries. The extra CSV fields report rebuild wall/process CPU
 time, rebuilt search P50 wall/process CPU time, rebuilt self-query and
-full-code agreement, and incremental/rebuilt Top-1 agreement.
+full-code agreement, incremental/rebuilt Top-1 agreement, and direct edge
+counts for both topologies.
 
 The rebuild and slot-ordered FP32 copy are diagnostic work outside the mutation
 timers. They intentionally increase runtime, transient memory, and process peak
