@@ -1095,6 +1095,15 @@ public:
         return result;
     }
 
+    void
+    CompactIncoming() {
+        require(use_incoming_adjacency_, "incoming adjacency is not enabled");
+        for (auto& sources : incoming_) {
+            sources.shrink_to_fit();
+        }
+        incoming_.shrink_to_fit();
+    }
+
     [[nodiscard]] int64_t
     IdAt(uint64_t slot) const {
         require(slot < ids_.size(), "mutable graph ID outside storage");
@@ -2003,6 +2012,13 @@ self_test() {
                 tiny_graph.GetMutationScanTiming().remove_cpu_us >= 0.0,
             "mutable graph mutation scan timing is invalid");
     tiny_graph.Validate();
+    const auto incoming_before_compact = tiny_graph.GetIncomingMemoryUsage();
+    tiny_graph.CompactIncoming();
+    const auto incoming_after_compact = tiny_graph.GetIncomingMemoryUsage();
+    require(incoming_after_compact.logical_bytes == incoming_before_compact.logical_bytes and
+                incoming_after_compact.capacity_bytes <= incoming_before_compact.capacity_bytes,
+            "mutable incoming compaction changed logical storage or increased capacity");
+    tiny_graph.Validate();
     require(tiny_graph.Size() == 1 and tiny_graph.IdAt(0) == 2002,
             "non-last removal did not compact the final slot");
     require(tiny_graph.GetMutationFallbacks() == 0,
@@ -2384,7 +2400,8 @@ run_crud(const std::filesystem::path& root,
          uint64_t max_degree,
          uint64_t ef_search,
          bool rebuild_control,
-         bool use_incoming_adjacency) {
+         bool use_incoming_adjacency,
+         bool compact_incoming) {
     const uint64_t dim = read_dimension(root / "base.fvecs");
     auto base = read_records<float>(root / "base.fvecs", dim);
     require(base.count >= 10 and query_count <= base.count and max_degree >= 4 and
@@ -2434,6 +2451,11 @@ run_crud(const std::filesystem::path& root,
            "mean_visited,mean_reordered";
     if (use_incoming_adjacency) {
         std::cout << ",incoming_edges,incoming_logical_bytes,incoming_capacity_bytes";
+    }
+    if (compact_incoming) {
+        std::cout << ",incoming_compact_ms,incoming_compact_cpu_ms,"
+                     "incoming_capacity_before_compact_bytes,"
+                     "incoming_capacity_after_compact_bytes";
     }
     if (rebuild_control) {
         std::cout << ",rebuild_control_ms,rebuild_control_cpu_ms,"
@@ -2507,6 +2529,21 @@ run_crud(const std::filesystem::path& root,
         }
         state.Validate();
         require(state.Size() == base.count, "CRUD changed the active record count");
+        double incoming_compact_ms = 0.0;
+        double incoming_compact_cpu_ms = 0.0;
+        uint64_t incoming_capacity_before_compact_bytes = 0;
+        uint64_t incoming_capacity_after_compact_bytes = 0;
+        if (compact_incoming) {
+            incoming_capacity_before_compact_bytes = state.GetIncomingMemoryUsage().capacity_bytes;
+            const auto incoming_compact_start = Clock::now();
+            const double incoming_compact_cpu_start_us = process_cpu_microseconds();
+            state.CompactIncoming();
+            incoming_compact_ms = milliseconds(incoming_compact_start, Clock::now());
+            incoming_compact_cpu_ms =
+                (process_cpu_microseconds() - incoming_compact_cpu_start_us) / 1'000.0;
+            incoming_capacity_after_compact_bytes = state.GetIncomingMemoryUsage().capacity_bytes;
+            state.Validate();
+        }
         std::sort(update_us.begin(), update_us.end());
         std::sort(update_cpu_us.begin(), update_cpu_us.end());
         std::sort(remove_us.begin(), remove_us.end());
@@ -2688,6 +2725,11 @@ run_crud(const std::filesystem::path& root,
             std::cout << ',' << incoming_usage.edges << ',' << incoming_usage.logical_bytes << ','
                       << incoming_usage.capacity_bytes;
         }
+        if (compact_incoming) {
+            std::cout << ',' << incoming_compact_ms << ',' << incoming_compact_cpu_ms << ','
+                      << incoming_capacity_before_compact_bytes << ','
+                      << incoming_capacity_after_compact_bytes;
+        }
         if (rebuild_control) {
             std::cout << ',' << rebuild_control_ms << ',' << rebuild_control_cpu_ms << ','
                       << percentile(rebuilt_search_us, 0.50) << ','
@@ -2742,7 +2784,8 @@ main(int argc, char** argv) {
         }
         if (argc == 9 and
             (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control" or
-             std::string(argv[1]) == "--crud-incoming")) {
+             std::string(argv[1]) == "--crud-incoming" or
+             std::string(argv[1]) == "--crud-incoming-compact")) {
             run_crud(argv[2],
                      argv[3],
                      parse_positive(argv[4]),
@@ -2751,7 +2794,9 @@ main(int argc, char** argv) {
                      parse_positive(argv[7]),
                      parse_positive(argv[8]),
                      std::string(argv[1]) == "--crud-control",
-                     std::string(argv[1]) == "--crud-incoming");
+                     std::string(argv[1]) == "--crud-incoming" or
+                         std::string(argv[1]) == "--crud-incoming-compact",
+                     std::string(argv[1]) == "--crud-incoming-compact");
             return 0;
         }
         if (argc == 2 or argc == 4) {
@@ -2766,7 +2811,9 @@ main(int argc, char** argv) {
                      "--mutable-rss SNAPSHOT | --incoming-rss SNAPSHOT | "
                      "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-incoming DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
-                     "EF_SEARCH | --crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
+                     "EF_SEARCH | --crud-incoming-compact DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS "
+                     "QUERIES MAX_DEGREE EF_SEARCH | "
+                     "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
                      "MAX_DEGREE "
                      "EF_SEARCH | --self-test]\n";
         return 2;

@@ -778,3 +778,18 @@ prototype. The strong 100k Remove result supports continued evaluation, but
 the dynamic capacity overhead must remain visible in any adoption decision.
 Raw evidence and a verified manifest are in
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-crud-20260926-16d3aab`.
+
+To measure whether periodic capacity recovery is worthwhile, use the separate
+batch-boundary experiment:
+
+```bash
+lite_rabitq_codec_probe --crud-incoming-compact \
+  DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH
+```
+
+This mode performs the same incoming-edge CRUD workload, then replaces each
+incoming list with an exact-size copy after the batch. It reports compaction
+wall/process CPU time and incoming capacity before/after compaction. The
+compaction runs after mutation latency sampling and exact incoming validation,
+so its cost is visible separately. This is an experiment-only policy; regular
+`--crud-incoming`, snapshots, and the Lite public API remain unchanged.
