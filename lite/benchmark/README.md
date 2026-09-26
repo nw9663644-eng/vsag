@@ -680,3 +680,30 @@ result checks, and have verified SHA-256 manifests. Raw evidence is in
 `/home/ubuntu/project/vsag-lite-rabitq-gist-crud-repair-20260926-dafc277`
 and
 `/home/ubuntu/project/vsag-lite-rabitq-link-cache-validation-20260926-a26a052`.
+
+### Mutable adjacency scan cost
+
+Commit `c6bb0a640f097b1d89b3300cda88e68498979331` adds opt-in
+phase timing to `--crud-control` without changing the original `--crud`
+schema or enabling timing calls in that path. The timed region is only the
+full adjacency scan that removes incoming references during Update or removes
+and remaps references during Remove.
+
+The same deterministic CPU-0 GIST workloads used above produced these medians:
+
+| Scale | Update total | Update scan | Update scan share | Remove total | Remove scan | Remove scan share |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10k | 1,388.615 us | 68.029 us | 4.9% | 212.380 us | 110.243 us | 51.9% |
+| 100k | 3,550.243 us | 504.576 us | 14.2% | 924.748 us | 918.888 us | 99.4% |
+
+Process CPU ratios were 4.9% and 14.2% for Update, and 52.1% and 99.4% for
+Remove, closely matching wall time. All quality fields, topology edge counts,
+and result checksums were identical to the `a26a052` runs. Both stderr files
+were empty and the SHA-256 manifest verifies all evidence.
+
+The 100k result justifies evaluating a lightweight incoming-edge index for
+Remove. It does not by itself justify importing Full HGraph's hash-map,
+per-node dynamic-vector, and synchronization structure into Lite. The next
+experiment must measure the incoming index's logical and capacity bytes
+alongside mutation latency before adoption. Raw evidence is in
+`/home/ubuntu/project/vsag-lite-rabitq-scan-timing-20260926-c6bb0a6`.
