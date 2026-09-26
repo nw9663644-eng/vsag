@@ -749,3 +749,32 @@ per-node dynamic-vector, and synchronization structure into Lite. The next
 experiment must measure the incoming index's logical and capacity bytes
 alongside mutation latency before adoption. Raw evidence is in
 `/home/ubuntu/project/vsag-lite-rabitq-scan-timing-20260926-c6bb0a6`.
+
+### Opt-in incoming-edge mutation prototype
+
+At commit `16d3aab2d74b2c67dd4ae95833acf1b4f4cefb2b`, the
+experiment-only mutable graph can maintain an incoming adjacency through Add,
+Update, Remove, reverse-link pruning, local repair, and last-slot compaction.
+Batch validation reconstructs the incoming table from outgoing adjacency and
+requires exact set equality. The v3 snapshot remains unchanged.
+
+A paired CPU-0 GIST run compared `--crud` and `--crud-incoming` with
+identical deterministic workloads:
+
+| Scale | Workload | Update baseline / incoming | Remove baseline / incoming | Add baseline / incoming | Remove speedup |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10k | 10 x 100 CRUD | 1,583.204 / 1,518.999 us | 222.214 / 122.257 us | 1,377.448 / 1,375.283 us | 1.82x |
+| 100k | 3 x 100 CRUD | 3,831.412 / 3,130.365 us | 1,048.965 / 9.350 us | 2,944.942 / 2,940.789 us | 112.19x |
+
+All per-round fallback, quality, visited/reordered, snapshot-size, and result
+checksum fields were identical. Both paths passed exact Save/Load result
+checks and produced empty stderr. Incoming edge counts tracked outgoing counts:
+159,972-160,000 at 10k and 1,599,997-1,599,999 at 100k.
+
+Dynamic vector capacity after long churn ranged from 1,858,728 to 2,243,040
+bytes at 10k and 16,284,952 to 17,515,088 bytes at 100k. This is higher than
+the exact initial construction and is the relevant memory range for the
+prototype. The strong 100k Remove result supports continued evaluation, but
+the dynamic capacity overhead must remain visible in any adoption decision.
+Raw evidence and a verified manifest are in
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-crud-20260926-16d3aab`.
