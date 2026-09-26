@@ -728,6 +728,21 @@ and outputs. The measured capacity is exact for this counted-reservation
 layout; RSS deltas include allocator and process effects. Raw evidence is in
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-rss-20260926-c7d192c`.
 
+Use the opt-in mutation prototype to compare local incoming-edge maintenance
+with the original full-scan path:
+
+\`\`\`bash
+lite_rabitq_codec_probe --crud-incoming \
+  DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH
+\`\`\`
+
+The mode rebuilds the incoming table from the initial topology, maintains it
+through Add, Update, Remove, reverse-link pruning, local repair, and last-slot
+compaction, and validates it against a fresh reconstruction at every batch
+boundary. It adds incoming edge/logical/capacity columns to the regular CRUD
+schema. The saved v3 snapshot stays unchanged and reconstructs incoming state
+when this opt-in mode is selected after loading.
+
 The 100k result justifies evaluating a lightweight incoming-edge index for
 Remove. It does not by itself justify importing Full HGraph's hash-map,
 per-node dynamic-vector, and synchronization structure into Lite. The next

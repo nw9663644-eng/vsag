@@ -820,20 +820,25 @@ public:
                       std::vector<int64_t> input_ids,
                       uint64_t input_max_degree,
                       uint64_t input_ef_search,
-                      bool measure_mutation_scans = false)
+                      bool measure_mutation_scans = false,
+                      bool use_incoming_adjacency = false)
         : model_(std::move(input_model)),
           codes_(std::move(input_codes)),
           ids_(std::move(input_ids)),
           adjacency_(expand_graph(input_graph)),
           max_degree_(input_max_degree),
           ef_search_(input_ef_search),
-          measure_mutation_scans_(measure_mutation_scans) {
+          measure_mutation_scans_(measure_mutation_scans),
+          use_incoming_adjacency_(use_incoming_adjacency) {
         require(max_degree_ >= 2 and max_degree_ <= 64 and ef_search_ >= max_degree_,
                 "invalid mutable graph options");
         require(ids_.size() == codes_.Size() and adjacency_.size() == codes_.Size(),
                 "mutable graph storage disagrees");
         for (uint64_t slot = 0; slot < ids_.size(); ++slot) {
             require(slots_.emplace(ids_[slot], slot).second, "duplicate mutable graph ID");
+        }
+        if (use_incoming_adjacency_) {
+            incoming_ = BuildIncomingAdjacency();
         }
         Validate();
     }
@@ -856,7 +861,11 @@ public:
         const uint64_t slot = Size();
         codes_.Append(encode(model_, vector));
         ids_.push_back(id);
-        adjacency_.push_back(neighbors);
+        adjacency_.emplace_back();
+        if (use_incoming_adjacency_) {
+            incoming_.emplace_back();
+        }
+        replace_neighbors(slot, neighbors);
         slots_.emplace(id, slot);
         for (uint64_t neighbor : neighbors) {
             link(neighbor, slot);
@@ -880,15 +889,23 @@ public:
         affected_nodes.reserve(old_neighbors.size());
         const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
         const double scan_cpu_start_us = measure_mutation_scans_ ? process_cpu_microseconds() : 0.0;
-        for (uint64_t source = 0; source < adjacency_.size(); ++source) {
-            if (source == slot) {
-                continue;
+        if (use_incoming_adjacency_) {
+            affected_nodes = incoming_[slot];
+            for (const uint64_t source : affected_nodes) {
+                erase_value(adjacency_[source], slot);
             }
-            auto& reverse = adjacency_[source];
-            const auto old_size = reverse.size();
-            reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
-            if (reverse.size() != old_size) {
-                affected_nodes.push_back(source);
+            incoming_[slot].clear();
+        } else {
+            for (uint64_t source = 0; source < adjacency_.size(); ++source) {
+                if (source == slot) {
+                    continue;
+                }
+                auto& reverse = adjacency_[source];
+                const auto old_size = reverse.size();
+                reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
+                if (reverse.size() != old_size) {
+                    affected_nodes.push_back(source);
+                }
             }
         }
         if (measure_mutation_scans_) {
@@ -896,7 +913,7 @@ public:
             mutation_scan_timing_.update_cpu_us = process_cpu_microseconds() - scan_cpu_start_us;
         }
         codes_.Replace(slot, encode(model_, vector));
-        adjacency_[slot] = neighbors;
+        replace_neighbors(slot, neighbors);
         for (uint64_t neighbor : neighbors) {
             link(neighbor, slot);
         }
@@ -916,16 +933,38 @@ public:
         std::vector<uint64_t> affected_nodes = removed_neighbors;
         const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
         const double scan_cpu_start_us = measure_mutation_scans_ ? process_cpu_microseconds() : 0.0;
-        for (uint64_t source = 0; source < adjacency_.size(); ++source) {
-            auto& neighbors = adjacency_[source];
-            const auto old_size = neighbors.size();
-            neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot), neighbors.end());
-            if (neighbors.size() != old_size) {
-                affected_nodes.push_back(source);
+        if (use_incoming_adjacency_) {
+            const auto removed_incoming = incoming_[slot];
+            affected_nodes.insert(
+                affected_nodes.end(), removed_incoming.begin(), removed_incoming.end());
+            for (const uint64_t target : removed_neighbors) {
+                erase_value(incoming_[target], slot);
             }
-            for (uint64_t& neighbor : neighbors) {
-                if (neighbor == last) {
-                    neighbor = slot;
+            for (const uint64_t source : removed_incoming) {
+                erase_value(adjacency_[source], slot);
+            }
+            incoming_[slot].clear();
+            if (slot != last) {
+                for (const uint64_t target : adjacency_[last]) {
+                    replace_value(incoming_[target], last, slot);
+                }
+                for (const uint64_t source : incoming_[last]) {
+                    replace_value(adjacency_[source], last, slot);
+                }
+            }
+        } else {
+            for (uint64_t source = 0; source < adjacency_.size(); ++source) {
+                auto& neighbors = adjacency_[source];
+                const auto old_size = neighbors.size();
+                neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),
+                                neighbors.end());
+                if (neighbors.size() != old_size) {
+                    affected_nodes.push_back(source);
+                }
+                for (uint64_t& neighbor : neighbors) {
+                    if (neighbor == last) {
+                        neighbor = slot;
+                    }
                 }
             }
         }
@@ -936,6 +975,9 @@ public:
         if (slot != last) {
             ids_[slot] = ids_[last];
             adjacency_[slot] = std::move(adjacency_[last]);
+            if (use_incoming_adjacency_) {
+                incoming_[slot] = std::move(incoming_[last]);
+            }
             adjacency_[slot].erase(
                 std::remove(adjacency_[slot].begin(), adjacency_[slot].end(), slot),
                 adjacency_[slot].end());
@@ -944,6 +986,9 @@ public:
         slots_.erase(found);
         ids_.pop_back();
         adjacency_.pop_back();
+        if (use_incoming_adjacency_) {
+            incoming_.pop_back();
+        }
         codes_.RemoveSwap(slot);
         auto remap = [slot, last](uint64_t node) { return node == last ? slot : node; };
         for (auto& node : affected_nodes) {
@@ -971,6 +1016,16 @@ public:
     Validate() const {
         require(ids_.size() == Size() and adjacency_.size() == Size() and slots_.size() == Size(),
                 "mutable graph size mismatch");
+        if (use_incoming_adjacency_) {
+            require(incoming_.size() == Size(), "mutable incoming size mismatch");
+            auto expected_incoming = BuildIncomingAdjacency();
+            for (uint64_t target = 0; target < Size(); ++target) {
+                auto actual = incoming_[target];
+                std::sort(actual.begin(), actual.end());
+                std::sort(expected_incoming[target].begin(), expected_incoming[target].end());
+                require(actual == expected_incoming[target], "mutable incoming adjacency mismatch");
+            }
+        }
         for (uint64_t slot = 0; slot < Size(); ++slot) {
             const auto found = slots_.find(ids_[slot]);
             require(found != slots_.end() and found->second == slot,
@@ -1027,6 +1082,19 @@ public:
         return incoming;
     }
 
+    [[nodiscard]] IncomingMemoryUsage
+    GetIncomingMemoryUsage() const {
+        IncomingMemoryUsage result;
+        result.logical_bytes = incoming_.size() * sizeof(std::vector<uint64_t>);
+        result.capacity_bytes = incoming_.capacity() * sizeof(std::vector<uint64_t>);
+        for (const auto& sources : incoming_) {
+            result.edges += sources.size();
+            result.logical_bytes += sources.size() * sizeof(uint64_t);
+            result.capacity_bytes += sources.capacity() * sizeof(uint64_t);
+        }
+        return result;
+    }
+
     [[nodiscard]] int64_t
     IdAt(uint64_t slot) const {
         require(slot < ids_.size(), "mutable graph ID outside storage");
@@ -1081,6 +1149,46 @@ public:
     }
 
 private:
+    static void
+    erase_value(std::vector<uint64_t>& values, uint64_t value) {
+        values.erase(std::remove(values.begin(), values.end(), value), values.end());
+    }
+
+    static void
+    replace_value(std::vector<uint64_t>& values, uint64_t old_value, uint64_t new_value) {
+        for (uint64_t& value : values) {
+            if (value == old_value) {
+                value = new_value;
+            }
+        }
+    }
+
+    void
+    sync_incoming(uint64_t source, const std::vector<uint64_t>& old_neighbors) {
+        if (not use_incoming_adjacency_) {
+            return;
+        }
+        const auto& neighbors = adjacency_[source];
+        for (const uint64_t target : old_neighbors) {
+            if (std::find(neighbors.begin(), neighbors.end(), target) == neighbors.end()) {
+                erase_value(incoming_[target], source);
+            }
+        }
+        for (const uint64_t target : neighbors) {
+            if (std::find(old_neighbors.begin(), old_neighbors.end(), target) ==
+                old_neighbors.end()) {
+                incoming_[target].push_back(source);
+            }
+        }
+    }
+
+    void
+    replace_neighbors(uint64_t source, const std::vector<uint64_t>& neighbors) {
+        const auto old_neighbors = adjacency_[source];
+        adjacency_[source] = neighbors;
+        sync_incoming(source, old_neighbors);
+    }
+
     [[nodiscard]] std::vector<float>
     decode_query(uint64_t slot) const {
         const auto code = codes_.At(slot);
@@ -1170,6 +1278,7 @@ private:
             if (repaired.size() >= max_degree_) {
                 continue;
             }
+            const auto old_neighbors = repaired;
             const auto query = decode_query(source);
             const float query_norm = codes_.At(source).metadata.norm;
             std::vector<Candidate> ranked;
@@ -1190,6 +1299,7 @@ private:
             for (uint64_t i = 0; i < retained; ++i) {
                 repaired.push_back(ranked[i].id);
             }
+            sync_incoming(source, old_neighbors);
         }
     }
 
@@ -1200,6 +1310,7 @@ private:
             std::find(neighbors.begin(), neighbors.end(), target) != neighbors.end()) {
             return;
         }
+        const auto old_neighbors = neighbors;
         neighbors.push_back(target);
         if (neighbors.size() > max_degree_) {
             const auto query = decode_query(source);
@@ -1218,6 +1329,7 @@ private:
                 neighbors[i] = ranked[i].id;
             }
         }
+        sync_incoming(source, old_neighbors);
     }
 
     Model model_;
@@ -1225,10 +1337,12 @@ private:
     std::vector<int64_t> ids_;
     std::unordered_map<int64_t, uint64_t> slots_;
     std::vector<std::vector<uint64_t>> adjacency_;
+    std::vector<std::vector<uint64_t>> incoming_;
     uint64_t max_degree_;
     uint64_t ef_search_;
     uint64_t mutation_fallbacks_{};
     bool measure_mutation_scans_{};
+    bool use_incoming_adjacency_{};
     MutationScanTiming mutation_scan_timing_{};
 };
 
@@ -1860,7 +1974,7 @@ self_test() {
     }
 
     MutableGraphState tiny_graph(
-        first, EncodedRecords(dim), GraphTopology{{0}, {}}, {}, 2, 2, true);
+        first, EncodedRecords(dim), GraphTopology{{0}, {}}, {}, 2, 2, true, true);
     require(tiny_graph.Search(base.data(), 10).neighbors.empty(),
             "empty mutable graph search returned a candidate");
     require(tiny_graph.Add(2000, base.data()), "empty mutable graph Add failed");
@@ -2269,7 +2383,8 @@ run_crud(const std::filesystem::path& root,
          uint64_t query_count,
          uint64_t max_degree,
          uint64_t ef_search,
-         bool rebuild_control) {
+         bool rebuild_control,
+         bool use_incoming_adjacency) {
     const uint64_t dim = read_dimension(root / "base.fvecs");
     auto base = read_records<float>(root / "base.fvecs", dim);
     require(base.count >= 10 and query_count <= base.count and max_degree >= 4 and
@@ -2305,7 +2420,8 @@ run_crud(const std::filesystem::path& root,
                             std::move(ids),
                             max_degree,
                             ef_search,
-                            rebuild_control);
+                            rebuild_control,
+                            use_incoming_adjacency);
 
     std::cout
         << "round,count,dim,crud_ops,queries,max_degree,ef_search,build_encode_ms,"
@@ -2316,6 +2432,9 @@ run_crud(const std::filesystem::path& root,
            "search_cpu_p50_us,search_cpu_p99_us,full_self_top1_recall,"
            "graph_self_top1_recall,graph_full_top1_agreement,graph_full_positional_agreement,"
            "mean_visited,mean_reordered";
+    if (use_incoming_adjacency) {
+        std::cout << ",incoming_edges,incoming_logical_bytes,incoming_capacity_bytes";
+    }
     if (rebuild_control) {
         std::cout << ",rebuild_control_ms,rebuild_control_cpu_ms,"
                      "rebuilt_search_p50_us,rebuilt_search_cpu_p50_us,"
@@ -2564,6 +2683,11 @@ run_crud(const std::filesystem::path& root,
                   << static_cast<double>(positional_agreement) / static_cast<double>(opportunities)
                   << ',' << static_cast<double>(visited) / static_cast<double>(query_count) << ','
                   << static_cast<double>(reordered) / static_cast<double>(query_count);
+        if (use_incoming_adjacency) {
+            const auto incoming_usage = state.GetIncomingMemoryUsage();
+            std::cout << ',' << incoming_usage.edges << ',' << incoming_usage.logical_bytes << ','
+                      << incoming_usage.capacity_bytes;
+        }
         if (rebuild_control) {
             std::cout << ',' << rebuild_control_ms << ',' << rebuild_control_cpu_ms << ','
                       << percentile(rebuilt_search_us, 0.50) << ','
@@ -2617,7 +2741,8 @@ main(int argc, char** argv) {
             return 0;
         }
         if (argc == 9 and
-            (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control")) {
+            (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control" or
+             std::string(argv[1]) == "--crud-incoming")) {
             run_crud(argv[2],
                      argv[3],
                      parse_positive(argv[4]),
@@ -2625,7 +2750,8 @@ main(int argc, char** argv) {
                      parse_positive(argv[6]),
                      parse_positive(argv[7]),
                      parse_positive(argv[8]),
-                     std::string(argv[1]) == "--crud-control");
+                     std::string(argv[1]) == "--crud-control",
+                     std::string(argv[1]) == "--crud-incoming");
             return 0;
         }
         if (argc == 2 or argc == 4) {
@@ -2639,7 +2765,9 @@ main(int argc, char** argv) {
                      "--load DATASET_DIR SNAPSHOT EF_SEARCH | "
                      "--mutable-rss SNAPSHOT | --incoming-rss SNAPSHOT | "
                      "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
-                     "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
+                     "--crud-incoming DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
+                     "EF_SEARCH | --crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
+                     "MAX_DEGREE "
                      "EF_SEARCH | --self-test]\n";
         return 2;
     } catch (const std::exception& error) {
