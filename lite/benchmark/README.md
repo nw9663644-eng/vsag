@@ -793,3 +793,35 @@ wall/process CPU time and incoming capacity before/after compaction. The
 compaction runs after mutation latency sampling and exact incoming validation,
 so its cost is visible separately. This is an experiment-only policy; regular
 `--crud-incoming`, snapshots, and the Lite public API remain unchanged.
+
+### Incoming capacity compaction result
+
+At commit `33232fce3fabfb15661bded92f90b0b0b724d532`, a paired
+CPU-0 GIST run compared `--crud-incoming` with
+`--crud-incoming-compact`. Compaction ran after every batch, outside the
+per-operation latency samples:
+
+| Scale | Workload | Capacity before compaction | Capacity after compaction | Median bytes recovered | Compact wall / CPU |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10k | 10 x 100 CRUD | 1,724,944-1,858,728 B | 1,519,776-1,520,000 B | 240,164 B | 0.147 / 0.147 ms |
+| 100k | 3 x 100 CRUD | 16,284,952-16,376,496 B | 15,199,976-15,199,992 B | 1,107,320 B | 0.701 / 0.701 ms |
+
+The median p50 mutation results were:
+
+| Scale | Update incoming / compact | Remove incoming / compact | Add incoming / compact |
+| --- | ---: | ---: | ---: |
+| 10k | 1,333.677 / 1,340.623 us | 106.093 / 106.563 us | 1,201.355 / 1,208.035 us |
+| 100k | 3,028.645 / 3,090.134 us | 9.800 / 9.680 us | 2,826.181 / 2,878.930 us |
+
+All per-round fallback, quality, visited/reordered, incoming edge/logical byte,
+snapshot-size, and result-checksum fields were identical. The final snapshots
+also had identical SHA-256 hashes for each scale, all stderr files were empty,
+and the evidence manifest verifies the raw artifacts.
+
+Unconditional compaction after every 100 CRUD cycles is not recommended as a
+default policy: at 100k it recovered a median 1.11 MB while adding a separate
+0.70 ms batch cost and coinciding with about 2% higher Update/Add medians in
+this run. If capacity recovery is adopted later, it should be threshold-driven
+and evaluated over longer churn instead of running after every batch. Raw
+evidence is in
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-compact-20260926-33232fc`.
