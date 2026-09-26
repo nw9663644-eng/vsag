@@ -773,6 +773,13 @@ compact_graph(const std::vector<std::vector<uint64_t>>& adjacency) {
     return result;
 }
 
+struct MutationScanTiming {
+    double update_wall_us{};
+    double update_cpu_us{};
+    double remove_wall_us{};
+    double remove_cpu_us{};
+};
+
 struct MutableMemoryUsage {
     uint64_t model_logical_bytes{};
     uint64_t model_capacity_bytes{};
@@ -806,13 +813,15 @@ public:
                       const GraphTopology& input_graph,
                       std::vector<int64_t> input_ids,
                       uint64_t input_max_degree,
-                      uint64_t input_ef_search)
+                      uint64_t input_ef_search,
+                      bool measure_mutation_scans = false)
         : model_(std::move(input_model)),
           codes_(std::move(input_codes)),
           ids_(std::move(input_ids)),
           adjacency_(expand_graph(input_graph)),
           max_degree_(input_max_degree),
-          ef_search_(input_ef_search) {
+          ef_search_(input_ef_search),
+          measure_mutation_scans_(measure_mutation_scans) {
         require(max_degree_ >= 2 and max_degree_ <= 64 and ef_search_ >= max_degree_,
                 "invalid mutable graph options");
         require(ids_.size() == codes_.Size() and adjacency_.size() == codes_.Size(),
@@ -863,6 +872,8 @@ public:
         const auto old_neighbors = adjacency_[slot];
         std::vector<uint64_t> affected_nodes;
         affected_nodes.reserve(old_neighbors.size());
+        const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
+        const double scan_cpu_start_us = measure_mutation_scans_ ? process_cpu_microseconds() : 0.0;
         for (uint64_t source = 0; source < adjacency_.size(); ++source) {
             if (source == slot) {
                 continue;
@@ -873,6 +884,10 @@ public:
             if (reverse.size() != old_size) {
                 affected_nodes.push_back(source);
             }
+        }
+        if (measure_mutation_scans_) {
+            mutation_scan_timing_.update_wall_us = microseconds(scan_start, Clock::now());
+            mutation_scan_timing_.update_cpu_us = process_cpu_microseconds() - scan_cpu_start_us;
         }
         codes_.Replace(slot, encode(model_, vector));
         adjacency_[slot] = neighbors;
@@ -893,6 +908,8 @@ public:
         const uint64_t last = Size() - 1;
         const auto removed_neighbors = adjacency_[slot];
         std::vector<uint64_t> affected_nodes = removed_neighbors;
+        const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
+        const double scan_cpu_start_us = measure_mutation_scans_ ? process_cpu_microseconds() : 0.0;
         for (uint64_t source = 0; source < adjacency_.size(); ++source) {
             auto& neighbors = adjacency_[source];
             const auto old_size = neighbors.size();
@@ -905,6 +922,10 @@ public:
                     neighbor = slot;
                 }
             }
+        }
+        if (measure_mutation_scans_) {
+            mutation_scan_timing_.remove_wall_us = microseconds(scan_start, Clock::now());
+            mutation_scan_timing_.remove_cpu_us = process_cpu_microseconds() - scan_cpu_start_us;
         }
         if (slot != last) {
             ids_[slot] = ids_[last];
@@ -999,6 +1020,11 @@ public:
     [[nodiscard]] uint64_t
     GetMutationFallbacks() const {
         return mutation_fallbacks_;
+    }
+
+    [[nodiscard]] const MutationScanTiming&
+    GetMutationScanTiming() const {
+        return mutation_scan_timing_;
     }
 
     [[nodiscard]] MutableMemoryUsage
@@ -1176,6 +1202,8 @@ private:
     uint64_t max_degree_;
     uint64_t ef_search_;
     uint64_t mutation_fallbacks_{};
+    bool measure_mutation_scans_{};
+    MutationScanTiming mutation_scan_timing_{};
 };
 
 uint64_t
@@ -1805,7 +1833,8 @@ self_test() {
                 "disconnected graph search returned a duplicate candidate");
     }
 
-    MutableGraphState tiny_graph(first, EncodedRecords(dim), GraphTopology{{0}, {}}, {}, 2, 2);
+    MutableGraphState tiny_graph(
+        first, EncodedRecords(dim), GraphTopology{{0}, {}}, {}, 2, 2, true);
     require(tiny_graph.Search(base.data(), 10).neighbors.empty(),
             "empty mutable graph search returned a candidate");
     require(tiny_graph.Add(2000, base.data()), "empty mutable graph Add failed");
@@ -1824,6 +1853,15 @@ self_test() {
             "two-element mutable graph Update failed");
     tiny_graph.Validate();
     require(tiny_graph.Remove(2001), "non-last tiny graph Remove failed");
+    require(std::isfinite(tiny_graph.GetMutationScanTiming().update_wall_us) and
+                tiny_graph.GetMutationScanTiming().update_wall_us >= 0.0 and
+                std::isfinite(tiny_graph.GetMutationScanTiming().update_cpu_us) and
+                tiny_graph.GetMutationScanTiming().update_cpu_us >= 0.0 and
+                std::isfinite(tiny_graph.GetMutationScanTiming().remove_wall_us) and
+                tiny_graph.GetMutationScanTiming().remove_wall_us >= 0.0 and
+                std::isfinite(tiny_graph.GetMutationScanTiming().remove_cpu_us) and
+                tiny_graph.GetMutationScanTiming().remove_cpu_us >= 0.0,
+            "mutable graph mutation scan timing is invalid");
     tiny_graph.Validate();
     require(tiny_graph.Size() == 1 and tiny_graph.IdAt(0) == 2002,
             "non-last removal did not compact the final slot");
@@ -2182,8 +2220,13 @@ run_crud(const std::filesystem::path& root,
     const double graph_build_cpu_ms = (process_cpu_microseconds() - graph_cpu_start_us) / 1'000.0;
     std::vector<int64_t> ids(base.count);
     std::iota(ids.begin(), ids.end(), 0);
-    MutableGraphState state(
-        std::move(model), std::move(codes), initial_graph, std::move(ids), max_degree, ef_search);
+    MutableGraphState state(std::move(model),
+                            std::move(codes),
+                            initial_graph,
+                            std::move(ids),
+                            max_degree,
+                            ef_search,
+                            rebuild_control);
 
     std::cout
         << "round,count,dim,crud_ops,queries,max_degree,ef_search,build_encode_ms,"
@@ -2199,7 +2242,9 @@ run_crud(const std::filesystem::path& root,
                      "rebuilt_search_p50_us,rebuilt_search_cpu_p50_us,"
                      "rebuilt_graph_self_top1_recall,rebuilt_graph_full_top1_agreement,"
                      "rebuilt_graph_full_positional_agreement,"
-                     "incremental_rebuilt_top1_agreement,incremental_edges,rebuilt_edges";
+                     "incremental_rebuilt_top1_agreement,incremental_edges,rebuilt_edges,"
+                     "update_scan_p50_us,update_scan_cpu_p50_us,remove_scan_p50_us,"
+                     "remove_scan_cpu_p50_us";
     }
     std::cout << ",save_ms,load_ms,snapshot_bytes,state_rss_kib,roundtrip_rss_kib,"
                  "peak_rss_kib,result_checksum\n";
@@ -2212,12 +2257,20 @@ run_crud(const std::filesystem::path& root,
         std::vector<double> remove_cpu_us;
         std::vector<double> add_us;
         std::vector<double> add_cpu_us;
+        std::vector<double> update_scan_us;
+        std::vector<double> update_scan_cpu_us;
+        std::vector<double> remove_scan_us;
+        std::vector<double> remove_scan_cpu_us;
         update_us.reserve(crud_ops);
         update_cpu_us.reserve(crud_ops);
         remove_us.reserve(crud_ops);
         remove_cpu_us.reserve(crud_ops);
         add_us.reserve(crud_ops);
         add_cpu_us.reserve(crud_ops);
+        update_scan_us.reserve(crud_ops);
+        update_scan_cpu_us.reserve(crud_ops);
+        remove_scan_us.reserve(crud_ops);
+        remove_scan_cpu_us.reserve(crud_ops);
         const uint64_t fallbacks_before = state.GetMutationFallbacks();
         for (uint64_t operation = 0; operation < crud_ops; ++operation) {
             const uint64_t id = (round * 65537ULL + operation * 8191ULL) % base.count;
@@ -2233,12 +2286,20 @@ run_crud(const std::filesystem::path& root,
             require(state.Update(static_cast<int64_t>(id), vector), "CRUD Update failed");
             update_us.push_back(microseconds(start, Clock::now()));
             update_cpu_us.push_back(process_cpu_microseconds() - cpu_start_us);
+            if (rebuild_control) {
+                update_scan_us.push_back(state.GetMutationScanTiming().update_wall_us);
+                update_scan_cpu_us.push_back(state.GetMutationScanTiming().update_cpu_us);
+            }
 
             start = Clock::now();
             cpu_start_us = process_cpu_microseconds();
             require(state.Remove(static_cast<int64_t>(id)), "CRUD Remove failed");
             remove_us.push_back(microseconds(start, Clock::now()));
             remove_cpu_us.push_back(process_cpu_microseconds() - cpu_start_us);
+            if (rebuild_control) {
+                remove_scan_us.push_back(state.GetMutationScanTiming().remove_wall_us);
+                remove_scan_cpu_us.push_back(state.GetMutationScanTiming().remove_cpu_us);
+            }
 
             start = Clock::now();
             cpu_start_us = process_cpu_microseconds();
@@ -2254,6 +2315,10 @@ run_crud(const std::filesystem::path& root,
         std::sort(remove_cpu_us.begin(), remove_cpu_us.end());
         std::sort(add_us.begin(), add_us.end());
         std::sort(add_cpu_us.begin(), add_cpu_us.end());
+        std::sort(update_scan_us.begin(), update_scan_us.end());
+        std::sort(update_scan_cpu_us.begin(), update_scan_cpu_us.end());
+        std::sort(remove_scan_us.begin(), remove_scan_us.end());
+        std::sort(remove_scan_cpu_us.begin(), remove_scan_cpu_us.end());
 
         const auto compact_start = Clock::now();
         const auto topology = state.GetGraph();
@@ -2435,7 +2500,11 @@ run_crud(const std::filesystem::path& root,
                       << static_cast<double>(incremental_rebuilt_top1_agreement) /
                              static_cast<double>(query_count)
                       << ',' << topology.neighbors.size() << ','
-                      << rebuilt_topology.neighbors.size();
+                      << rebuilt_topology.neighbors.size() << ','
+                      << percentile(update_scan_us, 0.50) << ','
+                      << percentile(update_scan_cpu_us, 0.50) << ','
+                      << percentile(remove_scan_us, 0.50) << ','
+                      << percentile(remove_scan_cpu_us, 0.50);
         }
         std::cout << ',' << save_ms << ',' << load_ms << ',' << snapshot_bytes << ','
                   << state_rss_kib << ',' << current_rss_kib() << ',' << peak_rss_kib() << ','
