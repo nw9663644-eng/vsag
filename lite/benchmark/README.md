@@ -589,3 +589,27 @@ The fixed-count CRUD runner used seven fresh processes per dataset and scale at 
 The CRUD self-query columns are post-mutation reachability diagnostics, not standard Recall@10. A GIST-100k parameter sweep showed that `16/256`, `32/128`, `32/256`, and `64/256` raised Graph self Top-1 from the default 0.37 to 0.42, 0.56, 0.60, and 0.78. The `64/256` point increased graph build from 39.6 to 182.0 seconds, Update P50 from 4.13 to 40.77 ms, Add P50 from 3.41 to 38.09 ms, and snapshot size from 112.8 to 151.2 MB. This rules out simply maximizing graph parameters when single-insert efficiency matters; independent-query quality should use the documented GIST `32/512` configuration, while CRUD quality needs a separate graph-repair investigation.
 
 Raw evidence and verified SHA-256 manifests are in `/home/ubuntu/project/vsag-lite-rabitq-single-core-{sift,gist}-20260926-835eab3`, `/home/ubuntu/project/vsag-lite-rabitq-single-core-{sift,gist}-quality-20260926-835eab3`, and `/home/ubuntu/project/vsag-lite-rabitq-gist-tuning-20260926-835eab3`. Cohere was not present on the measured server and is therefore recorded as pending rather than replaced with another dataset.
+
+### CRUD rebuilt-topology differential control
+
+Use the control mode to distinguish incremental graph-maintenance effects from
+the quality of the selected graph parameters:
+
+```bash
+lite_rabitq_codec_probe --crud-control \
+  DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH
+```
+
+The command performs the same timed Update-Remove-Add sequence as `--crud`.
+After each batch, it orders the current raw vectors by the mutable state's slot
+mapping and invokes the existing FP32 Lite graph builder with the same degree
+and `ef_search`. Incremental and rebuilt topologies then search the same
+RaBitQ codes and queries. The extra CSV fields report rebuild wall/process CPU
+time, rebuilt search P50 wall/process CPU time, rebuilt self-query and
+full-code agreement, and incremental/rebuilt Top-1 agreement.
+
+The rebuild and slot-ordered FP32 copy are diagnostic work outside the mutation
+timers. They intentionally increase runtime, transient memory, and process peak
+RSS, so control-mode resource values must not be reported as the mutable
+backend's steady footprint. The original `--crud` schema and runner remain
+unchanged.

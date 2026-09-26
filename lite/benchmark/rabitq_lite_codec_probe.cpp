@@ -2086,7 +2086,8 @@ run_crud(const std::filesystem::path& root,
          uint64_t crud_ops,
          uint64_t query_count,
          uint64_t max_degree,
-         uint64_t ef_search) {
+         uint64_t ef_search,
+         bool rebuild_control) {
     const uint64_t dim = read_dimension(root / "base.fvecs");
     auto base = read_records<float>(root / "base.fvecs", dim);
     require(base.count >= 10 and query_count <= base.count and max_degree >= 4 and
@@ -2127,8 +2128,16 @@ run_crud(const std::filesystem::path& root,
            "add_cpu_p99_us,mutation_fallbacks,compact_ms,search_p50_us,search_p99_us,"
            "search_cpu_p50_us,search_cpu_p99_us,full_self_top1_recall,"
            "graph_self_top1_recall,graph_full_top1_agreement,graph_full_positional_agreement,"
-           "mean_visited,mean_reordered,save_ms,load_ms,snapshot_bytes,state_rss_kib,"
-           "roundtrip_rss_kib,peak_rss_kib,result_checksum\n";
+           "mean_visited,mean_reordered";
+    if (rebuild_control) {
+        std::cout << ",rebuild_control_ms,rebuild_control_cpu_ms,"
+                     "rebuilt_search_p50_us,rebuilt_search_cpu_p50_us,"
+                     "rebuilt_graph_self_top1_recall,rebuilt_graph_full_top1_agreement,"
+                     "rebuilt_graph_full_positional_agreement,"
+                     "incremental_rebuilt_top1_agreement";
+    }
+    std::cout << ",save_ms,load_ms,snapshot_bytes,state_rss_kib,roundtrip_rss_kib,"
+                 "peak_rss_kib,result_checksum\n";
 
     constexpr uint64_t k = 10;
     for (uint64_t round = 0; round < rounds; ++round) {
@@ -2184,10 +2193,36 @@ run_crud(const std::filesystem::path& root,
         const auto compact_start = Clock::now();
         const auto topology = state.GetGraph();
         const double compact_ms = milliseconds(compact_start, Clock::now());
+
+        GraphTopology rebuilt_topology;
+        double rebuild_control_ms = 0.0;
+        double rebuild_control_cpu_ms = 0.0;
+        if (rebuild_control) {
+            const auto rebuild_start = Clock::now();
+            const double rebuild_cpu_start_us = process_cpu_microseconds();
+            std::vector<float> slot_vectors(state.Size() * dim);
+            for (uint64_t slot = 0; slot < state.Size(); ++slot) {
+                const int64_t id = state.IdAt(slot);
+                require(id >= 0 and static_cast<uint64_t>(id) < base.count,
+                        "CRUD control ID outside source vectors");
+                std::copy_n(base.values.data() + static_cast<uint64_t>(id) * dim,
+                            dim,
+                            slot_vectors.data() + slot * dim);
+            }
+            rebuilt_topology =
+                build_graph_topology(slot_vectors, state.Size(), dim, max_degree, ef_search);
+            rebuild_control_ms = milliseconds(rebuild_start, Clock::now());
+            rebuild_control_cpu_ms = (process_cpu_microseconds() - rebuild_cpu_start_us) / 1'000.0;
+        }
+
         std::vector<double> search_us;
         std::vector<double> search_cpu_us;
+        std::vector<double> rebuilt_search_us;
+        std::vector<double> rebuilt_search_cpu_us;
         search_us.reserve(query_count);
         search_cpu_us.reserve(query_count);
+        rebuilt_search_us.reserve(query_count);
+        rebuilt_search_cpu_us.reserve(query_count);
         std::vector<std::vector<Candidate>> expected;
         expected.reserve(query_count);
         uint64_t full_self_hits = 0;
@@ -2196,6 +2231,10 @@ run_crud(const std::filesystem::path& root,
         uint64_t positional_agreement = 0;
         uint64_t visited = 0;
         uint64_t reordered = 0;
+        uint64_t rebuilt_self_hits = 0;
+        uint64_t rebuilt_top1_agreement = 0;
+        uint64_t rebuilt_positional_agreement = 0;
+        uint64_t incremental_rebuilt_top1_agreement = 0;
         uint64_t checksum = 1469598103934665603ULL;
         for (uint64_t query_number = 0; query_number < query_count; ++query_number) {
             const uint64_t id = (round * 104729ULL + query_number * 65537ULL) % base.count;
@@ -2225,11 +2264,36 @@ run_crud(const std::filesystem::path& root,
             }
             visited += found.visited;
             reordered += found.reordered;
+            if (rebuild_control) {
+                const auto rebuilt_start = Clock::now();
+                const double rebuilt_cpu_start_us = process_cpu_microseconds();
+                const auto rebuilt = graph_search(
+                    query, query_norm, state.GetCodes(), rebuilt_topology, k, ef_search);
+                rebuilt_search_us.push_back(microseconds(rebuilt_start, Clock::now()));
+                rebuilt_search_cpu_us.push_back(process_cpu_microseconds() - rebuilt_cpu_start_us);
+                require(rebuilt.neighbors.size() == k, "rebuilt CRUD result size changed");
+                rebuilt_self_hits +=
+                    state.IdAt(rebuilt.neighbors.front().id) == static_cast<int64_t>(id) ? 1 : 0;
+                rebuilt_top1_agreement +=
+                    state.IdAt(rebuilt.neighbors.front().id) == state.IdAt(full.front().id) ? 1 : 0;
+                incremental_rebuilt_top1_agreement += state.IdAt(rebuilt.neighbors.front().id) ==
+                                                              state.IdAt(found.neighbors.front().id)
+                                                          ? 1
+                                                          : 0;
+                for (uint64_t position = 0; position < k; ++position) {
+                    rebuilt_positional_agreement +=
+                        state.IdAt(rebuilt.neighbors[position].id) == state.IdAt(full[position].id)
+                            ? 1
+                            : 0;
+                }
+            }
             checksum = result_checksum(found.neighbors, state, checksum);
             expected.push_back(std::move(found.neighbors));
         }
         std::sort(search_us.begin(), search_us.end());
         std::sort(search_cpu_us.begin(), search_cpu_us.end());
+        std::sort(rebuilt_search_us.begin(), rebuilt_search_us.end());
+        std::sort(rebuilt_search_cpu_us.begin(), rebuilt_search_cpu_us.end());
 
         const auto save_start = Clock::now();
         {
@@ -2290,9 +2354,25 @@ run_crud(const std::filesystem::path& root,
                   << ','
                   << static_cast<double>(positional_agreement) / static_cast<double>(opportunities)
                   << ',' << static_cast<double>(visited) / static_cast<double>(query_count) << ','
-                  << static_cast<double>(reordered) / static_cast<double>(query_count) << ','
-                  << save_ms << ',' << load_ms << ',' << snapshot_bytes << ',' << state_rss_kib
-                  << ',' << current_rss_kib() << ',' << peak_rss_kib() << ',' << checksum << '\n';
+                  << static_cast<double>(reordered) / static_cast<double>(query_count);
+        if (rebuild_control) {
+            std::cout << ',' << rebuild_control_ms << ',' << rebuild_control_cpu_ms << ','
+                      << percentile(rebuilt_search_us, 0.50) << ','
+                      << percentile(rebuilt_search_cpu_us, 0.50) << ','
+                      << static_cast<double>(rebuilt_self_hits) / static_cast<double>(query_count)
+                      << ','
+                      << static_cast<double>(rebuilt_top1_agreement) /
+                             static_cast<double>(query_count)
+                      << ','
+                      << static_cast<double>(rebuilt_positional_agreement) /
+                             static_cast<double>(opportunities)
+                      << ','
+                      << static_cast<double>(incremental_rebuilt_top1_agreement) /
+                             static_cast<double>(query_count);
+        }
+        std::cout << ',' << save_ms << ',' << load_ms << ',' << snapshot_bytes << ','
+                  << state_rss_kib << ',' << current_rss_kib() << ',' << peak_rss_kib() << ','
+                  << checksum << '\n';
     }
 }
 }  // namespace
@@ -2317,14 +2397,16 @@ main(int argc, char** argv) {
             run_mutable_rss(argv[2]);
             return 0;
         }
-        if (argc == 9 and std::string(argv[1]) == "--crud") {
+        if (argc == 9 and
+            (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control")) {
             run_crud(argv[2],
                      argv[3],
                      parse_positive(argv[4]),
                      parse_positive(argv[5]),
                      parse_positive(argv[6]),
                      parse_positive(argv[7]),
-                     parse_positive(argv[8]));
+                     parse_positive(argv[8]),
+                     std::string(argv[1]) == "--crud-control");
             return 0;
         }
         if (argc == 2 or argc == 4) {
@@ -2338,7 +2420,8 @@ main(int argc, char** argv) {
                      "--load DATASET_DIR SNAPSHOT EF_SEARCH | "
                      "--mutable-rss SNAPSHOT | "
                      "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
-                     "--self-test]\n";
+                     "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
+                     "EF_SEARCH | --self-test]\n";
         return 2;
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
