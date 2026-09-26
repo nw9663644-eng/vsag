@@ -780,6 +780,12 @@ struct MutationScanTiming {
     double remove_cpu_us{};
 };
 
+struct IncomingMemoryUsage {
+    uint64_t edges{};
+    uint64_t logical_bytes{};
+    uint64_t capacity_bytes{};
+};
+
 struct MutableMemoryUsage {
     uint64_t model_logical_bytes{};
     uint64_t model_capacity_bytes{};
@@ -999,6 +1005,26 @@ public:
     [[nodiscard]] const std::vector<int64_t>&
     GetIds() const {
         return ids_;
+    }
+
+    [[nodiscard]] std::vector<std::vector<uint64_t>>
+    BuildIncomingAdjacency() const {
+        std::vector<uint64_t> counts(Size());
+        for (const auto& neighbors : adjacency_) {
+            for (const uint64_t target : neighbors) {
+                ++counts[target];
+            }
+        }
+        std::vector<std::vector<uint64_t>> incoming(Size());
+        for (uint64_t target = 0; target < Size(); ++target) {
+            incoming[target].reserve(counts[target]);
+        }
+        for (uint64_t source = 0; source < Size(); ++source) {
+            for (const uint64_t target : adjacency_[source]) {
+                incoming[target].push_back(source);
+            }
+        }
+        return incoming;
     }
 
     [[nodiscard]] int64_t
@@ -1901,6 +1927,13 @@ self_test() {
     const auto mutable_result = mutable_graph.Search(base.data() + 2 * dim, 10);
     require(mutable_result.neighbors.size() == 10 and mutable_result.visited > 0,
             "mutable graph search failed after CRUD");
+    const auto incoming = mutable_graph.BuildIncomingAdjacency();
+    uint64_t incoming_edges = 0;
+    for (const auto& sources : incoming) {
+        incoming_edges += sources.size();
+    }
+    require(incoming_edges == mutable_graph.GetGraph().neighbors.size(),
+            "mutable graph incoming edge count mismatch");
 
     std::stringstream mutable_snapshot(std::ios::in | std::ios::out | std::ios::binary);
     save_mutable_snapshot(mutable_snapshot, mutable_graph);
@@ -2180,6 +2213,52 @@ run_mutable_rss(const std::filesystem::path& snapshot_path) {
               << usage.KnownLogicalBytes() << ',' << usage.KnownCapacityBytes() << ','
               << usage.slot_entries << ',' << usage.slot_buckets << ',' << current_rss_kib() << ','
               << peak_rss_kib() << '\n';
+}
+
+void
+run_incoming_rss(const std::filesystem::path& snapshot_path) {
+    const auto load_start = Clock::now();
+    std::ifstream input(snapshot_path, std::ios::binary);
+    require(static_cast<bool>(input), "cannot open incoming RSS snapshot");
+    auto state = load_mutable_snapshot(input);
+    const double load_ms = milliseconds(load_start, Clock::now());
+    state.Validate();
+    const auto state_usage = state.GetMemoryUsage();
+
+    const auto build_start = Clock::now();
+    const double build_cpu_start_us = process_cpu_microseconds();
+    const auto incoming = state.BuildIncomingAdjacency();
+    const double build_ms = milliseconds(build_start, Clock::now());
+    const double build_cpu_ms = (process_cpu_microseconds() - build_cpu_start_us) / 1'000.0;
+
+    IncomingMemoryUsage incoming_usage;
+    incoming_usage.logical_bytes = incoming.size() * sizeof(std::vector<uint64_t>);
+    incoming_usage.capacity_bytes = incoming.capacity() * sizeof(std::vector<uint64_t>);
+    for (const auto& sources : incoming) {
+        incoming_usage.edges += sources.size();
+        incoming_usage.logical_bytes += sources.size() * sizeof(uint64_t);
+        incoming_usage.capacity_bytes += sources.capacity() * sizeof(uint64_t);
+    }
+    require(incoming_usage.edges == state_usage.adjacency_edges,
+            "incoming and outgoing edge counts differ");
+    require(incoming_usage.logical_bytes <= incoming_usage.capacity_bytes,
+            "incoming logical bytes exceed capacity bytes");
+
+    std::cout << "count,dim,max_degree,ef_search,load_ms,incoming_build_ms,"
+                 "incoming_build_cpu_ms,snapshot_bytes,outgoing_edges,incoming_edges,"
+                 "state_known_logical_bytes,state_known_capacity_bytes,"
+                 "incoming_logical_bytes,incoming_capacity_bytes,"
+                 "combined_known_logical_bytes,combined_known_capacity_bytes,"
+                 "current_rss_kib,peak_rss_kib\n";
+    std::cout << std::fixed << std::setprecision(6) << state.Size() << ',' << state.GetModel().dim
+              << ',' << state.GetMaxDegree() << ',' << state.GetEfSearch() << ',' << load_ms << ','
+              << build_ms << ',' << build_cpu_ms << ',' << std::filesystem::file_size(snapshot_path)
+              << ',' << state_usage.adjacency_edges << ',' << incoming_usage.edges << ','
+              << state_usage.KnownLogicalBytes() << ',' << state_usage.KnownCapacityBytes() << ','
+              << incoming_usage.logical_bytes << ',' << incoming_usage.capacity_bytes << ','
+              << state_usage.KnownLogicalBytes() + incoming_usage.logical_bytes << ','
+              << state_usage.KnownCapacityBytes() + incoming_usage.capacity_bytes << ','
+              << current_rss_kib() << ',' << peak_rss_kib() << '\n';
 }
 
 void
@@ -2533,6 +2612,10 @@ main(int argc, char** argv) {
             run_mutable_rss(argv[2]);
             return 0;
         }
+        if (argc == 3 and std::string(argv[1]) == "--incoming-rss") {
+            run_incoming_rss(argv[2]);
+            return 0;
+        }
         if (argc == 9 and
             (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control")) {
             run_crud(argv[2],
@@ -2554,7 +2637,7 @@ main(int argc, char** argv) {
         std::cerr << "usage: lite_rabitq_codec_probe [DATASET_DIR [MAX_DEGREE EF_SEARCH] | "
                      "--save DATASET_DIR SNAPSHOT MAX_DEGREE EF_SEARCH | "
                      "--load DATASET_DIR SNAPSHOT EF_SEARCH | "
-                     "--mutable-rss SNAPSHOT | "
+                     "--mutable-rss SNAPSHOT | --incoming-rss SNAPSHOT | "
                      "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
                      "EF_SEARCH | --self-test]\n";

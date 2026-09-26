@@ -701,6 +701,18 @@ Remove, closely matching wall time. All quality fields, topology edge counts,
 and result checksums were identical to the `a26a052` runs. Both stderr files
 were empty and the SHA-256 manifest verifies all evidence.
 
+Use the fresh-process memory diagnostic before integrating an incoming-edge
+index into mutation paths:
+
+```bash
+lite_rabitq_codec_probe --incoming-rss MUTABLE_SNAPSHOT
+```
+
+It loads the mutable snapshot, constructs an exact
+`vector<vector<uint64_t>>` incoming adjacency with counted reservations, and
+reports build wall/process CPU, incoming logical/capacity bytes, combined known
+state bytes, and RSS. The snapshot and CRUD behavior remain unchanged.
+
 The 100k result justifies evaluating a lightweight incoming-edge index for
 Remove. It does not by itself justify importing Full HGraph's hash-map,
 per-node dynamic-vector, and synchronization structure into Lite. The next
