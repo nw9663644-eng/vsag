@@ -713,6 +713,21 @@ It loads the mutable snapshot, constructs an exact
 reports build wall/process CPU, incoming logical/capacity bytes, combined known
 state bytes, and RSS. The snapshot and CRUD behavior remain unchanged.
 
+At commit `c7d192c05326c7c19fe65ca11b65b0f4f1766127`, seven
+fresh processes per scale compared `--incoming-rss` with the existing
+`--mutable-rss` baseline on the same long-churn snapshots:
+
+| Scale | Edges | Incoming build wall / CPU | Incoming capacity | Capacity over known state | Baseline / incoming RSS |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 10k | 160,000 | 0.565 / 0.566 ms | 1,520,000 B | 13.28% | 15,964 / 16,992 KiB |
+| 100k | 1,599,997 | 10.456 / 10.455 ms | 15,199,976 B | 13.29% | 124,980 / 137,792 KiB |
+
+Every incoming edge count equaled the outgoing edge count. All 28 formal
+processes produced empty stderr, and the evidence manifest verifies all inputs
+and outputs. The measured capacity is exact for this counted-reservation
+layout; RSS deltas include allocator and process effects. Raw evidence is in
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-rss-20260926-c7d192c`.
+
 The 100k result justifies evaluating a lightweight incoming-edge index for
 Remove. It does not by itself justify importing Full HGraph's hash-map,
 per-node dynamic-vector, and synchronization structure into Lite. The next
