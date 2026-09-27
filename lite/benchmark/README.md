@@ -837,3 +837,52 @@ this run. If capacity recovery is adopted later, it should be threshold-driven
 and evaluated over longer churn instead of running after every batch. Raw
 evidence is in
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-compact-20260926-33232fc`.
+
+### Long-churn incoming capacity policy
+
+At commit `b6fe3f060b8fadc337d3524b893ed37e9cc33b36`, a CPU-0
+GIST-100k run extended the deterministic workload to 50 batches of 100
+Update-Remove-Add cycles with 20 diagnostics per batch. The unmodified
+full-scan and incoming-edge paths matched in every per-round fallback, quality,
+visited/reordered, snapshot-size, and result-checksum field. Their final
+snapshots also had identical SHA-256 hashes. Incoming maintenance therefore
+remained semantically equivalent through 5,000 cycles while reducing median
+Update from 5,734.170 to 4,163.219 us and Remove from 2,343.615 to 67.124 us.
+Add medians were 3,861.078 and 3,989.944 us.
+
+Without recovery, incoming capacity grew from 16,284,952 to 21,383,776 bytes
+while logical bytes stayed near 15.20 MB. The capacity/logical ratio reached
+1.407, and the final ten rounds still had a positive capacity slope. A separate
+ten-round rebuilt-topology control took a median 50.789 seconds per rebuild,
+but its self-query and full-code agreement ranges matched the incremental
+topology and their Top-1 agreement median was 1.0. This extends the earlier
+finding that the low `16/128` GIST self-query diagnostic is not repaired by
+rebuilding the topology; independent-query validation continues to use the
+documented `32/512` configuration.
+
+The 125% threshold policy triggered only at rounds 10, 23, and 40:
+
+| Metric | No recovery | 125% threshold |
+| --- | ---: | ---: |
+| Capacity range | 16,284,952-21,383,776 B | 15,958,016-19,135,896 B before policy |
+| Final capacity | 21,383,776 B | 17,898,928 B |
+| Compaction count / total wall time | 0 / 0 ms | 3 / 11.503 ms |
+| Update P50 median | 4,163.219 us | 4,080.248 us |
+| Remove P50 median | 67.124 us | 66.104 us |
+| Add P50 median | 3,989.944 us | 3,900.404 us |
+
+Each trigger recovered 3.86-3.94 MB and returned capacity to the exact logical
+size. All 50 semantic rows and the final snapshot hash matched the no-recovery
+baseline. The latency differences are single paired observations and are not
+claimed as speedups; the result only shows no measured regression in this run.
+Process peak RSS was identical because source data and graph construction
+dominated the process peak, so the capacity figures are the exact evidence for
+this policy rather than an RSS claim.
+
+This experiment supports a sparse threshold policy over per-batch compaction
+if incoming adjacency is adopted. It does not make threshold compaction or the
+incoming prototype part of the public Lite implementation. Raw evidence and
+verified manifests are in
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-long-churn-20260927-7bae1a9`
+and
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-threshold-20260927-b6fe3f0`.
