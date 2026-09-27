@@ -794,6 +794,18 @@ compaction runs after mutation latency sampling and exact incoming validation,
 so its cost is visible separately. This is an experiment-only policy; regular
 `--crud-incoming`, snapshots, and the Lite public API remain unchanged.
 
+Use the threshold policy to compact only when reserved incoming capacity is
+more than 125% of its logical bytes:
+
+```bash
+lite_rabitq_codec_probe --crud-incoming-threshold \
+  DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH
+```
+
+The output adds a per-batch trigger field to the same compaction measurements.
+The 125% boundary is an experiment constant chosen from the long-churn
+capacity trace; it is not a public setting or an adopted production policy.
+
 ### Incoming capacity compaction result
 
 At commit `33232fce3fabfb15661bded92f90b0b0b724d532`, a paired

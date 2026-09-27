@@ -786,6 +786,14 @@ struct IncomingMemoryUsage {
     uint64_t capacity_bytes{};
 };
 
+[[nodiscard]] bool
+should_compact_incoming(const IncomingMemoryUsage& usage) {
+    require(usage.logical_bytes <= usage.capacity_bytes,
+            "incoming logical bytes exceed capacity bytes");
+    return usage.logical_bytes > 0 and
+           usage.capacity_bytes - usage.logical_bytes > usage.logical_bytes / 4;
+}
+
 struct MutableMemoryUsage {
     uint64_t model_logical_bytes{};
     uint64_t model_capacity_bytes{};
@@ -2012,6 +2020,9 @@ self_test() {
                 tiny_graph.GetMutationScanTiming().remove_cpu_us >= 0.0,
             "mutable graph mutation scan timing is invalid");
     tiny_graph.Validate();
+    require(not should_compact_incoming({0, 100, 125}) and
+                should_compact_incoming({0, 100, 126}) and not should_compact_incoming({0, 0, 0}),
+            "mutable incoming compaction threshold is invalid");
     const auto incoming_before_compact = tiny_graph.GetIncomingMemoryUsage();
     tiny_graph.CompactIncoming();
     const auto incoming_after_compact = tiny_graph.GetIncomingMemoryUsage();
@@ -2401,7 +2412,8 @@ run_crud(const std::filesystem::path& root,
          uint64_t ef_search,
          bool rebuild_control,
          bool use_incoming_adjacency,
-         bool compact_incoming) {
+         bool compact_incoming,
+         bool threshold_incoming_compaction) {
     const uint64_t dim = read_dimension(root / "base.fvecs");
     auto base = read_records<float>(root / "base.fvecs", dim);
     require(base.count >= 10 and query_count <= base.count and max_degree >= 4 and
@@ -2453,8 +2465,8 @@ run_crud(const std::filesystem::path& root,
         std::cout << ",incoming_edges,incoming_logical_bytes,incoming_capacity_bytes";
     }
     if (compact_incoming) {
-        std::cout << ",incoming_compact_ms,incoming_compact_cpu_ms,"
-                     "incoming_capacity_before_compact_bytes,"
+        std::cout << ",incoming_compact_triggered,incoming_compact_ms,"
+                     "incoming_compact_cpu_ms,incoming_capacity_before_compact_bytes,"
                      "incoming_capacity_after_compact_bytes";
     }
     if (rebuild_control) {
@@ -2529,20 +2541,26 @@ run_crud(const std::filesystem::path& root,
         }
         state.Validate();
         require(state.Size() == base.count, "CRUD changed the active record count");
+        bool incoming_compact_triggered = false;
         double incoming_compact_ms = 0.0;
         double incoming_compact_cpu_ms = 0.0;
         uint64_t incoming_capacity_before_compact_bytes = 0;
         uint64_t incoming_capacity_after_compact_bytes = 0;
         if (compact_incoming) {
-            incoming_capacity_before_compact_bytes = state.GetIncomingMemoryUsage().capacity_bytes;
-            const auto incoming_compact_start = Clock::now();
-            const double incoming_compact_cpu_start_us = process_cpu_microseconds();
-            state.CompactIncoming();
-            incoming_compact_ms = milliseconds(incoming_compact_start, Clock::now());
-            incoming_compact_cpu_ms =
-                (process_cpu_microseconds() - incoming_compact_cpu_start_us) / 1'000.0;
+            const auto incoming_usage_before_compact = state.GetIncomingMemoryUsage();
+            incoming_capacity_before_compact_bytes = incoming_usage_before_compact.capacity_bytes;
+            incoming_compact_triggered = not threshold_incoming_compaction or
+                                         should_compact_incoming(incoming_usage_before_compact);
+            if (incoming_compact_triggered) {
+                const auto incoming_compact_start = Clock::now();
+                const double incoming_compact_cpu_start_us = process_cpu_microseconds();
+                state.CompactIncoming();
+                incoming_compact_ms = milliseconds(incoming_compact_start, Clock::now());
+                incoming_compact_cpu_ms =
+                    (process_cpu_microseconds() - incoming_compact_cpu_start_us) / 1'000.0;
+                state.Validate();
+            }
             incoming_capacity_after_compact_bytes = state.GetIncomingMemoryUsage().capacity_bytes;
-            state.Validate();
         }
         std::sort(update_us.begin(), update_us.end());
         std::sort(update_cpu_us.begin(), update_cpu_us.end());
@@ -2726,7 +2744,8 @@ run_crud(const std::filesystem::path& root,
                       << incoming_usage.capacity_bytes;
         }
         if (compact_incoming) {
-            std::cout << ',' << incoming_compact_ms << ',' << incoming_compact_cpu_ms << ','
+            std::cout << ',' << static_cast<uint64_t>(incoming_compact_triggered) << ','
+                      << incoming_compact_ms << ',' << incoming_compact_cpu_ms << ','
                       << incoming_capacity_before_compact_bytes << ','
                       << incoming_capacity_after_compact_bytes;
         }
@@ -2785,7 +2804,8 @@ main(int argc, char** argv) {
         if (argc == 9 and
             (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control" or
              std::string(argv[1]) == "--crud-incoming" or
-             std::string(argv[1]) == "--crud-incoming-compact")) {
+             std::string(argv[1]) == "--crud-incoming-compact" or
+             std::string(argv[1]) == "--crud-incoming-threshold")) {
             run_crud(argv[2],
                      argv[3],
                      parse_positive(argv[4]),
@@ -2795,8 +2815,11 @@ main(int argc, char** argv) {
                      parse_positive(argv[8]),
                      std::string(argv[1]) == "--crud-control",
                      std::string(argv[1]) == "--crud-incoming" or
-                         std::string(argv[1]) == "--crud-incoming-compact",
-                     std::string(argv[1]) == "--crud-incoming-compact");
+                         std::string(argv[1]) == "--crud-incoming-compact" or
+                         std::string(argv[1]) == "--crud-incoming-threshold",
+                     std::string(argv[1]) == "--crud-incoming-compact" or
+                         std::string(argv[1]) == "--crud-incoming-threshold",
+                     std::string(argv[1]) == "--crud-incoming-threshold");
             return 0;
         }
         if (argc == 2 or argc == 4) {
@@ -2812,7 +2835,8 @@ main(int argc, char** argv) {
                      "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-incoming DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
                      "EF_SEARCH | --crud-incoming-compact DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS "
-                     "QUERIES MAX_DEGREE EF_SEARCH | "
+                     "QUERIES MAX_DEGREE EF_SEARCH | --crud-incoming-threshold DATASET_DIR "
+                     "SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
                      "MAX_DEGREE "
                      "EF_SEARCH | --self-test]\n";
