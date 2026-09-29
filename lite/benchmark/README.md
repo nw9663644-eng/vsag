@@ -951,3 +951,52 @@ implementation.
 Raw CSVs, snapshots, the analyzer, SHA-256 manifest, and `summary.json` are
 in
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-profile-20260929-7e1982c`.
+
+### GIST-500k high-dimensional incoming validation
+
+At commit `57aaa59201d3bf3457f32eb61f8432d1b3e7fc93`, a CPU-0
+GIST-500k run repeated the no-recovery and 125% threshold profiles for 50
+batches of 100 Update-Remove-Add cycles, with 20 self-query diagnostics per
+batch, `max_degree=16`, and `ef_search=128`. The prepared input contains
+500,000 960-dimensional vectors (1,922,000,000 bytes, SHA-256
+`840447f2014c69dcd66c5296738f2a8147cf9296bbdc649b8374ab5466c16a1c`).
+
+Both profiles completed all 50 rounds with empty stderr and zero mutation
+fallbacks. Every paired semantic field and result checksum matched. Their
+final snapshots were byte-identical with SHA-256
+`6b17bc1b86c8a0017dbecf153971fd268185110e89e20e1dc6afae556c667545`.
+The timed commands exited zero and reached 6,308,528 KiB and 6,308,552 KiB
+maximum RSS respectively; source vectors and graph construction dominate this
+process peak.
+
+The final incoming graph contained 7,999,985 edges. Of 500,000 nodes, 319,611
+(63.9222%) had zero incoming degree. Degree P50/P90/P95/P99/max was
+`0 / 36 / 78 / 269 / 7326`, confirming a sparse, long-tailed distribution at
+the larger and higher-dimensional scale.
+
+| Metric | No recovery | 125% threshold |
+| --- | ---: | ---: |
+| Final incoming capacity | 95,452,888 B | 80,549,456 B |
+| Final slack entries | 2,431,626 | 568,697 |
+| Capacity saved | - | 14,903,432 B (15.613%) |
+| Compaction triggers | 0 | 1 (round 47) |
+
+The round-47 trigger reduced incoming capacity from 95,095,744 to 75,999,872
+bytes in 16.697 ms wall time. The best tested chunk model again used 8-entry
+blocks, but required 82,528,456 bytes: 1,979,000 bytes (2.457%) more than the
+final thresholded vector layout. This larger-scale result strengthens the
+decision to retain vector incoming adjacency with sparse 125% capacity recovery
+and not implement a chunk backend.
+
+Update, Remove, Add, search, Save, and Load medians are recorded in
+`summary.json`, but this is one sequential paired run and is not evidence of
+a latency speedup. The self-query diagnostics are mutation and round-trip
+checks; this subset has no independent-query ground truth and therefore makes
+no recall claim. One earlier threshold attempt ended when its remote execution
+channel closed during the round-18 snapshot write; it is preserved separately,
+excluded from the paired result, and had empty stderr with no OOM or segfault
+kernel record.
+
+Raw CSVs, snapshots, timing logs, commands, validation checks, SHA-256
+manifest, and `summary.json` are in
+`/home/ubuntu/project/vsag-lite-rabitq-gist500k-profile-20260929-57aaa59`.
