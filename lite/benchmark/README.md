@@ -908,3 +908,46 @@ verified manifests are in
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-long-churn-20260927-7bae1a9`
 and
 `/home/ubuntu/project/vsag-lite-rabitq-incoming-threshold-20260927-b6fe3f0`.
+
+### Incoming degree distribution and chunk-layout decision
+
+At profiler commit `7e1982cb2d4217a78f08fc6904a80c3e64d44d13` and layout-model
+commit `6a9fa3e0550f706ac368ddfc86bc27e96844fff1`, paired CPU-0 runs
+measured 50 batches of 100 Update-Remove-Add cycles and 20 diagnostic
+queries per batch. Both 10k and 100k pairs matched all semantic rows and final
+snapshot SHA-256 hashes; all stderr files were empty.
+
+| Scale | Zero degree | Degree <= 16 | Degree > 64 | Degree P50/P90/P95/P99/max |
+| --- | ---: | ---: | ---: | --- |
+| 10k | 23.770% | 71.780% | 5.040% | 6 / 41 / 65 / 125 / 676 |
+| 100k | 50.134% | 79.194% | 6.246% | 0 / 42 / 77 / 212 / 2706 |
+
+The distribution is sparse and long-tailed. A fixed 16-, 32-, or 64-entry
+inline allocation would waste storage on zero- and low-degree nodes while
+still requiring overflow handling. The explicit chunk model found 8 entries
+per block to be the smallest of the tested 4/8/16/32/64 layouts:
+
+| Scale | Vector plus threshold | 8-entry chunk model | Chunk difference |
+| --- | ---: | ---: | ---: |
+| 10k | 1,519,968 B | 1,789,208 B | 269,240 B larger (17.714%) |
+| 100k | 17,898,928 B | 16,995,248 B | 903,680 B smaller (5.049%) |
+
+The chunk totals include an 8-byte node head, an 8-byte next pointer per
+block, and 8-byte source IDs, but exclude allocator metadata and alignment.
+They are modeled layout bytes rather than measured RSS. The 100k saving over
+the thresholded vector layout is only 5.049%, while 10k regresses and chunk
+traversal would add pointer chasing. A chunked backend prototype is therefore
+not justified by this evidence.
+
+The 125% threshold reduced final vector capacity by 36.375% at 10k and
+16.297% at 100k. It triggered 25 times for 7.803 ms total at 10k and three
+times (rounds 10, 23, and 40) for 11.699 ms total at 100k. The frequent 10k
+triggers did not change semantic results or materially shift paired latency
+medians, but a production policy should still evaluate size-aware hysteresis
+before adoption. The current experiment decision is to retain dynamic vectors,
+keep sparse threshold compaction as the candidate, and avoid a block-layout
+implementation.
+
+Raw CSVs, snapshots, the analyzer, SHA-256 manifest, and `summary.json` are
+in
+`/home/ubuntu/project/vsag-lite-rabitq-incoming-profile-20260929-7e1982c`.
