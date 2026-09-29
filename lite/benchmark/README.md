@@ -814,6 +814,20 @@ entries with reserved slack, outer vector bytes, logical edge bytes, and
 reserved edge bytes. Profiling runs after mutation/search timing and does not
 change snapshots or the regular experiment schemas.
 
+To model chunked incoming-adjacency layouts from an existing mutable snapshot
+without rerunning CRUD, use:
+
+```bash
+lite_rabitq_codec_probe --incoming-layout-profile MUTABLE_SNAPSHOT
+```
+
+The output reports exact block counts and payload slack for block sizes 4, 8,
+16, 32, and 64. `total_bytes` is an explicit model with one 64-bit head per
+node, one 64-bit next pointer per block, and 64-bit source IDs. It excludes
+allocator metadata and alignment, and is therefore a layout comparison rather
+than a process-RSS measurement. The same output includes ideal static CSR and
+the current vector-of-vectors logical byte counts as reference bounds.
+
 ### Incoming capacity compaction result
 
 At commit `33232fce3fabfb15661bded92f90b0b0b724d532`, a paired

@@ -812,6 +812,41 @@ struct IncomingDistribution {
     uint64_t edge_capacity_bytes{};
 };
 
+struct ChunkLayoutEstimate {
+    uint64_t nodes{};
+    uint64_t edges{};
+    uint64_t blocks{};
+    uint64_t payload_entries{};
+    uint64_t payload_slack_entries{};
+    uint64_t node_head_bytes{};
+    uint64_t block_next_bytes{};
+    uint64_t payload_bytes{};
+
+    [[nodiscard]] uint64_t
+    TotalBytes() const {
+        return node_head_bytes + block_next_bytes + payload_bytes;
+    }
+};
+
+[[nodiscard]] ChunkLayoutEstimate
+estimate_chunk_layout(const std::vector<std::vector<uint64_t>>& incoming, uint64_t block_size) {
+    require(block_size > 0, "incoming chunk size must be positive");
+    ChunkLayoutEstimate result;
+    result.nodes = incoming.size();
+    result.node_head_bytes = result.nodes * sizeof(uint64_t);
+    for (const auto& sources : incoming) {
+        const uint64_t degree = sources.size();
+        const uint64_t blocks = (degree + block_size - 1) / block_size;
+        result.edges += degree;
+        result.blocks += blocks;
+    }
+    result.payload_entries = result.blocks * block_size;
+    result.payload_slack_entries = result.payload_entries - result.edges;
+    result.block_next_bytes = result.blocks * sizeof(uint64_t);
+    result.payload_bytes = result.payload_entries * sizeof(uint64_t);
+    return result;
+}
+
 [[nodiscard]] bool
 should_compact_incoming(const IncomingMemoryUsage& usage) {
     require(usage.logical_bytes <= usage.capacity_bytes,
@@ -2111,6 +2146,12 @@ self_test() {
             tiny_incoming_profile.degree_gt_64 == 0 and tiny_incoming_profile.degree_max == 0 and
             tiny_incoming_profile.edge_logical_bytes == 0,
         "mutable incoming distribution is invalid");
+    const std::vector<std::vector<uint64_t>> chunk_sample{{}, {1}, {1, 2, 3, 4, 5, 6, 7, 8, 9}};
+    const auto chunk_layout = estimate_chunk_layout(chunk_sample, 8);
+    require(chunk_layout.nodes == 3 and chunk_layout.edges == 10 and chunk_layout.blocks == 3 and
+                chunk_layout.payload_entries == 24 and chunk_layout.payload_slack_entries == 14 and
+                chunk_layout.TotalBytes() == 240,
+            "incoming chunk layout estimate is invalid");
     tiny_graph.Validate();
     require(tiny_graph.Size() == 1 and tiny_graph.IdAt(0) == 2002,
             "non-last removal did not compact the final slot");
@@ -2482,6 +2523,38 @@ run_incoming_rss(const std::filesystem::path& snapshot_path) {
               << state_usage.KnownLogicalBytes() + incoming_usage.logical_bytes << ','
               << state_usage.KnownCapacityBytes() + incoming_usage.capacity_bytes << ','
               << current_rss_kib() << ',' << peak_rss_kib() << '\n';
+}
+
+void
+run_incoming_layout_profile(const std::filesystem::path& snapshot_path) {
+    std::ifstream input(snapshot_path, std::ios::binary);
+    require(static_cast<bool>(input), "cannot open incoming layout snapshot");
+    const auto state = load_mutable_snapshot(input);
+    state.Validate();
+    const auto incoming = state.BuildIncomingAdjacency();
+    uint64_t edges = 0;
+    for (const auto& sources : incoming) {
+        edges += sources.size();
+    }
+    const uint64_t ideal_csr_bytes = (incoming.size() + 1 + edges) * sizeof(uint64_t);
+    const uint64_t vector_logical_bytes =
+        incoming.size() * sizeof(std::vector<uint64_t>) + edges * sizeof(uint64_t);
+
+    std::cout << "count,edges,block_size,blocks,payload_entries,payload_slack_entries,"
+                 "node_head_bytes,block_next_bytes,payload_bytes,total_bytes,"
+                 "ideal_csr_bytes,vector_logical_bytes\n";
+    for (const uint64_t block_size : std::array<uint64_t, 5>{4, 8, 16, 32, 64}) {
+        const auto layout = estimate_chunk_layout(incoming, block_size);
+        require(layout.nodes == incoming.size() and layout.edges == edges and
+                    layout.payload_entries >= layout.edges,
+                "incoming chunk layout estimate is inconsistent");
+        std::cout << layout.nodes << ',' << layout.edges << ',' << block_size << ','
+                  << layout.blocks << ',' << layout.payload_entries << ','
+                  << layout.payload_slack_entries << ',' << layout.node_head_bytes << ','
+                  << layout.block_next_bytes << ',' << layout.payload_bytes << ','
+                  << layout.TotalBytes() << ',' << ideal_csr_bytes << ',' << vector_logical_bytes
+                  << '\n';
+    }
 }
 
 void
@@ -2909,6 +2982,10 @@ main(int argc, char** argv) {
             run_incoming_rss(argv[2]);
             return 0;
         }
+        if (argc == 3 and std::string(argv[1]) == "--incoming-layout-profile") {
+            run_incoming_layout_profile(argv[2]);
+            return 0;
+        }
         if (argc == 9 and
             (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control" or
              std::string(argv[1]) == "--crud-incoming" or
@@ -2948,7 +3025,8 @@ main(int argc, char** argv) {
                      "--save DATASET_DIR SNAPSHOT MAX_DEGREE EF_SEARCH | "
                      "--load DATASET_DIR SNAPSHOT EF_SEARCH | "
                      "--mutable-rss SNAPSHOT | --incoming-rss SNAPSHOT | "
-                     "--crud DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
+                     "--incoming-layout-profile SNAPSHOT | --crud DATASET_DIR SNAPSHOT ROUNDS "
+                     "CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-incoming DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
                      "EF_SEARCH | --crud-incoming-compact DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS "
                      "QUERIES MAX_DEGREE EF_SEARCH | --crud-incoming-threshold DATASET_DIR "
