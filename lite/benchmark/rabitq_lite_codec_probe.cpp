@@ -786,6 +786,32 @@ struct IncomingMemoryUsage {
     uint64_t capacity_bytes{};
 };
 
+struct IncomingDistribution {
+    uint64_t nodes{};
+    uint64_t zero_degree_nodes{};
+    uint64_t degree_le_4{};
+    uint64_t degree_le_8{};
+    uint64_t degree_le_16{};
+    uint64_t degree_le_32{};
+    uint64_t degree_le_64{};
+    uint64_t degree_gt_64{};
+    uint64_t degree_p50{};
+    uint64_t degree_p90{};
+    uint64_t degree_p95{};
+    uint64_t degree_p99{};
+    uint64_t degree_max{};
+    uint64_t capacity_p50{};
+    uint64_t capacity_p90{};
+    uint64_t capacity_p95{};
+    uint64_t capacity_p99{};
+    uint64_t capacity_max{};
+    uint64_t slack_nodes{};
+    uint64_t slack_entries{};
+    uint64_t outer_vector_bytes{};
+    uint64_t edge_logical_bytes{};
+    uint64_t edge_capacity_bytes{};
+};
+
 [[nodiscard]] bool
 should_compact_incoming(const IncomingMemoryUsage& usage) {
     require(usage.logical_bytes <= usage.capacity_bytes,
@@ -1110,6 +1136,55 @@ public:
             sources.shrink_to_fit();
         }
         incoming_.shrink_to_fit();
+    }
+
+    [[nodiscard]] IncomingDistribution
+    GetIncomingDistribution() const {
+        require(use_incoming_adjacency_, "incoming adjacency is not enabled");
+        IncomingDistribution result;
+        result.nodes = incoming_.size();
+        result.outer_vector_bytes = incoming_.capacity() * sizeof(std::vector<uint64_t>);
+        std::vector<uint64_t> degrees;
+        std::vector<uint64_t> capacities;
+        degrees.reserve(incoming_.size());
+        capacities.reserve(incoming_.size());
+        for (const auto& sources : incoming_) {
+            const uint64_t degree = sources.size();
+            const uint64_t capacity = sources.capacity();
+            degrees.push_back(degree);
+            capacities.push_back(capacity);
+            result.zero_degree_nodes += degree == 0 ? 1 : 0;
+            result.degree_le_4 += degree <= 4 ? 1 : 0;
+            result.degree_le_8 += degree <= 8 ? 1 : 0;
+            result.degree_le_16 += degree <= 16 ? 1 : 0;
+            result.degree_le_32 += degree <= 32 ? 1 : 0;
+            result.degree_le_64 += degree <= 64 ? 1 : 0;
+            result.degree_gt_64 += degree > 64 ? 1 : 0;
+            result.slack_nodes += capacity > degree ? 1 : 0;
+            result.slack_entries += capacity - degree;
+            result.edge_logical_bytes += degree * sizeof(uint64_t);
+            result.edge_capacity_bytes += capacity * sizeof(uint64_t);
+        }
+        if (degrees.empty()) {
+            return result;
+        }
+        std::sort(degrees.begin(), degrees.end());
+        std::sort(capacities.begin(), capacities.end());
+        auto quantile =
+            [](const std::vector<uint64_t>& values, uint64_t numerator, uint64_t denominator) {
+                return values[(values.size() - 1) * numerator / denominator];
+            };
+        result.degree_p50 = quantile(degrees, 50, 100);
+        result.degree_p90 = quantile(degrees, 90, 100);
+        result.degree_p95 = quantile(degrees, 95, 100);
+        result.degree_p99 = quantile(degrees, 99, 100);
+        result.degree_max = degrees.back();
+        result.capacity_p50 = quantile(capacities, 50, 100);
+        result.capacity_p90 = quantile(capacities, 90, 100);
+        result.capacity_p95 = quantile(capacities, 95, 100);
+        result.capacity_p99 = quantile(capacities, 99, 100);
+        result.capacity_max = capacities.back();
+        return result;
     }
 
     [[nodiscard]] int64_t
@@ -2029,6 +2104,13 @@ self_test() {
     require(incoming_after_compact.logical_bytes == incoming_before_compact.logical_bytes and
                 incoming_after_compact.capacity_bytes <= incoming_before_compact.capacity_bytes,
             "mutable incoming compaction changed logical storage or increased capacity");
+    const auto tiny_incoming_profile = tiny_graph.GetIncomingDistribution();
+    require(
+        tiny_incoming_profile.nodes == 1 and tiny_incoming_profile.zero_degree_nodes == 1 and
+            tiny_incoming_profile.degree_le_4 == 1 and tiny_incoming_profile.degree_le_64 == 1 and
+            tiny_incoming_profile.degree_gt_64 == 0 and tiny_incoming_profile.degree_max == 0 and
+            tiny_incoming_profile.edge_logical_bytes == 0,
+        "mutable incoming distribution is invalid");
     tiny_graph.Validate();
     require(tiny_graph.Size() == 1 and tiny_graph.IdAt(0) == 2002,
             "non-last removal did not compact the final slot");
@@ -2413,7 +2495,8 @@ run_crud(const std::filesystem::path& root,
          bool rebuild_control,
          bool use_incoming_adjacency,
          bool compact_incoming,
-         bool threshold_incoming_compaction) {
+         bool threshold_incoming_compaction,
+         bool profile_incoming) {
     const uint64_t dim = read_dimension(root / "base.fvecs");
     auto base = read_records<float>(root / "base.fvecs", dim);
     require(base.count >= 10 and query_count <= base.count and max_degree >= 4 and
@@ -2468,6 +2551,16 @@ run_crud(const std::filesystem::path& root,
         std::cout << ",incoming_compact_triggered,incoming_compact_ms,"
                      "incoming_compact_cpu_ms,incoming_capacity_before_compact_bytes,"
                      "incoming_capacity_after_compact_bytes";
+    }
+    if (profile_incoming) {
+        std::cout << ",incoming_nodes,incoming_zero_degree_nodes,incoming_degree_le_4,"
+                     "incoming_degree_le_8,incoming_degree_le_16,incoming_degree_le_32,"
+                     "incoming_degree_le_64,incoming_degree_gt_64,incoming_degree_p50,"
+                     "incoming_degree_p90,incoming_degree_p95,incoming_degree_p99,"
+                     "incoming_degree_max,incoming_capacity_p50,incoming_capacity_p90,"
+                     "incoming_capacity_p95,incoming_capacity_p99,incoming_capacity_max,"
+                     "incoming_slack_nodes,incoming_slack_entries,incoming_outer_vector_bytes,"
+                     "incoming_edge_logical_bytes,incoming_edge_capacity_bytes";
     }
     if (rebuild_control) {
         std::cout << ",rebuild_control_ms,rebuild_control_cpu_ms,"
@@ -2749,6 +2842,21 @@ run_crud(const std::filesystem::path& root,
                       << incoming_capacity_before_compact_bytes << ','
                       << incoming_capacity_after_compact_bytes;
         }
+        if (profile_incoming) {
+            const auto profile = state.GetIncomingDistribution();
+            std::cout << ',' << profile.nodes << ',' << profile.zero_degree_nodes << ','
+                      << profile.degree_le_4 << ',' << profile.degree_le_8 << ','
+                      << profile.degree_le_16 << ',' << profile.degree_le_32 << ','
+                      << profile.degree_le_64 << ',' << profile.degree_gt_64 << ','
+                      << profile.degree_p50 << ',' << profile.degree_p90 << ','
+                      << profile.degree_p95 << ',' << profile.degree_p99 << ','
+                      << profile.degree_max << ',' << profile.capacity_p50 << ','
+                      << profile.capacity_p90 << ',' << profile.capacity_p95 << ','
+                      << profile.capacity_p99 << ',' << profile.capacity_max << ','
+                      << profile.slack_nodes << ',' << profile.slack_entries << ','
+                      << profile.outer_vector_bytes << ',' << profile.edge_logical_bytes << ','
+                      << profile.edge_capacity_bytes;
+        }
         if (rebuild_control) {
             std::cout << ',' << rebuild_control_ms << ',' << rebuild_control_cpu_ms << ','
                       << percentile(rebuilt_search_us, 0.50) << ','
@@ -2805,7 +2913,9 @@ main(int argc, char** argv) {
             (std::string(argv[1]) == "--crud" or std::string(argv[1]) == "--crud-control" or
              std::string(argv[1]) == "--crud-incoming" or
              std::string(argv[1]) == "--crud-incoming-compact" or
-             std::string(argv[1]) == "--crud-incoming-threshold")) {
+             std::string(argv[1]) == "--crud-incoming-threshold" or
+             std::string(argv[1]) == "--crud-incoming-profile" or
+             std::string(argv[1]) == "--crud-incoming-threshold-profile")) {
             run_crud(argv[2],
                      argv[3],
                      parse_positive(argv[4]),
@@ -2816,10 +2926,16 @@ main(int argc, char** argv) {
                      std::string(argv[1]) == "--crud-control",
                      std::string(argv[1]) == "--crud-incoming" or
                          std::string(argv[1]) == "--crud-incoming-compact" or
-                         std::string(argv[1]) == "--crud-incoming-threshold",
+                         std::string(argv[1]) == "--crud-incoming-threshold" or
+                         std::string(argv[1]) == "--crud-incoming-profile" or
+                         std::string(argv[1]) == "--crud-incoming-threshold-profile",
                      std::string(argv[1]) == "--crud-incoming-compact" or
-                         std::string(argv[1]) == "--crud-incoming-threshold",
-                     std::string(argv[1]) == "--crud-incoming-threshold");
+                         std::string(argv[1]) == "--crud-incoming-threshold" or
+                         std::string(argv[1]) == "--crud-incoming-threshold-profile",
+                     std::string(argv[1]) == "--crud-incoming-threshold" or
+                         std::string(argv[1]) == "--crud-incoming-threshold-profile",
+                     std::string(argv[1]) == "--crud-incoming-profile" or
+                         std::string(argv[1]) == "--crud-incoming-threshold-profile");
             return 0;
         }
         if (argc == 2 or argc == 4) {
@@ -2836,6 +2952,9 @@ main(int argc, char** argv) {
                      "--crud-incoming DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE "
                      "EF_SEARCH | --crud-incoming-compact DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS "
                      "QUERIES MAX_DEGREE EF_SEARCH | --crud-incoming-threshold DATASET_DIR "
+                     "SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
+                     "--crud-incoming-profile DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
+                     "MAX_DEGREE EF_SEARCH | --crud-incoming-threshold-profile DATASET_DIR "
                      "SNAPSHOT ROUNDS CRUD_OPS QUERIES MAX_DEGREE EF_SEARCH | "
                      "--crud-control DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERIES "
                      "MAX_DEGREE "

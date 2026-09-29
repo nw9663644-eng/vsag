@@ -806,6 +806,14 @@ The output adds a per-batch trigger field to the same compaction measurements.
 The 125% boundary is an experiment constant chosen from the long-churn
 capacity trace; it is not a public setting or an adopted production policy.
 
+Use `--crud-incoming-profile` or
+`--crud-incoming-threshold-profile` with the same positional arguments to
+append node-level layout diagnostics. The profile reports zero-degree and
+cumulative degree buckets, degree/capacity percentiles and maxima, nodes and
+entries with reserved slack, outer vector bytes, logical edge bytes, and
+reserved edge bytes. Profiling runs after mutation/search timing and does not
+change snapshots or the regular experiment schemas.
+
 ### Incoming capacity compaction result
 
 At commit `33232fce3fabfb15661bded92f90b0b0b724d532`, a paired
