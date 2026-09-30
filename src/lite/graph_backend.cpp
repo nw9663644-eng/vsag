@@ -97,6 +97,7 @@ public:
             for (uint64_t neighbor : extras_.back()) {
                 link(neighbor, Size() - 1);
             }
+            ensure_incoming(Size() - 1);
             return {};
         } catch (const std::invalid_argument&) {
             return failure(ErrorType::INVALID_ARGUMENT, "vector exceeds FP16 range");
@@ -145,6 +146,7 @@ public:
             for (uint64_t neighbor : extras_[slot]) {
                 link(neighbor, slot);
             }
+            ensure_incoming(slot);
             repair(affected_nodes, old_neighbors);
             return {};
         } catch (const std::invalid_argument&) {
@@ -563,6 +565,36 @@ private:
     }
 
     void
+    ensure_incoming(uint64_t target) {
+        if (Size() <= 1 or not incoming_[target].empty()) {
+            return;
+        }
+        uint64_t selected_source = Size();
+        uint64_t selected_edge = 0;
+        float farthest_distance = -1.0F;
+        for (const uint64_t source : extras_[target]) {
+            for (uint64_t edge = 0; edge < extras_[source].size(); ++edge) {
+                const uint64_t displaced = extras_[source][edge];
+                if (incoming_[displaced].size() <= 1) {
+                    continue;
+                }
+                const float candidate_distance = distance(source, displaced);
+                if (selected_source == Size() or candidate_distance > farthest_distance) {
+                    selected_source = source;
+                    selected_edge = edge;
+                    farthest_distance = candidate_distance;
+                }
+            }
+        }
+        if (selected_source == Size()) {
+            return;
+        }
+        const auto old_neighbors = extras_[selected_source];
+        extras_[selected_source][selected_edge] = target;
+        sync_incoming(selected_source, old_neighbors);
+    }
+
+    void
     repair(std::vector<uint64_t> affected_nodes,
            const std::vector<uint64_t>& additional_candidates) {
         std::sort(affected_nodes.begin(), affected_nodes.end());
@@ -682,8 +714,20 @@ private:
             std::sort(ranked.begin(),
                       ranked.begin() + static_cast<std::ptrdiff_t>(neighbors.size()),
                       closer);
-            for (uint64_t i = 0; i < max_degree_; ++i) {
-                neighbors[i] = ranked[i].slot;
+            uint64_t dropped = max_degree_;
+            for (uint64_t i = neighbors.size(); i > 0; --i) {
+                const uint64_t candidate = ranked[i - 1].slot;
+                const bool safe_to_drop = candidate == target ? not incoming_[candidate].empty()
+                                                              : incoming_[candidate].size() > 1;
+                if (safe_to_drop) {
+                    dropped = i - 1;
+                    break;
+                }
+            }
+            for (uint64_t source = 0, destination = 0; source < neighbors.size(); ++source) {
+                if (source != dropped) {
+                    neighbors[destination++] = ranked[source].slot;
+                }
             }
             neighbors.resize(max_degree_);
         }

@@ -285,6 +285,13 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
         }
         return total;
     };
+    auto zero_incoming = [&graph]() {
+        uint64_t total = 0;
+        for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
+            total += (*graph)->IncomingLinkCountAt(slot) == 0 ? 1 : 0;
+        }
+        return total;
+    };
     const uint64_t initial_edges = edge_count();
     for (uint64_t step = 0; step < 2000; ++step) {
         for (float& value : values) {
@@ -297,7 +304,10 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
             REQUIRE((*graph)->IncomingCapacityBytes() - (*graph)->IncomingLogicalBytes() <=
                     (*graph)->IncomingLogicalBytes() / 4 + sizeof(uint64_t));
         }
+        const uint64_t zero_incoming_before_add = zero_incoming();
         REQUIRE((*graph)->Add(static_cast<int64_t>(count + step), values.data(), dim));
+        REQUIRE((*graph)->IncomingLinkCountAt((*graph)->Size() - 1) > 0);
+        REQUIRE(zero_incoming() <= zero_incoming_before_add);
         require_incoming_matches(**graph);
     }
     REQUIRE((*graph)->Size() == count);
