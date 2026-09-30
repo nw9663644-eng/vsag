@@ -1148,3 +1148,54 @@ Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
 clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw
 evidence is in
 `/home/ubuntu/project/vsag-lite-scaled-churn-min1000-20260930-71675f1`.
+
+### Incoming-reachability-preserving graph links
+
+At commit `69cd411`, graph degree pruning avoids removing a node's only incoming
+edge when another candidate edge can be removed safely. If a newly added or
+updated node is still unreachable after reciprocal link attempts, the backend
+rewires the farthest safe edge from one of its nearest neighbors. The displaced
+node must retain another incoming edge. Maximum degree, search parameters,
+public API, and snapshot format are unchanged.
+
+The 2,000-cycle CRUD regression now requires every re-added node to receive an
+incoming link and requires Add not to increase the number of zero-incoming
+nodes. Exact incoming/outgoing consistency is still checked after every cycle.
+
+A private CPU-0 topology probe measured the baseline and candidate with the same
+synthetic 64D data and CRUD sequence:
+
+| Scale / checkpoint | Zero incoming baseline / candidate | Entry-directed reachable baseline / candidate | Self Top-1 baseline / candidate |
+| --- | ---: | ---: | ---: |
+| 10k initial | 301 / 0 | 9,684 / 9,982 | 1.000 / 1.000 |
+| 10k after 200 x 100 CRUD | 686 / 489 | 9,223 / 9,430 | 0.750 / 0.800 |
+| 100k initial | 9,373 / 0 | 90,294 / 99,120 | 0.650 / 0.750 |
+| 100k after 100 x 100 CRUD | 10,266 / 1,391 | 89,275 / 97,602 | 0.600 / 0.700 |
+
+Both candidates retained exactly 16 outgoing edges per node and one weakly
+connected component throughout. This isolates the relevant failure mode as
+directed reachability from graph entry points rather than edge-count loss or
+weak disconnection. Remove/repair can still create zero-incoming nodes, so the
+candidate reduces but does not eliminate long-churn reachability loss.
+
+The matching public stability workloads produced these medians:
+
+| Scale | Metric | Baseline | Candidate |
+| --- | --- | ---: | ---: |
+| 10k, 200 rounds | Update / Remove / Re-add P50 | 208.211 / 7.770 / 168.307 us | 198.892 / 7.445 / 166.882 us |
+| 10k, 200 rounds | Search P50 / whole run | 173.902 us / 15.16 s | 170.063 us / 14.65 s |
+| 100k, 100 rounds | Update / Remove / Re-add P50 | 473.972 / 9.045 / 278.475 us | 460.608 / 9.049 / 272.466 us |
+| 100k, 100 rounds | Search P50 / whole run | 429.718 us / 65.28 s | 408.179 us / 64.27 s |
+
+The candidate's self-query first/last-block medians were 0.950/0.900 at 10k and
+0.825/0.800 at 100k, versus 0.950/0.875 and 0.700/0.675 for the baseline.
+Candidate stderr was empty. Peak RSS changed from 19,688 to 19,948 KiB at 10k
+and 138,780 to 139,356 KiB at 100k. These are single sequential runs and do not
+establish a general latency improvement. Self-query Top-1 is a reachability
+diagnostic, not independent-query ANN recall; independent SIFT/GIST quality
+validation remains required.
+
+Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
+clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw probe,
+CSV, timing, and validation evidence is in
+`/home/ubuntu/project/vsag-lite-graph-topology-20260930-69cd411`.
