@@ -1199,3 +1199,35 @@ Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
 clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw probe,
 CSV, timing, and validation evidence is in
 `/home/ubuntu/project/vsag-lite-graph-topology-20260930-69cd411`.
+
+### Remove-repair incoming reachability
+
+At commit `c25f8a8`, graph removal repairs the outgoing adjacency of affected
+nodes and then applies the existing safe incoming-edge repair to those same
+nodes. This targets the remaining removal-induced zero-incoming nodes without a
+full-graph scan. Maximum degree, search parameters, public API, and snapshot
+format are unchanged. The repeated-CRUD regression now also requires Remove not
+to increase the zero-incoming count.
+
+The CPU-0 topology probe compared `c25f8a8` with the preceding `69cd411`
+candidate under identical synthetic 64D workloads:
+
+| Scale / checkpoint | Zero incoming before / after | Entry-directed reachable before / after | Self Top-1 before / after |
+| --- | ---: | ---: | ---: |
+| 10k after 200 x 100 CRUD | 489 / 6 | 9,430 / 9,906 | 0.800 / 0.800 |
+| 100k after 100 x 100 CRUD | 1,391 / 15 | 97,602 / 98,961 | 0.700 / 0.700 |
+
+Both variants retained exactly 16 outgoing edges per node and one weakly
+connected component. Public stability final Top-1 changed from 0.950 to 0.950 at
+10k and from 0.700 to 0.750 at 100k; observed minima changed from 0.650 to 0.700
+and remained 0.550 respectively. Candidate median Update/Remove/Re-add/Search
+latencies were 201.306/7.410/168.197/170.712 us at 10k and
+474.387/9.010/282.981/423.367 us at 100k. Compared with `69cd411`, the 100k
+Update, Re-add, and Search medians increased by about 3-4%, while final RSS and
+snapshot size were unchanged. These are single sequential runs, so the timing
+values are observations rather than universal speed claims.
+
+Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
+clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw probe,
+CSV, timing, commands, and checksums are in
+`/home/ubuntu/project/vsag-lite-graph-repair-incoming-20260930-c25f8a8`.
