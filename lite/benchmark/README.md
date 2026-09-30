@@ -1084,3 +1084,30 @@ ground truth, so it makes no ANN recall claim.
 Raw CSVs, timing logs, the private probe source and output, validation logs,
 summary, and SHA-256 manifest are in
 `/home/ubuntu/project/vsag-lite-public-threshold-20260930-bd062b1`.
+
+### Scale-aware public incoming-capacity checks
+
+At commit `47b2475`, the capacity policy keeps the 100-remove minimum check
+interval for small graphs and scales the interval to approximately 1% of the
+current graph size. This prevents every 100 removals from causing an O(n)
+capacity scan on larger indices while retaining the same 125% compaction
+threshold and best-effort failure behavior.
+
+On the same CPU-0 100k x 64D, 50 x 100 CRUD workload, the scale-aware policy
+checked at approximately 1,000 removals and compacted at rounds 10, 20, 30, 40,
+and 50. Incoming logical bytes remained 15,200,000. Final capacity/slack was
+17,675,144/2,475,144 bytes, compared with 18,745,048/3,545,048 bytes for the
+fixed-100 candidate. Whole-run wall time was 46.42 seconds, compared with 53.28
+seconds for fixed-100 and 45.66 seconds without recovery. The process peak was
+138,704 KiB because the first compaction occurs after 10 rounds; peak RSS is
+therefore not reduced in this workload even though final retained capacity is.
+
+All 50 rows again matched the no-recovery run's semantic fields and checksum,
+and the final snapshot SHA-256 was identical. Release and ASan/UBSan CTest each
+passed 6/6; clang-format-15, clang-tidy-15 with warnings-as-errors, and
+`git diff --check` passed. These timings remain single sequential observations,
+so the result supports a lower-overhead policy choice but is not a general
+latency claim.
+
+Raw evidence is in
+`/home/ubuntu/project/vsag-lite-public-scaled-interval-20260930-47b2475`.
