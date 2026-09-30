@@ -20,7 +20,7 @@ namespace vsag::lite::detail {
 namespace {
 
 constexpr uint64_t K_MAX_DEGREE = 64;
-constexpr uint64_t K_INCOMING_COMPACT_INTERVAL = 100;
+constexpr uint64_t K_MIN_INCOMING_COMPACT_INTERVAL = 100;
 
 struct Candidate {
     uint64_t slot;
@@ -541,7 +541,8 @@ private:
     void
     maybe_compact_incoming() {
         ++removes_since_incoming_check_;
-        if (removes_since_incoming_check_ < K_INCOMING_COMPACT_INTERVAL) {
+        const uint64_t interval = std::max(K_MIN_INCOMING_COMPACT_INTERVAL, Size() / 100);
+        if (removes_since_incoming_check_ < interval) {
             return;
         }
         removes_since_incoming_check_ = 0;
