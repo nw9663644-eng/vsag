@@ -1111,3 +1111,40 @@ latency claim.
 
 Raw evidence is in
 `/home/ubuntu/project/vsag-lite-public-scaled-interval-20260930-47b2475`.
+
+### Multi-scale long-churn capacity boundary
+
+At commit `71675f1`, the scale-aware policy raises its minimum inspection
+interval from 100 to 1,000 successful Remove operations. The larger floor avoids
+small-graph compaction thrash while the existing `Size() / 100` term continues
+to scale the interval for large graphs. The repeated-CRUD test now covers 2,000
+cycles and checks the 125% boundary immediately when a compaction occurs, before
+a subsequent Add can reserve new incoming capacity.
+
+A CPU-0 private capacity probe ran 10k x 64D for 200 x 100 CRUD operations and
+100k x 64D for 100 x 100 operations:
+
+| Scale | Old / new compactions | Final logical / capacity / slack | Probe wall |
+| --- | ---: | ---: | ---: |
+| 10k | 200 / 20 | 1,520,000 / 1,766,608 / 246,608 B | 8.99 s |
+| 100k | 10 / 10 | 15,200,000 / 17,604,672 / 2,404,672 B | 36.92 s |
+
+The 10k compactions now occur every 10 rounds instead of every round. The 100k
+schedule remains every 10 rounds. Public Save/Load stability runs completed all
+200 and 100 rows respectively with constant count, snapshot bytes, and empty
+stderr. For the first 50 100k rounds, semantic fields and result checksums were
+identical to the preceding scale-aware candidate; final snapshots also loaded
+successfully.
+
+The longer run exposes a separate graph-quality limitation. Top-1 self-query
+recall had a first-block/last-block median of 0.950/0.875 at 10k and 0.700/0.675
+at 100k; observed minima were 0.600 and 0.400. The block medians do not show
+a monotonic decline, but their low and variable values expose a graph
+repair/reachability limit. Capacity compaction does not change graph links, and
+the checksum match confirms this is separate from capacity-policy semantics. The next graph task must address repair quality and validate with
+independent queries; self-query recall is only a reachability diagnostic.
+
+Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
+clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw
+evidence is in
+`/home/ubuntu/project/vsag-lite-scaled-churn-min1000-20260930-71675f1`.
