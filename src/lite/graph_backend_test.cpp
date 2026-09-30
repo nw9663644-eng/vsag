@@ -286,19 +286,22 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
         return total;
     };
     const uint64_t initial_edges = edge_count();
-    for (uint64_t step = 0; step < 200; ++step) {
+    for (uint64_t step = 0; step < 2000; ++step) {
         for (float& value : values) {
             value = normal(rng);
         }
         REQUIRE((*graph)->Update(static_cast<int64_t>(step), values.data(), dim));
+        const uint64_t compactions = (*graph)->IncomingCompactionCount();
         REQUIRE((*graph)->Remove(static_cast<int64_t>(step)));
+        if ((*graph)->IncomingCompactionCount() != compactions) {
+            REQUIRE((*graph)->IncomingCapacityBytes() - (*graph)->IncomingLogicalBytes() <=
+                    (*graph)->IncomingLogicalBytes() / 4 + sizeof(uint64_t));
+        }
         REQUIRE((*graph)->Add(static_cast<int64_t>(count + step), values.data(), dim));
         require_incoming_matches(**graph);
     }
     REQUIRE((*graph)->Size() == count);
     REQUIRE((*graph)->IncomingCompactionCount() > 0);
-    REQUIRE((*graph)->IncomingCapacityBytes() - (*graph)->IncomingLogicalBytes() <=
-            (*graph)->IncomingLogicalBytes() / 4 + sizeof(uint64_t));
     REQUIRE(edge_count() + max_degree >= initial_edges);
     for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
         for (uint64_t edge = 0; edge < (*graph)->LinkCountAt(slot); ++edge) {

@@ -20,7 +20,7 @@ namespace vsag::lite::detail {
 namespace {
 
 constexpr uint64_t K_MAX_DEGREE = 64;
-constexpr uint64_t K_MIN_INCOMING_COMPACT_INTERVAL = 100;
+constexpr uint64_t K_MIN_INCOMING_COMPACT_INTERVAL = 1000;
 
 struct Candidate {
     uint64_t slot;
