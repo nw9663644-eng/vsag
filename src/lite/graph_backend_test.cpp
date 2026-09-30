@@ -32,6 +32,28 @@ using vsag::lite::detail::make_brute_force_backend;
 using vsag::lite::detail::make_fp16_graph_backend;
 using vsag::lite::detail::make_graph_backend;
 
+namespace {
+void
+require_incoming_matches(const vsag::lite::detail::Backend& graph) {
+    std::vector<std::vector<uint64_t>> expected(graph.Size());
+    for (uint64_t source = 0; source < graph.Size(); ++source) {
+        for (uint64_t edge = 0; edge < graph.LinkCountAt(source); ++edge) {
+            expected[graph.LinkAt(source, edge)].push_back(source);
+        }
+    }
+    for (uint64_t target = 0; target < graph.Size(); ++target) {
+        std::vector<uint64_t> actual;
+        actual.reserve(graph.IncomingLinkCountAt(target));
+        for (uint64_t edge = 0; edge < graph.IncomingLinkCountAt(target); ++edge) {
+            actual.push_back(graph.IncomingLinkAt(target, edge));
+        }
+        std::sort(expected[target].begin(), expected[target].end());
+        std::sort(actual.begin(), actual.end());
+        REQUIRE(actual == expected[target]);
+    }
+}
+}  // namespace
+
 TEST_CASE("Lite graph backend validates input and survives CRUD", "[lite-graph]") {
     auto flat = make_brute_force_backend(2);
     REQUIRE(flat);
@@ -46,6 +68,7 @@ TEST_CASE("Lite graph backend validates input and survives CRUD", "[lite-graph]"
     auto graph = make_graph_backend(**flat, 4, 32);
     REQUIRE(graph);
     REQUIRE((*graph)->Size() == 3);
+    require_incoming_matches(**graph);
     const std::array<float, 2> nonfinite{std::numeric_limits<float>::quiet_NaN(), 0};
     REQUIRE_FALSE((*graph)->Add(4, nonfinite.data(), 2));
     REQUIRE_FALSE((*graph)->Update(2, nonfinite.data(), 2));
@@ -58,8 +81,10 @@ TEST_CASE("Lite graph backend validates input and survives CRUD", "[lite-graph]"
     REQUIRE_FALSE((*graph)->Add(4, a.data(), 1));
     REQUIRE_FALSE((*graph)->Update(9, a.data(), 2));
     REQUIRE((*graph)->Update(2, a.data(), 2));
+    require_incoming_matches(**graph);
     REQUIRE((*graph)->Search(a.data(), 2, 2)->size() == 2);
     REQUIRE((*graph)->Remove(1));
+    require_incoming_matches(**graph);
     REQUIRE_FALSE((*graph)->Remove(1));
     REQUIRE((*graph)->Size() == 2);
     for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
@@ -72,6 +97,7 @@ TEST_CASE("Lite graph backend validates input and survives CRUD", "[lite-graph]"
     REQUIRE(result->size() == 2);
     REQUIRE(std::none_of(result->begin(), result->end(), [](const auto& n) { return n.id == 1; }));
     REQUIRE((*graph)->Add(1, b.data(), 2));
+    require_incoming_matches(**graph);
     REQUIRE((*graph)->Search(b.data(), 2, 3)->size() == 3);
 }
 
@@ -80,7 +106,9 @@ TEST_CASE("Lite graph removal cleans asymmetric restored links", "[lite-graph]")
     auto graph = restore_graph_backend(
         2, 2, 8, {10, 11, 12, 13}, {0, 0, 1, 0, 0, 1, 1, 1}, {{1}, {}, {3}, {}});
     REQUIRE(graph);
+    require_incoming_matches(**graph);
     REQUIRE((*graph)->Remove(11));
+    require_incoming_matches(**graph);
     REQUIRE((*graph)->Size() == 3);
     REQUIRE((*graph)->LinkCountAt(0) == 0);
     REQUIRE((*graph)->LinkCountAt(2) == 1);
@@ -113,6 +141,14 @@ TEST_CASE("Lite FP16 VectorAt uses caller-owned scratch", "[lite-graph]") {
     REQUIRE(first[1] == first_vector[1]);
     REQUIRE(second[0] == second_vector[0]);
     REQUIRE(second[1] == second_vector[1]);
+
+    require_incoming_matches(**graph);
+    REQUIRE((*graph)->Update(2, first_vector.data(), 2));
+    require_incoming_matches(**graph);
+    REQUIRE((*graph)->Remove(1));
+    require_incoming_matches(**graph);
+    REQUIRE((*graph)->Add(3, second_vector.data(), 2));
+    require_incoming_matches(**graph);
 }
 
 TEST_CASE("Lite graph filter traverses rejected IDs and survives snapshot load", "[lite-graph]") {
@@ -257,6 +293,7 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
         REQUIRE((*graph)->Update(static_cast<int64_t>(step), values.data(), dim));
         REQUIRE((*graph)->Remove(static_cast<int64_t>(step)));
         REQUIRE((*graph)->Add(static_cast<int64_t>(count + step), values.data(), dim));
+        require_incoming_matches(**graph);
     }
     REQUIRE((*graph)->Size() == count);
     REQUIRE(edge_count() + max_degree >= initial_edges);
