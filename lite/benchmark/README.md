@@ -1000,3 +1000,41 @@ kernel record.
 Raw CSVs, snapshots, timing logs, commands, validation checks, SHA-256
 manifest, and `summary.json` are in
 `/home/ubuntu/project/vsag-lite-rabitq-gist500k-profile-20260929-57aaa59`.
+
+### Public GraphBackend incoming-adjacency candidate
+
+At commit `ec4410a6be37645f997b11aad3318a56b5da3d6b`, the private
+`GraphBackend` maintains an incoming adjacency alongside its existing
+outgoing links. Add, Update, Remove, degree pruning, repair, last-slot moves,
+and FP32/FP16 restore keep both views synchronized. Snapshots and the public
+Lite API are unchanged; Load reconstructs incoming links from the serialized
+outgoing graph.
+
+Tests independently rebuild incoming links from `LinkAt()` and require exact
+set equality after construction, restored asymmetric links, FP32 and FP16
+CRUD, and 200 Update-Remove-Add cycles. Release and ASan/UBSan CTest each
+passed 6/6. clang-format-15, clang-tidy-15 with warnings-as-errors, and
+`git diff --check` also passed.
+
+A CPU-0 deterministic public-backend comparison used the parent commit's
+full-scan Update/Remove path and the incoming candidate with identical seeds:
+
+| Scale | Workload | Update P50 parent / incoming | Remove P50 parent / incoming | Re-add P50 parent / incoming |
+| --- | ---: | ---: | ---: | ---: |
+| 10k x 64D | 10 x 100 CRUD | 307.096 / 233.214 us | 140.006 / 7.970 us | 207.051 / 172.301 us |
+| 100k x 64D | 3 x 100 CRUD | 5,025.578 / 543.905 us | 6,397.743 / 9.840 us | 717.400 / 311.092 us |
+
+Every paired round matched count, snapshot bytes, Top-1 self recall, result
+checksum, backend options, and final snapshot SHA-256. Both stderr streams were
+empty. Peak RSS was 13,232/17,272 KiB at 10k and 98,540/138,192 KiB at 100k
+(parent/incoming). Median Load rose from 1.691 to 2.573 ms at 10k and from
+20.882 to 34.194 ms at 100k because incoming links are reconstructed.
+
+These are single sequential paired observations, so the ratios are candidate
+evidence rather than speedup claims. The next separate change should apply the
+already profiled 125% sparse-capacity recovery policy and measure its effect on
+this public backend; it should not change snapshot bytes or public API.
+
+Raw CSVs, timing logs, snapshots, environment, summaries, and the verified
+SHA-256 manifest are in
+`/home/ubuntu/project/vsag-lite-public-incoming-20260930-ec4410a`.
