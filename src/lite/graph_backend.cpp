@@ -628,6 +628,11 @@ private:
             }
             sync_incoming(source, old_neighbors);
         }
+        for (const uint64_t target : affected_nodes) {
+            if (target < Size()) {
+                ensure_incoming(target);
+            }
+        }
     }
 
     template <typename T>

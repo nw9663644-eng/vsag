@@ -299,7 +299,9 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
         }
         REQUIRE((*graph)->Update(static_cast<int64_t>(step), values.data(), dim));
         const uint64_t compactions = (*graph)->IncomingCompactionCount();
+        const uint64_t zero_incoming_before_remove = zero_incoming();
         REQUIRE((*graph)->Remove(static_cast<int64_t>(step)));
+        REQUIRE(zero_incoming() <= zero_incoming_before_remove);
         if ((*graph)->IncomingCompactionCount() != compactions) {
             REQUIRE((*graph)->IncomingCapacityBytes() - (*graph)->IncomingLogicalBytes() <=
                     (*graph)->IncomingLogicalBytes() / 4 + sizeof(uint64_t));
