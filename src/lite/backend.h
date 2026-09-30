@@ -64,6 +64,18 @@ public:
     IncomingLinkAt([[maybe_unused]] uint64_t slot, [[maybe_unused]] uint64_t edge) const {
         return 0;
     }
+    [[nodiscard]] virtual uint64_t
+    IncomingLogicalBytes() const {
+        return 0;
+    }
+    [[nodiscard]] virtual uint64_t
+    IncomingCapacityBytes() const {
+        return 0;
+    }
+    [[nodiscard]] virtual uint64_t
+    IncomingCompactionCount() const {
+        return 0;
+    }
 };
 
 tl::expected<std::unique_ptr<Backend>, Error>

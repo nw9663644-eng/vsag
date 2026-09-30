@@ -296,6 +296,9 @@ TEST_CASE("Lite graph repeated CRUD repairs affected adjacency", "[lite-graph]")
         require_incoming_matches(**graph);
     }
     REQUIRE((*graph)->Size() == count);
+    REQUIRE((*graph)->IncomingCompactionCount() > 0);
+    REQUIRE((*graph)->IncomingCapacityBytes() - (*graph)->IncomingLogicalBytes() <=
+            (*graph)->IncomingLogicalBytes() / 4 + sizeof(uint64_t));
     REQUIRE(edge_count() + max_degree >= initial_edges);
     for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
         for (uint64_t edge = 0; edge < (*graph)->LinkCountAt(slot); ++edge) {

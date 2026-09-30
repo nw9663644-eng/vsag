@@ -20,6 +20,7 @@ namespace vsag::lite::detail {
 namespace {
 
 constexpr uint64_t K_MAX_DEGREE = 64;
+constexpr uint64_t K_INCOMING_COMPACT_INTERVAL = 100;
 
 struct Candidate {
     uint64_t slot;
@@ -217,6 +218,7 @@ public:
             repair_candidates.push_back(remap(old_candidate));
         }
         repair(std::move(affected_nodes), repair_candidates);
+        maybe_compact_incoming();
         return true;
     }
 
@@ -427,6 +429,21 @@ public:
     }
 
     [[nodiscard]] uint64_t
+    IncomingLogicalBytes() const override {
+        return incoming_bytes(false);
+    }
+
+    [[nodiscard]] uint64_t
+    IncomingCapacityBytes() const override {
+        return incoming_bytes(true);
+    }
+
+    [[nodiscard]] uint64_t
+    IncomingCompactionCount() const override {
+        return incoming_compactions_;
+    }
+
+    [[nodiscard]] uint64_t
     Size() const override {
         return ids_.size();
     }
@@ -509,6 +526,39 @@ private:
         const auto old_neighbors = extras_[source];
         extras_[source] = neighbors;
         sync_incoming(source, old_neighbors);
+    }
+
+    [[nodiscard]] uint64_t
+    incoming_bytes(bool capacity) const {
+        uint64_t bytes =
+            (capacity ? incoming_.capacity() : incoming_.size()) * sizeof(std::vector<uint64_t>);
+        for (const auto& sources : incoming_) {
+            bytes += (capacity ? sources.capacity() : sources.size()) * sizeof(uint64_t);
+        }
+        return bytes;
+    }
+
+    void
+    maybe_compact_incoming() {
+        ++removes_since_incoming_check_;
+        if (removes_since_incoming_check_ < K_INCOMING_COMPACT_INTERVAL) {
+            return;
+        }
+        removes_since_incoming_check_ = 0;
+        const uint64_t logical = incoming_bytes(false);
+        const uint64_t capacity = incoming_bytes(true);
+        if (logical == 0 or capacity - logical <= logical / 4) {
+            return;
+        }
+        try {
+            for (auto& sources : incoming_) {
+                sources.shrink_to_fit();
+            }
+            incoming_.shrink_to_fit();
+            ++incoming_compactions_;
+        } catch (const std::bad_alloc&) {
+            // Capacity recovery is best-effort and must not make a successful Remove fail.
+        }
     }
 
     void
@@ -651,6 +701,8 @@ private:
     std::unordered_map<int64_t, uint64_t> slots_;
     std::vector<std::vector<uint64_t>> extras_;
     std::vector<std::vector<uint64_t>> incoming_;
+    uint64_t removes_since_incoming_check_{};
+    uint64_t incoming_compactions_{};
 };
 
 }  // namespace
