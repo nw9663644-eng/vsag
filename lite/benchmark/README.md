@@ -1038,3 +1038,49 @@ this public backend; it should not change snapshot bytes or public API.
 Raw CSVs, timing logs, snapshots, environment, summaries, and the verified
 SHA-256 manifest are in
 `/home/ubuntu/project/vsag-lite-public-incoming-20260930-ec4410a`.
+
+### Public GraphBackend sparse incoming-capacity recovery
+
+At commit `bd062b1`, the public-backend incoming candidate checks reserved
+incoming-adjacency capacity after each 100 successful Remove operations. It
+compacts only when capacity exceeds logical bytes by more than 25%. Compaction
+is best-effort: an allocation failure cannot turn a successful Remove into an
+API error. Snapshots and the public Lite API remain unchanged.
+
+The 256-node repeated-CRUD test now requires the policy to trigger and verifies
+that remaining capacity slack is within the 25% boundary, allowing one
+`uint64_t` of implementation-level `shrink_to_fit` slack. Release and
+ASan/UBSan CTest each passed 6/6. clang-format-15, clang-tidy-15 with
+warnings-as-errors, and `git diff --check` also passed.
+
+A deterministic private inspection probe used the same CPU-0 100k x 64D graph
+and 50 batches of 100 Update-Remove-Add cycles as the public benchmark. The
+logical incoming state remained 15,200,000 bytes. Initial capacity/slack was
+21,824,808/6,624,808 bytes; final capacity/slack was
+18,745,048/3,545,048 bytes. The policy compacted 25 times. Thus final slack was
+46.5% below initial slack, while remaining below the 25% logical-byte boundary.
+This probe reads internal counters solely for validation and adds no public API.
+
+A sequential paired public-backend run compared incoming maintenance without
+recovery to the threshold candidate:
+
+| Metric | Incoming only | 125% threshold |
+| --- | ---: | ---: |
+| Update P50 | 474.906 us | 493.506 us |
+| Remove P50 / P99 | 9.590 / 15.224 us | 8.100 / 17.115 us |
+| Re-add P50 | 274.705 us | 296.465 us |
+| Search P50 | 429.457 us | 471.201 us |
+| Peak RSS | 138,688 KiB | 132,996 KiB |
+| Whole-run wall time | 45.66 s | 53.28 s |
+
+All 50 paired rows matched count, CRUD count, snapshot bytes, Top-1 self
+recall, result checksum, backend options, and final snapshot SHA-256. Stderr
+was empty. The lower process peak RSS is consistent with capacity recovery, but
+this is one sequential paired run. The latency and wall-time differences include
+run-order and host noise and are not attributed to compaction. The workload is
+a self-query mutation and round-trip diagnostic without independent-query
+ground truth, so it makes no ANN recall claim.
+
+Raw CSVs, timing logs, the private probe source and output, validation logs,
+summary, and SHA-256 manifest are in
+`/home/ubuntu/project/vsag-lite-public-threshold-20260930-bd062b1`.
