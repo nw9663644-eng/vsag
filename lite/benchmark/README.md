@@ -1509,3 +1509,41 @@ and diverse GIST 10k outputs were byte-identical to the preceding experiment.
 Format/tidy version 15 and diff checks passed. Raw results and commands are in
 `/home/ubuntu/project/vsag-lite-diverse-repair-20261005`; production code and
 PR branches are unchanged.
+
+
+##### Directed versus weak connectivity (2026-10-05)
+
+The summary additionally reports `reverse_reachable_from_zero`,
+`weak_components` and `largest_weak_component`. Reverse reachability counts
+nodes that can reach slot zero along stored directed edges. Weak components
+ignore edge direction. These linear-time diagnostics exclude implicit search
+ring edges and require an auxiliary reverse adjacency list; their memory and
+time must not be attributed to the production index or search.
+
+All 12 combinations of SIFT/GIST 10k/100k repaired-implementation snapshots
+and preserve/diverse/diverse_repair have one weak component containing every
+node. Thus the observed reachability deficit is directed, not disconnected
+weak components. For diverse_repair:
+
+| Dataset | Reachable from 0 | Can reach 0 | Weak components | Largest component |
+| --- | ---: | ---: | ---: | ---: |
+| SIFT 10k | 10000 | 10000 | 1 | 10000 |
+| SIFT 100k | 100000 | 100000 | 1 | 100000 |
+| GIST 10k | 9978 | 10000 | 1 | 10000 |
+| GIST 100k | 99625 | 99955 | 1 | 100000 |
+
+Both SIFT snapshots are strongly connected: every node reaches zero and zero
+reaches every node. GIST is not: the 100k graph has 375 nodes unreachable from
+zero and 45 unable to reach zero (these sets need not be disjoint). The 45-node
+reverse deficit already exists in preserve and pure diverse. A subsequent
+candidate should examine directed edge installation/retention and safe reverse
+links, rather than assuming zero in-degree repair guarantees connectivity.
+These diagnostics do not prove that every missed query is due to connectivity;
+budget-limited exploration remains a separate source of recall loss.
+
+All 1,200 per-query output rows are byte-identical to the previous corresponding
+runs. Release 4/4, ASan+UBSan 6/6, both-build small-graph fixtures, format/tidy15
+and diff checks passed. Fixtures distinguish a one-way connected chain from two
+independent cycles. Commands and raw evidence are in
+`/home/ubuntu/project/vsag-lite-connectivity-20261005`. No production policy or
+PR branch is changed by this diagnostic increment.

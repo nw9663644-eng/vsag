@@ -72,6 +72,13 @@ def main():
         row = summary(run([0, 1, 2, 3], [[], [0], [0], [1]], 1, 'diverse_repair'))
         assert row['zero_in'] == '0' and row['mean_graph_degree'] == '1.000000'
         assert row['edge_reachable_from_zero'] == '2'
+        row = summary(run([0, 1, 2, 3], [[1], [0], [3], [2]], 1, 'preserve'))
+        assert row['weak_components'] == '2' and row['largest_weak_component'] == '2'
+        assert row['reverse_reachable_from_zero'] == '2'
+        row = summary(run([0, 1, 2], [[1], [2], []], 1, 'preserve'))
+        assert row['weak_components'] == '1' and row['largest_weak_component'] == '3'
+        assert row['edge_reachable_from_zero'] == '3'
+        assert row['reverse_reachable_from_zero'] == '1'
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

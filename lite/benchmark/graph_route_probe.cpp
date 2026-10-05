@@ -321,11 +321,15 @@ struct TopologyStats {
     uint64_t zero_out{};
     uint64_t zero_in{};
     uint64_t reachable{};
+    uint64_t reverse_reachable{};
+    uint64_t weak_components{};
+    uint64_t largest_weak_component{};
 };
 
 TopologyStats
 topology_stats(const GraphSnapshot& graph) {
     TopologyStats stats;
+    std::vector<std::vector<uint64_t>> reverse(graph.links.size());
     std::vector<uint64_t> incoming(graph.links.size(), 0);
     for (uint64_t source = 0; source < graph.links.size(); ++source) {
         const auto& neighbors = graph.links[source];
@@ -337,6 +341,7 @@ topology_stats(const GraphSnapshot& graph) {
                         unique.insert(neighbor).second,
                     "invalid transformed edge");
             ++incoming[neighbor];
+            reverse[neighbor].push_back(source);
         }
     }
     stats.zero_in = static_cast<uint64_t>(std::count(incoming.begin(), incoming.end(), 0));
@@ -355,6 +360,42 @@ topology_stats(const GraphSnapshot& graph) {
         }
     }
     stats.reachable = pending.size();
+    std::fill(visited.begin(), visited.end(), 0);
+    pending = {0};
+    visited[0] = 1;
+    for (uint64_t i = 0; i < pending.size(); ++i) {
+        for (const uint64_t neighbor : reverse[pending[i]]) {
+            if (visited[neighbor] == 0) {
+                visited[neighbor] = 1;
+                pending.push_back(neighbor);
+            }
+        }
+    }
+    stats.reverse_reachable = pending.size();
+    std::fill(visited.begin(), visited.end(), 0);
+    for (uint64_t seed = 0; seed < graph.links.size(); ++seed) {
+        if (visited[seed] != 0) {
+            continue;
+        }
+        ++stats.weak_components;
+        pending = {seed};
+        visited[seed] = 1;
+        for (uint64_t i = 0; i < pending.size(); ++i) {
+            const uint64_t source = pending[i];
+            const auto visit = [&](const std::vector<uint64_t>& neighbors) {
+                for (const uint64_t neighbor : neighbors) {
+                    if (visited[neighbor] == 0) {
+                        visited[neighbor] = 1;
+                        pending.push_back(neighbor);
+                    }
+                }
+            };
+            visit(graph.links[source]);
+            visit(reverse[source]);
+        }
+        stats.largest_weak_component =
+            std::max<uint64_t>(stats.largest_weak_component, pending.size());
+    }
     return stats;
 }
 
@@ -536,7 +577,8 @@ run(const std::string& snapshot,
     require(static_cast<bool>(output), "output write failed");
     std::cout << "query_count,k,recall_at_k,truth_visit_rate,mean_visited_nodes,"
                  "mean_expanded_nodes,mean_route_nodes,mean_distance_evaluations,mean_graph_degree,"
-                 "zero_out,zero_in,edge_reachable_from_zero\n";
+                 "zero_out,zero_in,edge_reachable_from_zero,reverse_reachable_from_zero,weak_"
+                 "components,largest_weak_component\n";
     std::cout << queries.size() << ',' << k << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(total_hits) / static_cast<double>(queries.size() * k) << ','
               << static_cast<double>(total_truth_visited) / static_cast<double>(queries.size() * k)
@@ -547,7 +589,8 @@ run(const std::string& snapshot,
               << static_cast<double>(total_distance_evaluations) /
                      static_cast<double>(queries.size())
               << ',' << mean_degree(graph) << ',' << topology.zero_out << ',' << topology.zero_in
-              << ',' << topology.reachable << '\n';
+              << ',' << topology.reachable << ',' << topology.reverse_reachable << ','
+              << topology.weak_components << ',' << topology.largest_weak_component << '\n';
     return 0;
 }
 
