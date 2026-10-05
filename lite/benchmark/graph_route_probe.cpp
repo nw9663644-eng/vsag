@@ -82,6 +82,7 @@ read_records(const std::string& path, int32_t expected_dim) {
 
 struct GraphSnapshot {
     uint64_t dim{};
+    uint64_t max_degree{};
     uint64_t ef_search{};
     std::vector<int64_t> ids;
     std::vector<float> vectors;
@@ -105,13 +106,15 @@ load_snapshot(const std::string& path) {
     const auto payload = read<uint64_t>(input);
     const auto representation = read<uint64_t>(input);
     require(version == 2 and representation == 2, "route probe requires an FP32 graph snapshot");
-    require(dim > 0 and dim <= 4096 and payload + 48 == available, "invalid snapshot layout");
+    require(count > 0 and dim > 0 and dim <= 4096 and payload + 48 == available,
+            "invalid snapshot layout");
     const auto degree = read<uint64_t>(input);
     const auto ef_search = read<uint64_t>(input);
     require(degree > 0 and degree <= 64 and ef_search > 0, "invalid graph options");
 
     GraphSnapshot graph;
     graph.dim = dim;
+    graph.max_degree = degree;
     graph.ef_search = ef_search;
     graph.ids.resize(count);
     graph.vectors.resize(count * dim);
@@ -192,6 +195,112 @@ select_entries(const GraphSnapshot& graph, const std::string& mode) {
                       });
     entries.resize(count);
     return entries;
+}
+
+void
+apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
+    if (mode == "preserve") {
+        return;
+    }
+    require(mode == "diverse" or mode == "symmetric",
+            "NEIGHBOR_MODE must be preserve, symmetric, or diverse");
+    std::vector<std::vector<uint64_t>> incoming(graph.ids.size());
+    for (uint64_t source = 0; source < graph.links.size(); ++source) {
+        for (const uint64_t target : graph.links[source]) {
+            incoming[target].push_back(source);
+        }
+    }
+    std::vector<std::vector<uint64_t>> diversified(graph.ids.size());
+    for (uint64_t source = 0; source < graph.links.size(); ++source) {
+        std::vector<uint64_t> candidates = graph.links[source];
+        candidates.insert(candidates.end(), incoming[source].begin(), incoming[source].end());
+        std::sort(candidates.begin(), candidates.end());
+        candidates.erase(std::unique(candidates.begin(), candidates.end()), candidates.end());
+        candidates.erase(std::remove(candidates.begin(), candidates.end(), source),
+                         candidates.end());
+        std::vector<Candidate> ranked;
+        ranked.reserve(candidates.size());
+        for (const uint64_t candidate : candidates) {
+            ranked.push_back(
+                {candidate, distance(graph, graph.vectors.data() + source * graph.dim, candidate)});
+        }
+        std::sort(ranked.begin(), ranked.end(), closer);
+        auto& selected = diversified[source];
+        selected.reserve(std::min<uint64_t>(graph.max_degree, ranked.size()));
+        if (mode == "symmetric") {
+            for (uint64_t i = 0; i < std::min<uint64_t>(graph.max_degree, ranked.size()); ++i) {
+                selected.push_back(ranked[i].slot);
+            }
+            continue;
+        }
+        for (const Candidate& candidate : ranked) {
+            bool good = true;
+            for (const uint64_t previous : selected) {
+                if (distance(graph, graph.vectors.data() + previous * graph.dim, candidate.slot) <
+                    candidate.distance) {
+                    good = false;
+                    break;
+                }
+            }
+            if (good) {
+                selected.push_back(candidate.slot);
+                if (selected.size() == graph.max_degree) {
+                    break;
+                }
+            }
+        }
+    }
+    graph.links = std::move(diversified);
+}
+
+double
+mean_degree(const GraphSnapshot& graph) {
+    uint64_t edges = 0;
+    for (const auto& neighbors : graph.links) {
+        edges += neighbors.size();
+    }
+    return static_cast<double>(edges) / static_cast<double>(graph.links.size());
+}
+
+struct TopologyStats {
+    uint64_t zero_out{};
+    uint64_t zero_in{};
+    uint64_t reachable{};
+};
+
+TopologyStats
+topology_stats(const GraphSnapshot& graph) {
+    TopologyStats stats;
+    std::vector<uint64_t> incoming(graph.links.size(), 0);
+    for (uint64_t source = 0; source < graph.links.size(); ++source) {
+        const auto& neighbors = graph.links[source];
+        require(neighbors.size() <= graph.max_degree, "transformed degree exceeds limit");
+        stats.zero_out += static_cast<uint64_t>(neighbors.empty());
+        std::unordered_set<uint64_t> unique;
+        for (const uint64_t neighbor : neighbors) {
+            require(neighbor < graph.links.size() and neighbor != source and
+                        unique.insert(neighbor).second,
+                    "invalid transformed edge");
+            ++incoming[neighbor];
+        }
+    }
+    stats.zero_in = static_cast<uint64_t>(std::count(incoming.begin(), incoming.end(), 0));
+    if (graph.links.empty()) {
+        return stats;
+    }
+    std::vector<uint8_t> visited(graph.links.size(), 0);
+    std::vector<uint64_t> pending{0};
+    visited[0] = 1;
+    for (uint64_t i = 0; i < pending.size(); ++i) {
+        for (const uint64_t neighbor : graph.links[pending[i]]) {
+            if (visited[neighbor] == 0) {
+                visited[neighbor] = 1;
+                pending.push_back(neighbor);
+            }
+        }
+    }
+    stats.reachable = pending.size();
+    return stats;
 }
 
 struct SearchTrace {
@@ -313,12 +422,15 @@ run(const std::string& snapshot,
     const std::string& directory,
     const std::string& output_path,
     uint64_t ef_search,
-    const std::string& entry_mode) {
+    const std::string& entry_mode,
+    const std::string& neighbor_mode) {
     require(not std::filesystem::exists(output_path), "output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
     if (ef_search != 0) {
         graph.ef_search = ef_search;
     }
+    apply_neighbor_mode(graph, neighbor_mode);
+    const auto topology = topology_stats(graph);
     const auto entries = select_entries(graph, entry_mode);
     const auto queries =
         read_records<float>(directory + "/queries.fvecs", static_cast<int32_t>(graph.dim));
@@ -368,7 +480,8 @@ run(const std::string& snapshot,
     }
     require(static_cast<bool>(output), "output write failed");
     std::cout << "query_count,k,recall_at_k,truth_visit_rate,mean_visited_nodes,"
-                 "mean_expanded_nodes,mean_route_nodes,mean_distance_evaluations\n";
+                 "mean_expanded_nodes,mean_route_nodes,mean_distance_evaluations,mean_graph_degree,"
+                 "zero_out,zero_in,edge_reachable_from_zero\n";
     std::cout << queries.size() << ',' << k << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(total_hits) / static_cast<double>(queries.size() * k) << ','
               << static_cast<double>(total_truth_visited) / static_cast<double>(queries.size() * k)
@@ -378,7 +491,8 @@ run(const std::string& snapshot,
               << ','
               << static_cast<double>(total_distance_evaluations) /
                      static_cast<double>(queries.size())
-              << '\n';
+              << ',' << mean_degree(graph) << ',' << topology.zero_out << ',' << topology.zero_in
+              << ',' << topology.reachable << '\n';
     return 0;
 }
 
@@ -387,13 +501,14 @@ run(const std::string& snapshot,
 int
 main(int argc, char** argv) {
     try {
-        require(argc >= 4 and argc <= 6,
+        require(argc >= 4 and argc <= 7,
                 "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
-                "[EF_SEARCH [ENTRY_MODE]]");
+                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE]]]");
         const uint64_t ef_search = argc >= 5 ? std::stoull(argv[4]) : 0;
         require(argc == 4 or ef_search > 0, "EF_SEARCH must be positive");
-        const std::string entry_mode = argc == 6 ? argv[5] : "uniform";
-        return run(argv[1], argv[2], argv[3], ef_search, entry_mode);
+        const std::string entry_mode = argc >= 6 ? argv[5] : "uniform";
+        const std::string neighbor_mode = argc == 7 ? argv[6] : "preserve";
+        return run(argv[1], argv[2], argv[3], ef_search, entry_mode, neighbor_mode);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

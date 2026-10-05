@@ -1385,3 +1385,79 @@ return. The small, scale-dependent changes do not justify the added work or a
 production entry-policy change. A future routing candidate needs a separately
 constructed sparse route structure or improved neighbor selection rather than
 greedy descent over the same bottom graph.
+
+
+##### Offline neighbor-selection experiment (2026-10-05)
+
+The route probe accepts an additional optional argument:
+
+```text
+lite_graph_route_probe SNAPSHOT DATASET OUTPUT [EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE]]]
+```
+
+`preserve` is the default and leaves stored edges unchanged. `symmetric` pools
+original outgoing and incoming neighbors, removes duplicates, then keeps the
+nearest `max_degree` candidates. Only the candidate pool is symmetric: the
+resulting directed graph need not be. `diverse` uses the same pool and the
+alpha=1 occlusion comparison from `src/impl/pruning_strategy.cpp`:
+a candidate is rejected if it is closer to an already selected neighbor than
+to the source. Selection is synchronous over the original snapshot and does
+not refill rejected edges. This is not an exact Full HGraph transplant: Full
+keeps undersized candidate pools unchanged and has separate candidate discovery
+and reverse-edge installation. The probe prunes undersized pools too, performs
+no online mutation maintenance, and never writes the transformed snapshot.
+
+All results below use uniform entries, ef=128, degree limit 16 and 100 independent
+Top-10 queries per dataset/scale. Both `before` and `after` snapshots are taken
+AFTER long CRUD; these labels distinguish the incoming-repair implementation,
+not before/after CRUD. The table shows the repaired (`after`) snapshots.
+Topology measures stored directed edges only, excluding the implicit ring used
+by search. Zero in-degree and reachability are diagnostics, not a proof of
+strong connectivity or query quality.
+
+| Dataset | Mode | Recall@10 | Mean visited | Mean degree | Zero in-degree | Reachable from slot 0 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| SIFT 10k | preserve | 0.976000 | 798.410000 | 16.000000 | 0 | 9900 |
+| SIFT 10k | symmetric | 0.977000 | 805.310000 | 16.000000 | 122 | 9814 |
+| SIFT 10k | diverse | 0.997000 | 871.390000 | 7.071900 | 0 | 10000 |
+| SIFT 100k | preserve | 0.949000 | 1137.560000 | 16.000000 | 9 | 99283 |
+| SIFT 100k | symmetric | 0.953000 | 1136.150000 | 16.000000 | 1198 | 98147 |
+| SIFT 100k | diverse | 0.989000 | 1148.070000 | 8.203820 | 9 | 99991 |
+| GIST 10k | preserve | 0.811000 | 829.950000 | 16.000000 | 28 | 8483 |
+| GIST 10k | symmetric | 0.830000 | 806.350000 | 16.000000 | 1392 | 6917 |
+| GIST 10k | diverse | 0.962000 | 1085.120000 | 5.492800 | 214 | 9768 |
+| GIST 100k | preserve | 0.729000 | 1264.340000 | 15.999010 | 433 | 88344 |
+| GIST 100k | symmetric | 0.771000 | 1217.450000 | 15.999310 | 17738 | 63769 |
+| GIST 100k | diverse | 0.896000 | 1413.600000 | 5.678810 | 2647 | 97019 |
+
+Diversity substantially improves recall in these samples, but is not ready for
+production adoption: GIST 100k zero in-degree increases from 433 to 2,647 despite
+higher reachability and recall. GIST 10k increases from 28 to 214. Nearest-only
+selection over the symmetric candidate pool degrades topology still further.
+A subsequent online candidate must preserve or repair incoming connectivity
+and measure single-core Add/Update/Remove cost, query latency, and memory.
+The lower mean degree does not itself establish a production memory saving.
+
+At ef=256/512, diverse GIST recall is 0.986/0.994 (10k) and 0.932/0.961 (100k)
+on repaired snapshots. These gains spend more search work: ef=128 mean visited
+nodes are 1,085/1,414 versus 830/1,264 for preserve. Results from 100 queries
+and an offline whole-graph transformation do not prove online CRUD stability,
+production speed, or optimality. The recorded process time includes loading,
+transformation and every query; it is not isolated build or search latency.
+
+Evidence directories on the experiment host:
+`/home/ubuntu/project/vsag-lite-neighbor-selection-20261005` (24 topology runs)
+and `/home/ubuntu/project/vsag-lite-query-paired-20261005` (GIST budget sweeps).
+`topology-*-summary.csv` includes degree, zero-in/out and directed reachability;
+per-query CSVs retain their existing schema. Default mode reproduced all 400
+GIST public-baseline query hit counts. The Release suite passed 4/4 and the
+ASan+UBSan suite 6/6. Small collinear, incoming-only and singleton fixtures,
+invalid mode and empty-snapshot rejection passed with both probe builds:
+
+```bash
+python3 lite/benchmark/test_graph_route_probe.py build-lite-fragment-release/lite_graph_route_probe
+python3 lite/benchmark/test_graph_route_probe.py build-lite-baseline-asan/lite_graph_route_probe
+```
+
+Only the standalone experiment and its documentation change. Production graph
+construction, CRUD, public API and snapshot format remain unchanged.
