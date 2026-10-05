@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <numeric>
 #include <queue>
 #include <stdexcept>
 #include <string>
@@ -154,20 +155,108 @@ distance(const GraphSnapshot& graph, const float* query, uint64_t slot) {
     return result;
 }
 
+std::vector<uint64_t>
+select_entries(const GraphSnapshot& graph, const std::string& mode) {
+    constexpr uint64_t k_entry_points = 8;
+    if (mode == "uniform" or mode == "greedy") {
+        std::vector<uint64_t> entries{0};
+        const uint64_t last = graph.ids.size() - 1;
+        if (last != 0) {
+            entries.push_back(last);
+        }
+        constexpr uint64_t k_extra_entry_points = k_entry_points - 2;
+        for (uint64_t i = 1; i <= k_extra_entry_points; ++i) {
+            const uint64_t entry = i * last / (k_extra_entry_points + 1);
+            if (entry != 0 and entry != last) {
+                entries.push_back(entry);
+            }
+        }
+        return entries;
+    }
+    require(mode == "in_degree", "ENTRY_MODE must be uniform, in_degree, or greedy");
+    std::vector<uint64_t> in_degree(graph.ids.size(), 0);
+    for (const auto& neighbors : graph.links) {
+        for (const uint64_t neighbor : neighbors) {
+            ++in_degree[neighbor];
+        }
+    }
+    std::vector<uint64_t> entries(graph.ids.size());
+    std::iota(entries.begin(), entries.end(), 0);
+    const auto count = std::min<uint64_t>(k_entry_points, entries.size());
+    std::partial_sort(entries.begin(),
+                      entries.begin() + static_cast<std::ptrdiff_t>(count),
+                      entries.end(),
+                      [&in_degree](uint64_t left, uint64_t right) {
+                          return in_degree[left] > in_degree[right] or
+                                 (in_degree[left] == in_degree[right] and left < right);
+                      });
+    entries.resize(count);
+    return entries;
+}
+
 struct SearchTrace {
     std::vector<Candidate> result;
     std::vector<uint8_t> visited;
     uint64_t expanded{};
+    uint64_t route_nodes{};
+    uint64_t distance_evaluations{};
     bool early_stop{};
 };
 
 SearchTrace
-search(const GraphSnapshot& graph, const float* query, uint64_t k) {
+search(const GraphSnapshot& graph,
+       const std::vector<uint64_t>& entries,
+       const std::string& entry_mode,
+       const float* query,
+       uint64_t k) {
     k = std::min<uint64_t>(k, graph.ids.size());
     SearchTrace trace;
     trace.visited.resize(graph.ids.size(), 0);
     if (k == 0) {
         return trace;
+    }
+    std::vector<uint64_t> active_entries = entries;
+    std::vector<uint8_t> route_visited(graph.ids.size(), 0);
+    if (entry_mode == "greedy") {
+        std::vector<float> route_distances(graph.ids.size(), 0.0F);
+        auto route_score = [&](uint64_t slot) {
+            if (route_visited[slot] == 0) {
+                route_visited[slot] = 1;
+                route_distances[slot] = distance(graph, query, slot);
+                ++trace.distance_evaluations;
+            }
+            return Candidate{slot, route_distances[slot]};
+        };
+        Candidate current = route_score(entries.front());
+        for (const uint64_t entry : entries) {
+            const Candidate candidate = route_score(entry);
+            if (closer(candidate, current)) {
+                current = candidate;
+            }
+        }
+        while (true) {
+            Candidate next = current;
+            auto consider = [&](uint64_t slot) {
+                const Candidate candidate = route_score(slot);
+                if (closer(candidate, next)) {
+                    next = candidate;
+                }
+            };
+            if (graph.ids.size() > 1) {
+                consider((current.slot + graph.ids.size() - 1) % graph.ids.size());
+                consider((current.slot + 1) % graph.ids.size());
+            }
+            for (const uint64_t neighbor : graph.links[current.slot]) {
+                consider(neighbor);
+            }
+            if (next.slot == current.slot) {
+                break;
+            }
+            current = next;
+        }
+        active_entries.assign(1, current.slot);
+        trace.route_nodes =
+            static_cast<uint64_t>(std::count(route_visited.begin(), route_visited.end(), 1));
     }
     const uint64_t ef = std::min<uint64_t>(graph.ids.size(), std::max(k, graph.ef_search));
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> best(&closer);
@@ -177,6 +266,7 @@ search(const GraphSnapshot& graph, const float* query, uint64_t k) {
             return;
         }
         trace.visited[slot] = 1;
+        ++trace.distance_evaluations;
         const Candidate next{slot, distance(graph, query, slot)};
         candidates.push(next);
         best.push(next);
@@ -185,17 +275,8 @@ search(const GraphSnapshot& graph, const float* query, uint64_t k) {
         }
     };
 
-    visit(0);
-    const uint64_t last = graph.ids.size() - 1;
-    if (last != 0) {
-        visit(last);
-    }
-    constexpr uint64_t k_extra_entry_points = 6;
-    for (uint64_t i = 1; i <= k_extra_entry_points; ++i) {
-        const uint64_t entry = i * last / (k_extra_entry_points + 1);
-        if (entry != 0 and entry != last) {
-            visit(entry);
-        }
+    for (const uint64_t entry : active_entries) {
+        visit(entry);
     }
     while (not candidates.empty()) {
         const Candidate current = candidates.top();
@@ -219,6 +300,11 @@ search(const GraphSnapshot& graph, const float* query, uint64_t k) {
         best.pop();
     }
     trace.result.resize(std::min<uint64_t>(k, trace.result.size()));
+    for (uint64_t slot = 0; slot < route_visited.size(); ++slot) {
+        if (route_visited[slot] != 0) {
+            trace.visited[slot] = 1;
+        }
+    }
     return trace;
 }
 
@@ -226,12 +312,14 @@ int
 run(const std::string& snapshot,
     const std::string& directory,
     const std::string& output_path,
-    uint64_t ef_search) {
+    uint64_t ef_search,
+    const std::string& entry_mode) {
     require(not std::filesystem::exists(output_path), "output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
     if (ef_search != 0) {
         graph.ef_search = ef_search;
     }
+    const auto entries = select_entries(graph, entry_mode);
     const auto queries =
         read_records<float>(directory + "/queries.fvecs", static_cast<int32_t>(graph.dim));
     std::ifstream truth_input(directory + "/groundtruth.ivecs", std::ios::binary);
@@ -244,13 +332,16 @@ run(const std::string& snapshot,
     std::ofstream output(output_path);
     require(static_cast<bool>(output), "output open failed");
     output << "query,hits,truth_visited,truth_not_visited,visited_not_returned,"
-              "visited_nodes,expanded_nodes,early_stop\n";
+              "visited_nodes,expanded_nodes,route_nodes,distance_evaluations,early_stop\n";
     uint64_t total_hits = 0;
     uint64_t total_truth_visited = 0;
     uint64_t total_visited = 0;
     uint64_t total_expanded = 0;
+    uint64_t total_route_nodes = 0;
+    uint64_t total_distance_evaluations = 0;
     for (uint64_t i = 0; i < queries.size(); ++i) {
-        const SearchTrace trace = search(graph, queries[i].data(), static_cast<uint64_t>(k));
+        const SearchTrace trace =
+            search(graph, entries, entry_mode, queries[i].data(), static_cast<uint64_t>(k));
         std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
         uint64_t hits = 0;
         for (const Candidate& candidate : trace.result) {
@@ -268,18 +359,25 @@ run(const std::string& snapshot,
         total_truth_visited += truth_visited;
         total_visited += visited_nodes;
         total_expanded += trace.expanded;
+        total_route_nodes += trace.route_nodes;
+        total_distance_evaluations += trace.distance_evaluations;
         output << i << ',' << hits << ',' << truth_visited << ',' << k - truth_visited << ','
                << truth_visited - hits << ',' << visited_nodes << ',' << trace.expanded << ','
-               << trace.early_stop << '\n';
+               << trace.route_nodes << ',' << trace.distance_evaluations << ',' << trace.early_stop
+               << '\n';
     }
     require(static_cast<bool>(output), "output write failed");
     std::cout << "query_count,k,recall_at_k,truth_visit_rate,mean_visited_nodes,"
-                 "mean_expanded_nodes\n";
+                 "mean_expanded_nodes,mean_route_nodes,mean_distance_evaluations\n";
     std::cout << queries.size() << ',' << k << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(total_hits) / static_cast<double>(queries.size() * k) << ','
               << static_cast<double>(total_truth_visited) / static_cast<double>(queries.size() * k)
               << ',' << static_cast<double>(total_visited) / static_cast<double>(queries.size())
               << ',' << static_cast<double>(total_expanded) / static_cast<double>(queries.size())
+              << ',' << static_cast<double>(total_route_nodes) / static_cast<double>(queries.size())
+              << ','
+              << static_cast<double>(total_distance_evaluations) /
+                     static_cast<double>(queries.size())
               << '\n';
     return 0;
 }
@@ -289,11 +387,13 @@ run(const std::string& snapshot,
 int
 main(int argc, char** argv) {
     try {
-        require(argc == 4 or argc == 5,
-                "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT [EF_SEARCH]");
-        const uint64_t ef_search = argc == 5 ? std::stoull(argv[4]) : 0;
+        require(argc >= 4 and argc <= 6,
+                "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
+                "[EF_SEARCH [ENTRY_MODE]]");
+        const uint64_t ef_search = argc >= 5 ? std::stoull(argv[4]) : 0;
         require(argc == 4 or ef_search > 0, "EF_SEARCH must be positive");
-        return run(argv[1], argv[2], argv[3], ef_search);
+        const std::string entry_mode = argc == 6 ? argv[5] : "uniform";
+        return run(argv[1], argv[2], argv[3], ef_search, entry_mode);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

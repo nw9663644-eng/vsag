@@ -1307,11 +1307,14 @@ nodes that were visited but omitted from the final Top-k:
 
 ```bash
 cmake --build build-lite-quality --target lite_graph_route_probe
-lite_graph_route_probe SNAPSHOT DATASET_DIR NEW_QUERY_CSV [EF_SEARCH]
+lite_graph_route_probe SNAPSHOT DATASET_DIR NEW_QUERY_CSV [EF_SEARCH [ENTRY_MODE]]
 ```
 
 The optional `EF_SEARCH` value overrides the value stored in the snapshot for
-sensitivity analysis; it does not modify the snapshot. On all four GIST
+sensitivity analysis; it does not modify the snapshot. `ENTRY_MODE` defaults to
+`uniform`, which exactly reproduces the production entry slots. The diagnostic
+`in_degree` mode instead chooses up to eight nodes with the greatest incoming
+degree (ties by slot). On all four GIST
 before/after snapshots, the default probe's per-query hit counts exactly matched
 `lite_graph_crud_quality`. Every missed truth node was unvisited and
 `visited_not_returned` was zero, so the observed Recall@10 loss is routing
@@ -1331,3 +1334,54 @@ queries do not support a stable recall improvement claim. The evidence narrows
 the next algorithmic work to entry routing and neighbor selection, with recall
 and visited-node cost reported together. Raw route CSV and summaries are in
 `/home/ubuntu/project/vsag-lite-query-paired-20261005`.
+
+
+##### Static high-in-degree entries
+
+The `in_degree` entry mode tests whether static graph hubs are better starting
+points than the production uniform slots. It keeps the entry count and all
+subsequent traversal logic unchanged. The table reports paired differences from
+`uniform`: Recall@10 and mean visited nodes.
+
+| GIST scale / snapshot | ef=128 delta | ef=256 delta | ef=512 delta |
+| --- | ---: | ---: | ---: |
+| 10k before | 0.000 / -6.59 | -0.001 / -6.32 | 0.000 / -5.04 |
+| 10k after | -0.001 / -6.74 | -0.001 / -5.86 | 0.000 / -5.10 |
+| 100k before | +0.002 / -6.06 | 0.000 / -9.12 | 0.000 / -8.95 |
+| 100k after | +0.002 / -8.55 | -0.001 / -11.11 | 0.000 / -9.23 |
+
+At `ef=128`, only one or two queries changed per run. At `ef=256`, two runs
+lost one hit and the other two were unchanged; all `ef=512` result sets had
+the same hit counts. Saving roughly 5-11 visited nodes out of 815-3,618 is less
+than one percent and does not establish a useful quality/cost improvement.
+Static high-in-degree entries therefore remain a rejected diagnostic candidate,
+not a production change.
+
+
+##### Query-directed greedy routing
+
+The diagnostic `greedy` mode starts from the production uniform entries,
+chooses the query-nearest seed, and follows ring and outgoing graph neighbors
+while distance strictly improves. It then runs the unchanged bottom search from
+the local minimum. This approximates the direction of Full HGraph's query-aware
+routing, but deliberately does not claim equivalence to its separate sparse
+route levels. The CSV reports `route_nodes` and `distance_evaluations`; route
+work is included rather than hidden.
+
+The table reports the paired Recall@10 change from `uniform` and the mean
+additional distance evaluations per query:
+
+| GIST scale / snapshot | ef=128 delta / extra evals | ef=256 delta / extra evals | ef=512 delta / extra evals |
+| --- | ---: | ---: | ---: |
+| 10k before | 0.000 / 37.93 | -0.001 / 40.82 | 0.000 / 44.40 |
+| 10k after | -0.001 / 37.93 | -0.001 / 41.70 | 0.000 / 44.95 |
+| 100k before | +0.002 / 42.23 | +0.001 / 40.36 | 0.000 / 42.77 |
+| 100k after | +0.002 / 41.82 | +0.001 / 40.10 | 0.000 / 42.72 |
+
+At 10k the route was neutral or lost one hit; at 100k it gained at most two
+hits at the lower budget, and the difference disappeared at `ef=512`. Two
+10k runs each scored one truth node during routing that the final Top-10 did not
+return. The small, scale-dependent changes do not justify the added work or a
+production entry-policy change. A future routing candidate needs a separately
+constructed sparse route structure or improved neighbor selection rather than
+greedy descent over the same bottom graph.
