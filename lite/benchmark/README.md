@@ -1296,3 +1296,38 @@ diagnostic should therefore measure routing/visited candidates or expand the
 independent query set rather than infer quality from zero-incoming counts alone.
 Paired raw evidence is under
 `/home/ubuntu/project/vsag-lite-query-paired-20261005`.
+
+#### Routing-coverage diagnostic
+
+The opt-in `lite_graph_route_probe` parses a v2 FP32 graph snapshot and
+reproduces the current scalar graph traversal while recording visited nodes. It
+is an experiment tool, not a production search implementation or public API.
+The output separates exact Top-10 truth nodes that were never visited from truth
+nodes that were visited but omitted from the final Top-k:
+
+```bash
+cmake --build build-lite-quality --target lite_graph_route_probe
+lite_graph_route_probe SNAPSHOT DATASET_DIR NEW_QUERY_CSV [EF_SEARCH]
+```
+
+The optional `EF_SEARCH` value overrides the value stored in the snapshot for
+sensitivity analysis; it does not modify the snapshot. On all four GIST
+before/after snapshots, the default probe's per-query hit counts exactly matched
+`lite_graph_crud_quality`. Every missed truth node was unvisited and
+`visited_not_returned` was zero, so the observed Recall@10 loss is routing
+coverage rather than final heap pruning.
+
+| GIST scale / snapshot | ef=128 Recall / mean visited | ef=256 Recall / mean visited | ef=512 Recall / mean visited |
+| --- | ---: | ---: | ---: |
+| 10k before | 0.814 / 821.18 | 0.866 / 1,333.61 | 0.903 / 2,173.65 |
+| 10k after | 0.811 / 829.95 | 0.865 / 1,350.14 | 0.909 / 2,209.59 |
+| 100k before | 0.733 / 1,262.21 | 0.798 / 2,126.18 | 0.851 / 3,603.40 |
+| 100k after | 0.729 / 1,264.34 | 0.801 / 2,131.47 | 0.850 / 3,618.33 |
+
+Higher search budgets recover more exact neighbors, but increase mean visited
+nodes by roughly 1.6-1.7x at `ef=256` and 2.7-2.9x at `ef=512` relative to
+`ef=128`. The repair delta changes sign across scale and budget, so these 100
+queries do not support a stable recall improvement claim. The evidence narrows
+the next algorithmic work to entry routing and neighbor selection, with recall
+and visited-node cost reported together. Raw route CSV and summaries are in
+`/home/ubuntu/project/vsag-lite-query-paired-20261005`.
