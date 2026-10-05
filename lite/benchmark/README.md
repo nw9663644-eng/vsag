@@ -1461,3 +1461,51 @@ python3 lite/benchmark/test_graph_route_probe.py build-lite-baseline-asan/lite_g
 
 Only the standalone experiment and its documentation change. Production graph
 construction, CRUD, public API and snapshot format remain unchanged.
+
+
+##### Diversity followed by safe incoming repair (2026-10-05)
+
+The optional `NEIGHBOR_MODE=diverse_repair` applies the preceding diversity
+selection, then visits zero-in-degree targets in slot order. It first appends
+a reverse edge from the first outgoing neighbor with spare degree. If no such
+neighbor exists, it follows `GraphBackend::ensure_incoming` in
+`src/lite/graph_backend.cpp`: replace the farthest eligible edge from an outgoing
+neighbor only when the displaced target retains at least one other incoming
+edge. If neither operation is possible, the target is left unresolved. No
+self edges, duplicate edges or degree overflow are introduced. This experiment
+adds spare-capacity handling because diversity often leaves partially filled
+rows; the production helper uses replacement. It is still a single offline
+pass, not a guarantee of connectivity or an online CRUD implementation.
+
+Eight SIFT/GIST snapshots were evaluated on CPU 0, uniform entries, ef=128,
+degree limit 16 and 100 independent queries. All eight ended with zero
+zero-in-degree nodes. Repaired-implementation (`after`) snapshots:
+
+| Dataset | Diverse Recall | Diverse+repair Recall | Mean visited | Mean degree | Reachable from slot 0 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| SIFT 10k | 0.997000 | 0.997000 | 871.390000 | 7.071900 | 10000 |
+| SIFT 100k | 0.989000 | 0.989000 | 1148.100000 | 8.203910 | 100000 |
+| GIST 10k | 0.962000 | 0.963000 | 1086.600000 | 5.506300 | 9978 |
+| GIST 100k | 0.896000 | 0.891000 | 1415.220000 | 5.693380 | 99625 |
+
+GIST 100k recall decreases from 0.896 to 0.891 versus pure diversity but remains
+above preserve (0.729). Reachability improves from 97,019 to 99,625, while
+zero-in-degree drops from 2,647 to zero. GIST 10k recall increases from 0.962
+to 0.963, with reachability 9,978 and zero-in-degree zero. Neither graph is
+fully reachable along stored edges. The synthetic saturated-degree fixture
+also demonstrates that zero-in-degree zero can leave disconnected components.
+
+The candidate merits online evaluation, not automatic adoption. CPU pinning
+controls placement; no isolated timing was collected in this matrix, so this
+is not evidence of single-core speedup. Next evaluate connectivity preservation
+and online construction/CRUD cost, CPU time, query latency and memory before
+changing the production selection policy. The fixed 100 queries remain a
+sampling limitation; Cohere is not covered by this experiment.
+
+Release 4/4 and ASan+UBSan 6/6 passed. Both probe builds passed spare-capacity,
+safe saturated replacement, impossible-repair and singleton regression fixtures.
+The ASan GIST 10k run matched Release per-query CSV exactly. Existing preserve
+and diverse GIST 10k outputs were byte-identical to the preceding experiment.
+Format/tidy version 15 and diff checks passed. Raw results and commands are in
+`/home/ubuntu/project/vsag-lite-diverse-repair-20261005`; production code and
+PR branches are unchanged.

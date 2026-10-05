@@ -198,12 +198,64 @@ select_entries(const GraphSnapshot& graph, const std::string& mode) {
 }
 
 void
+repair_incoming(GraphSnapshot& graph) {
+    std::vector<uint64_t> incoming(graph.links.size(), 0);
+    for (const auto& row : graph.links) {
+        for (const uint64_t target : row) {
+            ++incoming[target];
+        }
+    }
+    for (uint64_t target = 0; target < graph.links.size(); ++target) {
+        if (incoming[target] != 0) {
+            continue;
+        }
+        bool appended = false;
+        for (const uint64_t source : graph.links[target]) {
+            if (graph.links[source].size() < graph.max_degree) {
+                graph.links[source].push_back(target);
+                ++incoming[target];
+                appended = true;
+                break;
+            }
+        }
+        if (appended) {
+            continue;
+        }
+        // Follow GraphBackend::ensure_incoming: never remove a sole incoming edge.
+        uint64_t selected_source = graph.links.size();
+        uint64_t selected_edge = 0;
+        float farthest = -1.0F;
+        for (const uint64_t source : graph.links[target]) {
+            for (uint64_t edge = 0; edge < graph.links[source].size(); ++edge) {
+                const uint64_t displaced = graph.links[source][edge];
+                if (incoming[displaced] <= 1) {
+                    continue;
+                }
+                const float value =
+                    distance(graph, graph.vectors.data() + source * graph.dim, displaced);
+                if (selected_source == graph.links.size() or value > farthest) {
+                    selected_source = source;
+                    selected_edge = edge;
+                    farthest = value;
+                }
+            }
+        }
+        if (selected_source != graph.links.size()) {
+            auto& displaced = graph.links[selected_source][selected_edge];
+            --incoming[displaced];
+            displaced = target;
+            ++incoming[target];
+        }
+    }
+}
+
+void
 apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
     if (mode == "preserve") {
         return;
     }
-    require(mode == "diverse" or mode == "symmetric",
-            "NEIGHBOR_MODE must be preserve, symmetric, or diverse");
+    require(mode == "diverse" or mode == "symmetric" or mode == "diverse_repair",
+            "NEIGHBOR_MODE must be preserve, symmetric, diverse, or diverse_repair");
     std::vector<std::vector<uint64_t>> incoming(graph.ids.size());
     for (uint64_t source = 0; source < graph.links.size(); ++source) {
         for (const uint64_t target : graph.links[source]) {
@@ -251,6 +303,9 @@ apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
         }
     }
     graph.links = std::move(diversified);
+    if (mode == "diverse_repair") {
+        repair_incoming(graph);
+    }
 }
 
 double
