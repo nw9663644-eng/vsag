@@ -1231,3 +1231,43 @@ Release and ASan/UBSan CTest each passed 6/6. clang-format-15,
 clang-tidy-15 with warnings-as-errors, and `git diff --check` passed. Raw probe,
 CSV, timing, commands, and checksums are in
 `/home/ubuntu/project/vsag-lite-graph-repair-incoming-20260930-c25f8a8`.
+
+### Independent-query graph quality after CRUD (2026-10-05)
+
+The opt-in `lite_graph_crud_quality` target measures public FP32 Lite graph Search
+on the prepared SIFT-128 and GIST-960 prefixes. It reads the same 100 independent
+queries and prefix-specific exact squared-L2 Top-10 truth as `dataset_main.cpp`.
+The deterministic Update-Remove-Add sequence writes the original vector back to
+each selected ID, so the exact truth remains valid across all rounds. After the
+search it saves a snapshot, reloads it, and requires every returned ID and
+distance to match. Use it as follows:
+
+```bash
+cmake -S lite -B build-lite-quality -DCMAKE_BUILD_TYPE=Release -DENABLE_BENCHMARKS=ON
+cmake --build build-lite-quality --target lite_graph_crud_quality
+lite_graph_crud_quality DATASET_DIR NEW_SNAPSHOT_PATH ROUNDS CRUD_OPS
+```
+
+The same executable was linked at runtime against `7ff27f8` (before the local
+incoming repair) and `c25f8a8` (after). Runs were sequential on CPU 0 with
+`max_degree=16`, `ef_search=128`, 100 independent queries, and 100 CRUD cycles
+per round. The current library's zero-round initial Recall@10 is included to
+separate build quality from churn. It is identical across the two code versions
+because the changed repair path is not called during BuildGraph.
+
+| Dataset / scale | Initial | Short before / after | Long before / after |
+| --- | ---: | ---: | ---: |
+| SIFT 10k | 0.985 | 0.984 / 0.986 (20 rounds) | 0.975 / 0.976 (200 rounds) |
+| SIFT 100k | 0.956 | 0.952 / 0.952 (10 rounds) | 0.949 / 0.949 (100 rounds) |
+| GIST 10k | 0.916 | 0.892 / 0.896 (20 rounds) | 0.814 / 0.811 (200 rounds) |
+| GIST 100k | 0.742 | 0.748 / 0.748 (10 rounds) | 0.733 / 0.729 (100 rounds) |
+
+The incoming repair greatly reduced zero-incoming nodes in the separate topology
+probe, but did not produce a clear independent-query benefit. In the longer GIST
+runs, Recall@10 was lower by 0.003 and 0.004 respectively. These are single
+sequential runs with 100 queries each, so the small differences are not a claim
+of statistical significance. The repair remains an experimental graph-quality
+candidate; further work should inspect entry traversal and local neighbor
+selection before promotion. The measurements include no FP16 or RaBitQ quality
+claim. Raw CSV, time, stderr, snapshots, binary/library hashes, and commands are
+under `/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005`.
