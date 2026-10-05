@@ -69,7 +69,11 @@ percentile(std::vector<double> values, double fraction) {
 }
 
 int
-run(const std::string& directory, const std::string& snapshot, uint64_t rounds, uint64_t crud_ops) {
+run(const std::string& directory,
+    const std::string& snapshot,
+    uint64_t rounds,
+    uint64_t crud_ops,
+    const std::string& query_results) {
     const auto base_path = directory + "/base.fvecs";
     const auto query_path = directory + "/queries.fvecs";
     const auto truth_path = directory + "/groundtruth.ivecs";
@@ -84,6 +88,9 @@ run(const std::string& directory, const std::string& snapshot, uint64_t rounds, 
         return read_dim(file);
     }();
     require(not std::filesystem::exists(snapshot), "snapshot path already exists");
+    require(query_results.empty() or not std::filesystem::exists(query_results),
+            "query results path already exists");
+
     auto base = read_records<float>(base_path, dim);
     auto queries = read_records<float>(query_path, dim);
     auto truth = read_records<int32_t>(truth_path, k);
@@ -120,6 +127,7 @@ run(const std::string& directory, const std::string& snapshot, uint64_t rounds, 
     require(index->Size() == base.size(), "live count changed");
     uint64_t hits = 0;
     std::vector<double> latencies;
+    std::vector<uint64_t> query_hits;
     std::vector<std::vector<vsag::lite::Neighbor>> before;
     for (uint64_t i = 0; i < queries.size(); ++i) {
         start = Clock::now();
@@ -129,10 +137,23 @@ run(const std::string& directory, const std::string& snapshot, uint64_t rounds, 
         require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
                 "search failed");
         std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
+        uint64_t current_hits = 0;
         for (const auto& neighbor : *result) {
-            hits += expected.count(neighbor.id);
+            current_hits += expected.count(neighbor.id);
         }
+        hits += current_hits;
+        query_hits.push_back(current_hits);
         before.push_back(std::move(*result));
+    }
+    if (not query_results.empty()) {
+        std::ofstream query_output(query_results);
+        require(static_cast<bool>(query_output), "query results open failed");
+        query_output << "query,hits,k,recall_at_k\n";
+        for (uint64_t i = 0; i < query_hits.size(); ++i) {
+            query_output << i << ',' << query_hits[i] << ',' << k << ','
+                         << static_cast<double>(query_hits[i]) / k << '\n';
+        }
+        require(static_cast<bool>(query_output), "query results write failed");
     }
     start = Clock::now();
     std::ofstream output(snapshot, std::ios::binary);
@@ -170,11 +191,13 @@ run(const std::string& directory, const std::string& snapshot, uint64_t rounds, 
 int
 main(int argc, char** argv) {
     try {
-        require(argc == 5, "usage: lite_graph_crud_quality DATASET SNAPSHOT ROUNDS CRUD_OPS");
+        require(argc == 5 or argc == 6,
+                "usage: lite_graph_crud_quality DATASET SNAPSHOT ROUNDS CRUD_OPS "
+                "[QUERY_RESULTS]");
         const auto rounds = std::stoull(argv[3]);
         const auto crud_ops = std::stoull(argv[4]);
         require(crud_ops > 0, "CRUD_OPS must be positive");
-        return run(argv[1], argv[2], rounds, crud_ops);
+        return run(argv[1], argv[2], rounds, crud_ops, argc == 6 ? argv[5] : "");
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

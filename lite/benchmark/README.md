@@ -1271,3 +1271,28 @@ candidate; further work should inspect entry traversal and local neighbor
 selection before promotion. The measurements include no FP16 or RaBitQ quality
 claim. Raw CSV, time, stderr, snapshots, binary/library hashes, and commands are
 under `/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005`.
+
+The optional fifth output argument records per-query hits without changing the
+existing aggregate CSV:
+
+```bash
+lite_graph_crud_quality DATASET_DIR SNAPSHOT ROUNDS CRUD_OPS QUERY_RESULTS
+```
+
+A paired rerun used the same executable, mutations, queries, and truth while
+switching only the pre/post-repair shared library. For GIST 10k, 19 queries
+improved, 14 regressed, and 67 were unchanged. The aggregate delta was -0.003,
+the deterministic paired bootstrap 95% interval was [-0.021, 0.013], and the
+two-sided sign-test p-value was 0.487. For GIST 100k, 0 queries improved, 3
+regressed, and 97 were unchanged. The aggregate delta was -0.004, the bootstrap
+interval was [-0.009, 0], and the sign-test p-value was 0.25.
+
+The 10k result varies in both directions across queries, while the 100k loss is
+concentrated in three queries. Neither scale establishes a statistically clear
+quality change with only 100 queries. Snapshot inspection also found that
+changed-edge median squared-L2 was essentially unchanged at 10k and 5.5% higher
+after repair at 100k; sampled neighbor spread did not decrease. The next
+diagnostic should therefore measure routing/visited candidates or expand the
+independent query set rather than infer quality from zero-incoming counts alone.
+Paired raw evidence is under
+`/home/ubuntu/project/vsag-lite-query-paired-20261005`.
