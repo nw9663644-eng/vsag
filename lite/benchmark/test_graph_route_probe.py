@@ -24,6 +24,7 @@ def snapshot(path, vectors, links, degree):
 
 def main():
     binary = str(Path(sys.argv[1]).resolve())
+    subprocess.run([binary, '--self-test'], check=True)
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
         (root / 'queries.fvecs').write_bytes(struct.pack('<if', 1, 0.0))
@@ -55,7 +56,7 @@ def main():
         # Incoming-only candidates must become eligible, without inventing self edges.
         row = summary(run([0, 1, 3], [[1], [2], []], 2, 'symmetric'))
         assert row['zero_out'] == '0' and row['edge_reachable_from_zero'] == '3'
-        for mode in (None, 'preserve', 'symmetric', 'diverse', 'diverse_repair', 'diverse_reverse'):
+        for mode in (None, 'preserve', 'symmetric', 'diverse', 'diverse_repair', 'diverse_reverse', 'diverse_reverse_safe'):
             row = summary(run([0], [[]], 1, mode))
             assert row['zero_out'] == '1' and row['zero_in'] == '1'
             assert row['edge_reachable_from_zero'] == '1'
@@ -96,6 +97,9 @@ def main():
         assert row['mean_graph_degree'] == '1.500000'
         assert row['edge_reachable_from_zero'] == '4'
         assert row['reverse_reachable_from_zero'] == '4'
+        # No two-hop witness exists in these degree-one cycles: preserve them.
+        row = summary(run([0, 1, 2, 3], [[1], [0], [3], [2]], 1, 'diverse_reverse_safe'))
+        assert row['weak_components'] == '2' and row['mean_graph_degree'] == '1.000000'
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

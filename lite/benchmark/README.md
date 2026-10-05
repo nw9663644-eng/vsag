@@ -1593,3 +1593,47 @@ matches Release; the previous diverse_repair output is unchanged. Format/tidy15
 and diff checks passed. Raw evidence and commands:
 `/home/ubuntu/project/vsag-lite-reverse-fill-20261005`. No production code or
 PR source branch is changed.
+
+
+##### Two-hop-witness reverse replacement: not adopted (2026-10-05)
+
+`NEIGHBOR_MODE=diverse_reverse_safe` extends diverse_reverse with a second
+reverse-edge pass. For a saturated row u, an existing edge u->v is eligible for
+replacement only if a current u->w->v path exists with w different from v.
+The farthest eligible edge is replaced by the missing reverse. The witness is
+checked against the current graph for each mutation, so deleting that edge
+preserves prior reachability through the two-hop path. This is stricter than
+production `GraphBackend::link`'s incoming-count guard, but it is not an exact
+transplant and does not preserve path lengths or finite-budget search quality.
+Candidates are snapshotted, all changes respect the existing degree limit,
+and no public API, production CRUD or snapshot format changes.
+
+Eight SIFT/GIST snapshots were evaluated with CPU 0, ef=128, uniform entries
+and 100 independent queries. Repaired-implementation snapshots:
+
+| Dataset | Append-only Recall | Replacement Recall | Mean visited | From 0 | To 0 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| SIFT 10k | 1.000000 | 1.000000 | 932.740000 | 10000 | 10000 |
+| SIFT 100k | 0.993000 | 0.992000 | 1244.700000 | 100000 | 100000 |
+| GIST 10k | 0.972000 | 0.972000 | 1146.560000 | 9996 | 10000 |
+| GIST 100k | 0.903000 | 0.900000 | 1498.170000 | 99802 | 100000 |
+
+All measured forward/reverse reachability counts are nondecreasing and average
+degree is unchanged. In GIST 100k, all 100,000 nodes can now reach zero, but
+198 remain unreachable from zero. Recall drops 0.903 to 0.900 and mean visited
+increases 1,484.01 to 1,498.17. SIFT 100k loses 0.001 recall, and GIST 10k is
+unchanged after repair (the before snapshot loses 0.003). No tested combination
+improves recall over append-only reversal. With only 100 queries these small
+differences are not a statistical regression claim, but there is no observed
+quality/work advantage to justify adoption. The candidate stays opt-in and
+will not be added to production. Stop extending this topology-only sequence;
+next measure the simpler diversity/append-only alternatives under matched
+recall and actual single-core build, query and CRUD costs.
+
+The probe's `--self-test` checks an actual saturated replacement and all-pairs
+reachability preservation for that fixture, plus refusal without a witness.
+The Python fixture runner invokes it and covers degree-one disconnected cycles.
+Release 4/4, ASan+UBSan 6/6 and both-build fixtures passed; ASan GIST 10k output
+matches Release and the previous diverse_reverse output remains identical.
+Format/tidy15 and diff checks passed. Raw results, commands and source/binary
+hashes are in `/home/ubuntu/project/vsag-lite-reverse-safe-20261005`.

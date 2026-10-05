@@ -265,14 +265,99 @@ append_reverse_edges(GraphSnapshot& graph) {
 }
 
 void
+replace_redundant_reverse_edges(GraphSnapshot& graph) {
+    const auto original = graph.links;
+    for (uint64_t source = 0; source < original.size(); ++source) {
+        for (const uint64_t target : original[source]) {
+            auto& neighbors = graph.links[target];
+            if (std::find(neighbors.begin(), neighbors.end(), source) != neighbors.end()) {
+                continue;
+            }
+            if (neighbors.size() < graph.max_degree) {
+                neighbors.push_back(source);
+                continue;
+            }
+            uint64_t selected = neighbors.size();
+            float farthest = -1.0F;
+            for (uint64_t edge = 0; edge < neighbors.size(); ++edge) {
+                const uint64_t displaced = neighbors[edge];
+                bool alternate = false;
+                for (const uint64_t via : neighbors) {
+                    if (via != displaced and
+                        std::find(graph.links[via].begin(), graph.links[via].end(), displaced) !=
+                            graph.links[via].end()) {
+                        alternate = true;
+                        break;
+                    }
+                }
+                if (alternate) {
+                    const float value =
+                        distance(graph, graph.vectors.data() + target * graph.dim, displaced);
+                    if (selected == neighbors.size() or value > farthest) {
+                        selected = edge;
+                        farthest = value;
+                    }
+                }
+            }
+            // Recheck against the current graph for every replacement. The two-hop
+            // witness excludes the removed edge, preserving existing reachability.
+            if (selected != neighbors.size()) {
+                neighbors[selected] = source;
+            }
+        }
+    }
+}
+
+void
+test_reverse_replacement() {
+    GraphSnapshot graph;
+    graph.dim = 1;
+    graph.max_degree = 2;
+    graph.ids = {0, 1, 2, 3};
+    graph.vectors = {0, 1, 2, 3};
+    graph.links = {{1, 2}, {2}, {0}, {0}};
+    const auto reachable = [](const GraphSnapshot& value, uint64_t seed) {
+        std::vector<uint8_t> seen(value.links.size(), 0);
+        std::vector<uint64_t> pending{seed};
+        seen[seed] = 1;
+        for (uint64_t i = 0; i < pending.size(); ++i) {
+            for (const uint64_t next : value.links[pending[i]]) {
+                if (seen[next] == 0) {
+                    seen[next] = 1;
+                    pending.push_back(next);
+                }
+            }
+        }
+        return seen;
+    };
+    const GraphSnapshot before = graph;
+    replace_redundant_reverse_edges(graph);
+    require(graph.links[0] == std::vector<uint64_t>({1, 3}), "expected redundant edge replacement");
+    for (uint64_t source = 0; source < graph.links.size(); ++source) {
+        const auto old_reachable = reachable(before, source);
+        const auto new_reachable = reachable(graph, source);
+        require(graph.links[source].size() <= graph.max_degree, "replacement exceeds degree");
+        for (uint64_t target = 0; target < graph.links.size(); ++target) {
+            require(old_reachable[target] == 0 or new_reachable[target] != 0,
+                    "replacement lost existing reachability");
+        }
+    }
+    graph.max_degree = 1;
+    graph.links = {{1}, {0}, {0}, {2}};
+    const auto saturated = graph.links;
+    replace_redundant_reverse_edges(graph);
+    require(graph.links == saturated, "replacement removed an edge without a witness");
+}
+
+void
 apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
     if (mode == "preserve") {
         return;
     }
-    require(
-        mode == "diverse" or mode == "symmetric" or mode == "diverse_repair" or
-            mode == "diverse_reverse",
-        "NEIGHBOR_MODE must be preserve, symmetric, diverse, diverse_repair, or diverse_reverse");
+    require(mode == "diverse" or mode == "symmetric" or mode == "diverse_repair" or
+                mode == "diverse_reverse" or mode == "diverse_reverse_safe",
+            "NEIGHBOR_MODE must be preserve, symmetric, diverse, diverse_repair, diverse_reverse, "
+            "or diverse_reverse_safe");
     std::vector<std::vector<uint64_t>> incoming(graph.ids.size());
     for (uint64_t source = 0; source < graph.links.size(); ++source) {
         for (const uint64_t target : graph.links[source]) {
@@ -320,11 +405,14 @@ apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
         }
     }
     graph.links = std::move(diversified);
-    if (mode == "diverse_repair" or mode == "diverse_reverse") {
+    if (mode == "diverse_repair" or mode == "diverse_reverse" or mode == "diverse_reverse_safe") {
         repair_incoming(graph);
     }
-    if (mode == "diverse_reverse") {
+    if (mode == "diverse_reverse" or mode == "diverse_reverse_safe") {
         append_reverse_edges(graph);
+    }
+    if (mode == "diverse_reverse_safe") {
+        replace_redundant_reverse_edges(graph);
     }
 }
 
@@ -619,6 +707,11 @@ run(const std::string& snapshot,
 int
 main(int argc, char** argv) {
     try {
+        if (argc == 2 and std::string(argv[1]) == "--self-test") {
+            test_reverse_replacement();
+            std::cout << "Reverse replacement fixtures passed\n";
+            return 0;
+        }
         require(argc >= 4 and argc <= 7,
                 "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
                 "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE]]]");
