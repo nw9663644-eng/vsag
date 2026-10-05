@@ -1547,3 +1547,49 @@ and diff checks passed. Fixtures distinguish a one-way connected chain from two
 independent cycles. Commands and raw evidence are in
 `/home/ubuntu/project/vsag-lite-connectivity-20261005`. No production policy or
 PR branch is changed by this diagnostic increment.
+
+
+##### Append-only reverse-edge candidate (2026-10-05)
+
+`NEIGHBOR_MODE=diverse_reverse` runs diverse_repair then considers each existing
+edge in source-slot order, appending its missing reverse only when the target
+row has spare degree. Candidate edges are copied before the pass, so newly
+added edges cannot affect iteration. This references Lite Add/Update's reverse
+`link(neighbor, slot)` operation, but intentionally omits eviction. It never
+removes edges and preserves the configured degree limit; saturated rows may
+leave asymmetric edges. The temporary adjacency copy is experiment overhead,
+not evidence of production memory cost.
+
+Eight before/after incoming-repair snapshots (all after long CRUD) were tested
+on CPU 0 with uniform entries, ef=128 and 100 independent Top-10 queries.
+The repaired-implementation snapshots give:
+
+| Dataset | Recall@10 | Mean visited | Mean degree | Reachable from 0 | Can reach 0 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| SIFT 10k | 1.000000 | 930.870000 | 8.945800 | 10000 | 10000 |
+| SIFT 100k | 0.993000 | 1240.440000 | 10.129540 | 100000 | 100000 |
+| GIST 10k | 0.972000 | 1136.500000 | 7.616700 | 9991 | 10000 |
+| GIST 100k | 0.903000 | 1484.010000 | 7.750910 | 99789 | 99955 |
+
+Compared with diverse_repair, GIST 100k recall improves 0.891 to 0.903,
+mean visited grows 1,415.22 to 1,484.01 (about 4.9%), and mean degree grows
+5.69338 to 7.75091 (about 36%). Unreachable-from-zero nodes fall from 375 to
+211, while the 45 nodes unable to reach zero remain. GIST 10k recall improves
+0.963 to 0.972 but nine nodes remain unreachable. SIFT remains strongly
+connected and reaches recall 1.000/0.993 at 10k/100k. These are sample results,
+not guaranteed perfect recall or measured latency improvements.
+
+The candidate remains offline: full connectivity is not achieved on GIST and
+extra adjacency/search work must be weighed against quality. Next inspect
+saturated boundary rows before proposing edge replacement, and validate online
+construction/CRUD behavior and single-core timings before production adoption.
+Do not infer that eliminating the reachability deficit alone will eliminate
+all recall loss under a finite search budget.
+
+Release 4/4, ASan+UBSan 6/6 and both-build fixtures passed, including an
+asymmetric four-node graph that exercises actual reverse addition and saturated
+cycles that cannot be connected by this pass. ASan GIST 10k per-query output
+matches Release; the previous diverse_repair output is unchanged. Format/tidy15
+and diff checks passed. Raw evidence and commands:
+`/home/ubuntu/project/vsag-lite-reverse-fill-20261005`. No production code or
+PR source branch is changed.

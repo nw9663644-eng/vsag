@@ -55,7 +55,7 @@ def main():
         # Incoming-only candidates must become eligible, without inventing self edges.
         row = summary(run([0, 1, 3], [[1], [2], []], 2, 'symmetric'))
         assert row['zero_out'] == '0' and row['edge_reachable_from_zero'] == '3'
-        for mode in (None, 'preserve', 'symmetric', 'diverse', 'diverse_repair'):
+        for mode in (None, 'preserve', 'symmetric', 'diverse', 'diverse_repair', 'diverse_reverse'):
             row = summary(run([0], [[]], 1, mode))
             assert row['zero_out'] == '1' and row['zero_in'] == '1'
             assert row['edge_reachable_from_zero'] == '1'
@@ -79,6 +79,23 @@ def main():
         assert row['weak_components'] == '1' and row['largest_weak_component'] == '3'
         assert row['edge_reachable_from_zero'] == '3'
         assert row['reverse_reachable_from_zero'] == '1'
+        # The reverse-fill pipeline preserves a small connected graph
+        # without exceeding the degree budget.
+        row = summary(run([0, 1, 3], [[1, 2], [2], [0]], 2, 'diverse_reverse'))
+        assert row['edge_reachable_from_zero'] == '3'
+        assert row['reverse_reachable_from_zero'] == '3'
+        assert float(row['mean_graph_degree']) <= 2
+        # Saturated disconnected cycles cannot be fixed by append-only repair.
+        row = summary(run([0, 1, 2, 3], [[1], [0], [3], [2]], 1, 'diverse_reverse'))
+        assert row['weak_components'] == '2' and row['mean_graph_degree'] == '1.000000'
+        # An asymmetric edge survives diversity because a closer neighbor
+        # occludes its reverse. Spare-capacity fill restores that reverse.
+        row = summary(run([0, 1, 3, 4], [[1, 2], [0], [3], [2]], 2, 'diverse_repair'))
+        assert row['mean_graph_degree'] == '1.250000'
+        row = summary(run([0, 1, 3, 4], [[1, 2], [0], [3], [2]], 2, 'diverse_reverse'))
+        assert row['mean_graph_degree'] == '1.500000'
+        assert row['edge_reachable_from_zero'] == '4'
+        assert row['reverse_reachable_from_zero'] == '4'
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

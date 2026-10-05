@@ -250,12 +250,29 @@ repair_incoming(GraphSnapshot& graph) {
 }
 
 void
+append_reverse_edges(GraphSnapshot& graph) {
+    // Snapshot the candidate edges: additions must not change iteration order.
+    const auto original = graph.links;
+    for (uint64_t source = 0; source < original.size(); ++source) {
+        for (const uint64_t target : original[source]) {
+            auto& neighbors = graph.links[target];
+            if (neighbors.size() < graph.max_degree and
+                std::find(neighbors.begin(), neighbors.end(), source) == neighbors.end()) {
+                neighbors.push_back(source);
+            }
+        }
+    }
+}
+
+void
 apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
     if (mode == "preserve") {
         return;
     }
-    require(mode == "diverse" or mode == "symmetric" or mode == "diverse_repair",
-            "NEIGHBOR_MODE must be preserve, symmetric, diverse, or diverse_repair");
+    require(
+        mode == "diverse" or mode == "symmetric" or mode == "diverse_repair" or
+            mode == "diverse_reverse",
+        "NEIGHBOR_MODE must be preserve, symmetric, diverse, diverse_repair, or diverse_reverse");
     std::vector<std::vector<uint64_t>> incoming(graph.ids.size());
     for (uint64_t source = 0; source < graph.links.size(); ++source) {
         for (const uint64_t target : graph.links[source]) {
@@ -303,8 +320,11 @@ apply_neighbor_mode(GraphSnapshot& graph, const std::string& mode) {
         }
     }
     graph.links = std::move(diversified);
-    if (mode == "diverse_repair") {
+    if (mode == "diverse_repair" or mode == "diverse_reverse") {
         repair_incoming(graph);
+    }
+    if (mode == "diverse_reverse") {
+        append_reverse_edges(graph);
     }
 }
 
