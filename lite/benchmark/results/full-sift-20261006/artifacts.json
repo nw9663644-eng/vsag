@@ -1,0 +1,22 @@
+{
+  "build-full-comparison-runner/full_rabitq_dataset_benchmark": {
+    "bytes": 63280,
+    "sha256": "7154bb096838fded573a444cc2eb11663e49b139768c275e4563f6c083cd3c32"
+  },
+  "/home/ubuntu/project/vsag-lite-full-comparison-install/lib/libvsag.so.0.0.0": {
+    "bytes": 576730568,
+    "sha256": "4d245bfcde3969ecd18b338b68d7cd8b3a8f4c47d39eeba71045b9aafadb7505"
+  },
+  "build-lite-fragment-release/libvsag-lite.so": {
+    "bytes": 165344,
+    "sha256": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f"
+  },
+  "build-lite-online-diverse-release/libvsag-lite.so": {
+    "bytes": 161168,
+    "sha256": "f0bc3c5d66b321e2aadf6afd663cd1421be9517a5871f2f1948bc5e07c61f7c5"
+  },
+  "lite/benchmark/full_rabitq_dataset_main.cpp": {
+    "bytes": 12683,
+    "sha256": "2c23ffbeb3f0056e47af69841dc4a899d60b2bf653389198cb93233ef836b441"
+  }
+}

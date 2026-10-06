@@ -1751,3 +1751,9 @@ CPU semantics. [GIST100k pilot and exact definitions](results/mixed-20261006/REA
 show nearly equal end quality and a 1.87x mixed-CPU ratio for the selected
 mutation-heavy workload, with 9% higher maintenance CPU. One run per mode is
 not a repeated-run estimate or a universal workload speedup.
+
+## Full query-budget and warmup measurements
+
+`full_rabitq_dataset_benchmark DATASET SNAPSHOT MODE [EF_SEARCH [WARMUP_ROUNDS]]` now accepts optional query ef (1..1000000, default 128) and warmup rounds (0..100, default 0). Construction remains degree 16 / ef128. The existing three-argument command keeps its timing behavior; summary CSV appends query budget, warmup count and query-loop process CPU milliseconds. Every execution writes `SNAPSHOT.latencies.csv` with one sample per timed query. Warmup, serialization, reloading and sample-file writes are excluded from query-loop CPU, while vector copying, search, recall scoring and result bookkeeping are included. This is one timed pass, not mixed CRUD. `python3 lite/benchmark/test_full_query_options.py BUILD/full_rabitq_dataset_benchmark` checks old/new options, exact fixture recall, raw percentiles and invalid numeric arguments.
+
+See `lite/benchmark/results/full-sift-20261006/README.md` for the SIFT comparison and `lite/benchmark/results/cohere-source-20261006/README.md` for the validated Cohere source and pending normalization requirement.

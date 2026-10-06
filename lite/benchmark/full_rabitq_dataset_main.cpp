@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -83,6 +84,16 @@ percentile(std::vector<double> values, double fraction) {
 }
 
 uint64_t
+parse_number(const char* value) {
+    const std::string text(value);
+    require(
+        not text.empty() and
+            std::all_of(text.begin(), text.end(), [](char ch) { return ch >= '0' and ch <= '9'; }),
+        "expected a nonnegative integer");
+    return std::stoull(text);
+}
+
+uint64_t
 current_rss_kib() {
     std::ifstream status("/proc/self/status");
     std::string key;
@@ -125,9 +136,9 @@ create_parameters(int32_t dim, const std::string& mode) {
 }
 
 std::string
-search_parameters(const std::string& mode) {
-    return std::string(R"({"hgraph":{"ef_search":128,"rabitq_one_bit_search":)") +
-           (mode == "fp32" ? "false" : "true") + "}}";
+search_parameters(const std::string& mode, uint64_t ef_search) {
+    return std::string(R"({"hgraph":{"ef_search":)") + std::to_string(ef_search) +
+           R"(,"rabitq_one_bit_search":)" + (mode == "fp32" ? "false" : "true") + "}}";
 }
 
 std::shared_ptr<vsag::Index>
@@ -153,7 +164,11 @@ search(const std::shared_ptr<vsag::Index>& index,
 }
 
 int
-run(const std::string& directory, const std::string& snapshot, const std::string& mode) {
+run(const std::string& directory,
+    const std::string& snapshot,
+    const std::string& mode,
+    uint64_t ef_search,
+    uint64_t warmup_rounds) {
     require(not std::filesystem::exists(snapshot), "snapshot path already exists");
     auto base = read_matrix<float>(directory + "/base.fvecs");
     const auto queries = read_matrix<float>(directory + "/queries.fvecs", base.dim);
@@ -189,11 +204,20 @@ run(const std::string& directory, const std::string& snapshot, const std::string
                              ->Dim(base.dim)
                              ->Float32Vectors(query_vector.data())
                              ->Owner(false);
-    const auto parameters = search_parameters(mode);
+    const auto parameters = search_parameters(mode, ef_search);
+    for (uint64_t round = 0; round < warmup_rounds; ++round) {
+        for (uint64_t i = 0; i < queries.count; ++i) {
+            std::copy_n(queries.values.data() + i * static_cast<uint64_t>(base.dim),
+                        base.dim,
+                        query_vector.data());
+            search(index, query_dataset, truth.dim, parameters);
+        }
+    }
     uint64_t hits = 0;
     std::vector<double> latencies;
     std::vector<std::vector<Neighbor>> before;
     before.reserve(queries.count);
+    const auto query_cpu_start = std::clock();
     for (uint64_t i = 0; i < queries.count; ++i) {
         std::copy_n(queries.values.data() + i * static_cast<uint64_t>(base.dim),
                     base.dim,
@@ -209,6 +233,16 @@ run(const std::string& directory, const std::string& snapshot, const std::string
         }
         before.push_back(std::move(result));
     }
+
+    const auto query_cpu_ms =
+        1000.0 * static_cast<double>(std::clock() - query_cpu_start) / CLOCKS_PER_SEC;
+    std::ofstream samples(snapshot + ".latencies.csv");
+    samples << "query,latency_us\n" << std::fixed << std::setprecision(6);
+    for (uint64_t i = 0; i < latencies.size(); ++i) {
+        samples << i << ',' << latencies[i] << '\n';
+    }
+    samples.close();
+    require(static_cast<bool>(samples), "query samples write failed");
 
     start = Clock::now();
     std::ofstream output(snapshot, std::ios::binary);
@@ -249,14 +283,16 @@ run(const std::string& directory, const std::string& snapshot, const std::string
     require(getrusage(RUSAGE_SELF, &usage) == 0, "getrusage failed");
     std::cout << "mode,base_count,query_count,dim,k,recall_at_k,build_ms,search_p50_us,"
                  "search_p99_us,save_ms,load_ms,snapshot_bytes,build_steady_rss_kib,"
-                 "final_steady_rss_kib,process_peak_rss_kib\n";
+                 "final_steady_rss_kib,process_peak_rss_kib,query_ef_search,warmup_rounds,"
+                 "query_loop_cpu_ms\n";
     std::cout << mode << ',' << base.count << ',' << queries.count << ',' << base.dim << ','
               << truth.dim << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(hits) / static_cast<double>(queries.count * truth.dim) << ','
               << build_ms << ',' << percentile(latencies, 0.50) << ','
               << percentile(latencies, 0.99) << ',' << save_ms << ',' << load_ms << ','
               << std::filesystem::file_size(snapshot) << ',' << build_steady_rss_kib << ','
-              << current_rss_kib() << ',' << usage.ru_maxrss << '\n';
+              << current_rss_kib() << ',' << usage.ru_maxrss << ',' << ef_search << ','
+              << warmup_rounds << ',' << query_cpu_ms << '\n';
     return 0;
 }
 
@@ -265,10 +301,14 @@ run(const std::string& directory, const std::string& snapshot, const std::string
 int
 main(int argc, char** argv) {
     try {
-        require(argc == 4,
+        require(argc >= 4 and argc <= 6,
                 "usage: full_rabitq_dataset_benchmark DATASET_DIRECTORY SNAPSHOT_PATH "
-                "MODE(fp32|rabitq1|rabitq3x5)");
-        return run(argv[1], argv[2], argv[3]);
+                "MODE(fp32|rabitq1|rabitq3x5) [EF_SEARCH [WARMUP_ROUNDS]]");
+        const auto ef_search = argc >= 5 ? parse_number(argv[4]) : 128;
+        const auto warmup_rounds = argc == 6 ? parse_number(argv[5]) : 0;
+        require(ef_search > 0 and ef_search <= 1000000, "invalid query budget");
+        require(warmup_rounds <= 100, "invalid warmup count");
+        return run(argv[1], argv[2], argv[3], ef_search, warmup_rounds);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

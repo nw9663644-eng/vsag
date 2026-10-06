@@ -1,0 +1,57 @@
+{
+  "recall_at_k": {
+    "median": 0.990333,
+    "min": 0.990333,
+    "max": 0.990333
+  },
+  "build_ms": {
+    "median": 15109.644973,
+    "min": 15024.165543,
+    "max": 15148.972692
+  },
+  "search_p50_us": {
+    "median": 176.556,
+    "min": 175.796,
+    "max": 176.676
+  },
+  "search_p99_us": {
+    "median": 210.955,
+    "min": 210.095,
+    "max": 212.035
+  },
+  "save_ms": {
+    "median": 53.03099,
+    "min": 52.727297,
+    "max": 53.374421
+  },
+  "load_ms": {
+    "median": 67.457606,
+    "min": 66.504179,
+    "max": 68.364076
+  },
+  "snapshot_bytes": {
+    "median": 57156886.0,
+    "min": 57156886.0,
+    "max": 57156886.0
+  },
+  "build_steady_rss_kib": {
+    "median": 193564.0,
+    "min": 193388.0,
+    "max": 193828.0
+  },
+  "final_steady_rss_kib": {
+    "median": 192820.0,
+    "min": 192776.0,
+    "max": 193100.0
+  },
+  "process_peak_rss_kib": {
+    "median": 280836.0,
+    "min": 280676.0,
+    "max": 281088.0
+  },
+  "query_loop_cpu_ms": {
+    "median": 51.971,
+    "min": 51.91,
+    "max": 52.351
+  }
+}

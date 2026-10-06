@@ -1,0 +1,16 @@
+{
+  "default": {
+    "recall_at_k": 0.968667,
+    "search_p50_us": 471.469,
+    "search_p99_us": 673.094,
+    "query_loop_cpu_ms": 136.056,
+    "query_ef_search": 256.0
+  },
+  "diverse": {
+    "recall_at_k": 0.977667,
+    "search_p50_us": 232.604,
+    "search_p99_us": 314.454,
+    "query_loop_cpu_ms": 67.525,
+    "query_ef_search": 96.0
+  }
+}

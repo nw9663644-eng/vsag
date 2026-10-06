@@ -1,0 +1,29 @@
+VM-0-10-ubuntu
+Linux VM-0-10-ubuntu 5.15.0-190-generic #200-Ubuntu SMP Fri Aug 7 15:06:04 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Ubuntu clang-format version 15.0.7
+Ubuntu LLVM version 15.0.7
+  Optimized build.
+  Default target: x86_64-pc-linux-gnu
+  Host CPU: (unknown)
+	linux-vdso.so.1 (0x00007ffc61731000)
+	libvsag.so.0.0 => /home/ubuntu/project/vsag-lite-full-comparison-install/lib/libvsag.so.0.0 (0x00007fea249f5000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fea249cd000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fea247a4000)
+	libgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x00007fea2475a000)
+	libopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007fea22308000)
+	liblapacke.so.3 => /lib/x86_64-linux-gnu/liblapacke.so.3 (0x00007fea220a1000)
+	libaio.so.1 => /lib/x86_64-linux-gnu/libaio.so.1 (0x00007fea2209c000)
+	libfmt.so.8 => /lib/x86_64-linux-gnu/libfmt.so.8 (0x00007fea2207b000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fea21f94000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fea270a2000)
+	libgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007fea21cb9000)
+	libblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007fea21c57000)
+	liblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007fea21592000)
+	libtmglib.so.3 => /lib/x86_64-linux-gnu/libtmglib.so.3 (0x00007fea21527000)
+	libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fea212fb000)
+	libquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007fea212b3000)

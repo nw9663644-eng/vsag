@@ -1,0 +1,16 @@
+{
+  "source": "f3a3bcdc55964fbe16b056e77d4c0dbb2f48ad34",
+  "dataset": "/home/ubuntu/project/vsag-lite-sift-matched-20261006/final/scale-100000",
+  "mode": "Full HGraph FP32",
+  "degree": 16,
+  "construction_ef": 128,
+  "query_ef": 128,
+  "cpu": 0,
+  "replicates": 3,
+  "query_rows": [
+    400,
+    700
+  ],
+  "queries_previously_observed": true,
+  "limitation": "existing runner has one timed pass with no warmup; no mixed CRUD or per-phase CPU; Full graph differs from Lite; common final quality floor .95 descriptive comparison only"
+}

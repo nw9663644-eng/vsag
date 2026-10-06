@@ -1,0 +1,10 @@
+{
+  "full-stripped.so": {
+    "bytes": 40463344,
+    "sha256": "467f550b289d487538807cb8d1e5bb325690ae74a5edb0beead37d4f7e43b723"
+  },
+  "lite-stripped.so": {
+    "bytes": 138064,
+    "sha256": "f87f21995eceed1acac00ac481119230ba18ae4df0ab3f4ce7302b0d281bc419"
+  }
+}

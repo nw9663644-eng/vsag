@@ -1,0 +1,32 @@
+{
+  "official_definition": "https://github.com/zilliztech/VectorDBBench/blob/main/vectordb_bench/backend/dataset.py",
+  "mirror_configuration": "https://github.com/zilliztech/VectorDBBench/blob/main/vectordb_bench/__init__.py",
+  "source_metric": "cosine",
+  "download_mirror": "https://assets.zilliz.com.cn/benchmark/cohere_small_100k/",
+  "status": "raw files validated; no ANN recall or performance measurement; normalized squared-L2 preparation pending",
+  "original_s3_attempt": "timed out at 300s; incomplete train.parquet.part retained; not used",
+  "train.parquet": {
+    "rows": 100000,
+    "dim": 768,
+    "unique_ids": 100000,
+    "source_ids_contiguous_in_row_order": true,
+    "all_finite": true,
+    "zero_norm_count": 0,
+    "norm_min": 12.273768889484646,
+    "norm_max": 16.83558701354913,
+    "bytes": 312652957,
+    "sha256": "a8719014d8e86bbfb64f53a21287aecf10d048d7de28c7bebb1d0559b9181b42"
+  },
+  "test.parquet": {
+    "rows": 1000,
+    "dim": 768,
+    "unique_ids": 1000,
+    "source_ids_contiguous_in_row_order": true,
+    "all_finite": true,
+    "zero_norm_count": 0,
+    "norm_min": 12.30566163611116,
+    "norm_max": 15.703732260271615,
+    "bytes": 3126879,
+    "sha256": "252a25003060713a268cd2bf5c5f8fab6159f13772924859487907bef64f1391"
+  }
+}

@@ -1,0 +1,11 @@
+# Cohere source readiness, not a performance result
+
+The VectorDBBench official [dataset definition](https://github.com/zilliztech/VectorDBBench/blob/main/vectordb_bench/backend/dataset.py) registers Cohere as 768-dimensional COSINE and includes the 100k scale. The project's [configuration](https://github.com/zilliztech/VectorDBBench/blob/main/vectordb_bench/__init__.py) lists both S3 and Aliyun mirrors.
+
+On 2026-10-06 the S3 training download timed out after 300 s, leaving an incomplete `train.parquet.part` (not used). The official Aliyun mirror completed both files at `https://assets.zilliz.com.cn/benchmark/cohere_small_100k/{train,test}.parquet`. Complete files are on the remote server under `/home/ubuntu/project/vsag-lite-datasets/cohere/cohere-small-100k/`; data and dependencies are not committed.
+
+`audit.json` binds exact bytes/SHA256, row counts, source IDs and norm ranges. All 100000 training rows and 1000 query rows have 768 finite coordinates, unique IDs in contiguous row order and nonzero norms. Training norm range is 12.274..16.836, query norm range 12.306..15.704: these embeddings are NOT unit-normalized. Running the current squared-L2 Lite API directly on raw data would change the intended metric.
+
+Next: normalize each vector in FP64 then store FP32; recompute exact ground truth against the actual 10k/100k subsets, audit roundoff versus original cosine ranking, preserve source-ID mapping and reserve query ranges before tuning. On exact unit vectors squared-L2 equals twice cosine distance, but FP32 normalization entails rounding and needs verification. No ANN quality or performance result exists for Cohere in this increment; downloading and validating sources do not satisfy cross-dataset acceptance.
+
+Audit command: `PYTHONPATH=/home/ubuntu/project/vsag-lite-datasets/cohere/python-deps:/home/ubuntu/project/vsag-lite-datasets/sift/python-deps python3 /home/ubuntu/project/vsag-lite-cohere-source-20261006/audit.py`. Isolated pyarrow 21.0.0 was installed under the first dependency directory; numpy 2.2.6 was reused from the second. `audit.py` is the exact script executed. Source checks do not require indexing or evaluate any reserved query's retrieval result.

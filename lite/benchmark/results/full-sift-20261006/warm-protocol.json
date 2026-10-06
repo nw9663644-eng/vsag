@@ -1,0 +1,14 @@
+{
+  "query_ef": 128,
+  "warmup_rounds": 1,
+  "timed_rounds": 1,
+  "replicates": 3,
+  "cpu": 0,
+  "quality_floor": 0.95,
+  "query_rows": [
+    400,
+    700
+  ],
+  "queries_previously_observed": true,
+  "maintenance_not_measured": true
+}
