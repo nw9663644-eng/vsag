@@ -1,0 +1,26 @@
+{
+  "query_source_sha256": "220465f0ab851de6890d87ab1dd5081f526da8d214aa7a3849e738e63cad6775",
+  "base_source_sha256": "85717af87d81a6d84628cf6746ac00a149427948e145603db9ea1ddac36feebf",
+  "query_offset_zero_based": 100,
+  "query_count": 300,
+  "previous_tuning_rows": [
+    0,
+    100
+  ],
+  "selected_rows_half_open": [
+    100,
+    400
+  ],
+  "groundtruth": "existing lite_prepare_gist exact squared-L2, ascending ID ties",
+  "preparer_sha256": "9d270304a41f1bb67c3a2fec01359f083ab27f80cc2f3fdc0fdfe24b7992d816",
+  "outputs_sha256": {
+    "scale-10000/base.fvecs": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444",
+    "scale-10000/groundtruth.ivecs": "16f797a14408ec6a18786da2880e66223c82d57628319a7fea00faee8678c8ed",
+    "scale-10000/manifest.json": "494fb46762475c88084b3be363ae9472a75a05fad50d74b0096f761d80e6cef3",
+    "scale-10000/queries.fvecs": "8a891dfb8628969b2c60aee9194cc3094715f46d34d5c09b92e25de80bfbe33b",
+    "scale-100000/base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+    "scale-100000/groundtruth.ivecs": "df01cc0fe0e301b3dd395b3d011ee747f3ec850c613bddd1ca8dfd8cc8f2f08a",
+    "scale-100000/manifest.json": "e3f8bbec1f7537878ab456e0d96906b6f9cd6df8e3aad8cd97a7aa4a86204d06",
+    "scale-100000/queries.fvecs": "8a891dfb8628969b2c60aee9194cc3094715f46d34d5c09b92e25de80bfbe33b"
+  }
+}

@@ -57,3 +57,12 @@ Empty `.stderr` files confirm successful runs; command exit codes were checked.
 SHA256SUMS covers the committed evidence. No dataset, binary or private handoff
 rules are included. Next validate the simpler candidate with independent queries
 and online construction/CRUD timings before proposing production adoption.
+
+
+## Follow-up acceptance limitation (2026-10-06)
+
+The frozen configurations failed the Recall>=0.90 gate on 300 disjoint query
+rows: preserve 0.867667 versus diverse_reverse 0.836667. The selected tuning-set
+6.52x ratio does not establish a generalized matched-quality speedup. See
+[the complete holdout report](../gist-holdout-20261006/README.md). This note
+preserves the original measurements while updating their acceptance boundary.

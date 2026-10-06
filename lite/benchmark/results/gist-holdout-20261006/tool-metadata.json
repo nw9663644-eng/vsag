@@ -1,0 +1,15 @@
+{
+  "source_commit": "c9f65430c5c681a172b083bd9f47531252e750d9",
+  "preparation_script_sha256": "4c9cf856ab3cb4f7817bf7df174d5225444bdbc58bba0892a0ceaf74416db645",
+  "route_binary_sha256": "bd99784a5c01b5ee81ef4d7216e0582a9df6f2d0d2d89d86c82ba566cfa2971a",
+  "cpu": 0,
+  "frozen_configs": {
+    "preserve": 1536,
+    "diverse": 160,
+    "diverse_reverse": 128
+  },
+  "query_range": [
+    100,
+    400
+  ]
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "preserve",
+    "ef": 1536,
+    "recall_before": 0.867667,
+    "recall_after": 0.866667,
+    "p50_us": 4409.919,
+    "p99_us": 5053.194
+  },
+  {
+    "mode": "diverse",
+    "ef": 160,
+    "recall_before": 0.837,
+    "recall_after": 0.846,
+    "p50_us": 811.172,
+    "p99_us": 949.039
+  },
+  {
+    "mode": "diverse_reverse",
+    "ef": 128,
+    "recall_before": 0.836667,
+    "recall_after": 0.843333,
+    "p50_us": 714.784,
+    "p99_us": 872.97
+  }
+]

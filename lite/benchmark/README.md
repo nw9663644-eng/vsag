@@ -1679,3 +1679,15 @@ show preserved candidate recall advantage, with mutation loop CPU overhead about
 offline-transformed graph; online diversity building, long churn and concurrency
 remain to be validated. It must not be combined into a net speedup with the
 previous differently tuned query comparison.
+
+
+##### Independent-query acceptance gate (2026-10-06)
+
+The fixed tuning-set configurations failed Recall>=0.90 on GIST source rows
+[100,400), disjoint from prior rows [0,100): preserve ef1536 scores 0.867667,
+diverse ef160 0.837000, diverse_reverse ef128 0.836667. The previously recorded
+6.52x loaded-query ratio is limited to the tuning split and is not a validated
+equal-quality speedup on independent queries. No retuning was performed.
+[Raw evidence, preparation and acceptance limits](results/gist-holdout-20261006/README.md).
+The wrapper prepare_gist_holdout.py reuses the existing precise truth preparer;
+reserve unused query rows for final assessment after any further tuning.
