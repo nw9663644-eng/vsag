@@ -1,0 +1,146 @@
+[
+  {
+    "mode": "remove",
+    "repeat": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "remove",
+    "repeat": 1,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "remove",
+    "repeat": 2,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "update-remove",
+    "repeat": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "update-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "update-remove",
+    "repeat": 1,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "update-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "update-remove",
+    "repeat": 2,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "update-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "last-remove",
+    "repeat": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "last-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "last-remove",
+    "repeat": 1,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "last-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "last-remove",
+    "repeat": 2,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "last-remove"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "restored",
+    "repeat": 0,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "restored"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "restored",
+    "repeat": 1,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "restored"
+    ],
+    "returncode": 0
+  },
+  {
+    "mode": "restored",
+    "repeat": 2,
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/delete_reproducer",
+      "restored"
+    ],
+    "returncode": 0
+  }
+]

@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner
+Test project /home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner
+    Start 1: full_delete_remove
+1/4 Test #1: full_delete_remove ...............   Passed    0.11 sec
+    Start 2: full_delete_update-remove
+2/4 Test #2: full_delete_update-remove ........   Passed    0.10 sec
+    Start 3: full_delete_last-remove
+3/4 Test #3: full_delete_last-remove ..........   Passed    0.10 sec
+    Start 4: full_delete_restored
+4/4 Test #4: full_delete_restored .............   Passed    0.11 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.42 sec

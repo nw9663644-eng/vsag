@@ -23,3 +23,12 @@ add_executable(full_load_memory ../load_memory.cpp)
 target_compile_definitions(full_load_memory PRIVATE VSAG_BENCH_FULL)
 target_link_libraries(full_load_memory PRIVATE vsag::vsag)
 target_compile_options(full_load_memory PRIVATE -Wall -Wextra -Wpedantic)
+
+# Physical compaction must remain searchable before a removed vector is readded.
+add_executable(full_delete_regression ../full_delete_regression.cpp)
+target_link_libraries(full_delete_regression PRIVATE vsag::vsag)
+target_compile_options(full_delete_regression PRIVATE -Wall -Wextra -Wpedantic)
+enable_testing()
+foreach(mode remove update-remove last-remove restored)
+    add_test(NAME full_delete_${mode} COMMAND full_delete_regression ${mode})
+endforeach()

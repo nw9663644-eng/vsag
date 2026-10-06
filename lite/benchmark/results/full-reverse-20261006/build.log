@@ -1,0 +1,7 @@
+Consolidate compiler generated dependencies of target full_rabitq_dataset_benchmark
+[ 50%] Building CXX object CMakeFiles/full_rabitq_dataset_benchmark.dir/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/full_rabitq_dataset_main.cpp.o
+[100%] Linking CXX executable full_rabitq_dataset_benchmark
+[100%] Built target full_rabitq_dataset_benchmark
+[ 50%] Building CXX object CMakeFiles/full_delete_regression.dir/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/full_delete_regression.cpp.o
+[100%] Linking CXX executable full_delete_regression
+[100%] Built target full_delete_regression

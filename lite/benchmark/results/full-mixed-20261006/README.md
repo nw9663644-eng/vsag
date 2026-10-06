@@ -1,4 +1,5 @@
 # Full HGraph restored-data CRUD comparison (2026-10-06)
+> Follow-up: the prior physical-delete profile omitted `use_reverse_edges`. The 2026-10-06 full-reverse report records the corrected configuration and control tests. These historical failures remain valid for the explicitly recorded reverse-edges-OFF profile; they are not evidence that Full with reverse edges enabled has the same defect.
 
 Full FP32 HGraph completed six single-core physical-delete runs on normalized
 Cohere 100k / 768 dimensions / 600 previously observed queries (original rows

@@ -1,0 +1,29 @@
+[
+  {
+    "query_every": 1,
+    "quality_passes": 3,
+    "short_query_events": 0,
+    "initial_recall": 0.952,
+    "end_recall_at_k": 0.951,
+    "mixed_recall_at_k": 0.9534,
+    "mutation_cpu_ms": 585.877,
+    "query_cpu_ms": 303.657,
+    "mixed_loop_cpu_ms": 895.896,
+    "mixed_p50_us": 305.084,
+    "mixed_p99_us": 373.311
+  },
+  {
+    "query_every": 10,
+    "quality_passes": 3,
+    "short_query_events": 0,
+    "initial_recall": 0.952,
+    "end_recall_at_k": 0.951,
+    "mixed_recall_at_k": 0.953,
+    "mutation_cpu_ms": 575.259,
+    "query_cpu_ms": 35.1,
+    "mixed_loop_cpu_ms": 613.449,
+    "mixed_p50_us": 349.222,
+    "mixed_p99_us": 422.961
+  }
+]
+AUDIT: 6000 four-operation cycles; 3300 mixed queries; six Save/Load roundtrip checks passed

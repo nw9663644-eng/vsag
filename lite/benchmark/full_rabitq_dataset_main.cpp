@@ -113,12 +113,12 @@ current_rss_kib() {
 
 std::string
 create_parameters(int32_t dim, const std::string& mode, bool force_remove = false) {
-    const std::string prefix = std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") +
-                               std::to_string(dim) +
-                               R"(,"index_param":{"max_degree":16,"ef_construction":128,)" +
-                               (force_remove ? R"("support_force_remove":true,)" : "") +
-                               (force_remove ? R"("graph_storage_type":"flat",)"
-                                             : R"("graph_storage_type":"compressed",)");
+    const std::string prefix =
+        std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") + std::to_string(dim) +
+        R"(,"index_param":{"max_degree":16,"ef_construction":128,)" +
+        (force_remove ? R"("support_force_remove":true,"use_reverse_edges":true,)" : "") +
+        (force_remove ? R"("graph_storage_type":"flat",)"
+                      : R"("graph_storage_type":"compressed",)");
     if (mode == "fp32") {
         return prefix + R"("base_quantization_type":"fp32","store_raw_vector":true}})";
     }

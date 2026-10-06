@@ -1,4 +1,5 @@
 # Full physical-delete correctness diagnostic (2026-10-06)
+> Follow-up: the prior physical-delete profile omitted `use_reverse_edges`. The 2026-10-06 full-reverse report records the corrected configuration and control tests. These historical failures remain valid for the explicitly recorded reverse-edges-OFF profile; they are not evidence that Full with reverse edges enabled has the same defect.
 
 This diagnostic blocks treating the currently installed Full physical-delete
 profile as a valid matched-quality CRUD performance reference. It does not

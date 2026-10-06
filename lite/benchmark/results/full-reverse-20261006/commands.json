@@ -1,0 +1,110 @@
+[
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every1-r0.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "1"
+    ],
+    "started": 1791299168.5774806,
+    "exit": 0,
+    "elapsed_s": 35.02841019630432
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every10-r0.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "10"
+    ],
+    "started": 1791299203.6062043,
+    "exit": 0,
+    "elapsed_s": 34.803714752197266
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every10-r1.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "10"
+    ],
+    "started": 1791299238.4411542,
+    "exit": 0,
+    "elapsed_s": 35.29659605026245
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every1-r1.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "1"
+    ],
+    "started": 1791299273.7381227,
+    "exit": 0,
+    "elapsed_s": 34.7959668636322
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every1-r2.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "1"
+    ],
+    "started": 1791299308.5345929,
+    "exit": 0,
+    "elapsed_s": 35.28385066986084
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every10-r2.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "10"
+    ],
+    "started": 1791299343.818839,
+    "exit": 0,
+    "elapsed_s": 34.89538311958313
+  }
+]

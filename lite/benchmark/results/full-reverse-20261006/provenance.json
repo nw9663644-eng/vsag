@@ -1,0 +1,14 @@
+{
+  "parent": "f1733b203fafa663be94909f2bbfe3018d1bbb70",
+  "sha256": {
+    "lite/benchmark/full_rabitq_dataset_main.cpp": "181241d347b30bad371b6490ea1ddbc7f9f26d6996bcfcaec88aec9d209b5474",
+    "lite/benchmark/full_delete_regression.cpp": "4eec9f85f8213c6969e22eb03ad82c0ce51a44387dadbbc4acffabcb6d2fc9a2",
+    "build-full-known-runner/full_rabitq_dataset_benchmark": "244d89f35066bf72db3cc00b4b419f07aadba4603b88552b526dff81e56eb741",
+    "build-full-known-runner/full_delete_regression": "d8f68a6e17654ee4fa6000fd178948ca983816ab60063a75d05766e61b46fd0f",
+    "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000/base.fvecs": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000/queries.fvecs": "b8ae4e075722574dc211dd2d06d573a21334d29b82f9656eedab3a98d36c4405",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000/groundtruth.ivecs": "841d20af383f07f06e2c7e1d8afbe3e1d5a69f59bccf9c7df229a62b5c1f771d"
+  },
+  "library_origin": "d18c82a cached incremental shared build; not latest upstream"
+}
