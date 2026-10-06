@@ -71,3 +71,5 @@ Full mixed CRUD, then a unified SIFT/GIST/Cohere report and policy decision.
 | Lite diverse | 256 | 0.961333 | 1073.785 | 1321.160 | 636.642 |
 
 Uses three initial passes from the 1:4 group, before mutations. No mixed-query timings are substituted. Full and Lite CPU loop bookkeeping differ; this is a descriptive reference.
+
+Published stdout logs have trailing whitespace removed to satisfy repository checks. Original stdout remains on the host; raw-stdout-sha256.json identifies original bytes. CSV values are unchanged.

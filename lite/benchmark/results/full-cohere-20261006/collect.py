@@ -9,7 +9,9 @@ for repeat,row in enumerate(rows):
  for fraction,key in [(.5,'search_p50_us'),(.99,'search_p99_us')]:assert abs(values[math.ceil(600*fraction)-1]-float(row[key]))<1e-5
  assert float(row['recall_at_k'])>=.95 and int(row['query_ef_search'])==128 and int(row['warmup_rounds'])==1
 for p in root.iterdir():
- if p.is_file() and p.suffix!='.snapshot':shutil.copy2(p,out/p.name)
+ if p.is_file() and p.suffix!='.snapshot':
+  shutil.copy2(p,out/p.name)
+  if p.name.endswith('.stdout.log'):(out/p.name).write_text('\n'.join(line.rstrip() for line in p.read_text().splitlines())+'\n')
 fields=['recall_at_k','build_ms','search_p50_us','search_p99_us','query_loop_cpu_ms','save_ms','load_ms','snapshot_bytes','build_steady_rss_kib','final_steady_rss_kib','process_peak_rss_kib']
 audit={k:{'median':statistics.median(float(r[k]) for r in rows),'min':min(float(r[k]) for r in rows),'max':max(float(r[k]) for r in rows)} for k in fields}
 (out/'audit.json').write_text(json.dumps({'raw_queries':1800,'processes':3,'quality_passes':3,'metrics':audit},indent=2)+'\n')
