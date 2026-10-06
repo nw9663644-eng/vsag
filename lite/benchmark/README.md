@@ -1637,3 +1637,27 @@ Release 4/4, ASan+UBSan 6/6 and both-build fixtures passed; ASan GIST 10k output
 matches Release and the previous diverse_reverse output remains identical.
 Format/tidy15 and diff checks passed. Raw results, commands and source/binary
 hashes are in `/home/ubuntu/project/vsag-lite-reverse-safe-20261005`.
+
+
+##### Actual Lite API timing for offline candidates
+
+The optional `API_REPEATS` argument measures the actual Lite API:
+
+```text
+lite_graph_route_probe SNAPSHOT DATASET OUTPUT [EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS]]]]
+```
+
+API_REPEATS must be 1..1000 and requires uniform ENTRY_MODE. The probe now links
+vsag::lite. It serializes the selected graph into the existing v2 FP32 format,
+loads it with Index::Load, performs one full warmup/quality pass, then times
+Index::Search calls. The `.api.csv` summary and `.api.csv.latencies.csv` raw
+samples are additional outputs; previous diagnostic commands remain valid.
+Existing output paths are rejected. Query-loop CPU time includes the full loop;
+Load is from an in-memory stream and excludes serialization/graph transformation.
+
+The five-process GIST100k comparison and raw samples are published in
+[results/api-latency-20261005](results/api-latency-20261005/README.md).
+At the selected Recall>=0.90 gate, preserve ef1536 scores 0.902 with median
+process P50 4035.594us; diverse_reverse ef128 scores 0.903 with P50 618.959us.
+This loaded-index warm-query result is promising, but does not measure online
+construction/CRUD, independent holdout quality or cold-start performance.

@@ -1,0 +1,2 @@
+query_count,k,recall_at_k,truth_visit_rate,mean_visited_nodes,mean_expanded_nodes,mean_route_nodes,mean_distance_evaluations,mean_graph_degree,zero_out,zero_in,edge_reachable_from_zero,reverse_reachable_from_zero,weak_components,largest_weak_component
+100,10,0.913000,0.913000,1696.980000,164.370000,0.000000,1696.980000,5.678810,0,2647,97019,99955,1,100000

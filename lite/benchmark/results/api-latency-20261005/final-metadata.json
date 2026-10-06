@@ -1,0 +1,9 @@
+{
+  "source_sha256": "74e33760617175481fa5a99adf0913d2ca98b2a11dffe649fa6f94519c4fd2e7",
+  "binary_sha256": "a04b44214a5b95bc222e9d07fb415eabb8cfdc1d19a18087aed7d2d125fda8ce",
+  "cpu": 0,
+  "quality_floor": 0.9,
+  "fresh_processes": 5,
+  "warmup_passes": 1,
+  "timed_passes": 10
+}

@@ -1,15 +1,20 @@
 // Copyright 2024-present the vsag project
 // SPDX-License-Identifier: Apache-2.0
+#include <vsag/lite/index.h>
+
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
 #include <queue>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -621,14 +626,120 @@ search(const GraphSnapshot& graph,
     return trace;
 }
 
+void
+measure_api(const GraphSnapshot& graph,
+            const std::vector<std::vector<float>>& queries,
+            const std::vector<std::vector<int32_t>>& truth,
+            uint64_t repeats,
+            const std::string& path) {
+    require(not std::filesystem::exists(path), "API output path already exists");
+    // Match Index::Save's v2 FP32 layout; serialization is outside Load timing.
+    std::stringstream snapshot(std::ios::in | std::ios::out | std::ios::binary);
+    const auto write = [&](uint64_t value, uint64_t bytes = 8) {
+        for (uint64_t i = 0; i < bytes; ++i) {
+            snapshot.put(static_cast<char>((value >> (8 * i)) & 0xff));
+        }
+    };
+    uint64_t payload = 16 + graph.ids.size() * 16 + graph.vectors.size() * 4;
+    for (const auto& row : graph.links) {
+        payload += row.size() * 8;
+    }
+    snapshot.write("VSAGLT01", 8);
+    for (const uint64_t value : {uint64_t{2},
+                                 graph.dim,
+                                 static_cast<uint64_t>(graph.ids.size()),
+                                 payload,
+                                 uint64_t{2},
+                                 graph.max_degree,
+                                 graph.ef_search}) {
+        write(value);
+    }
+    for (const int64_t id : graph.ids) {
+        write(static_cast<uint64_t>(id));
+    }
+    for (const float value : graph.vectors) {
+        uint32_t bits = 0;
+        std::memcpy(&bits, &value, sizeof(bits));
+        write(bits, 4);
+    }
+    for (const auto& row : graph.links) {
+        write(row.size());
+        for (const uint64_t target : row) {
+            write(target);
+        }
+    }
+    require(static_cast<bool>(snapshot), "API snapshot serialization failed");
+    snapshot.seekg(0);
+    using Clock = std::chrono::steady_clock;
+    auto start = Clock::now();
+    auto loaded = vsag::lite::Index::Load(snapshot);
+    const double load_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+    require(static_cast<bool>(loaded), "API snapshot load failed");
+    const uint64_t k = truth.front().size();
+    uint64_t hits = 0;
+    // One full warmup pass also measures quality outside the timed query loop.
+    for (uint64_t i = 0; i < queries.size(); ++i) {
+        auto result = (*loaded)->Search(queries[i].data(), graph.dim, k);
+        require(static_cast<bool>(result) and result->size() == k, "API warmup failed");
+        std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
+        for (const auto& neighbor : *result) {
+            hits += expected.count(neighbor.id);
+        }
+    }
+    std::vector<double> latencies;
+    latencies.reserve(queries.size() * repeats);
+    const auto cpu_start = std::clock();
+    for (uint64_t round = 0; round < repeats; ++round) {
+        for (const auto& query : queries) {
+            start = Clock::now();
+            auto result = (*loaded)->Search(query.data(), graph.dim, k);
+            const auto end = Clock::now();
+            require(static_cast<bool>(result) and result->size() == k, "API timed search failed");
+            latencies.push_back(std::chrono::duration<double, std::micro>(end - start).count());
+        }
+    }
+    const double cpu_ms = 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
+    std::ofstream samples(path + ".latencies.csv");
+    require(static_cast<bool>(samples), "API latency output open failed");
+    samples << "round,query,latency_us\n" << std::fixed << std::setprecision(6);
+    for (uint64_t i = 0; i < latencies.size(); ++i) {
+        samples << i / queries.size() << ',' << i % queries.size() << ',' << latencies[i] << '\n';
+    }
+    samples.close();
+    require(static_cast<bool>(samples), "API latency output write failed");
+    std::sort(latencies.begin(), latencies.end());
+    const auto percentile = [&](double fraction) {
+        return latencies[static_cast<uint64_t>(
+                             std::ceil(fraction * static_cast<double>(latencies.size()))) -
+                         1];
+    };
+    std::ofstream output(path);
+    require(static_cast<bool>(output), "API output open failed");
+    output << "query_count,repeats,recall_at_k,search_p50_us,search_p99_us,query_loop_cpu_ms,load_"
+              "ms\n";
+    output << queries.size() << ',' << repeats << ',' << std::fixed << std::setprecision(6)
+           << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
+           << percentile(0.50) << ',' << percentile(0.99) << ',' << cpu_ms << ',' << load_ms
+           << '\n';
+    output.close();
+    require(static_cast<bool>(output), "API output write failed");
+}
+
 int
 run(const std::string& snapshot,
     const std::string& directory,
     const std::string& output_path,
     uint64_t ef_search,
     const std::string& entry_mode,
-    const std::string& neighbor_mode) {
+    const std::string& neighbor_mode,
+    uint64_t api_repeats) {
     require(not std::filesystem::exists(output_path), "output path already exists");
+    require(api_repeats == 0 or not std::filesystem::exists(output_path + ".api.csv.latencies.csv"),
+            "API latency output path already exists");
+    require(api_repeats == 0 or entry_mode == "uniform",
+            "API measurement requires uniform ENTRY_MODE");
+    require(api_repeats == 0 or not std::filesystem::exists(output_path + ".api.csv"),
+            "API output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
     if (ef_search != 0) {
         graph.ef_search = ef_search;
@@ -699,6 +810,9 @@ run(const std::string& snapshot,
               << ',' << mean_degree(graph) << ',' << topology.zero_out << ',' << topology.zero_in
               << ',' << topology.reachable << ',' << topology.reverse_reachable << ','
               << topology.weak_components << ',' << topology.largest_weak_component << '\n';
+    if (api_repeats != 0) {
+        measure_api(graph, queries, truth, api_repeats, output_path + ".api.csv");
+    }
     return 0;
 }
 
@@ -712,14 +826,17 @@ main(int argc, char** argv) {
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
         }
-        require(argc >= 4 and argc <= 7,
+        require(argc >= 4 and argc <= 8,
                 "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
-                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE]]]");
+                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS]]]]");
         const uint64_t ef_search = argc >= 5 ? std::stoull(argv[4]) : 0;
         require(argc == 4 or ef_search > 0, "EF_SEARCH must be positive");
         const std::string entry_mode = argc >= 6 ? argv[5] : "uniform";
-        const std::string neighbor_mode = argc == 7 ? argv[6] : "preserve";
-        return run(argv[1], argv[2], argv[3], ef_search, entry_mode, neighbor_mode);
+        const std::string neighbor_mode = argc >= 7 ? argv[6] : "preserve";
+        const uint64_t api_repeats = argc == 8 ? std::stoull(argv[7]) : 0;
+        require(argc != 8 or (api_repeats > 0 and api_repeats <= 1000),
+                "API_REPEATS must be in [1, 1000]");
+        return run(argv[1], argv[2], argv[3], ef_search, entry_mode, neighbor_mode, api_repeats);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

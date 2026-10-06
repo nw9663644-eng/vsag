@@ -31,15 +31,27 @@ def main():
         (root / 'groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 0))
         case = 0
 
-        def run(vectors, links, degree, mode=None):
+        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform"):
             nonlocal case
             case += 1
             source = root / f'{case}.snapshot'
             snapshot(source, vectors, links, degree)
             command = [binary, str(source), str(root), str(root / f'{case}.csv')]
             if mode is not None:
-                command += ['128', 'uniform', mode]
-            return subprocess.run(command, capture_output=True, text=True, check=False)
+                command += ['128', entry_mode, mode]
+            if api_repeats is not None:
+                command += [str(api_repeats)]
+            result = subprocess.run(command, capture_output=True, text=True, check=False)
+            if api_repeats is not None and result.returncode == 0:
+                with (root / f'{case}.csv.api.csv').open() as output:
+                    result.api = next(csv.DictReader(output))
+                with (root / f'{case}.csv.api.csv.latencies.csv').open() as output:
+                    samples = list(csv.DictReader(output))
+                assert len(samples) == int(result.api['query_count']) * api_repeats
+                values = sorted(float(row['latency_us']) for row in samples)
+                assert abs(values[-1] - float(result.api['search_p99_us'])) < 1e-6
+
+            return result
 
         def summary(result):
             assert result.returncode == 0, result.stderr
@@ -100,6 +112,16 @@ def main():
         # No two-hop witness exists in these degree-one cycles: preserve them.
         row = summary(run([0, 1, 2, 3], [[1], [0], [3], [2]], 1, 'diverse_reverse_safe'))
         assert row['weak_components'] == '2' and row['mean_graph_degree'] == '1.000000'
+        for mode in ('preserve', 'diverse', 'diverse_reverse'):
+            result = run([0, 1, 3], [[1, 2], [0, 2], [0, 1]], 2, mode, 2)
+            summary(result)
+            assert result.api['recall_at_k'] == '1.000000'
+            assert result.api['repeats'] == '2'
+            assert float(result.api['search_p99_us']) >= float(result.api['search_p50_us'])
+        result = run([0], [[]], 1, 'preserve', 0)
+        assert result.returncode != 0 and 'API_REPEATS' in result.stderr
+        result = run([0], [[]], 1, 'preserve', 2, 'greedy')
+        assert result.returncode != 0 and 'uniform ENTRY_MODE' in result.stderr
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

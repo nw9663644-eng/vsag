@@ -1,0 +1,29 @@
+[
+  {
+    "mode": "preserve",
+    "ef": 1536,
+    "recall": 0.902,
+    "search_p50_us": 4035.594,
+    "search_p99_us": 4786.391,
+    "query_loop_cpu_ms": 4009.495,
+    "load_ms": 152.263236
+  },
+  {
+    "mode": "diverse",
+    "ef": 160,
+    "recall": 0.913,
+    "search_p50_us": 703.388,
+    "search_p99_us": 876.524,
+    "query_loop_cpu_ms": 691.444,
+    "load_ms": 140.106997
+  },
+  {
+    "mode": "diverse_reverse",
+    "ef": 128,
+    "recall": 0.903,
+    "search_p50_us": 618.959,
+    "search_p99_us": 769.057,
+    "query_loop_cpu_ms": 613.07,
+    "load_ms": 142.797733
+  }
+]
