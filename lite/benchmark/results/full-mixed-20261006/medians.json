@@ -1,0 +1,28 @@
+[
+  {
+    "query_every": 1,
+    "quality_passes": 0,
+    "short_query_events": 6,
+    "initial_recall": 0.952,
+    "end_recall_at_k": 0.9405,
+    "mixed_recall_at_k": 0.9453,
+    "mutation_cpu_ms": 393.006,
+    "query_cpu_ms": 293.125,
+    "mixed_loop_cpu_ms": 691.541,
+    "mixed_p50_us": 294.673,
+    "mixed_p99_us": 363.532
+  },
+  {
+    "query_every": 10,
+    "quality_passes": 0,
+    "short_query_events": 0,
+    "initial_recall": 0.952,
+    "end_recall_at_k": 0.9405,
+    "mixed_recall_at_k": 0.948,
+    "mutation_cpu_ms": 389.877,
+    "query_cpu_ms": 34.429,
+    "mixed_loop_cpu_ms": 427.079,
+    "mixed_p50_us": 344.732,
+    "mixed_p99_us": 416.8
+  }
+]

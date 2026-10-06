@@ -1,0 +1,20 @@
+[
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+      "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+      "/home/ubuntu/project/vsag-lite-full-mixed-20261006/full-every1-r0.snapshot",
+      "fp32",
+      "128",
+      "1",
+      "1000",
+      "1"
+    ],
+    "started": 1791296770.4459624,
+    "exit": 1,
+    "elapsed_s": 32.187405824661255
+  }
+]

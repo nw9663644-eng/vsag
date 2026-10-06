@@ -1,0 +1,21 @@
+{
+  "source_parent": "72f49601c2b5d7565ceccaa6d0caddcaf2c5966e",
+  "dataset": "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+  "cpu": 0,
+  "cycles": 1000,
+  "cadences": [
+    1,
+    10
+  ],
+  "repeats": 3,
+  "ef_query": 128,
+  "ef_construction": 128,
+  "max_degree": 16,
+  "storage": "flat",
+  "support_force_remove": true,
+  "force_update": true,
+  "final_recall_floor": 0.95,
+  "queries": "previously observed Cohere rows 400..999; not blind",
+  "comparison": "historical frozen Lite results, not interleaved",
+  "full_library": "d18c82a cached incremental shared build; not clean rebuild"
+}
