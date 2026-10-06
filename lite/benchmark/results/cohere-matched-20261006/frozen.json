@@ -1,0 +1,18 @@
+{
+  "budgets": {
+    "default": 768,
+    "diverse": 256
+  },
+  "selection_floor": 0.955,
+  "final_floor": 0.95,
+  "validation_rows": [
+    100,
+    400
+  ],
+  "final_rows": [
+    400,
+    1000
+  ],
+  "protocol_sha256": "6641a1fcdbe6d69718a013e8f52114b14e6d0243e999f4f15790dd80c15a7b08",
+  "validation_sha256": "a7ecc60125b20a6ac0b3b3a097761cdc5c38b830b31b347089c21a28daa24519"
+}

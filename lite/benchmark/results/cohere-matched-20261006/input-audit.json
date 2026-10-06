@@ -1,0 +1,13 @@
+{
+  "prepared_base_sha256": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193",
+  "cross_range_duplicate_vectors": [
+    0,
+    0,
+    0
+  ],
+  "unique_query_vectors_per_range": [
+    100,
+    300,
+    600
+  ]
+}

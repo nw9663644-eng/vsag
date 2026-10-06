@@ -1,0 +1,6 @@
+{
+  "build-lite-fragment-release/libvsag-lite.so": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f",
+  "build-lite-fragment-release/lite_graph_route_probe": "d058bb4bfa7b92fd039e2edd5c26b27cd30484381a8744a7af903e66fe2edabd",
+  "build-lite-online-diverse-release/libvsag-lite.so": "f0bc3c5d66b321e2aadf6afd663cd1421be9517a5871f2f1948bc5e07c61f7c5",
+  "build-lite-online-diverse-release/lite_graph_route_probe": "9e2b637d0ffe6ae153bd80d75c04e24a381345ad90801cc9c6200ce9c0cb72bd"
+}

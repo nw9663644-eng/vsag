@@ -1774,3 +1774,7 @@ ranges before tuning and report rounding differences. Run `test_prepare_cohere.p
 with the same dependencies for preparation fixtures. The first normalized online
 CRUD pilot and its quality failures/limits are documented in
 [cohere-normalized-20261006](results/cohere-normalized-20261006/README.md).
+
+The [Cohere frozen-budget follow-up](results/cohere-matched-20261006/README.md)
+separates validation and final query ranges, reports three process repeats under
+1:4 and 1:40 read/mutation-call ratios, and retains quality gates and CPU tradeoffs.

@@ -1,0 +1,1 @@
+{"directory": "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000", "rounding_audit": {"queries": 600, "ordered_topk_exact_cosine_matches": 600, "mean_topk_set_overlap": 1.0, "minimum_topk_set_overlap": 1.0, "max_absolute_distance_vs_twice_cosine_error": 1.9444151844183466e-08}}

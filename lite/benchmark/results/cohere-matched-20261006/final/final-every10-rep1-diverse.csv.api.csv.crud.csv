@@ -1,0 +1,2 @@
+cycles,recall_at_k,crud_loop_cpu_ms,update_changed_p50_us,restore_p50_us,remove_p50_us,readd_p50_us,save_ms,reload_ms,snapshot_bytes,query_every,mixed_queries,mixed_recall_at_k,mixed_search_p50_us,mixed_search_p99_us,mixed_query_cpu_ms,mixed_loop_cpu_ms
+1000,0.960333,1277.954000,636.894000,345.772000,4.769000,292.223000,1345.587604,127.841414,317294680,10,100,0.970000,1143.892000,1359.628000,111.750000,1390.489000
