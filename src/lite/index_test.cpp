@@ -467,3 +467,74 @@ TEST_CASE("Lite FP16 dispatch requires complete feature combinations", "[lite]")
     REQUIRE(select_fp16_distance_for(true, true, true, true, true) == avx512_fp16_distance);
 }
 #endif
+
+TEST_CASE("Lite per-query budget preserves defaults, filters and mutation policy", "[lite]") {
+    auto reference = Index::Create(2);
+    REQUIRE(reference);
+    for (int64_t id = -32; id < 32; ++id) {
+        const int64_t row = (id + 32) / 11;
+        const float vector[]{static_cast<float>((id + 32) % 11 - 5), static_cast<float>(row - 3)};
+        REQUIRE((*reference)->Add(id, vector, 2));
+    }
+    std::stringstream base;
+    REQUIRE((*reference)->Save(base));
+    const float query[]{4.25F, -3.75F};
+    const vsag::lite::IdFilter even = [](int64_t id) { return id % 2 == 0; };
+    const auto compare = [](const auto& left, const auto& right) {
+        REQUIRE(left);
+        REQUIRE(right);
+        REQUIRE(left->size() == right->size());
+        for (uint64_t i = 0; i < left->size(); ++i) {
+            REQUIRE((*left)[i].id == (*right)[i].id);
+            REQUIRE((*left)[i].distance == (*right)[i].distance);
+        }
+    };
+    for (const int mode : {0, 1, 2}) {
+        std::stringstream input(base.str());
+        auto created = Index::Load(input);
+        REQUIRE(created);
+        if (mode != 0) {
+            const auto storage =
+                mode == 1 ? vsag::lite::VectorStorage::FP32 : vsag::lite::VectorStorage::FP16;
+            REQUIRE((*created)->BuildGraph(storage, 4, 8));
+        }
+        std::stringstream before;
+        REQUIRE((*created)->Save(before));
+        compare((*created)->Search(query, 2, 10), (*created)->SearchWithOptions(query, 2, 10, {}));
+        compare((*created)->Search(query, 2, 10, {}),
+                (*created)->SearchWithOptions(query, 2, 10, {}, {}));
+        compare((*created)->Search(query, 2, 10, even),
+                (*created)->SearchWithOptions(query, 2, 10, {}, even));
+        compare((*reference)->Search(query, 2, 10),
+                (*created)->SearchWithOptions(query, 2, 10, {UINT64_MAX}));
+        compare((*reference)->Search(query, 2, 10, even),
+                (*created)->SearchWithOptions(query, 2, 10, {UINT64_MAX}, even));
+        REQUIRE((*created)->SearchWithOptions(query, 2, 10, {1})->size() == 10);
+        REQUIRE((*created)->SearchWithOptions(query, 2, 0, {UINT64_MAX})->empty());
+        REQUIRE_FALSE((*created)->SearchWithOptions(nullptr, 2, 10, {64}));
+        REQUIRE_FALSE((*created)->SearchWithOptions(query, 1, 10, {64}));
+        const vsag::lite::IdFilter reject = [](int64_t) { return false; };
+        REQUIRE((*created)->SearchWithOptions(query, 2, 10, {64}, reject)->empty());
+        std::stringstream after;
+        REQUIRE((*created)->Save(after));
+        REQUIRE(after.str() == before.str());
+        std::stringstream twin_input(before.str());
+        auto twin = Index::Load(twin_input);
+        REQUIRE(twin);
+        const float changed[]{20, 21};
+        for (auto* index : {created->get(), twin->get()}) {
+            REQUIRE(index->Update(-32, changed, 2));
+            REQUIRE(index->Remove(31));
+            REQUIRE(index->Add(100, changed, 2));
+        }
+        std::stringstream mutated;
+        std::stringstream twin_mutated;
+        REQUIRE((*created)->Save(mutated));
+        REQUIRE((*twin)->Save(twin_mutated));
+        REQUIRE(mutated.str() == twin_mutated.str());
+    }
+    auto empty = Index::Create(2);
+    REQUIRE(empty);
+    REQUIRE((*empty)->BuildGraph(4, 8));
+    REQUIRE((*empty)->SearchWithOptions(query, 2, 10, {UINT64_MAX})->empty());
+}

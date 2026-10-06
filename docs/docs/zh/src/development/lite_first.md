@@ -35,6 +35,7 @@ filtered id=7 squared_l2=48
 updated id=42 squared_l2=0
 removed id=42 remaining=1
 loaded id=7 squared_l2=0
+graph query id=7 budget=64
 ```
 
 与 Full 的 make 入口不同，`cmake -S lite` 刻意隔离依赖。测试复用仓库固定版本
@@ -197,3 +198,21 @@ Debug 构建可加 `-DENABLE_COVERAGE=ON`，运行测试后用 gcov 收集源码
 ## FP16 图存储
 
 调用 `BuildGraph(VectorStorage::FP16, max_degree, ef_search)` 可让图向量使用 IEEE binary16 存储，同时保持现有 FP32 输入与查询接口。原有 `BuildGraph(max_degree, ef_search)` 仍默认使用 FP32；`ActiveVectorStorage()` 可查询当前表示。FP16 图使用 v3 快照，既有 v1/v2 字节与加载行为不变。v3 采用可移植的小端 binary16，加载不依赖保存机器的指令集。加载器将 v3 向量批量读入最终 FP16 存储，通过 binary16 指数位检查有限值，并在需要时原地转换字节序。建图或更新时会拒绝超出有限 FP16 范围的值。
+
+
+## 每次查询的图搜索预算
+
+`SearchWithOptions(query, dim, k, SearchOptions{ef_search}, filter)` 为当前图查询
+单独设置预算。0 沿用配置默认值；正值最多限制到当前记录数量，必要时提高到请求结果数量。
+BruteForce 忽略该选项，仍执行精确搜索。可选过滤器与 Search 使用相同的外部 ID 语义。
+既有 Search 调用，包括空过滤器，保持兼容。
+
+```cpp
+vsag::lite::SearchOptions options{512};
+auto result = index->SearchWithOptions(query, dim, 10, options);
+```
+
+覆盖值不会改变 BuildGraph/Add/Update/Remove 的预算，也不会改变 Save 输出；
+快照仍保存配置默认值。消费者示例以预算8建图，再以预算64查询。
+调用仍须由外部串行化，本功能不增加并发调用保证。更大的查询预算会增加工作量，
+可能改善召回，但不保证达到某个质量目标。

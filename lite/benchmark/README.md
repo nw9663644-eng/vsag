@@ -1726,3 +1726,13 @@ or globally optimal speedup. Construction was at ef128. Query-budget overrides
 are experimental; an independent public query-budget interface and broader
 workload validation remain to be implemented. All 1,000 GIST queries are now
 observed and cannot serve as a new blind set after more tuning.
+
+
+##### Native per-query options
+
+The API timing mode now calls SearchWithOptions and preserves the snapshot's
+configured budget. API CSV adds configured_ef_search and query_ef_search.
+Query overrides no longer change CRUD's stored budget; post-CRUD quality uses
+the requested query budget. [Verification and migration boundary](results/query-options-20261006/README.md).
+Historical high-budget mutation measurements that altered the snapshot option
+have different semantics and must not be relabeled as this native API path.

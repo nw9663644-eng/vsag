@@ -1,0 +1,13 @@
+[
+  "taskset",
+  "-c",
+  "0",
+  "build-lite-fragment-release/lite_graph_route_probe",
+  "/home/ubuntu/project/vsag-lite-online-diverse-20261006/gist-100k-diverse-cycles1000.snapshot",
+  "/home/ubuntu/project/vsag-lite-gist-final-20261006/scale-100000",
+  "/home/ubuntu/project/vsag-lite-query-options-20261006/native-api.csv",
+  "512",
+  "uniform",
+  "preserve",
+  "1"
+]

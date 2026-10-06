@@ -38,6 +38,7 @@ filtered id=7 squared_l2=48
 updated id=42 squared_l2=0
 removed id=42 remaining=1
 loaded id=7 squared_l2=0
+graph query id=7 budget=64
 ```
 
 Unlike the Full `make` targets, `cmake -S lite` is a separate dependency-isolated
@@ -239,3 +240,24 @@ WARP, SQ8, mmap and concurrent calls are out of scope.
 ## FP16 graph storage
 
 Call `BuildGraph(VectorStorage::FP16, max_degree, ef_search)` to store graph vectors as IEEE binary16 while keeping the existing FP32 input and search API. The original `BuildGraph(max_degree, ef_search)` remains FP32. `ActiveVectorStorage()` reports the active representation. FP16 graphs use snapshot version 3; versions 1 and 2 remain readable and unchanged. Loading does not require the save host ISA because the stored representation is portable little-endian binary16. Version 3 values are bulk-read directly into final FP16 storage, validated by their binary16 exponent fields, and byte-swapped in place when required. Values outside the finite FP16 range are rejected when the graph is built or updated.
+
+
+## Per-query graph budget
+
+`SearchWithOptions(query, dim, k, SearchOptions{ef_search}, filter)` supplies a
+budget for one graph query. Zero uses the configured default; positive values
+are clamped to the live count and raised to the requested result count when
+necessary. BruteForce ignores this option and remains exact. The optional
+filter has the same external-ID semantics as Search. Existing Search calls,
+including empty filters, are unchanged.
+
+```cpp
+vsag::lite::SearchOptions options{512};
+auto result = index->SearchWithOptions(query, dim, 10, options);
+```
+
+The override does not change BuildGraph/Add/Update/Remove budgets or Save output.
+Snapshots retain their configured default. The consumer example builds with
+budget8 then queries with budget64. Calls still require external serialization;
+this feature does not add a concurrent-call guarantee. Bigger query budgets
+spend more work and may improve recall, but do not guarantee a quality target.

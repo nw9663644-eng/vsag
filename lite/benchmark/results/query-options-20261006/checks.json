@@ -1,0 +1,11 @@
+{
+  "default_release": "4/4",
+  "online_diversity_release": "3/3",
+  "default_asan_ubsan": "6/6",
+  "release_and_asan_route_probe_fixtures": "passed",
+  "installed_consumer": "six expected output lines passed",
+  "snapshot_query_invariance": "byte-identical before/after overrides",
+  "mutation_policy_invariance": "same subsequent mutations produce byte-identical snapshots",
+  "full_budget_correctness": "BruteForce, FP32, FP16 match exact reference on representable grid data",
+  "native_gist_replay": "600 queries, Recall .950, configured budget128/query budget512; scalar CSV unchanged"
+}

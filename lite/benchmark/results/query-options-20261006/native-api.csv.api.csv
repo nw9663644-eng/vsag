@@ -1,0 +1,2 @@
+query_count,repeats,recall_at_k,search_p50_us,search_p99_us,query_loop_cpu_ms,load_ms,configured_ef_search,query_ef_search
+600,1,0.950000,2115.580000,2528.892000,1238.156000,152.069963,128,512

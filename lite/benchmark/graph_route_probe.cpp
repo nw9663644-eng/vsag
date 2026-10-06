@@ -632,6 +632,7 @@ measure_crud(vsag::lite::Index& index,
              const std::vector<std::vector<float>>& queries,
              const std::vector<std::vector<int32_t>>& truth,
              uint64_t cycles,
+             uint64_t query_budget,
              const std::string& path) {
     using Clock = std::chrono::steady_clock;
     std::vector<std::vector<double>> times(4);
@@ -659,7 +660,7 @@ measure_crud(vsag::lite::Index& index,
     uint64_t hits = 0;
     std::vector<std::vector<vsag::lite::Neighbor>> results;
     for (uint64_t i = 0; i < queries.size(); ++i) {
-        auto result = index.Search(queries[i].data(), graph.dim, k);
+        auto result = index.SearchWithOptions(queries[i].data(), graph.dim, k, {query_budget});
         require(static_cast<bool>(result) and result->size() == k, "API post-CRUD search failed");
         std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
         for (const auto& neighbor : *result) {
@@ -679,7 +680,8 @@ measure_crud(vsag::lite::Index& index,
     require(static_cast<bool>(reloaded) and (*reloaded)->Size() == index.Size(),
             "API post-CRUD reload failed");
     for (uint64_t i = 0; i < queries.size(); ++i) {
-        auto after = (*reloaded)->Search(queries[i].data(), graph.dim, k);
+        auto after =
+            (*reloaded)->SearchWithOptions(queries[i].data(), graph.dim, k, {query_budget});
         require(static_cast<bool>(after) and after->size() == results[i].size(),
                 "API post-CRUD reload search failed");
         for (uint64_t j = 0; j < after->size(); ++j) {
@@ -718,6 +720,7 @@ measure_api(const GraphSnapshot& graph,
             const std::vector<std::vector<float>>& queries,
             const std::vector<std::vector<int32_t>>& truth,
             uint64_t repeats,
+            uint64_t configured_budget,
             uint64_t crud_cycles,
             const std::string& path) {
     require(not std::filesystem::exists(path), "API output path already exists");
@@ -739,7 +742,7 @@ measure_api(const GraphSnapshot& graph,
                                  payload,
                                  uint64_t{2},
                                  graph.max_degree,
-                                 graph.ef_search}) {
+                                 configured_budget}) {
         write(value);
     }
     for (const int64_t id : graph.ids) {
@@ -767,7 +770,8 @@ measure_api(const GraphSnapshot& graph,
     uint64_t hits = 0;
     // One full warmup pass also measures quality outside the timed query loop.
     for (uint64_t i = 0; i < queries.size(); ++i) {
-        auto result = (*loaded)->Search(queries[i].data(), graph.dim, k);
+        auto result =
+            (*loaded)->SearchWithOptions(queries[i].data(), graph.dim, k, {graph.ef_search});
         require(static_cast<bool>(result) and result->size() == k, "API warmup failed");
         std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
         for (const auto& neighbor : *result) {
@@ -780,7 +784,8 @@ measure_api(const GraphSnapshot& graph,
     for (uint64_t round = 0; round < repeats; ++round) {
         for (const auto& query : queries) {
             start = Clock::now();
-            auto result = (*loaded)->Search(query.data(), graph.dim, k);
+            auto result =
+                (*loaded)->SearchWithOptions(query.data(), graph.dim, k, {graph.ef_search});
             const auto end = Clock::now();
             require(static_cast<bool>(result) and result->size() == k, "API timed search failed");
             latencies.push_back(std::chrono::duration<double, std::micro>(end - start).count());
@@ -804,15 +809,16 @@ measure_api(const GraphSnapshot& graph,
     std::ofstream output(path);
     require(static_cast<bool>(output), "API output open failed");
     output << "query_count,repeats,recall_at_k,search_p50_us,search_p99_us,query_loop_cpu_ms,load_"
-              "ms\n";
+              "ms,configured_ef_search,query_ef_search\n";
     output << queries.size() << ',' << repeats << ',' << std::fixed << std::setprecision(6)
            << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
-           << percentile(0.50) << ',' << percentile(0.99) << ',' << cpu_ms << ',' << load_ms
-           << '\n';
+           << percentile(0.50) << ',' << percentile(0.99) << ',' << cpu_ms << ',' << load_ms << ','
+           << configured_budget << ',' << graph.ef_search << '\n';
     output.close();
     require(static_cast<bool>(output), "API output write failed");
     if (crud_cycles != 0) {
-        measure_crud(**loaded, graph, queries, truth, crud_cycles, path + ".crud.csv");
+        measure_crud(
+            **loaded, graph, queries, truth, crud_cycles, graph.ef_search, path + ".crud.csv");
     }
 }
 
@@ -837,6 +843,7 @@ run(const std::string& snapshot,
                  not std::filesystem::exists(output_path + ".api.csv.crud.csv.samples.csv")),
             "API CRUD output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
+    const uint64_t configured_budget = graph.ef_search;
     if (ef_search != 0) {
         graph.ef_search = ef_search;
     }
@@ -907,7 +914,13 @@ run(const std::string& snapshot,
               << ',' << topology.reachable << ',' << topology.reverse_reachable << ','
               << topology.weak_components << ',' << topology.largest_weak_component << '\n';
     if (api_repeats != 0) {
-        measure_api(graph, queries, truth, api_repeats, crud_cycles, output_path + ".api.csv");
+        measure_api(graph,
+                    queries,
+                    truth,
+                    api_repeats,
+                    configured_budget,
+                    crud_cycles,
+                    output_path + ".api.csv");
     }
     return 0;
 }

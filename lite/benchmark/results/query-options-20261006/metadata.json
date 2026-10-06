@@ -1,0 +1,13 @@
+{
+  "source_hashes": {
+    "include/vsag/lite/index.h": "174901fb0c1b76afd2bd8d0f488c3a246ff87dfa3b9fc11ab844e90487784242",
+    "src/lite/backend.h": "cdcc53729aa4e742066aa5f6dd4d30f8a5bcfd5b30b6a3a394ee24ede16b97f7",
+    "src/lite/index.cpp": "17ca9518507790034a4eecc13d45924a1dd5276bf0065f5553672f72c1a419ef",
+    "src/lite/graph_backend.cpp": "d068620fa80a34cf0054a7bb4d9012b127f4742633f99a0df56450cb33bced5c",
+    "lite/benchmark/graph_route_probe.cpp": "8c3b4957fc678aef099f79dde1dfb158e6faa41639273c1037c2bdb9a69cdeba"
+  },
+  "base_commit": "e1728c19ed16e9b9ac11dc9d63a5a2d2b83e17d2",
+  "measurement": "native API replay, one process, 600 timed queries after warmup",
+  "stored_budget": 128,
+  "query_budget": 512
+}

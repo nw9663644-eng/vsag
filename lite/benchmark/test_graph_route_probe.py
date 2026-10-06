@@ -31,14 +31,14 @@ def main():
         (root / 'groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 0))
         case = 0
 
-        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform", crud_cycles=None):
+        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform", crud_cycles=None, ef_search=128):
             nonlocal case
             case += 1
             source = root / f'{case}.snapshot'
             snapshot(source, vectors, links, degree)
             command = [binary, str(source), str(root), str(root / f'{case}.csv')]
             if mode is not None:
-                command += ['128', entry_mode, mode]
+                command += [str(ef_search), entry_mode, mode]
             if api_repeats is not None:
                 command += [str(api_repeats)]
             if crud_cycles is not None:
@@ -139,6 +139,12 @@ def main():
         assert result.crud['recall_at_k'] == '1.000000'
         result = run([0], [[]], 1, 'preserve', 1, crud_cycles=0)
         assert result.returncode != 0 and 'CRUD_CYCLES' in result.stderr
+        result = run([0, 1, 3], [[1, 2], [0, 2], [0, 1]], 2, 'preserve', 2,
+                     crud_cycles=4, ef_search=1024)
+        summary(result)
+        assert result.api['configured_ef_search'] == '128'
+        assert result.api['query_ef_search'] == '1024'
+        assert result.crud['recall_at_k'] == '1.000000'
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

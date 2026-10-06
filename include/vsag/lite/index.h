@@ -27,6 +27,11 @@ enum class BackendKind { BRUTE_FORCE, GRAPH };
 /** Vector storage used by the active backend. */
 enum class VectorStorage { FP32, FP16 };
 
+/** Per-call graph query budget; zero uses the configured default. */
+struct SearchOptions {
+    uint64_t ef_search = 0;
+};
+
 /**
  * Minimal FP32, squared-L2 index. No concurrent calls are supported.
  * Input vectors are borrowed for the duration of a call; stored data is owned.
@@ -69,6 +74,19 @@ public:
     /** Return only records whose external ID is accepted; an empty filter accepts all. */
     tl::expected<std::vector<Neighbor>, Error>
     Search(const float* query, uint64_t dim, uint64_t k, const IdFilter& filter) const;
+
+    /**
+     * Search with a per-call graph budget. BruteForce ignores the budget.
+     * Graph ef is clamped to [min(k, Size()), Size()]. Zero uses the stored default.
+     * Does not change construction/CRUD settings or persisted options.
+     * The existing externally serialized-call requirement still applies.
+     */
+    tl::expected<std::vector<Neighbor>, Error>
+    SearchWithOptions(const float* query,
+                      uint64_t dim,
+                      uint64_t k,
+                      const SearchOptions& options,
+                      const IdFilter& filter = {}) const;
 
     /** Write a little-endian snapshot at the current stream position; no atomic file replace. */
     tl::expected<void, Error>

@@ -226,16 +226,30 @@ public:
 
     tl::expected<std::vector<Neighbor>, Error>
     Search(const float* query, uint64_t dim, uint64_t k) const override {
-        return SearchImpl(query, dim, k, nullptr);
+        return SearchImpl(query, dim, k, nullptr, ef_search_);
     }
 
     tl::expected<std::vector<Neighbor>, Error>
     Search(const float* query, uint64_t dim, uint64_t k, const IdFilter& filter) const override {
-        return SearchImpl(query, dim, k, filter ? &filter : nullptr);
+        return SearchImpl(query, dim, k, filter ? &filter : nullptr, ef_search_);
     }
 
     tl::expected<std::vector<Neighbor>, Error>
-    SearchImpl(const float* query, uint64_t dim, uint64_t k, const IdFilter* filter) const {
+    SearchWithOptions(const float* query,
+                      uint64_t dim,
+                      uint64_t k,
+                      const SearchOptions& options,
+                      const IdFilter& filter) const override {
+        const uint64_t budget = options.ef_search == 0 ? ef_search_ : options.ef_search;
+        return SearchImpl(query, dim, k, filter ? &filter : nullptr, budget);
+    }
+
+    tl::expected<std::vector<Neighbor>, Error>
+    SearchImpl(const float* query,
+               uint64_t dim,
+               uint64_t k,
+               const IdFilter* filter,
+               uint64_t budget) const {
         auto valid = validate(query, dim, Dim());
         if (not valid) {
             return tl::unexpected(valid.error());
@@ -245,7 +259,7 @@ public:
             if (k == 0) {
                 return std::vector<Neighbor>{};
             }
-            const uint64_t ef = std::min(Size(), std::max(k, ef_search_));
+            const uint64_t ef = std::min(Size(), std::max(k, budget));
             // With closer as Compare, top() is the farthest candidate and pop() evicts it.
             std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> best(&closer);
             std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> accepted(
