@@ -1701,3 +1701,14 @@ ID. Eight sampled truth sets match independent double-precision exhaustive scans
 all three aggregate scalar/API recalls match. No sampled input/scoring error was
 found, so the independent-query gate remains failed and parameter selection must
 be validated more broadly before any adoption claim.
+
+
+##### Online neighbor-diversity experiment
+
+The standalone Lite CMake option ENABLE_DIVERSE_NEIGHBOR_EXPERIMENT defaults OFF.
+It enables FP32 alpha=1 diversity pruning inside GraphBackend::nearest, so actual
+BuildGraph/Add/Update select neighbors online. Undersized pools and FP16 keep
+existing selection. Reverse link and Remove repair still use the existing policy.
+[Online construction results and boundaries](results/online-diverse-20261006/README.md)
+show higher validation recall with increased construction/query cost; the 100k
+configuration remains below the 0.90 quality gate. Keep the option experimental.

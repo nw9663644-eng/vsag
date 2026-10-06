@@ -1,0 +1,12 @@
+{
+  "build-lite-fragment-release": {
+    "lite_graph_crud_quality": "072b402711f79cfda1284d44b8b18effafedba8f474bf5e24466691c6cb72be1",
+    "libvsag-lite.so": "206bdf469a9c0ea52127b6e5f96e6db89de059c4aaaab0672a69980717ff9fa7",
+    "CMakeCache.txt": "c35013989b2f98b8882f15f9dba44ed1abb5fae6198cebebc4b0ebb5fcbf67b5"
+  },
+  "build-lite-online-diverse-release": {
+    "lite_graph_crud_quality": "5568b94c4e0c93b3f116f0f286e4117d63c8b09c76d29afd1b7ba056bd30ae2c",
+    "libvsag-lite.so": "6147813e37ced6aaf1bda45421070c744b934fae3679077fdff03417a02e5c5f",
+    "CMakeCache.txt": "dd08f2ff685e8369b550587a65b495fb72579ede0041a1286a5296fa90d84ab6"
+  }
+}

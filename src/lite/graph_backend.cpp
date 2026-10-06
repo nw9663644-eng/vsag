@@ -688,9 +688,32 @@ private:
         }
         std::vector<uint64_t> result;
         result.reserve(count);
+#if defined(VSAG_LITE_EXPERIMENT_DIVERSE_NEIGHBORS)
+        const auto eligible = static_cast<uint64_t>(
+            std::count_if(found->begin(), found->end(), [&](const auto& neighbor) {
+                return slots_.at(neighbor.id) != excluded;
+            }));
+        const bool diverse = not fp16_ and eligible >= count;
+#endif
         for (const auto& neighbor : *found) {
             const uint64_t slot = slots_.at(neighbor.id);
             if (slot != excluded) {
+#if defined(VSAG_LITE_EXPERIMENT_DIVERSE_NEIGHBORS)
+                // Experimental FP32 alpha=1 pruning, following Full's
+                // select_edges_by_heuristic. Keep undersized pools unchanged.
+                if (diverse) {
+                    bool occluded = false;
+                    for (const uint64_t selected : result) {
+                        if (distance(selected, slot) < neighbor.distance) {
+                            occluded = true;
+                            break;
+                        }
+                    }
+                    if (occluded) {
+                        continue;
+                    }
+                }
+#endif
                 result.push_back(slot);
                 if (result.size() == count) {
                     break;

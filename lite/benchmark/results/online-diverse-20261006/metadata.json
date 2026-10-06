@@ -1,0 +1,27 @@
+{
+  "snapshot_sha256": {
+    "gist-100k-default-cycles1000.snapshot": "08efdcc559782d64def038b327613224b7ed41f7f38f8ad04cbcca0265aee78e",
+    "gist-10k-default-cycles1000.snapshot": "eb1c8926fec335d24a4bb0889a8ca98d98811fb691770fdf506e1f9771477429",
+    "gist-10k-diverse-cycles1000.snapshot": "20bbf6a4fbae618f6246f2492c3434bd724f5ea8e0ec68c237aef7ed82846d92",
+    "gist-10k-diverse-cycles0.snapshot": "f284c64f1bd581ae1f560c29bc4b04218596d3370617fbbcc4070eed0e93a8a3",
+    "gist-100k-diverse-cycles1000.snapshot": "ce70ff0193892615213c78d3c71abbc8c3df58add4c2e7d56b884ca89fd35376",
+    "gist-100k-diverse-cycles0.snapshot": "58cac02da6c21878017e4f4204056ba24cc348374fed2f5b9d941f2e90de04f7",
+    "gist-100k-default-cycles0.snapshot": "92e5fe645fa704d3e659f6995228c150c897b933456344707b412b41f42eae9c",
+    "gist-10k-default-cycles0.snapshot": "8127578179d43c7475806bc602d72f6344848e75d070b3fc6960c09e427f03c8"
+  },
+  "performance_scope": "single fresh process per mode/scale/churn; CPU 0, actual construction and same-vector update/remove/readd",
+  "validation_rows": [
+    100,
+    400
+  ],
+  "unobserved_final_rows": [
+    400,
+    1000
+  ],
+  "source_hashes_at_publication": {
+    "src/lite/graph_backend.cpp": "f3042b302b9f4dfa05afc21698f730f99889fa1c33b486867c11582ed39f9e45",
+    "src/lite/graph_backend_test.cpp": "e9af9fd52279166edbe1c14b4af70f563ccfb47d5af48c4914117a5dec4aee91",
+    "src/lite/index_test.cpp": "4ed971e68801263f7d528a7da95a54a1338ee7871d6c7655295db382b08caef1",
+    "lite/CMakeLists.txt": "fd119d61b4f9f4ba9d85b903d9f74838c07b22c3d3608ad38e5fd92689cd3256"
+  }
+}

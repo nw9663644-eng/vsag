@@ -1,0 +1,10 @@
+{
+  "release_experiment_on": "3/3 passed",
+  "release_default_off": "4/4 passed",
+  "asan_ubsan_on": "6/6 passed",
+  "asan_ubsan_off": "6/6 passed",
+  "coverage_experiment_on": "90.292% including internal headers, fresh unit run",
+  "clang_format_version": 15,
+  "clang_tidy_version": 15,
+  "clang_tidy": "graph_backend and graph_backend_test clean; index_test rechecked after named-parameter correction"
+}

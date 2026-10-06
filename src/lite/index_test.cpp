@@ -5,11 +5,17 @@
 #include <algorithm>
 #include <catch2/catch_test_macros.hpp>
 #include <cmath>
+#include <iterator>
 #include <limits>
+#include <new>
 #include <random>
 #include <sstream>
+#include <stdexcept>
+#include <streambuf>
 #include <unordered_map>
+#include <vector>
 
+#include "fp16_distance.h"
 #include "fp32_distance.h"
 
 using vsag::lite::Index;
@@ -368,3 +374,96 @@ TEST_CASE("Lite FP32 ISA kernels preserve squared-L2 across short and tail dimen
         }
     }
 }
+
+TEST_CASE("Lite filter allocation errors preserve the index", "[lite]") {
+    for (const bool graph : {false, true}) {
+        auto created = Index::Create(1);
+        REQUIRE(created);
+        const float vector = 1.0F;
+        REQUIRE((*created)->Add(17, &vector, 1));
+        if (graph) {
+            REQUIRE((*created)->BuildGraph(2, 8));
+        }
+        const vsag::lite::IdFilter allocation_failure = [](int64_t) -> bool {
+            throw std::bad_alloc();
+        };
+        const vsag::lite::IdFilter capacity_failure = [](int64_t) -> bool {
+            throw std::length_error("filter capacity failure");
+        };
+        REQUIRE_FALSE((*created)->Search(&vector, 1, 1, allocation_failure));
+        REQUIRE_FALSE((*created)->Search(&vector, 1, 1, capacity_failure));
+        REQUIRE((*created)->Size() == 1);
+        REQUIRE((*created)->Search(&vector, 1, 1)->front().id == 17);
+    }
+}
+
+TEST_CASE("Lite FP16 graph handles tiny values and rounding boundaries", "[lite]") {
+    auto created = Index::Create(8);
+    REQUIRE(created);
+    const float vector[]{0.0F,
+                         -0.0F,
+                         std::numeric_limits<float>::denorm_min(),
+                         std::ldexp(1.0F, -30),
+                         std::ldexp(1.5F, -24),
+                         1.00146484375F,
+                         std::nextafter(2.0F, 0.0F),
+                         65504.0F};
+    REQUIRE((*created)->Add(17, vector, 8));
+    REQUIRE((*created)->BuildGraph(vsag::lite::VectorStorage::FP16, 2, 8));
+    std::stringstream saved;
+    REQUIRE((*created)->Save(saved));
+    auto loaded = Index::Load(saved);
+    REQUIRE(loaded);
+    REQUIRE((*loaded)->Search(vector, 8, 1)->front().id == 17);
+    auto overflow = std::vector<float>(std::begin(vector), std::end(vector));
+    overflow[0] = 65520.0F;
+    REQUIRE_FALSE((*loaded)->Add(18, overflow.data(), 8));
+    overflow[0] = 70000.0F;
+    REQUIRE_FALSE((*loaded)->Update(17, overflow.data(), 8));
+    REQUIRE((*loaded)->Size() == 1);
+    REQUIRE((*loaded)->Search(vector, 8, 1)->front().id == 17);
+}
+
+namespace {
+class FailingPositionBuffer : public std::streambuf {
+public:
+    explicit FailingPositionBuffer(bool allocation) : allocation_(allocation) {
+    }
+
+protected:
+    pos_type
+    seekoff([[maybe_unused]] off_type offset,
+            [[maybe_unused]] std::ios_base::seekdir direction,
+            [[maybe_unused]] std::ios_base::openmode mode) override {
+        if (allocation_) {
+            throw std::bad_alloc();
+        }
+        throw std::length_error("stream position capacity failure");
+    }
+
+private:
+    bool allocation_;
+};
+}  // namespace
+
+TEST_CASE("Lite load translates stream allocation and capacity failures", "[lite]") {
+    for (const bool allocation : {false, true}) {
+        FailingPositionBuffer buffer(allocation);
+        std::istream input(&buffer);
+        input.exceptions(std::ios::badbit);
+        REQUIRE_FALSE(Index::Load(input));
+    }
+}
+
+#ifdef VSAG_LITE_HAS_X86_SIMD
+TEST_CASE("Lite FP16 dispatch requires complete feature combinations", "[lite]") {
+    using namespace vsag::lite::detail;
+    REQUIRE(select_fp16_distance_for(false, false, false, false, false) == generic_fp16_distance);
+    REQUIRE(select_fp16_distance_for(true, true, true, true, false) == generic_fp16_distance);
+    REQUIRE(select_fp16_distance_for(false, true, false, false, true) == generic_fp16_distance);
+    REQUIRE(select_fp16_distance_for(true, false, false, false, true) == avx_fp16_distance);
+    REQUIRE(select_fp16_distance_for(true, true, false, false, true) == avx_fp16_distance);
+    REQUIRE(select_fp16_distance_for(true, true, false, true, true) == avx2_fp16_distance);
+    REQUIRE(select_fp16_distance_for(true, true, true, true, true) == avx512_fp16_distance);
+}
+#endif
