@@ -1,0 +1,2 @@
+cycles,recall_at_k,crud_loop_cpu_ms,update_changed_p50_us,restore_p50_us,remove_p50_us,readd_p50_us,save_ms,reload_ms,snapshot_bytes
+1000,0.803000,592.490000,230.965000,172.896000,7.500000,172.766000,168.875115,14.888756,39840064

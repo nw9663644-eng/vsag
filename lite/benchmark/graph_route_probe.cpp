@@ -627,10 +627,98 @@ search(const GraphSnapshot& graph,
 }
 
 void
+measure_crud(vsag::lite::Index& index,
+             const GraphSnapshot& graph,
+             const std::vector<std::vector<float>>& queries,
+             const std::vector<std::vector<int32_t>>& truth,
+             uint64_t cycles,
+             const std::string& path) {
+    using Clock = std::chrono::steady_clock;
+    std::vector<std::vector<double>> times(4);
+    const auto timed = [&](uint64_t operation, const auto& action) {
+        const auto start = Clock::now();
+        require(action(), "API CRUD operation failed");
+        const auto end = Clock::now();
+        times[operation].push_back(std::chrono::duration<double, std::micro>(end - start).count());
+    };
+    const auto cpu_start = std::clock();
+    for (uint64_t i = 0; i < cycles; ++i) {
+        const uint64_t slot = (i * 8191ULL) % graph.ids.size();
+        const int64_t id = graph.ids[slot];
+        const float* original = graph.vectors.data() + slot * graph.dim;
+        std::vector<float> changed(original, original + graph.dim);
+        changed[0] += 0.125F;
+        timed(0, [&] { return static_cast<bool>(index.Update(id, changed.data(), graph.dim)); });
+        timed(1, [&] { return static_cast<bool>(index.Update(id, original, graph.dim)); });
+        timed(2, [&] { return index.Remove(id); });
+        timed(3, [&] { return static_cast<bool>(index.Add(id, original, graph.dim)); });
+        require(index.Size() == graph.ids.size(), "API CRUD changed live count");
+    }
+    const double cpu_ms = 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
+    const uint64_t k = truth.front().size();
+    uint64_t hits = 0;
+    std::vector<std::vector<vsag::lite::Neighbor>> results;
+    for (uint64_t i = 0; i < queries.size(); ++i) {
+        auto result = index.Search(queries[i].data(), graph.dim, k);
+        require(static_cast<bool>(result) and result->size() == k, "API post-CRUD search failed");
+        std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
+        for (const auto& neighbor : *result) {
+            hits += expected.count(neighbor.id);
+        }
+        results.push_back(std::move(*result));
+    }
+    std::stringstream saved(std::ios::in | std::ios::out | std::ios::binary);
+    auto start = Clock::now();
+    require(static_cast<bool>(index.Save(saved)), "API post-CRUD save failed");
+    const auto save_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+    const auto snapshot_bytes = static_cast<uint64_t>(saved.tellp());
+    saved.seekg(0);
+    start = Clock::now();
+    auto reloaded = vsag::lite::Index::Load(saved);
+    const auto reload_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+    require(static_cast<bool>(reloaded) and (*reloaded)->Size() == index.Size(),
+            "API post-CRUD reload failed");
+    for (uint64_t i = 0; i < queries.size(); ++i) {
+        auto after = (*reloaded)->Search(queries[i].data(), graph.dim, k);
+        require(static_cast<bool>(after) and after->size() == results[i].size(),
+                "API post-CRUD reload search failed");
+        for (uint64_t j = 0; j < after->size(); ++j) {
+            require((*after)[j].id == results[i][j].id and
+                        (*after)[j].distance == results[i][j].distance,
+                    "API post-CRUD reload changed result");
+        }
+    }
+    std::ofstream samples(path + ".samples.csv");
+    samples << "cycle,update_changed_us,restore_us,remove_us,readd_us\n";
+    for (uint64_t i = 0; i < cycles; ++i) {
+        samples << i;
+        for (const auto& values : times) {
+            samples << ',' << std::fixed << std::setprecision(6) << values[i];
+        }
+        samples << '\n';
+    }
+    samples.close();
+    require(static_cast<bool>(samples), "API CRUD samples write failed");
+    std::ofstream output(path);
+    output << "cycles,recall_at_k,crud_loop_cpu_ms,update_changed_p50_us,restore_p50_us,"
+              "remove_p50_us,readd_p50_us,save_ms,reload_ms,snapshot_bytes\n";
+    output << cycles << ',' << std::fixed << std::setprecision(6)
+           << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ',' << cpu_ms;
+    for (auto& values : times) {
+        std::sort(values.begin(), values.end());
+        output << ',' << values[(values.size() - 1) / 2];
+    }
+    output << ',' << save_ms << ',' << reload_ms << ',' << snapshot_bytes << '\n';
+    output.close();
+    require(static_cast<bool>(output), "API CRUD summary write failed");
+}
+
+void
 measure_api(const GraphSnapshot& graph,
             const std::vector<std::vector<float>>& queries,
             const std::vector<std::vector<int32_t>>& truth,
             uint64_t repeats,
+            uint64_t crud_cycles,
             const std::string& path) {
     require(not std::filesystem::exists(path), "API output path already exists");
     // Match Index::Save's v2 FP32 layout; serialization is outside Load timing.
@@ -723,6 +811,9 @@ measure_api(const GraphSnapshot& graph,
            << '\n';
     output.close();
     require(static_cast<bool>(output), "API output write failed");
+    if (crud_cycles != 0) {
+        measure_crud(**loaded, graph, queries, truth, crud_cycles, path + ".crud.csv");
+    }
 }
 
 int
@@ -732,7 +823,8 @@ run(const std::string& snapshot,
     uint64_t ef_search,
     const std::string& entry_mode,
     const std::string& neighbor_mode,
-    uint64_t api_repeats) {
+    uint64_t api_repeats,
+    uint64_t crud_cycles) {
     require(not std::filesystem::exists(output_path), "output path already exists");
     require(api_repeats == 0 or not std::filesystem::exists(output_path + ".api.csv.latencies.csv"),
             "API latency output path already exists");
@@ -740,6 +832,10 @@ run(const std::string& snapshot,
             "API measurement requires uniform ENTRY_MODE");
     require(api_repeats == 0 or not std::filesystem::exists(output_path + ".api.csv"),
             "API output path already exists");
+    require(crud_cycles == 0 or
+                (not std::filesystem::exists(output_path + ".api.csv.crud.csv") and
+                 not std::filesystem::exists(output_path + ".api.csv.crud.csv.samples.csv")),
+            "API CRUD output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
     if (ef_search != 0) {
         graph.ef_search = ef_search;
@@ -811,7 +907,7 @@ run(const std::string& snapshot,
               << ',' << topology.reachable << ',' << topology.reverse_reachable << ','
               << topology.weak_components << ',' << topology.largest_weak_component << '\n';
     if (api_repeats != 0) {
-        measure_api(graph, queries, truth, api_repeats, output_path + ".api.csv");
+        measure_api(graph, queries, truth, api_repeats, crud_cycles, output_path + ".api.csv");
     }
     return 0;
 }
@@ -826,17 +922,27 @@ main(int argc, char** argv) {
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
         }
-        require(argc >= 4 and argc <= 8,
+        require(argc >= 4 and argc <= 9,
                 "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
-                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS]]]]");
+                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS [CRUD_CYCLES]]]]]");
         const uint64_t ef_search = argc >= 5 ? std::stoull(argv[4]) : 0;
         require(argc == 4 or ef_search > 0, "EF_SEARCH must be positive");
         const std::string entry_mode = argc >= 6 ? argv[5] : "uniform";
         const std::string neighbor_mode = argc >= 7 ? argv[6] : "preserve";
-        const uint64_t api_repeats = argc == 8 ? std::stoull(argv[7]) : 0;
-        require(argc != 8 or (api_repeats > 0 and api_repeats <= 1000),
+        const uint64_t api_repeats = argc >= 8 ? std::stoull(argv[7]) : 0;
+        require(argc < 8 or (api_repeats > 0 and api_repeats <= 1000),
                 "API_REPEATS must be in [1, 1000]");
-        return run(argv[1], argv[2], argv[3], ef_search, entry_mode, neighbor_mode, api_repeats);
+        const uint64_t crud_cycles = argc == 9 ? std::stoull(argv[8]) : 0;
+        require(argc != 9 or (crud_cycles > 0 and crud_cycles <= 100000),
+                "CRUD_CYCLES must be in [1, 100000]");
+        return run(argv[1],
+                   argv[2],
+                   argv[3],
+                   ef_search,
+                   entry_mode,
+                   neighbor_mode,
+                   api_repeats,
+                   crud_cycles);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

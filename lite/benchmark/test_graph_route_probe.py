@@ -31,7 +31,7 @@ def main():
         (root / 'groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 0))
         case = 0
 
-        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform"):
+        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform", crud_cycles=None):
             nonlocal case
             case += 1
             source = root / f'{case}.snapshot'
@@ -41,6 +41,8 @@ def main():
                 command += ['128', entry_mode, mode]
             if api_repeats is not None:
                 command += [str(api_repeats)]
+            if crud_cycles is not None:
+                command += [str(crud_cycles)]
             result = subprocess.run(command, capture_output=True, text=True, check=False)
             if api_repeats is not None and result.returncode == 0:
                 with (root / f'{case}.csv.api.csv').open() as output:
@@ -51,6 +53,11 @@ def main():
                 values = sorted(float(row['latency_us']) for row in samples)
                 assert abs(values[-1] - float(result.api['search_p99_us'])) < 1e-6
 
+            if crud_cycles is not None and result.returncode == 0:
+                with (root / f'{case}.csv.api.csv.crud.csv').open() as output:
+                    result.crud = next(csv.DictReader(output))
+                with (root / f'{case}.csv.api.csv.crud.csv.samples.csv').open() as output:
+                    assert len(list(csv.DictReader(output))) == crud_cycles
             return result
 
         def summary(result):
@@ -122,6 +129,16 @@ def main():
         assert result.returncode != 0 and 'API_REPEATS' in result.stderr
         result = run([0], [[]], 1, 'preserve', 2, 'greedy')
         assert result.returncode != 0 and 'uniform ENTRY_MODE' in result.stderr
+        for mode in ('preserve', 'diverse_reverse'):
+            result = run([0, 1, 3], [[1, 2], [0, 2], [0, 1]], 2, mode, 2,
+                         crud_cycles=12)
+            summary(result)
+            assert result.crud['cycles'] == '12' and result.crud['recall_at_k'] == '1.000000'
+        result = run([0], [[]], 2, 'preserve', 1, crud_cycles=4)
+        summary(result)
+        assert result.crud['recall_at_k'] == '1.000000'
+        result = run([0], [[]], 1, 'preserve', 1, crud_cycles=0)
+        assert result.returncode != 0 and 'CRUD_CYCLES' in result.stderr
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

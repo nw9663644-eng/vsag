@@ -1,0 +1,16 @@
+{
+  "base": "b89cdb031cf1f4e49bce9cd556c54fc7d6163b77",
+  "source_sha256": "a1bdda5a2ca1baea6b4abad4cd72967dcf94211013aa483db660fc38b67ab908",
+  "binary_sha256": "bd99784a5c01b5ee81ef4d7216e0582a9df6f2d0d2d89d86c82ba566cfa2971a",
+  "cycles": 1000,
+  "cpu": 0,
+  "fresh_processes": 3,
+  "slot_formula": "i*8191 % size",
+  "perturbation": "first coordinate +0.125 then restore",
+  "timed_operations": [
+    "Update changed",
+    "Update original",
+    "Remove",
+    "Add original"
+  ]
+}

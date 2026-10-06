@@ -1661,3 +1661,21 @@ At the selected Recall>=0.90 gate, preserve ef1536 scores 0.902 with median
 process P50 4035.594us; diverse_reverse ef128 scores 0.903 with P50 618.959us.
 This loaded-index warm-query result is promising, but does not measure online
 construction/CRUD, independent holdout quality or cold-start performance.
+
+
+##### Loaded-candidate CRUD validation
+
+An optional `CRUD_CYCLES` argument after API_REPEATS runs serial Update changed,
+Update original, Remove and Add original cycles through the loaded Lite API.
+It requires 1..100000 cycles. The original external ID and vector are restored
+on every cycle; success and live count are checked. Post-CRUD queries are scored
+against the same truth, then Save/Load must preserve all result IDs/distances.
+Additional `.api.csv.crud.csv` and `.samples.csv` outputs contain post-CRUD quality,
+loop CPU time and every operation latency. Query timing remains pre-CRUD.
+
+[The GIST two-scale, three-process results](results/api-crud-20261006/README.md)
+show preserved candidate recall advantage, with mutation loop CPU overhead about
+33.4% at 10k and 19.5% at 100k at equal ef=128. This measures existing CRUD on an
+offline-transformed graph; online diversity building, long churn and concurrency
+remain to be validated. It must not be combined into a net speedup with the
+previous differently tuned query comparison.
