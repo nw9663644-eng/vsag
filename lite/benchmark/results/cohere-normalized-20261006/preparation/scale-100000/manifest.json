@@ -1,0 +1,33 @@
+{
+  "source_url": "https://assets.zilliz.com.cn/benchmark/cohere_small_100k/",
+  "source_sha256": {
+    "train.parquet": "a8719014d8e86bbfb64f53a21287aecf10d048d7de28c7bebb1d0559b9181b42",
+    "test.parquet": "252a25003060713a268cd2bf5c5f8fab6159f13772924859487907bef64f1391"
+  },
+  "source_metric": "cosine",
+  "stored_metric": "squared-L2",
+  "normalization": "FP64 row norm/division, stored FP32",
+  "dimension": 768,
+  "base_prefix": 100000,
+  "query_rows": [
+    0,
+    100
+  ],
+  "k": 10,
+  "index_ids": "zero-based base row ordinals; source IDs preserved in i64 files",
+  "groundtruth": "exhaustive FP64 squared-L2 on stored FP32 normalized vectors, ties by ID",
+  "rounding_audit": {
+    "queries": 100,
+    "ordered_topk_exact_cosine_matches": 100,
+    "mean_topk_set_overlap": 1.0,
+    "minimum_topk_set_overlap": 1.0,
+    "max_absolute_distance_vs_twice_cosine_error": 1.718346420709338e-08
+  },
+  "files_sha256": {
+    "source-base-ids.i64": "baa5f49fbad78af4964d9ec7eaf2d6327b2d2ca1f4dcf54e2394dfff2e36d58e",
+    "base.fvecs": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193",
+    "groundtruth.ivecs": "258d70c586da932a1e55e1587ea3509087e8b8510c723d31538634e9a534160e",
+    "source-query-ids.i64": "96bdba67cd0b5e6dc0f9e399f66b17eae627eac812d0620119e87687d789546a",
+    "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17"
+  }
+}

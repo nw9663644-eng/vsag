@@ -1,0 +1,14 @@
+{
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-10000-default.snapshot": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-default.snapshot": "4124feb3d7e82f2ab52caadfb8cfc2bb63fca34acb29684f6c38ad83291579ce",
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-10000-diverse.snapshot": "2270b193c7325096e641c125e6d2d0e069ea15bf105950f5e8d3cfe05129e2df",
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-diverse.snapshot": "db6e6a9e269359513ffff1692c185d5921d922d8d4eb1ae779a3e7364e044c63",
+  "build-lite-fragment-release/libvsag-lite.so": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f",
+  "build-lite-fragment-release/lite_graph_route_probe": "d058bb4bfa7b92fd039e2edd5c26b27cd30484381a8744a7af903e66fe2edabd",
+  "build-lite-fragment-release/lite_graph_crud_quality": "072b402711f79cfda1284d44b8b18effafedba8f474bf5e24466691c6cb72be1",
+  "build-lite-online-diverse-release/libvsag-lite.so": "f0bc3c5d66b321e2aadf6afd663cd1421be9517a5871f2f1948bc5e07c61f7c5",
+  "build-lite-online-diverse-release/lite_graph_route_probe": "9e2b637d0ffe6ae153bd80d75c04e24a381345ad90801cc9c6200ce9c0cb72bd",
+  "build-lite-online-diverse-release/lite_graph_crud_quality": "5568b94c4e0c93b3f116f0f286e4117d63c8b09c76d29afd1b7ba056bd30ae2c",
+  "lite/benchmark/prepare_cohere.py": "d0f066605719ff4473b8b61292731503d148f8b2335e06277cc327286b453d75",
+  "lite/benchmark/test_prepare_cohere.py": "38b1829afdcc1d867bdc607d0d43b6061ea4fd4490151d101fbce2a099e7317c"
+}

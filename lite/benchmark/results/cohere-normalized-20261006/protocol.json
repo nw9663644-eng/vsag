@@ -1,0 +1,26 @@
+{
+  "library_source": "e547eb1cc595828a19ffc82b6bdbf8fd5a43069a",
+  "dataset": "Cohere normalized FP32 squared-L2 10k/100k",
+  "query_rows": [
+    0,
+    100
+  ],
+  "reserved_validation_rows": [
+    100,
+    400
+  ],
+  "reserved_final_rows": [
+    400,
+    1000
+  ],
+  "degree": 16,
+  "construction_and_maintenance_ef": 128,
+  "query_ef": 128,
+  "cycles": 1000,
+  "mutation_calls_per_cycle": 4,
+  "query_every": 10,
+  "replicates": 1,
+  "cpu": 0,
+  "quality_floor": 0.9,
+  "limitation": "same-budget different-quality descriptive pilot; not independent acceptance or Full comparison"
+}

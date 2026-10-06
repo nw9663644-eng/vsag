@@ -1757,3 +1757,20 @@ not a repeated-run estimate or a universal workload speedup.
 `full_rabitq_dataset_benchmark DATASET SNAPSHOT MODE [EF_SEARCH [WARMUP_ROUNDS]]` now accepts optional query ef (1..1000000, default 128) and warmup rounds (0..100, default 0). Construction remains degree 16 / ef128. The existing three-argument command keeps its timing behavior; summary CSV appends query budget, warmup count and query-loop process CPU milliseconds. Every execution writes `SNAPSHOT.latencies.csv` with one sample per timed query. Warmup, serialization, reloading and sample-file writes are excluded from query-loop CPU, while vector copying, search, recall scoring and result bookkeeping are included. This is one timed pass, not mixed CRUD. `python3 lite/benchmark/test_full_query_options.py BUILD/full_rabitq_dataset_benchmark` checks old/new options, exact fixture recall, raw percentiles and invalid numeric arguments.
 
 See `lite/benchmark/results/full-sift-20261006/README.md` for the SIFT comparison and `lite/benchmark/results/cohere-source-20261006/README.md` for the validated Cohere source and pending normalization requirement.
+
+### Cohere cosine data preparation
+
+`prepare_cohere.py SOURCE OUTPUT --counts 10000 100000 --queries 100 --query-offset 0`
+reads Cohere `train.parquet` and `test.parquet` (`id`, `emb`, 768 dimensions).
+Install numpy, pyarrow and h5py in a separate experiment environment. It reuses
+SIFT binary writers, normalizes with FP64 norms/division into FP32 coordinates,
+and recomputes exhaustive squared-L2 truth with deterministic ID ties. Original
+source IDs are preserved separately; index IDs are zero-based row ordinals.
+It audits selected-query TopK against raw cosine ranking and records input/output
+SHA256 hashes. Existing output directories and invalid inputs are rejected.
+
+Normalization is caller preprocessing, not a new public cosine API. Reserve query
+ranges before tuning and report rounding differences. Run `test_prepare_cohere.py`
+with the same dependencies for preparation fixtures. The first normalized online
+CRUD pilot and its quality failures/limits are documented in
+[cohere-normalized-20261006](results/cohere-normalized-20261006/README.md).
