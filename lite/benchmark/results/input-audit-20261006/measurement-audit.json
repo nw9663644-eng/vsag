@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "preserve",
+    "queries": 300,
+    "scalar_recall": "0.867667",
+    "api_recall": "0.867667"
+  },
+  {
+    "mode": "diverse",
+    "queries": 300,
+    "scalar_recall": "0.837000",
+    "api_recall": "0.837000"
+  },
+  {
+    "mode": "diverse_reverse",
+    "queries": 300,
+    "scalar_recall": "0.836667",
+    "api_recall": "0.836667"
+  }
+]

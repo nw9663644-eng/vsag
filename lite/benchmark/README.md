@@ -1691,3 +1691,13 @@ equal-quality speedup on independent queries. No retuning was performed.
 [Raw evidence, preparation and acceptance limits](results/gist-holdout-20261006/README.md).
 The wrapper prepare_gist_holdout.py reuses the existing precise truth preparer;
 reserve unused query rows for final assessment after any further tuning.
+
+
+##### Input and scoring investigation (2026-10-06)
+
+[The failed-gate investigation](results/input-audit-20261006/README.md) found
+all 100,000 snapshot vectors byte-identical to prepared base vectors by external
+ID. Eight sampled truth sets match independent double-precision exhaustive scans;
+all three aggregate scalar/API recalls match. No sampled input/scoring error was
+found, so the independent-query gate remains failed and parameter selection must
+be validated more broadly before any adoption claim.

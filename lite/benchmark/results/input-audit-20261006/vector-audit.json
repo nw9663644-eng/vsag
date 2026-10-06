@@ -1,0 +1,7 @@
+{
+  "snapshot": "/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005/gist-100k-after.snapshot",
+  "dataset_base": "/home/ubuntu/project/vsag-lite-gist-holdout-20261006/scale-100000/base.fvecs",
+  "vectors_checked": 100000,
+  "ids_unique_complete": true,
+  "vector_bytes_equal_by_external_id": true
+}

@@ -1,0 +1,16 @@
+{
+  "source_commit": "704e544f1ed570a2a0e4551f4da5f66d3c7b3f7d",
+  "audit_source_sha256": "b94f326ed777b15677193d89d8f172b08dd349a4236a8a3683eeb973a8af25ce",
+  "query_rows": [
+    0,
+    42,
+    85,
+    128,
+    170,
+    213,
+    256,
+    299
+  ],
+  "truth_comparison": "set equality, 8 of 300 queries",
+  "vector_comparison": "all 100000 by external ID"
+}
