@@ -1,0 +1,58 @@
+{
+  "scope": "Existing summaries and manifests, not a new raw-data audit",
+  "hashes_verified": {
+    "sift-matched-20261006": 152,
+    "cohere-matched-20261006": 161,
+    "mixed-20261006": 23,
+    "full-reverse-20261006": 68,
+    "load-memory-20261006": 87
+  },
+  "workload_summary": [
+    {
+      "dataset": "SIFT",
+      "query_every": 1,
+      "cpu_ms": {
+        "default": 2160.586,
+        "diverse": 1944.176
+      },
+      "change_percent": -10.01626410612676
+    },
+    {
+      "dataset": "SIFT",
+      "query_every": 10,
+      "cpu_ms": {
+        "default": 1315.469,
+        "diverse": 1498.993
+      },
+      "change_percent": 13.951221959620487
+    },
+    {
+      "dataset": "Cohere",
+      "query_every": 1,
+      "cpu_ms": {
+        "default": 3870.573,
+        "diverse": 2379.522
+      },
+      "change_percent": -38.522745857008765
+    },
+    {
+      "dataset": "Cohere",
+      "query_every": 10,
+      "cpu_ms": {
+        "default": 1439.872,
+        "diverse": 1385.265
+      },
+      "change_percent": -3.792489887990036
+    },
+    {
+      "dataset": "GIST",
+      "query_every": 10,
+      "cpu_ms": {
+        "default": 61083.855,
+        "diverse": 32689.577
+      },
+      "change_percent": -46.48409632954568
+    }
+  ],
+  "report_sha256": "412eeb885734d786683a8a1b1ba1d0e6ac7eba491149d9ec0e22857f5bfef45c"
+}

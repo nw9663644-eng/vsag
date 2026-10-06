@@ -1,3 +1,5 @@
+> Current acceptance scope: [2026-10-06 report](ACCEPTANCE_REPORT_20261006.md). Historical sections retain their measured revisions; subsequent personal-branch development is not automatically present in the PRs.
+
 # VSAG Lite experiment report
 
 This report consolidates the reproducible evidence collected for the standalone VSAG Lite work. The public Lite implementation is reviewed in PR #2904. Benchmark programs, runners, and experimental evidence are isolated in PR #2926.
