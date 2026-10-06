@@ -1,0 +1,2 @@
+mode,base_count,query_count,dim,k,recall_at_k,build_ms,search_p50_us,search_p99_us,save_ms,load_ms,snapshot_bytes,build_steady_rss_kib,final_steady_rss_kib,process_peak_rss_kib,query_ef_search,warmup_rounds,query_loop_cpu_ms
+fp32,100000,600,768,10,0.952000,34026.834536,324.483000,379.081000,173.682623,190.262097,313616358,457592,456156,958556,128,1,194.997000

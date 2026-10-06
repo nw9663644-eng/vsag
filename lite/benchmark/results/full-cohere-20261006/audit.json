@@ -1,0 +1,62 @@
+{
+  "raw_queries": 1800,
+  "processes": 3,
+  "quality_passes": 3,
+  "metrics": {
+    "recall_at_k": {
+      "median": 0.952,
+      "min": 0.952,
+      "max": 0.952
+    },
+    "build_ms": {
+      "median": 33940.856349,
+      "min": 33899.969492,
+      "max": 34026.834536
+    },
+    "search_p50_us": {
+      "median": 323.242,
+      "min": 318.513,
+      "max": 324.483
+    },
+    "search_p99_us": {
+      "median": 379.081,
+      "min": 369.242,
+      "max": 381.291
+    },
+    "query_loop_cpu_ms": {
+      "median": 194.22,
+      "min": 191.298,
+      "max": 194.997
+    },
+    "save_ms": {
+      "median": 173.682623,
+      "min": 172.96849,
+      "max": 175.346686
+    },
+    "load_ms": {
+      "median": 191.866919,
+      "min": 190.262097,
+      "max": 197.671555
+    },
+    "snapshot_bytes": {
+      "median": 313616358.0,
+      "min": 313616358.0,
+      "max": 313616358.0
+    },
+    "build_steady_rss_kib": {
+      "median": 457592.0,
+      "min": 457580.0,
+      "max": 457800.0
+    },
+    "final_steady_rss_kib": {
+      "median": 456108.0,
+      "min": 455940.0,
+      "max": 456156.0
+    },
+    "process_peak_rss_kib": {
+      "median": 958556.0,
+      "min": 958548.0,
+      "max": 958772.0
+    }
+  }
+}

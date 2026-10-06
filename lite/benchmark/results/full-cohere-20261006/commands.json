@@ -1,0 +1,35 @@
+[
+  [
+    "taskset",
+    "-c",
+    "0",
+    "build-full-known-runner/full_rabitq_dataset_benchmark",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+    "/home/ubuntu/project/vsag-lite-full-cohere-20261006/full-rep0.snapshot",
+    "fp32",
+    "128",
+    "1"
+  ],
+  [
+    "taskset",
+    "-c",
+    "0",
+    "build-full-known-runner/full_rabitq_dataset_benchmark",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+    "/home/ubuntu/project/vsag-lite-full-cohere-20261006/full-rep1.snapshot",
+    "fp32",
+    "128",
+    "1"
+  ],
+  [
+    "taskset",
+    "-c",
+    "0",
+    "build-full-known-runner/full_rabitq_dataset_benchmark",
+    "/home/ubuntu/project/vsag-lite-cohere-matched-20261006/final/scale-100000",
+    "/home/ubuntu/project/vsag-lite-full-cohere-20261006/full-rep2.snapshot",
+    "fp32",
+    "128",
+    "1"
+  ]
+]

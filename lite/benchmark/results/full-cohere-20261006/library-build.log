@@ -1,0 +1,5 @@
+[1/4] cd /home/ubuntu/project/vsag-lite-baseline-v01/build-full-comparison-library && /usr/bin/cmake -D SRC=/home/ubuntu/project/vsag-lite-baseline-v01/src/version.h.in -D DST=/home/ubuntu/project/vsag-lite-baseline-v01/src/version.h -D GIT_EXECUTABLE=/usr/bin/git -D VSAG_VERSION=cdd2530-dirty -P /home/ubuntu/project/vsag-lite-baseline-v01/cmake/GenerateVersionHeader.cmake
+-- vsag version: d18c82a
+[2/4] Building CXX object src/CMakeFiles/vsag_objects.dir/vsag.cpp.o
+[3/4] Linking CXX shared library src/libvsag.so.0.0.0
+[4/4] Creating library symlink src/libvsag.so.0.0 src/libvsag.so

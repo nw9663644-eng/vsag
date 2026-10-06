@@ -1,0 +1,21 @@
+{
+  "source_commit": "d18c82a1f1f23ff84362516e86af5f3cb2e34475",
+  "full_library_sha256": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72",
+  "full_binary_sha256": "c32e120f8157af8e5018e50bfbeea29c74ff554484e523d0536064e9b06d70c6",
+  "dataset_manifest_sha256": "9402c87e46acb293ed8a893e97e49f8b0ad11277665a392ac10c405aab945b16",
+  "query_rows": [
+    400,
+    1000
+  ],
+  "query_status": "already observed in Lite; descriptive Full reference, not fresh blind evaluation",
+  "cpu": 0,
+  "mode": "fp32",
+  "degree": 16,
+  "construction_ef": 128,
+  "query_ef": 128,
+  "warmup_rounds": 1,
+  "replicates": 3,
+  "full_graph_storage": "compressed",
+  "store_raw_vector": true,
+  "limits": "no matched Lite RSS yet, no Full mixed CRUD, no equal-quality budget tuning"
+}

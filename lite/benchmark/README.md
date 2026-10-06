@@ -1778,3 +1778,8 @@ CRUD pilot and its quality failures/limits are documented in
 The [Cohere frozen-budget follow-up](results/cohere-matched-20261006/README.md)
 separates validation and final query ranges, reports three process repeats under
 1:4 and 1:40 read/mutation-call ratios, and retains quality gates and CPU tradeoffs.
+
+[Known-source Full Cohere reference](results/full-cohere-20261006/README.md)
+records the rebuilt Full source/library binding, three FP32 single-core runs,
+raw latency samples and whole-process memory measurements. Equivalent Lite RSS
+and Full mixed CRUD remain separate unfinished comparison gates.
