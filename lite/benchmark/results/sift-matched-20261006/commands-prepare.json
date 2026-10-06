@@ -1,0 +1,26 @@
+[
+  [
+    "python3",
+    "lite/benchmark/prepare_sift.py",
+    "/home/ubuntu/project/vsag-lite-datasets/sift/sift-128-euclidean.hdf5",
+    "/home/ubuntu/project/vsag-lite-sift-matched-20261006/validation",
+    "--counts",
+    "100000",
+    "--queries",
+    "300",
+    "--query-offset",
+    "100"
+  ],
+  [
+    "python3",
+    "lite/benchmark/prepare_sift.py",
+    "/home/ubuntu/project/vsag-lite-datasets/sift/sift-128-euclidean.hdf5",
+    "/home/ubuntu/project/vsag-lite-sift-matched-20261006/final",
+    "--counts",
+    "100000",
+    "--queries",
+    "300",
+    "--query-offset",
+    "400"
+  ]
+]

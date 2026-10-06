@@ -40,23 +40,26 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--counts", type=int, nargs="+", default=[10000, 100000])
     parser.add_argument("--queries", type=int, default=100)
+    parser.add_argument("--query-offset", type=int, default=0)
     parser.add_argument("--k", type=int, default=10)
     args = parser.parse_args()
     if args.output.exists():
         parser.error("output directory already exists")
     if min(args.counts + [args.queries, args.k]) <= 0:
         parser.error("counts, queries and k must be positive")
+    if args.query_offset < 0:
+        parser.error("query offset must be nonnegative")
     with h5py.File(args.source, "r") as dataset:
         if dataset.attrs.get("distance") != "euclidean":
             parser.error("expected a Euclidean dataset")
         train, test = dataset["train"], dataset["test"]
         if train.shape[1] != 128 or test.shape[1] != 128:
             parser.error("expected 128-dimensional SIFT data")
-        if max(args.counts) > train.shape[0] or args.queries > test.shape[0]:
+        if max(args.counts) > train.shape[0] or args.query_offset + args.queries > test.shape[0]:
             parser.error("requested subset exceeds source data")
         if any(count < args.k for count in args.counts):
             parser.error("k exceeds base count")
-        queries = np.asarray(test[: args.queries], dtype="<f4")
+        queries = np.asarray(test[args.query_offset : args.query_offset + args.queries], dtype="<f4")
         args.output.mkdir(parents=True)
         source_hash = sha256(args.source)
         for count in args.counts:
@@ -79,7 +82,8 @@ def main():
                 "source_url": "https://ann-benchmarks.com/sift-128-euclidean.hdf5",
                 "source_sha256": source_hash,
                 "base_prefix": count,
-                "queries_prefix": len(queries),
+                "queries_prefix": len(queries) if args.query_offset == 0 else None,
+                "query_rows": [args.query_offset, args.query_offset + len(queries)],
                 "dimension": 128,
                 "k": args.k,
                 "groundtruth": "recomputed squared-L2, ties by ascending ID on selected prefix",

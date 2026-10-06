@@ -1,0 +1,40 @@
+{
+  "source_commit": "fd67861a7f91a9eef4a42a3978d10375d0682230",
+  "validation_rows": [
+    100,
+    400
+  ],
+  "final_rows": [
+    400,
+    700
+  ],
+  "target_recall": 0.95,
+  "selection_floor": 0.955,
+  "default_budgets": [
+    64,
+    96,
+    128,
+    160,
+    192,
+    256
+  ],
+  "diverse_budgets": [
+    32,
+    48,
+    64,
+    96,
+    128,
+    192
+  ],
+  "selection": "smallest tested budget reaching selection floor on validation; freeze before final preparation",
+  "maintenance_budget": 128,
+  "degree": 16,
+  "cpu": 0,
+  "cycles": 2000,
+  "query_every": [
+    1,
+    10
+  ],
+  "replicates": 3,
+  "queries": "previously unmeasured SIFT source ranges; no retuning after final"
+}

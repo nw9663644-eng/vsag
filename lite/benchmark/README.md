@@ -11,7 +11,7 @@ See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-base
   deterministic Lite baseline, CRUD, load, and SIFT runners.
 - `lite/benchmark/full/`, `full_main.cpp`, and `full_dataset_main.cpp`:
   separate Full VSAG comparison consumers.
-- `lite/benchmark/prepare_sift.py`: prepares the documented SIFT subsets.
+- `lite/benchmark/prepare_sift.py`: prepares the documented SIFT subsets; optional `--query-offset` (default 0) selects a half-open test-row range recorded in `query_rows`. Non-prefix selections have `queries_prefix: null`. Ground truth is recomputed against each selected base prefix. `test_prepare_sift.py` checks range selection, exact truth and invalid/overwrite rejection (requires numpy/h5py).
 - `lite/benchmark/quantization_probe.cpp`: opt-in SQ8/FP16 scan experiment.
 - `lite/benchmark/rabitq_lite_layout_probe.cpp`: opt-in RaBitQ 3+5 bit-plane differential probe.
 - `lite/benchmark/rabitq_lite_codec_probe.cpp`: deterministic FHT training, 3-bit lower-bound filtering, 5-bit supplement reranking, and filter-first graph traversal probe.

@@ -1,0 +1,15 @@
+{
+  "final_queries": 300,
+  "byte_overlap_with_first_400": 0,
+  "float64_exact_truth_rows_checked": [
+    0,
+    42,
+    85,
+    128,
+    170,
+    213,
+    256,
+    299
+  ],
+  "all_checks_passed": true
+}
