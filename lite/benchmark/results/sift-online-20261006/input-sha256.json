@@ -1,0 +1,8 @@
+{
+  "diverse.snapshot": "88e015bd35ca17d63b0f2db1d7203715b4973e6fd4eec0591a8db56251ecf9a7",
+  "default.snapshot": "ebb1a3554e0a4abcdbf788cad1bfb8a03503246e5c75c7775a628234bbcdf0e7",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/base.fvecs": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/manifest.json": "c96edb654e75e76023cbd9052bb6570f7df9bda592f08b6c995fdc23b5d284a3"
+}
