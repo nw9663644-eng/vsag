@@ -1783,3 +1783,16 @@ separates validation and final query ranges, reports three process repeats under
 records the rebuilt Full source/library binding, three FP32 single-core runs,
 raw latency samples and whole-process memory measurements. Equivalent Lite RSS
 and Full mixed CRUD remain separate unfinished comparison gates.
+
+### Comparable load-only memory
+
+On Linux, `lite_load_memory SNAPSHOT DIM COUNT` (ENABLE_BENCHMARKS) and
+`full_load_memory SNAPSHOT DIM COUNT` (the Full runner project) share one probe
+source. They record RSS before creation/load, RSS after stream closure and allocator
+trim, load wall time and whole-process load peak. They do not load source matrices
+or search. Full validates count with caller-supplied dimension; Lite also verifies
+restored dimension. Use fresh processes, rotate modes, and state cache treatment.
+Run `test_load_memory.py FULL_BINARY LITE_BINARY FIXTURE_DIRECTORY` against
+`full-fixture.snapshot` and `lite-fixture.snapshot` made by the existing builders.
+The [Cohere load-only comparison](results/load-memory-20261006/README.md) contains
+seven runs per mode, fixture checks, source hashes and measurement limitations.

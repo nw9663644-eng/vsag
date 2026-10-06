@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release
+Test project /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release
+    Start 1: lite_unit
+1/4 Test #1: lite_unit ...........................   Passed    0.00 sec
+    Start 2: lite_scale
+2/4 Test #2: lite_scale ..........................   Passed    0.28 sec
+    Start 3: lite_graph
+3/4 Test #3: lite_graph ..........................   Passed    0.41 sec
+    Start 4: lite_quantization_probe_self_test
+4/4 Test #4: lite_quantization_probe_self_test ...   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.70 sec

@@ -1,0 +1,1 @@
+/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -fsanitize=address,undefined -fno-omit-frame-pointer -g -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_load_memory.dir/benchmark/load_memory.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp

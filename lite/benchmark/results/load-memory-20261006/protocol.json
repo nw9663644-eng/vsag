@@ -1,0 +1,33 @@
+{
+  "source_parent": "101e3f6fb3973efda6a212f84a5c532274c9f208",
+  "new_helper_sha256": "179c4738a620667916f77c37868ace75f807ea0f3f2200d97a32b078df9e6a7d",
+  "cpu": 0,
+  "replicates": 7,
+  "order": "cyclic rotate full/default/diverse each replicate",
+  "phase": "load only; no base/query matrices, no search/build/save, input stream closed then malloc_trim",
+  "cache": "read each input once before runs; no eviction control, warm attempted",
+  "dimension": 768,
+  "count": 100000,
+  "full_library_source": "d18c82a1f1f23ff84362516e86af5f3cb2e34475",
+  "snapshot_quality": "previous measured Full .952/Lite default .958/diverse .961333; different recall/topology",
+  "configs": {
+    "full": {
+      "binary": "build-full-known-runner/full_load_memory",
+      "binary_sha256": "2fc551c48b52bfc96ea8dc8b0fd2d7f6ecfcc0fe26c270d7c5955cd08a441c02",
+      "snapshot": "/home/ubuntu/project/vsag-lite-full-cohere-20261006/full-rep0.snapshot",
+      "snapshot_sha256": "72793a6c9c23bb7aab86823b68e6d62643710d64b4a8de107189c9260f5dff97"
+    },
+    "default": {
+      "binary": "build-lite-fragment-release/lite_load_memory",
+      "binary_sha256": "598a89c3d24ba5330d8cec292ab65e60d976ff60972f6db5250baee7a1d9f41e",
+      "snapshot": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-default.snapshot",
+      "snapshot_sha256": "4124feb3d7e82f2ab52caadfb8cfc2bb63fca34acb29684f6c38ad83291579ce"
+    },
+    "diverse": {
+      "binary": "build-lite-online-diverse-release/lite_load_memory",
+      "binary_sha256": "e0ff513d3dfdecf181d3699705f96ae76103591e07296bd4b1d35860f86a6d78",
+      "snapshot": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-diverse.snapshot",
+      "snapshot_sha256": "db6e6a9e269359513ffff1692c185d5921d922d8d4eb1ae779a3e7364e044c63"
+    }
+  }
+}

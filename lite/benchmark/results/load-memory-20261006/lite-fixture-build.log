@@ -1,0 +1,2 @@
+base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,search_p99_us,save_ms,load_ms,snapshot_bytes
+8,8,16,1,0,8,1.000000,0.037809,0.850000,1.800000,0.038569,0.012040,1152

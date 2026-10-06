@@ -1,0 +1,7 @@
+[0/1] Re-running CMake...
+-- Third-party override: dependency=CATCH2, pin=v3.7.1, source=default, variable=none; expected pinned variable VSAG_THIRDPARTY_CATCH2_3_7_1; deprecated legacy fallback VSAG_THIRDPARTY_CATCH2 is unset
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+[1/2] Building CXX object CMakeFiles/lite_load_memory.dir/benchmark/load_memory.cpp.o
+[2/2] Linking CXX executable lite_load_memory

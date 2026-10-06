@@ -18,3 +18,8 @@ target_compile_options(full_dataset_benchmark PRIVATE -Wall -Wextra -Wpedantic)
 add_executable(full_rabitq_dataset_benchmark ../full_rabitq_dataset_main.cpp)
 target_link_libraries(full_rabitq_dataset_benchmark PRIVATE vsag::vsag)
 target_compile_options(full_rabitq_dataset_benchmark PRIVATE -Wall -Wextra -Wpedantic)
+
+add_executable(full_load_memory ../load_memory.cpp)
+target_compile_definitions(full_load_memory PRIVATE VSAG_BENCH_FULL)
+target_link_libraries(full_load_memory PRIVATE vsag::vsag)
+target_compile_options(full_load_memory PRIVATE -Wall -Wextra -Wpedantic)
