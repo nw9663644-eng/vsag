@@ -1712,3 +1712,17 @@ existing selection. Reverse link and Remove repair still use the existing policy
 [Online construction results and boundaries](results/online-diverse-20261006/README.md)
 show higher validation recall with increased construction/query cost; the 100k
 configuration remains below the 0.90 quality gate. Keep the option experimental.
+
+
+##### Frozen online-graph budgets and final-query acceptance
+
+[Final GIST100k study](results/online-final-20261006/README.md) freezes budgets
+on development rows [100,400) then tests unseen rows [400,1000). The loaded
+post-1,000-CRUD default graph at ef8192 scores Recall0.954/P50 17.303ms; the online
+diversity graph at ef512 scores 0.950/2.057ms (three-process medians). Both pass
+Recall>=0.90. The 8.41x selected-point ratio is conditional on a coarse budget
+grid, warm single-core loaded querying and this dataset; it is not a universal
+or globally optimal speedup. Construction was at ef128. Query-budget overrides
+are experimental; an independent public query-budget interface and broader
+workload validation remain to be implemented. All 1,000 GIST queries are now
+observed and cannot serve as a new blind set after more tuning.

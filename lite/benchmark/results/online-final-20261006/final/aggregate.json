@@ -1,0 +1,52 @@
+[
+  {
+    "mode": "default",
+    "ef": 8192,
+    "recall_at_k": 0.954,
+    "search_p50_us": 17303.044,
+    "search_p50_us_range": [
+      17277.644,
+      17404.521
+    ],
+    "search_p99_us": 18678.941,
+    "search_p99_us_range": [
+      18555.955,
+      19238.338
+    ],
+    "query_loop_cpu_ms": 30704.685,
+    "query_loop_cpu_ms_range": [
+      30679.77,
+      30946.015
+    ],
+    "load_ms": 155.879155,
+    "load_ms_range": [
+      155.486776,
+      156.185196
+    ]
+  },
+  {
+    "mode": "diverse",
+    "ef": 512,
+    "recall_at_k": 0.95,
+    "search_p50_us": 2056.702,
+    "search_p50_us_range": [
+      2027.742,
+      2071.721
+    ],
+    "search_p99_us": 2445.813,
+    "search_p99_us_range": [
+      2411.603,
+      2460.973
+    ],
+    "query_loop_cpu_ms": 3627.451,
+    "query_loop_cpu_ms_range": [
+      3572.967,
+      3653.296
+    ],
+    "load_ms": 150.901748,
+    "load_ms_range": [
+      149.585968,
+      151.051874
+    ]
+  }
+]

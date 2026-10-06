@@ -1,0 +1,29 @@
+{
+  "source_commit": "236049e8fe64ff031e6cb2dfd51e4fe96ba02aad",
+  "selection_queries": [
+    100,
+    400
+  ],
+  "final_reserved_queries": [
+    400,
+    1000
+  ],
+  "validation_floor": 0.92,
+  "final_floor": 0.9,
+  "quality_metric": "actual Lite API Recall@10",
+  "budgets": {
+    "default": [
+      1024,
+      2048,
+      4096,
+      8192
+    ],
+    "diverse": [
+      256,
+      512,
+      1024,
+      2048
+    ]
+  },
+  "selection": "lowest tested ef meeting floor; if none, reject; no final queries inspected"
+}

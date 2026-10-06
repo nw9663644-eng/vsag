@@ -1,0 +1,12 @@
+{
+  "source_commit": "236049e8fe64ff031e6cb2dfd51e4fe96ba02aad",
+  "route_binary_sha256": "bd99784a5c01b5ee81ef4d7216e0582a9df6f2d0d2d89d86c82ba566cfa2971a",
+  "library_sha256": "206bdf469a9c0ea52127b6e5f96e6db89de059c4aaaab0672a69980717ff9fa7",
+  "freeze_sha256": "68fadaf2903dccc46dc128d51dba71a427a78f19399bddee3b940887eaae9c09",
+  "input_snapshots_sha256": {
+    "default": "08efdcc559782d64def038b327613224b7ed41f7f38f8ad04cbcca0265aee78e",
+    "diverse": "ce70ff0193892615213c78d3c71abbc8c3df58add4c2e7d56b884ca89fd35376"
+  },
+  "all_original_gist_queries_now_observed": true,
+  "quality_gate_passed": true
+}

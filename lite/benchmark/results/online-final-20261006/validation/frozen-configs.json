@@ -1,0 +1,26 @@
+{
+  "selected": [
+    {
+      "mode": "default",
+      "ef": 8192,
+      "validation_recall": 0.940667
+    },
+    {
+      "mode": "diverse",
+      "ef": 512,
+      "validation_recall": 0.938333
+    }
+  ],
+  "final_query_rows": [
+    400,
+    1000
+  ],
+  "final_recall_floor": 0.9,
+  "source_commit": "236049e8fe64ff031e6cb2dfd51e4fe96ba02aad",
+  "selection_rule": "lowest preregistered tested ef meeting validation Recall>=.92",
+  "performance_scope": "loaded post-1000-CRUD graph, not building at these ef values",
+  "final_fresh_processes_per_config": 3,
+  "query_warmup_passes": 1,
+  "timed_passes": 3,
+  "final_parameters_must_not_change": true
+}

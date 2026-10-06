@@ -12,5 +12,6 @@
     299
   ],
   "truth_comparison": "set equality, 8 of 300 queries",
-  "vector_comparison": "all 100000 by external ID"
+  "vector_comparison": "all 100000 by external ID",
+  "formatted_source_sha256": "cf36c587760ebc1ac6611695e7a5c09e834517f3970832196c1e6a2add9d224c"
 }

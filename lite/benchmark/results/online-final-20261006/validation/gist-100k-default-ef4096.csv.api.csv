@@ -1,0 +1,2 @@
+query_count,repeats,recall_at_k,search_p50_us,search_p99_us,query_loop_cpu_ms,load_ms
+300,2,0.919333,9871.224000,10931.369000,5769.076000,154.623282

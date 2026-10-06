@@ -34,7 +34,7 @@ main(int argc, char** argv) {
     const auto queries = records<float>(root + "/queries.fvecs");
     const auto truth = records<int32_t>(root + "/groundtruth.ivecs");
     std::cout << "query,top10_set_equal\n";
-    for (uint64_t query : {0, 42, 85, 128, 170, 213, 256, 299}) {
+    for (uint64_t query : {0, 85, 171, 256, 342, 428, 513, 599}) {
         std::vector<std::pair<double, uint64_t>> distances;
         for (uint64_t id = 0; id < base.size(); ++id) {
             double value = 0;
