@@ -1,0 +1,147 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+[New Thread 0x7ffff21b4640 (LWP 85206)]
+[New Thread 0x7ffff19b3640 (LWP 85207)]
+[New Thread 0x7fffe11b2640 (LWP 85208)]
+[New Thread 0x7fffd89b1640 (LWP 85209)]
+[New Thread 0x7fffd01b0640 (LWP 85210)]
+[New Thread 0x7fffc79af640 (LWP 85211)]
+[New Thread 0x7fffc71ae640 (LWP 85212)]
+[New Thread 0x7fffb69ad640 (LWP 85213)]
+[New Thread 0x7fffb61ac640 (LWP 85214)]
+[New Thread 0x7fffb59ab640 (LWP 85215)]
+[New Thread 0x7fffb51aa640 (LWP 85216)]
+[New Thread 0x7fffb49a9640 (LWP 85217)]
+[New Thread 0x7fffb41a8640 (LWP 85218)]
+[New Thread 0x7fffb39a7640 (LWP 85219)]
+[New Thread 0x7fffb31a6640 (LWP 85220)]
+[New Thread 0x7fffb29a5640 (LWP 85221)]
+[New Thread 0x7fffb21a4640 (LWP 85222)]
+[New Thread 0x7fffb19a3640 (LWP 85223)]
+[New Thread 0x7fffb11a2640 (LWP 85224)]
+[New Thread 0x7fffb09a1640 (LWP 85225)]
+[New Thread 0x7fffb01a0640 (LWP 85226)]
+[New Thread 0x7fffaf99f640 (LWP 85227)]
+[New Thread 0x7fffaf19e640 (LWP 85228)]
+[New Thread 0x7fffae99d640 (LWP 85229)]
+[New Thread 0x7fffae19c640 (LWP 85230)]
+[New Thread 0x7fffad99b640 (LWP 85231)]
+[New Thread 0x7fffad19a640 (LWP 85232)]
+[New Thread 0x7fffac999640 (LWP 85233)]
+[New Thread 0x7fffac198640 (LWP 85234)]
+[New Thread 0x7fffab997640 (LWP 85235)]
+[New Thread 0x7fffab196640 (LWP 85236)]
+[New Thread 0x7fffaa995640 (LWP 85237)]
+[New Thread 0x7fffaa194640 (LWP 85238)]
+[New Thread 0x7fffa9993640 (LWP 85239)]
+[New Thread 0x7fffa9192640 (LWP 85240)]
+[New Thread 0x7fffa8991640 (LWP 85241)]
+[New Thread 0x7fffa8190640 (LWP 85242)]
+[New Thread 0x7fffa798f640 (LWP 85243)]
+[New Thread 0x7fffa718e640 (LWP 85244)]
+[New Thread 0x7fffa698d640 (LWP 85245)]
+[New Thread 0x7fffa618c640 (LWP 85246)]
+[New Thread 0x7fffa598b640 (LWP 85247)]
+[New Thread 0x7fffa518a640 (LWP 85248)]
+[New Thread 0x7fffa4989640 (LWP 85249)]
+[New Thread 0x7fffa4188640 (LWP 85250)]
+[New Thread 0x7fffa3987640 (LWP 85251)]
+[New Thread 0x7fffa3186640 (LWP 85252)]
+[New Thread 0x7fffa2985640 (LWP 85253)]
+[New Thread 0x7fffa2184640 (LWP 85254)]
+[New Thread 0x7fffa1983640 (LWP 85255)]
+[New Thread 0x7fffa1182640 (LWP 85256)]
+[New Thread 0x7fffa0981640 (LWP 85257)]
+[New Thread 0x7fffa0180640 (LWP 85258)]
+[New Thread 0x7fff9f97f640 (LWP 85259)]
+[New Thread 0x7fff9f17e640 (LWP 85260)]
+[New Thread 0x7fff9e97d640 (LWP 85261)]
+[New Thread 0x7fff9e17c640 (LWP 85262)]
+[New Thread 0x7fff9d97b640 (LWP 85263)]
+[New Thread 0x7fff9d17a640 (LWP 85264)]
+[New Thread 0x7fff9c979640 (LWP 85265)]
+[New Thread 0x7fff9c178640 (LWP 85266)]
+[New Thread 0x7fff9b977640 (LWP 85267)]
+[New Thread 0x7fff9b176640 (LWP 85268)]
+[New Thread 0x7fff9a975640 (LWP 85269)]
+[New Thread 0x7fff9a174640 (LWP 85270)]
+[New Thread 0x7fff99973640 (LWP 85271)]
+[New Thread 0x7fff99172640 (LWP 85272)]
+[New Thread 0x7fff98971640 (LWP 85273)]
+[New Thread 0x7fff98170640 (LWP 85274)]
+[New Thread 0x7fff9796f640 (LWP 85275)]
+[New Thread 0x7fff9716e640 (LWP 85276)]
+[New Thread 0x7fff9696d640 (LWP 85277)]
+[New Thread 0x7fff9616c640 (LWP 85278)]
+[New Thread 0x7fff9596b640 (LWP 85279)]
+[New Thread 0x7fff9516a640 (LWP 85280)]
+[New Thread 0x7fff94969640 (LWP 85281)]
+[New Thread 0x7fff94168640 (LWP 85282)]
+[New Thread 0x7fff93967640 (LWP 85283)]
+[New Thread 0x7fff93166640 (LWP 85284)]
+[New Thread 0x7fff92965640 (LWP 85285)]
+[New Thread 0x7fff92164640 (LWP 85286)]
+[New Thread 0x7fff91963640 (LWP 85287)]
+[New Thread 0x7fff91162640 (LWP 85288)]
+[New Thread 0x7fff90961640 (LWP 85289)]
+[New Thread 0x7fff90160640 (LWP 85290)]
+[New Thread 0x7fff8f95f640 (LWP 85291)]
+[New Thread 0x7fff8f15e640 (LWP 85292)]
+[New Thread 0x7fff8e95d640 (LWP 85293)]
+[New Thread 0x7fff8e15c640 (LWP 85294)]
+[New Thread 0x7fff8d95b640 (LWP 85295)]
+[New Thread 0x7fff8d15a640 (LWP 85296)]
+[New Thread 0x7fff8c959640 (LWP 85297)]
+[New Thread 0x7fff8c158640 (LWP 85298)]
+[New Thread 0x7fff8b957640 (LWP 85299)]
+[New Thread 0x7fff8b156640 (LWP 85300)]
+[New Thread 0x7fff8a955640 (LWP 85301)]
+[New Thread 0x7fff8a154640 (LWP 85302)]
+[New Thread 0x7fff89953640 (LWP 85303)]
+[New Thread 0x7fff89152640 (LWP 85304)]
+[New Thread 0x7fff88951640 (LWP 85305)]
+[New Thread 0x7fff88150640 (LWP 85306)]
+[New Thread 0x7fff8794f640 (LWP 85307)]
+[New Thread 0x7fff8714e640 (LWP 85308)]
+[New Thread 0x7fff8694d640 (LWP 85309)]
+[New Thread 0x7fff8614c640 (LWP 85310)]
+[New Thread 0x7fff8594b640 (LWP 85311)]
+[New Thread 0x7fff8514a640 (LWP 85312)]
+[2026-10-06 22:55:26.459] [info]
+====vsag start init====
+running on AMD EPYC 9K65 192-Core
+instance spec: 4C15G
+cpu sse >> dist_support:Y + platform:Y = using:Y
+cpu avx >> dist_support:Y + platform:Y = using:Y
+cpu avx2 >> dist_support:Y + platform:Y = using:Y
+cpu avx512f >> dist_support:Y + platform:Y = using:Y
+cpu avx512dq >> dist_support:Y + platform:Y = using:Y
+cpu avx512bw >> dist_support:Y + platform:Y = using:Y
+cpu avx512vl >> dist_support:Y + platform:Y = using:Y
+cpu avx512vpopcntdq >> dist_support:Y + platform:Y = using:Y
+cpu neon >> dist_support:N + platform:N = using:N
+cpu sve >> dist_support:N + platform:N = using:N
+====vsag init done====
+before query: mode=remove count=7
+
+Thread 1 "delete_reproduc" received signal SIGSEGV, Segmentation fault.
+vsag::simd::ComputeBatch4Impl<vsag::simd::SimdTraits<vsag::simd::Avx512Tag>, (vsag::simd::Batch4Kind)1> (fallback=<optimized out>, r4=@0x5555555ae22c: 0, r3=@0x5555555ae228: 0, r2=@0x5555555ae224: 0, r1=@0x5555555ae220: 0, c4=0x7fff74948190, c3=0x0, c2=0x7fff749480d0, c1=0x7fff74948050, dim=16, query=0x5555555ae130) at /home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/compute_batch4.h:87
+87	        s3 = batch4_accumulate<T, Kind>(q, T::load(c3 + i), s3);
+#0  vsag::simd::ComputeBatch4Impl<vsag::simd::SimdTraits<vsag::simd::Avx512Tag>, (vsag::simd::Batch4Kind)1> (fallback=<optimized out>, r4=@0x5555555ae22c: 0, r3=@0x5555555ae228: 0, r2=@0x5555555ae224: 0, r1=@0x5555555ae220: 0, c4=0x7fff74948190, c3=0x0, c2=0x7fff749480d0, c1=0x7fff74948050, dim=16, query=0x5555555ae130) at /home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/compute_batch4.h:87
+#1  vsag::avx512::FP32ComputeL2SqrBatch4 (query=0x5555555ae130, dim=16, codes1=0x7fff74948050, codes2=0x7fff749480d0, codes3=0x0, codes4=0x7fff74948190, result1=@0x5555555ae220: 0, result2=@0x5555555ae224: 0, result3=@0x5555555ae228: 0, result4=@0x5555555ae22c: 0) at /home/ubuntu/project/vsag-lite-baseline-v01/src/simd/avx512.cpp:206
+#2  0x00007ffff726d683 in vsag::Quantizer<vsag::FP32Quantizer<(vsag::MetricType)0> >::ComputeDistsBatch4 (dists4=@0x5555555ae22c: 0, dists3=@0x5555555ae228: 0, dists2=@0x5555555ae224: 0, dists1=@0x5555555ae220: 0, codes4=<optimized out>, codes3=<optimized out>, codes2=<optimized out>, codes1=<optimized out>, computer=..., this=<optimized out>) at /home/ubuntu/project/vsag-lite-baseline-v01/src/quantization/quantizer.h:260
+#3  vsag::Computer<vsag::FP32Quantizer<(vsag::MetricType)0> >::ComputeDistsBatch4 (dists4=@0x5555555ae22c: 0, dists3=@0x5555555ae228: 0, dists2=@0x5555555ae224: 0, dists1=@0x5555555ae220: 0, codes4=<optimized out>, codes3=<optimized out>, codes2=<optimized out>, codes1=<optimized out>, this=0x555555591340) at /home/ubuntu/project/vsag-lite-baseline-v01/src/quantization/computer.h:90
+#4  vsag::FlattenDataCell<vsag::FP32Quantizer<(vsag::MetricType)0>, vsag::FixedLayout<vsag::MemoryBlockIO> >::query (this=0x55555559cc00, result_dists=0x5555555ae220, computer=0x555555591340, idx=0x5555555ae180, id_count=6, ctx=0x7fffffffdb70) at /home/ubuntu/project/vsag-lite-baseline-v01/src/datacell/flatten_datacell.h:388
+#5  0x00007ffff773a04d in vsag::BasicSearcher::search_impl<(vsag::InnerSearchMode)1> (this=0x55555559cdb0, graph=std::shared_ptr<vsag::GraphInterface> (use count 1, weak count 0) = {...}, flatten=std::shared_ptr<vsag::FlattenInterface> (use count 4, weak count 0) = {...}, vl=std::shared_ptr<vsag::VisitedList> (use count 2, weak count 0) = {...}, query=0x5555555b0040, inner_search_param=..., label_table=std::shared_ptr<vsag::LabelTable> (use count 1, weak count 0) = {...}, ctx=<optimized out>, rabitq_lower_bound_candidates=0x0, preset_computer=std::shared_ptr<vsag::ComputerInterface> (empty) = {...}) at /usr/include/c++/11/bits/stl_vector.h:1168
+#6  0x00007ffff77318df in vsag::BasicSearcher::Search (this=<optimized out>, graph=..., flatten=..., vl=..., query=<optimized out>, inner_search_param=..., label_table=std::shared_ptr<vsag::LabelTable> (use count 1, weak count 0) = {...}, ctx=0x7fffffffdb70, rabitq_lower_bound_candidates=0x0) at /usr/include/c++/11/bits/shared_ptr_base.h:587
+#7  0x00007ffff782a753 in vsag::HGraph::search_one_graph<(vsag::InnerSearchMode)1> (this=this@entry=0x555555592550, query=query@entry=0x5555555b0040, graph=std::shared_ptr<vsag::GraphInterface> (use count 1, weak count 0) = {...}, flatten=std::shared_ptr<vsag::FlattenInterface> (use count 4, weak count 0) = {...}, inner_search_param=..., vt=std::shared_ptr<vsag::VisitedList> (use count 2, weak count 0) = {...}, ctx=0x7fffffffdb70, rabitq_candidates=0x0, fused_search_finalized=0x7fffffffda35) at /home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/hgraph/hgraph_search.cpp:328
+#8  0x00007ffff7828b7c in vsag::HGraph::SearchWithRequest (this=0x555555592550, request=...) at /home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/hgraph/hgraph_search.cpp:783
+#9  0x00007ffff782520f in vsag::HGraph::KnnSearch (this=0x555555592550, query=..., k=<optimized out>, parameters="{\"hgraph\":{\"ef_search\":128}}", filter=..., allocator=0x0) at /home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/hgraph/hgraph_search.cpp:62
+#10 0x00007ffff7824b09 in vsag::HGraph::KnnSearch (this=<optimized out>, query=..., k=<optimized out>, parameters=..., filter=...) at /home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/hgraph/hgraph_search.cpp:46
+#11 0x00007ffff7783f26 in vsag::InnerIndexInterface::KnnSearch (this=0x555555592550, query=std::shared_ptr<vsag::Dataset> (use count 2, weak count 1) = {...}, k=1, parameters="{\"hgraph\":{\"ef_search\":128}}", invalid=...) at /home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/inner_index_interface.cpp:140
+#12 0x00007ffff682a092 in vsag::IndexImpl<vsag::HGraph>::KnnSearch (this=0x555555591b00, query=std::shared_ptr<vsag::Dataset> (use count 2, weak count 1) = {...}, k=1, parameters="{\"hgraph\":{\"ef_search\":128}}", invalid=std::shared_ptr<vsag::Bitset> (empty) = {...}) at /home/ubuntu/project/vsag-lite-baseline-v01/src/index/index_impl.h:321
+#13 0x000055555555735d in main (argc=2, argv=0x7fffffffe978) at /home/ubuntu/project/vsag-lite-full-short-diagnostic-20261006/delete_reproducer.cpp:80
+#4  vsag::FlattenDataCell<vsag::FP32Quantizer<(vsag::MetricType)0>, vsag::FixedLayout<vsag::MemoryBlockIO> >::query (this=0x55555559cc00, result_dists=0x5555555ae220, computer=0x555555591340, idx=0x5555555ae180, id_count=6, ctx=0x7fffffffdb70) at /home/ubuntu/project/vsag-lite-baseline-v01/src/datacell/flatten_datacell.h:388
+388	        computer->ComputeDistsBatch4(lease1.Data(),
+$1 = 6
+$2 = {1, 3, 7, 6, 2, 5}

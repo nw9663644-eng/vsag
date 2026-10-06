@@ -46,6 +46,13 @@ with tempfile.TemporaryDirectory() as temporary:
             assert float(summary[field]) == latencies[max(1, math.ceil(len(latencies)*fraction))-1]
         assert int(summary['mixed_queries']) == len(queries)
         assert snapshot.is_file()
+    snapshot, result = run('diagnostic', ['fp32', '128', '1', '4', '1', 'diagnose'])
+    assert result.returncode == 0, result.stderr
+    assert 'DIAGNOSTIC ONLY' in result.stderr
+    diagnostic = list(csv.DictReader(Path(str(snapshot) + '.diagnostic.csv').open()))
+    assert all(int(row['ef_search']) in [128, 512, 100000] for row in diagnostic)
+    assert len(diagnostic) % 3 == 0
+    assert all(0 <= int(row['hits']) <= int(row['returned_count']) <= 1 for row in diagnostic)
     snapshot, result = run('legacy', ['fp32', '128', '1'])
     assert result.returncode == 0, result.stderr
     row = next(csv.DictReader(io.StringIO(result.stdout[result.stdout.index('mode,base_count,'):])))
@@ -53,8 +60,9 @@ with tempfile.TemporaryDirectory() as temporary:
     invalid = [ ['fp32', '128', '1', '4'], ['fp32', '128', '1', '0', '1'],
                 ['fp32', '128', '1', '4', '0'], ['fp32', '128', '1', '4', '5'],
                 ['fp32', '128', '1', '4x', '1'], ['rabitq1', '128', '1', '4', '1'],
-                ['fp32', '128', '1', '100001', '1'] ]
+                ['fp32', '128', '1', '100001', '1'],
+                ['fp32', '128', '1', '4', '1', 'other'] ]
     for i, options in enumerate(invalid):
         snapshot, result = run('invalid'+str(i), options)
         assert result.returncode != 0 and not snapshot.exists()
-print('Full mixed: two cadences, four mutations, raw accounting, legacy path, seven invalid CLIs passed')
+print('Full mixed: two cadences, four mutations, raw accounting, legacy path, diagnostic mode and eight invalid CLIs passed')

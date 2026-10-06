@@ -176,12 +176,14 @@ measure_mixed(const std::shared_ptr<vsag::Index>& index,
               const Matrix<int32_t>& truth,
               const std::string& parameters,
               uint64_t cycles,
-              uint64_t every) {
+              uint64_t every,
+              bool diagnose) {
     const auto base = read_matrix<float>(directory + "/base.fvecs", queries.dim);
     std::vector<double> mutation_us[4];
     std::vector<double> query_us;
     std::vector<uint64_t> query_hits;
     std::vector<uint64_t> query_counts;
+    std::vector<std::string> diagnostics;
     double mutation_cpu_ms = 0;
     double query_cpu_ms = 0;
     std::vector<float> changed(base.dim);
@@ -243,6 +245,22 @@ measure_mixed(const std::shared_ptr<vsag::Index>& index,
             }
             query_hits.push_back(hits);
             query_counts.push_back(result.size());
+            if (diagnose and result.size() < static_cast<uint64_t>(truth.dim)) {
+                // Diagnostic-only reruns alter the whole-loop timer; never use it as a benchmark.
+                for (const uint64_t budget : {128ULL, 512ULL, 100000ULL}) {
+                    const auto retry =
+                        search(index, query, truth.dim, search_parameters("fp32", budget), true);
+                    uint64_t retry_hits = 0;
+                    for (const auto& neighbor : retry) {
+                        retry_hits += valid.count(static_cast<int32_t>(neighbor.id));
+                    }
+                    diagnostics.push_back(
+                        std::to_string(i + 1) + "," + std::to_string(row) + "," +
+                        std::to_string(budget) + "," + std::to_string(retry.size()) + "," +
+                        std::to_string(retry_hits) + "," +
+                        (retry.empty() ? "-1" : std::to_string(retry.front().id)));
+                }
+            }
         }
     }
     const auto total_cpu_ms =
@@ -256,6 +274,15 @@ measure_mixed(const std::shared_ptr<vsag::Index>& index,
         for (const auto& neighbor : result) {
             end_hits += valid.count(static_cast<int32_t>(neighbor.id));
         }
+    }
+    if (diagnose) {
+        std::ofstream diagnostic(snapshot + ".diagnostic.csv");
+        diagnostic << "cycle,query,ef_search,returned_count,hits,first_id\n";
+        for (const auto& row : diagnostics) {
+            diagnostic << row << '\n';
+        }
+        diagnostic.close();
+        require(static_cast<bool>(diagnostic), "Full diagnostic samples write failed");
     }
     std::ofstream samples(snapshot + ".crud.samples.csv");
     samples << "cycle,update_us,restore_us,remove_us,readd_us\n"
@@ -300,7 +327,8 @@ run(const std::string& directory,
     uint64_t ef_search,
     uint64_t warmup_rounds,
     uint64_t crud_cycles,
-    uint64_t query_every) {
+    uint64_t query_every,
+    bool diagnose) {
     require(not std::filesystem::exists(snapshot), "snapshot path already exists");
     auto base = read_matrix<float>(directory + "/base.fvecs");
     const auto queries = read_matrix<float>(directory + "/queries.fvecs", base.dim);
@@ -377,8 +405,15 @@ run(const std::string& directory,
     require(static_cast<bool>(samples), "query samples write failed");
 
     if (crud_cycles != 0) {
-        measure_mixed(
-            index, directory, snapshot, queries, truth, parameters, crud_cycles, query_every);
+        measure_mixed(index,
+                      directory,
+                      snapshot,
+                      queries,
+                      truth,
+                      parameters,
+                      crud_cycles,
+                      query_every,
+                      diagnose);
         before.clear();
         for (uint64_t i = 0; i < queries.count; ++i) {
             std::copy_n(queries.values.data() + i * static_cast<uint64_t>(base.dim),
@@ -445,20 +480,25 @@ run(const std::string& directory,
 int
 main(int argc, char** argv) {
     try {
-        require(
-            (argc >= 4 and argc <= 6) or argc == 8,
-            "usage: full_rabitq_dataset_benchmark DATASET_DIRECTORY SNAPSHOT_PATH "
-            "MODE(fp32|rabitq1|rabitq3x5) [EF_SEARCH [WARMUP_ROUNDS [CRUD_CYCLES QUERY_EVERY]]]");
+        require((argc >= 4 and argc <= 6) or argc == 8 or argc == 9,
+                "usage: full_rabitq_dataset_benchmark DATASET_DIRECTORY SNAPSHOT_PATH "
+                "MODE(fp32|rabitq1|rabitq3x5) [EF_SEARCH [WARMUP_ROUNDS [CRUD_CYCLES QUERY_EVERY "
+                "[diagnose]]]]");
         const auto ef_search = argc >= 5 ? parse_number(argv[4]) : 128;
         const auto warmup_rounds = argc >= 6 ? parse_number(argv[5]) : 0;
         require(ef_search > 0 and ef_search <= 1000000, "invalid query budget");
         require(warmup_rounds <= 100, "invalid warmup count");
-        const auto cycles = argc == 8 ? parse_number(argv[6]) : 0;
-        const auto every = argc == 8 ? parse_number(argv[7]) : 0;
-        require(argc != 8 or (std::string(argv[3]) == "fp32" and cycles > 0 and cycles <= 100000 and
-                              every > 0 and every <= cycles),
+        const auto cycles = argc >= 8 ? parse_number(argv[6]) : 0;
+        const auto every = argc >= 8 ? parse_number(argv[7]) : 0;
+        require(argc < 8 or (std::string(argv[3]) == "fp32" and cycles > 0 and cycles <= 100000 and
+                             every > 0 and every <= cycles),
                 "invalid FP32 mixed protocol");
-        return run(argv[1], argv[2], argv[3], ef_search, warmup_rounds, cycles, every);
+        require(argc != 9 or std::string(argv[8]) == "diagnose", "invalid diagnostic mode");
+        if (argc == 9) {
+            std::cerr << "DIAGNOSTIC ONLY: whole-loop CPU includes retry queries; "
+                         "exclude this run from performance comparisons\n";
+        }
+        return run(argv[1], argv[2], argv[3], ef_search, warmup_rounds, cycles, every, argc == 9);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

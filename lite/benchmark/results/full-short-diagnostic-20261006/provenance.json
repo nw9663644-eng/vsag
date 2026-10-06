@@ -1,0 +1,12 @@
+{
+  "parent": "765fc550db5979fe3b39fee41a97998de2f6e4ea",
+  "sha256": {
+    "lite/benchmark/full_rabitq_dataset_main.cpp": "f93a12cc061e7c3925cee726e75eb5ee081e6ea07e567e3b1b87a29c86a6b212",
+    "build-full-known-runner/full_rabitq_dataset_benchmark": "4aaab6d05b294ea79e7b23d51b2c69d1912acb4d3bf626076f12fbd19f11c979",
+    "/home/ubuntu/project/vsag-lite-full-short-diagnostic-20261006/delete_reproducer.cpp": "f4fe2855536afc892b8894a4e6e3213cef977d10ad2afce421d272cada28777a",
+    "/home/ubuntu/project/vsag-lite-full-short-diagnostic-20261006/delete_reproducer": "4a23b4667679f558a4044a2b2e0598e2e5b1534b2576d93ff87cf55a8921a876",
+    "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72"
+  },
+  "dataset_provenance": "../full-mixed-20261006/provenance-sha256.json",
+  "scope": "known incremental d18c82a library, not latest upstream"
+}

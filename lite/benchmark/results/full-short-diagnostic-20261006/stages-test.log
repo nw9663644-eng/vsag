@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/test_full_mixed.py", line 50, in <module>
+    assert result.returncode == 0, result.stderr
+AssertionError: DIAGNOSTIC ONLY: whole-loop CPU includes retry queries; exclude this run from performance comparisons
