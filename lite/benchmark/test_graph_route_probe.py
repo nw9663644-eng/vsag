@@ -31,7 +31,7 @@ def main():
         (root / 'groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 0))
         case = 0
 
-        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform", crud_cycles=None, ef_search=128):
+        def run(vectors, links, degree, mode=None, api_repeats=None, entry_mode="uniform", crud_cycles=None, ef_search=128, query_every=None):
             nonlocal case
             case += 1
             source = root / f'{case}.snapshot'
@@ -43,6 +43,8 @@ def main():
                 command += [str(api_repeats)]
             if crud_cycles is not None:
                 command += [str(crud_cycles)]
+            if query_every is not None:
+                command += [str(query_every)]
             result = subprocess.run(command, capture_output=True, text=True, check=False)
             if api_repeats is not None and result.returncode == 0:
                 with (root / f'{case}.csv.api.csv').open() as output:
@@ -145,6 +147,18 @@ def main():
         assert result.api['configured_ef_search'] == '128'
         assert result.api['query_ef_search'] == '1024'
         assert result.crud['recall_at_k'] == '1.000000'
+        result = run([0, 1, 3], [[1, 2], [0, 2], [0, 1]], 2, 'preserve', 2,
+                     crud_cycles=12, ef_search=1024, query_every=3)
+        summary(result)
+        assert result.crud['mixed_queries'] == '4'
+        assert result.crud['query_every'] == '3'
+        assert result.crud['mixed_recall_at_k'] == '1.000000'
+        assert float(result.crud['mixed_search_p99_us']) >= float(result.crud['mixed_search_p50_us'])
+        assert float(result.crud['mixed_loop_cpu_ms']) >= float(result.crud['crud_loop_cpu_ms'])
+        result = run([0], [[]], 2, 'preserve', 1, crud_cycles=4, query_every=5)
+        assert result.returncode != 0 and 'QUERY_EVERY' in result.stderr
+        result = run([0], [[]], 2, 'preserve', 1, crud_cycles=4, query_every=0)
+        assert result.returncode != 0 and 'QUERY_EVERY' in result.stderr
         result = run([0], [[]], 1, 'invalid')
         assert result.returncode != 0 and 'NEIGHBOR_MODE' in result.stderr
         result = run([], [], 1, 'diverse')

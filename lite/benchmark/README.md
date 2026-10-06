@@ -1736,3 +1736,18 @@ Query overrides no longer change CRUD's stored budget; post-CRUD quality uses
 the requested query budget. [Verification and migration boundary](results/query-options-20261006/README.md).
 Historical high-budget mutation measurements that altered the snapshot option
 have different semantics and must not be relabeled as this native API path.
+
+
+##### Serial mixed workloads
+
+An optional QUERY_EVERY argument after CRUD_CYCLES interleaves one query after
+that many complete modified-update/restore/remove/re-add cycles. It must be
+1..CRUD_CYCLES; omission preserves grouped mutation. Query budget remains
+per-call and maintenance budget remains the snapshot's configured value.
+New .mixed.csv records query latency and row; appended summary fields separate
+mutation CPU, query CPU and total mixed-loop CPU. In this mode crud_loop_cpu_ms
+means summed mutation-phase CPU; in grouped mode it retains full mutation-loop
+CPU semantics. [GIST100k pilot and exact definitions](results/mixed-20261006/README.md)
+show nearly equal end quality and a 1.87x mixed-CPU ratio for the selected
+mutation-heavy workload, with 9% higher maintenance CPU. One run per mode is
+not a repeated-run estimate or a universal workload speedup.

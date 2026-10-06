@@ -1,0 +1,11 @@
+{
+  "base_commit": "b50ea57c08ac8353a4f8b5d4dea55ad8ffda5a7c",
+  "probe_source_sha256": "75cdbc683041d19390fe214f96dfb19abbfea5c0c4ce0ff9740c5dbae9283e41",
+  "code_change": "benchmark-only interleaving; no library change",
+  "samples_checked": {
+    "mutation_rows": 40000,
+    "query_rows": 4000
+  },
+  "mixed_cpu_ratio": 1.8686034083585725,
+  "maintenance_cpu_ratio": 1.0903614161154376
+}

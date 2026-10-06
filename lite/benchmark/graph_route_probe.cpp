@@ -633,9 +633,15 @@ measure_crud(vsag::lite::Index& index,
              const std::vector<std::vector<int32_t>>& truth,
              uint64_t cycles,
              uint64_t query_budget,
+             uint64_t query_every,
              const std::string& path) {
     using Clock = std::chrono::steady_clock;
     std::vector<std::vector<double>> times(4);
+    std::vector<double> mixed_latencies;
+    uint64_t mixed_hits = 0;
+    double mutation_cpu_ms = 0;
+    double query_cpu_ms = 0;
+    const uint64_t k = truth.front().size();
     const auto timed = [&](uint64_t operation, const auto& action) {
         const auto start = Clock::now();
         require(action(), "API CRUD operation failed");
@@ -644,6 +650,7 @@ measure_crud(vsag::lite::Index& index,
     };
     const auto cpu_start = std::clock();
     for (uint64_t i = 0; i < cycles; ++i) {
+        const auto mutation_start = std::clock();
         const uint64_t slot = (i * 8191ULL) % graph.ids.size();
         const int64_t id = graph.ids[slot];
         const float* original = graph.vectors.data() + slot * graph.dim;
@@ -654,9 +661,27 @@ measure_crud(vsag::lite::Index& index,
         timed(2, [&] { return index.Remove(id); });
         timed(3, [&] { return static_cast<bool>(index.Add(id, original, graph.dim)); });
         require(index.Size() == graph.ids.size(), "API CRUD changed live count");
+        mutation_cpu_ms +=
+            1000.0 * static_cast<double>(std::clock() - mutation_start) / CLOCKS_PER_SEC;
+        if (query_every != 0 and (i + 1) % query_every == 0) {
+            const uint64_t query = mixed_latencies.size() % queries.size();
+            const auto query_start = std::clock();
+            const auto start = Clock::now();
+            auto result =
+                index.SearchWithOptions(queries[query].data(), graph.dim, k, {query_budget});
+            const auto end = Clock::now();
+            query_cpu_ms +=
+                1000.0 * static_cast<double>(std::clock() - query_start) / CLOCKS_PER_SEC;
+            require(static_cast<bool>(result) and result->size() == k, "API mixed search failed");
+            mixed_latencies.push_back(
+                std::chrono::duration<double, std::micro>(end - start).count());
+            std::unordered_set<int64_t> expected(truth[query].begin(), truth[query].end());
+            for (const auto& neighbor : *result) {
+                mixed_hits += expected.count(neighbor.id);
+            }
+        }
     }
     const double cpu_ms = 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
-    const uint64_t k = truth.front().size();
     uint64_t hits = 0;
     std::vector<std::vector<vsag::lite::Neighbor>> results;
     for (uint64_t i = 0; i < queries.size(); ++i) {
@@ -701,16 +726,43 @@ measure_crud(vsag::lite::Index& index,
     }
     samples.close();
     require(static_cast<bool>(samples), "API CRUD samples write failed");
+    std::ofstream mixed_output(path + ".mixed.csv");
+    mixed_output << "query_event,query,latency_us\n";
+    for (uint64_t i = 0; i < mixed_latencies.size(); ++i) {
+        mixed_output << i << ',' << i % queries.size() << ',' << std::fixed << std::setprecision(6)
+                     << mixed_latencies[i] << '\n';
+    }
+    mixed_output.close();
+    require(static_cast<bool>(mixed_output), "API mixed samples write failed");
+    const auto mixed_percentile = [&](double fraction) {
+        if (mixed_latencies.empty()) {
+            return 0.0;
+        }
+        auto sorted = mixed_latencies;
+        std::sort(sorted.begin(), sorted.end());
+        return sorted[static_cast<uint64_t>(
+                          std::ceil(fraction * static_cast<double>(sorted.size()))) -
+                      1];
+    };
     std::ofstream output(path);
     output << "cycles,recall_at_k,crud_loop_cpu_ms,update_changed_p50_us,restore_p50_us,"
-              "remove_p50_us,readd_p50_us,save_ms,reload_ms,snapshot_bytes\n";
+              "remove_p50_us,readd_p50_us,save_ms,reload_ms,snapshot_bytes,query_every,mixed_"
+              "queries,mixed_recall_at_k,mixed_search_p50_us,mixed_search_p99_us,mixed_query_cpu_"
+              "ms,mixed_loop_cpu_ms\n";
     output << cycles << ',' << std::fixed << std::setprecision(6)
-           << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ',' << cpu_ms;
+           << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
+           << (query_every == 0 ? cpu_ms : mutation_cpu_ms);
     for (auto& values : times) {
         std::sort(values.begin(), values.end());
         output << ',' << values[(values.size() - 1) / 2];
     }
-    output << ',' << save_ms << ',' << reload_ms << ',' << snapshot_bytes << '\n';
+    const double mixed_recall =
+        mixed_latencies.empty()
+            ? 0.0
+            : static_cast<double>(mixed_hits) / static_cast<double>(mixed_latencies.size() * k);
+    output << ',' << save_ms << ',' << reload_ms << ',' << snapshot_bytes << ',' << query_every
+           << ',' << mixed_latencies.size() << ',' << mixed_recall << ',' << mixed_percentile(0.50)
+           << ',' << mixed_percentile(0.99) << ',' << query_cpu_ms << ',' << cpu_ms << '\n';
     output.close();
     require(static_cast<bool>(output), "API CRUD summary write failed");
 }
@@ -722,6 +774,7 @@ measure_api(const GraphSnapshot& graph,
             uint64_t repeats,
             uint64_t configured_budget,
             uint64_t crud_cycles,
+            uint64_t query_every,
             const std::string& path) {
     require(not std::filesystem::exists(path), "API output path already exists");
     // Match Index::Save's v2 FP32 layout; serialization is outside Load timing.
@@ -817,8 +870,14 @@ measure_api(const GraphSnapshot& graph,
     output.close();
     require(static_cast<bool>(output), "API output write failed");
     if (crud_cycles != 0) {
-        measure_crud(
-            **loaded, graph, queries, truth, crud_cycles, graph.ef_search, path + ".crud.csv");
+        measure_crud(**loaded,
+                     graph,
+                     queries,
+                     truth,
+                     crud_cycles,
+                     graph.ef_search,
+                     query_every,
+                     path + ".crud.csv");
     }
 }
 
@@ -830,7 +889,8 @@ run(const std::string& snapshot,
     const std::string& entry_mode,
     const std::string& neighbor_mode,
     uint64_t api_repeats,
-    uint64_t crud_cycles) {
+    uint64_t crud_cycles,
+    uint64_t query_every) {
     require(not std::filesystem::exists(output_path), "output path already exists");
     require(api_repeats == 0 or not std::filesystem::exists(output_path + ".api.csv.latencies.csv"),
             "API latency output path already exists");
@@ -842,6 +902,9 @@ run(const std::string& snapshot,
                 (not std::filesystem::exists(output_path + ".api.csv.crud.csv") and
                  not std::filesystem::exists(output_path + ".api.csv.crud.csv.samples.csv")),
             "API CRUD output path already exists");
+    require(crud_cycles == 0 or
+                not std::filesystem::exists(output_path + ".api.csv.crud.csv.mixed.csv"),
+            "API mixed output path already exists");
     GraphSnapshot graph = load_snapshot(snapshot);
     const uint64_t configured_budget = graph.ef_search;
     if (ef_search != 0) {
@@ -920,6 +983,7 @@ run(const std::string& snapshot,
                     api_repeats,
                     configured_budget,
                     crud_cycles,
+                    query_every,
                     output_path + ".api.csv");
     }
     return 0;
@@ -935,9 +999,10 @@ main(int argc, char** argv) {
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
         }
-        require(argc >= 4 and argc <= 9,
-                "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
-                "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS [CRUD_CYCLES]]]]]");
+        require(
+            argc >= 4 and argc <= 10,
+            "usage: lite_graph_route_probe SNAPSHOT DATASET OUTPUT "
+            "[EF_SEARCH [ENTRY_MODE [NEIGHBOR_MODE [API_REPEATS [CRUD_CYCLES [QUERY_EVERY]]]]]]");
         const uint64_t ef_search = argc >= 5 ? std::stoull(argv[4]) : 0;
         require(argc == 4 or ef_search > 0, "EF_SEARCH must be positive");
         const std::string entry_mode = argc >= 6 ? argv[5] : "uniform";
@@ -945,9 +1010,12 @@ main(int argc, char** argv) {
         const uint64_t api_repeats = argc >= 8 ? std::stoull(argv[7]) : 0;
         require(argc < 8 or (api_repeats > 0 and api_repeats <= 1000),
                 "API_REPEATS must be in [1, 1000]");
-        const uint64_t crud_cycles = argc == 9 ? std::stoull(argv[8]) : 0;
-        require(argc != 9 or (crud_cycles > 0 and crud_cycles <= 100000),
+        const uint64_t crud_cycles = argc >= 9 ? std::stoull(argv[8]) : 0;
+        require(argc < 9 or (crud_cycles > 0 and crud_cycles <= 100000),
                 "CRUD_CYCLES must be in [1, 100000]");
+        const uint64_t query_every = argc == 10 ? std::stoull(argv[9]) : 0;
+        require(argc != 10 or (query_every > 0 and query_every <= crud_cycles),
+                "QUERY_EVERY must be in [1, CRUD_CYCLES]");
         return run(argv[1],
                    argv[2],
                    argv[3],
@@ -955,7 +1023,8 @@ main(int argc, char** argv) {
                    entry_mode,
                    neighbor_mode,
                    api_repeats,
-                   crud_cycles);
+                   crud_cycles,
+                   query_every);
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

@@ -1,0 +1,18 @@
+{
+  "base_commit": "b50ea57c08ac8353a4f8b5d4dea55ad8ffda5a7c",
+  "query_configs": {
+    "default": 8192,
+    "diverse": 512
+  },
+  "maintenance_budget": 128,
+  "cycles": 20000,
+  "mutation_calls_per_cycle": 4,
+  "query_every_cycles": 10,
+  "mixed_query_count": 2000,
+  "cpu": 0,
+  "replicates": 1,
+  "quality_floor_after_all_cycles": 0.9,
+  "queries": "previously evaluated GIST rows[400,1000), not new blind data",
+  "query_timing": "after full restored cycle; valid original truth",
+  "policy": "default uses default library; diverse uses opt-in library"
+}
