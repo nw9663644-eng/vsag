@@ -1,0 +1,21 @@
+Filters: [incoming-retention]
+Randomness seeded to: 817409755
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+lite_graph_tests is a Catch2 v3.7.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Graph reverse-link incoming retention preference
+-------------------------------------------------------------------------------
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:937
+...............................................................................
+
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:948: FAILED:
+  REQUIRE( (*graph)->IncomingLinkCountAt(1) == 2 )
+with expansion:
+  1 == 2
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 8 | 7 passed | 1 failed

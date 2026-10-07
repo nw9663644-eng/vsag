@@ -1,0 +1,4 @@
+[1/4] Building CXX object CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o
+[2/4] Linking CXX shared library libvsag-lite.so
+[3/4] Building CXX object CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o
+[4/4] Linking CXX executable lite_graph_tests

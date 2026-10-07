@@ -1833,3 +1833,7 @@ full-ID churn quality drop; it is not a performance improvement or new acceptanc
 See [event-specific routing controls](results/event-routing-20261007/README.md)
 for slot-order versus topology attribution and a single-edge recovery case.
 These observed-query diagnostics do not adopt a new graph policy.
+
+See [two-incoming retention rejection](results/two-incoming-20261007/README.md)
+for initial-build gains that did not survive full churn. The prototype was
+withdrawn; this is negative evidence, not a new accepted graph policy.

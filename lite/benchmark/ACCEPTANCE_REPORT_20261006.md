@@ -259,3 +259,16 @@ and match scalar returned ID sets; raw compressed node exports and available
 host snapshots are audited. No library policy, budget or quality gate changes,
 no new timing/ASan/coverage claims. Next evaluate a general opt-in incoming
 retention control, with full CRUD cost/quality and independent-query validation.
+
+## 2026-10-07: two-incoming retention rejected
+
+The [retention experiment](results/two-incoming-20261007/README.md) raised the
+old-candidate pruning preference under an isolated compile macro. Cohere10k
+initial recall improved .960 to .972; after 10,000 same-value CRUD cycles it was
+.940 baseline and .939 candidate (three repeats). Whole-process CPU medians
+were 4.92 and 5.01 seconds, with no demonstrated cost benefit. Starting from
+the same baseline graph yielded .940 and .942 in diagnostic traces, still
+below the .95 historical floor. These are existing observed queries, not new
+holdout acceptance. The library and test prototype were removed and the
+restored default passed 4/4 CTest. No default policy, new ASan result or public
+RaBitQ delivery is implied.

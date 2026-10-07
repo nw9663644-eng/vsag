@@ -1,0 +1,42 @@
+[
+  {
+    "flow": "build",
+    "variant": "baseline",
+    "recalls": [
+      0.96,
+      0.96,
+      0.96
+    ],
+    "median_whole_cpu_s": 2.01
+  },
+  {
+    "flow": "build",
+    "variant": "candidate",
+    "recalls": [
+      0.972,
+      0.972,
+      0.972
+    ],
+    "median_whole_cpu_s": 2.08
+  },
+  {
+    "flow": "crud",
+    "variant": "baseline",
+    "recalls": [
+      0.94,
+      0.94,
+      0.94
+    ],
+    "median_whole_cpu_s": 4.92
+  },
+  {
+    "flow": "crud",
+    "variant": "candidate",
+    "recalls": [
+      0.939,
+      0.939,
+      0.939
+    ],
+    "median_whole_cpu_s": 5.01
+  }
+]

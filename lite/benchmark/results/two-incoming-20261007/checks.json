@@ -1,0 +1,74 @@
+[
+  {
+    "name": "baseline",
+    "command": [
+      "build-lite-fragment-release/lite_graph_tests",
+      "[incoming-retention]"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "candidate",
+    "command": [
+      "build-lite-two-incoming-release/lite_graph_tests",
+      "[incoming-retention]"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "candidate-test-before",
+    "command": [
+      "build-lite-two-incoming-release/lite_graph_tests",
+      "[incoming-retention]"
+    ],
+    "exit": 42
+  },
+  {
+    "name": "default-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fragment-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "candidate-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-two-incoming-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "same-initial-baseline",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_mutation_trace",
+      "/home/ubuntu/project/vsag-lite-two-incoming-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-two-incoming-20261007/same-initial-baseline.events.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-two-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "same-initial-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_mutation_trace",
+      "/home/ubuntu/project/vsag-lite-two-incoming-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-two-incoming-20261007/same-initial-candidate.events.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-two-incoming-release",
+    "exit": 0
+  }
+]
