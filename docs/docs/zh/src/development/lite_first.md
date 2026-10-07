@@ -51,6 +51,7 @@ Load 采用现有 `tl::expected` / `vsag::Error`，不调用 Full 全局日志�
 输入必须是指定数量的有限 float32 值。调用需要外部串行化。结果拥有内存，不暴露内部槽位。
 
 - 单条 Add 拒绝重复 ID；Update 拒绝不存在的 ID。
+- 图模式 Update 在完成原有校验后，若 FP32 字节或编码后的 FP16 位模式与已存表示相同，直接返回，不改变邻接和快照。FP16 范围检查仍先执行；FP32 正零和负零的字节表示不同。同值 Update 不是图修复请求。BuildGraph 仅支持 BruteForce 到 Graph 的转换，不会原地重建已经成图的索引。
 - Remove 对不存在的 ID 返回 false；删除后的外部 ID 可以重新新增。
 - Add 失败不改变逻辑记录，但预留容量可能已经增加。
 - Search 最多返回 min(k, Size()) 条记录，按 L2 平方距离、ID 升序排列。

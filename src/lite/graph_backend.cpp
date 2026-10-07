@@ -4,6 +4,7 @@
 #include <array>
 #include <cmath>
 #include <cstddef>
+#include <cstring>
 #include <limits>
 #include <new>
 #include <queue>
@@ -139,6 +140,15 @@ public:
                 encoded = encode(vector);
             }
             const uint64_t slot = found->second;
+            // Validation and FP16 encoding must precede the identity check. Preserve
+            // the graph when the stored representation is unchanged.
+            const bool unchanged =
+                fp16_
+                    ? std::equal(encoded.begin(), encoded.end(), fp16_vectors_.data() + slot * dim)
+                    : std::memcmp(vector, vectors_.data() + slot * dim, dim * sizeof(float)) == 0;
+            if (unchanged) {
+                return {};
+            }
             auto neighbors = nearest(vector, max_degree_, slot);
             if (not neighbors) {
                 return tl::unexpected(neighbors.error());

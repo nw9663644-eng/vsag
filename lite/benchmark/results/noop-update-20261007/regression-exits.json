@@ -1,0 +1,20 @@
+[
+  {
+    "variant": "before",
+    "command": [
+      "build-lite-fragment-release/lite_tests",
+      "Lite identical graph updates*"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-noop-update-20261007/before",
+    "exit": 42
+  },
+  {
+    "variant": "after",
+    "command": [
+      "build-lite-fragment-release/lite_tests",
+      "Lite identical graph updates*"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  }
+]

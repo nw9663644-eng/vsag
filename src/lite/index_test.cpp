@@ -538,3 +538,55 @@ TEST_CASE("Lite per-query budget preserves defaults, filters and mutation policy
     REQUIRE((*empty)->BuildGraph(4, 8));
     REQUIRE((*empty)->SearchWithOptions(query, 2, 10, {UINT64_MAX})->empty());
 }
+
+TEST_CASE("Lite identical graph updates preserve snapshots after validation", "[lite]") {
+    for (const auto storage : {vsag::lite::VectorStorage::FP32, vsag::lite::VectorStorage::FP16}) {
+        auto created = vsag::lite::Index::Create(2);
+        REQUIRE(created);
+        auto& index = **created;
+        const float origin[]{0.0F, 0.0F};
+        const float a[]{1.0F, 0.0F};
+        const float b[]{0.0F, 1.0F};
+        const float c[]{2.0F, 1.0F};
+        REQUIRE(index.Add(1, origin, 2));
+        REQUIRE(index.Add(2, a, 2));
+        REQUIRE(index.Add(3, b, 2));
+        REQUIRE(index.Add(4, c, 2));
+        REQUIRE(index.BuildGraph(storage, 2, 8));
+        auto snapshot = [&index]() {
+            std::stringstream bytes;
+            REQUIRE(index.Save(bytes));
+            return bytes.str();
+        };
+        const auto before = snapshot();
+        REQUIRE(index.Update(1, origin, 2));
+        REQUIRE(static_cast<bool>(snapshot() == before));
+        REQUIRE_FALSE(index.Update(99, origin, 2));
+        REQUIRE_FALSE(index.Update(1, nullptr, 2));
+        REQUIRE_FALSE(index.Update(1, origin, 1));
+        const float invalid[]{std::numeric_limits<float>::infinity(), 0.0F};
+        REQUIRE_FALSE(index.Update(1, invalid, 2));
+        REQUIRE(static_cast<bool>(snapshot() == before));
+        if (storage == vsag::lite::VectorStorage::FP16) {
+            const auto encoded_before = snapshot();
+            const float equivalent[]{1.0001F, 0.0F};
+            REQUIRE(index.Update(2, equivalent, 2));
+            REQUIRE(static_cast<bool>(snapshot() == encoded_before));
+            const float overflow[]{70000.0F, 0.0F};
+            REQUIRE_FALSE(index.Update(2, overflow, 2));
+            REQUIRE(static_cast<bool>(snapshot() == encoded_before));
+        } else {
+            const float signed_zero[]{-0.0F, 0.0F};
+            REQUIRE(index.Update(1, signed_zero, 2));
+            REQUIRE(static_cast<bool>(snapshot() != before));
+        }
+        const float changed[]{0.25F, 0.0F};
+        const auto old = snapshot();
+        REQUIRE(index.Update(1, changed, 2));
+        REQUIRE(static_cast<bool>(snapshot() != old));
+        const auto found = index.Search(changed, 2, 1);
+        REQUIRE(found);
+        REQUIRE(found->front().id == 1);
+        REQUIRE(found->front().distance == 0.0F);
+    }
+}

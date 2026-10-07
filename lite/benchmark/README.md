@@ -1820,3 +1820,7 @@ Cohere full-ID routing diagnosis.
 See [Update outgoing-target repair](results/update-incoming-20261007/README.md)
 for a failing-then-passing FP32/FP16 regression, real phase trace and the remaining
 full-ID recall limitation.
+
+See [identical graph Update verification](results/noop-update-20261007/README.md)
+for snapshot preservation, validation boundaries and separate same-value versus
+actual-changed workload results.

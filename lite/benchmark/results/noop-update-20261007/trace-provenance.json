@@ -1,0 +1,12 @@
+{
+  "inherited_probe": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/phase_trace_final",
+  "probe_sha256": "697c2b65e6a60dd6fa921b17407685214e4e457fb19218c1db353aa145f0254c",
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "/home/ubuntu/project/vsag-lite-update-incoming-20261007/phase_trace_final",
+    "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot"
+  ],
+  "scope": "existing internal Backend trace, not public API quality/performance"
+}

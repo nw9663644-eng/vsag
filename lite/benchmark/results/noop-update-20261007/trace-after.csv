@@ -1,0 +1,2 @@
+cycle,id,phase,before_zero,after_zero,new_zero_id,old_outgoing_target
+no_new_zero_incoming

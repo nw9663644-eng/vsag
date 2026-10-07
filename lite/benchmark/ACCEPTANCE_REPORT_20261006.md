@@ -214,3 +214,21 @@ Slot-order restoration preserves all vectors/ID-based edges but changes none of
 100 hit counts. Only56.495% of original stored edges remain after restored-content
 churn. This supports investigating unnecessary Update rewiring and Remove/Add
 neighbor drift, not raising observed-query budgets or blaming slot order alone.
+
+## Identical stored-value Update, 2026-10-07
+
+[No-op graph Update](results/noop-update-20261007/README.md) validates inputs/IDs
+and FP16 range before comparing stored representation. Identical FP32 bytes or
+encoded FP16 bits preserve adjacency and snapshots; actual changes retain repair.
+Public FP32/FP16 regression56 assertions, default/diverse Release4/4 and3/3,
+ASan+UBSan6/6, emitted-source/internal-header coverage964/1067=90.35%, format/tidy15
+pass. Header and English/Chinese contracts are synchronized. BuildGraph remains
+a BruteForce-to-Graph conversion, not an in-place rebuild.
+
+Fixed Cohere10k same-value full-ID CRUD,12 fresh processes: whole-process CPU
+median6.27 to4.41 s (-29.67%), endpoint recall0.934 to0.940, still below0.95.
+Initial builds remain identical. A separate6-process changed/restore control
+(1000cycles,10%IDs,budget128) cannot take the identity shortcut and ends0.957
+in both versions; mutation CPU624.749 versus624.339 ms is essentially unchanged.
+Do not call this an all-Update speedup, final quality acceptance or new holdout.
+Remove/Add topology drift and public RaBitQ delivery remain open.

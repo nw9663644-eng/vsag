@@ -1,0 +1,122 @@
+[
+  {
+    "name": "before-r0",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/before-r0.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-noop-update-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-r0",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/after-r0.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "after-r1",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/after-r1.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "before-r1",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/before-r1.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-noop-update-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "before-r2",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/before-r2.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-noop-update-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-r2",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/changed/after-r2.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1",
+      "1000",
+      "10"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  }
+]

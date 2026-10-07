@@ -62,7 +62,9 @@ public:
     /** Insert one finite vector. Duplicate IDs fail without changing logical contents. */
     tl::expected<void, Error>
     Add(int64_t id, const float* vector, uint64_t dim);
-    /** Update an existing ID; a missing ID or invalid vector is an error. */
+    /** Update an existing ID; a missing ID or invalid vector is an error.
+     * Graph updates preserve topology when the validated stored representation is identical.
+     */
     tl::expected<void, Error>
     Update(int64_t id, const float* vector, uint64_t dim);
     /** Physically remove a record. Returns false for a missing ID; capacity is retained. */

@@ -59,6 +59,11 @@ Inputs must contain the specified number of finite float32 values. Calls must
 be externally serialized. Results own their memory; internal slots are not exposed.
 
 - Single-record Add rejects duplicate IDs; Update rejects absent IDs.
+- Graph Update returns without changing adjacency or snapshots when validated FP32 bytes
+  or encoded FP16 bits match the stored representation. FP16 range checks still run first;
+  FP32 positive and negative zero have distinct byte representations. Same-value Update is
+  not a graph repair request. BuildGraph only converts BruteForce to Graph; it does not
+  rebuild an index that is already a graph.
 - Remove returns false for absent IDs. A removed external ID can be inserted again.
 - Add failure leaves logical records unchanged, though reserved capacity may grow.
 - Search returns up to `min(k, Size())` entries sorted by squared-L2 then ascending ID.

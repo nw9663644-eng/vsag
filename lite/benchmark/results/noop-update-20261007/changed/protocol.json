@@ -1,0 +1,13 @@
+{
+  "source_parent": "b487ff8472df992af396dcd32054ea2ddc417b4e",
+  "cpu": 0,
+  "cycles": 1000,
+  "repeats": 3,
+  "query_every": 10,
+  "construction_maintenance_query": 128,
+  "changed_vectors": "+.125 first coordinate then restore; every coordinate change differs as FP32; no-op not applicable",
+  "snapshot": "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+  "snapshot_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+  "probe_sha256": "d058bb4bfa7b92fd039e2edd5c26b27cd30484381a8744a7af903e66fe2edabd",
+  "native_probes": "existing binary, current/old library explicit; own SaveLoad exact checks; cross-variant exact neighbors not exported"
+}
