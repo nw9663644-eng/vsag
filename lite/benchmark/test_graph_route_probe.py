@@ -60,6 +60,24 @@ def main():
                     result.crud = next(csv.DictReader(output))
                 with (root / f'{case}.csv.api.csv.crud.csv.samples.csv').open() as output:
                     assert len(list(csv.DictReader(output))) == crud_cycles
+                for kind, events in [('post', 1), ('mixed', crud_cycles // query_every if query_every else 0)]:
+                    evidence = root / f'{case}.csv.api.csv.crud.csv.{kind}.neighbors.csv'
+                    with evidence.open() as output:
+                        rows = list(csv.DictReader(output))
+                    assert len(rows) == events  # This fixture has one query and k=1.
+                    for event, row in enumerate(rows):
+                        assert int(row['event']) == event and int(row['query']) == 0
+                        assert int(row['cycle']) == ((event + 1) * query_every if kind == 'mixed' else crud_cycles)
+                        assert int(row['rank']) == 0 and int(row['id']) == 0
+                        assert float.fromhex(row['distance']) == 0
+                # Reject existing evidence before mutations; never truncate its contents.
+                marker = root / f'{case}.protected.csv.api.csv.crud.csv.post.neighbors.csv'
+                marker.write_text('keep\n')
+                protected = command.copy()
+                protected[3] = str(root / f'{case}.protected.csv')
+                rejected = subprocess.run(protected, capture_output=True, text=True)
+                assert rejected.returncode != 0 and 'evidence path already exists' in rejected.stderr
+                assert marker.read_text() == 'keep\n'
             return result
 
         def summary(result):

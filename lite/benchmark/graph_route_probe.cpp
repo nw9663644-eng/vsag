@@ -667,6 +667,73 @@ search(const GraphSnapshot& graph,
     return trace;
 }
 
+// Bounded exact oracle: integer coordinates are represented exactly in FP32/FP16.
+// The budget covers all nodes, so this checks mutation/persistence, not ANN recall.
+void
+test_persistent_update() {
+    constexpr uint64_t dim = 768;
+    constexpr uint64_t count = 24;
+    constexpr uint64_t k = 4;
+    for (const auto storage : {vsag::lite::VectorStorage::FP32, vsag::lite::VectorStorage::FP16}) {
+        auto created = vsag::lite::Index::Create(dim);
+        require(static_cast<bool>(created), "persistent fixture create failed");
+        auto& index = **created;
+        std::vector<std::vector<float>> vectors(count, std::vector<float>(dim, 0));
+        for (uint64_t i = 0; i < count; ++i) {
+            vectors[i][0] = static_cast<float>(i * 3);
+            vectors[i][767] = static_cast<float>(i % 5);
+            require(static_cast<bool>(
+                        index.Add(static_cast<int64_t>(100 + i * 7), vectors[i].data(), dim)),
+                    "persistent fixture add failed");
+        }
+        require(static_cast<bool>(index.BuildGraph(storage, 8, count)),
+                "persistent fixture build failed");
+        const auto check = [&](const vsag::lite::Index& target) {
+            for (const auto& query : vectors) {
+                std::vector<vsag::lite::Neighbor> expected;
+                for (uint64_t i = 0; i < count; ++i) {
+                    float distance = 0;
+                    for (uint64_t d = 0; d < dim; ++d) {
+                        const float difference = query[d] - vectors[i][d];
+                        distance += difference * difference;
+                    }
+                    expected.push_back({static_cast<int64_t>(100 + i * 7), distance});
+                }
+                std::sort(
+                    expected.begin(), expected.end(), [](const auto& left, const auto& right) {
+                        return left.distance < right.distance or
+                               (left.distance == right.distance and left.id < right.id);
+                    });
+                auto result = target.SearchWithOptions(query.data(), dim, k, {count});
+                require(static_cast<bool>(result) and result->size() == k,
+                        "persistent fixture search failed");
+                for (uint64_t rank = 0; rank < k; ++rank) {
+                    require((*result)[rank].id == expected[rank].id and
+                                (*result)[rank].distance == expected[rank].distance,
+                            "persistent fixture differs from exact oracle");
+                }
+            }
+        };
+        check(index);
+        // Change multiple vectors and keep the changed representation through Save/Load.
+        for (uint64_t i = 0; i < count; i += 3) {
+            vectors[i][0] = -static_cast<float>(i * 3 + 1);
+            vectors[i][767] += 8;
+            require(static_cast<bool>(
+                        index.Update(static_cast<int64_t>(100 + i * 7), vectors[i].data(), dim)),
+                    "persistent fixture update failed");
+        }
+        check(index);
+        std::stringstream saved(std::ios::in | std::ios::out | std::ios::binary);
+        require(static_cast<bool>(index.Save(saved)), "persistent fixture save failed");
+        saved.seekg(0);
+        auto loaded = vsag::lite::Index::Load(saved);
+        require(static_cast<bool>(loaded) and (*loaded)->Size() == count,
+                "persistent fixture load failed");
+        check(**loaded);
+    }
+}
+
 void
 measure_crud(vsag::lite::Index& index,
              const GraphSnapshot& graph,
@@ -679,6 +746,12 @@ measure_crud(vsag::lite::Index& index,
     using Clock = std::chrono::steady_clock;
     std::vector<std::vector<double>> times(4);
     std::vector<double> mixed_latencies;
+    std::vector<std::vector<vsag::lite::Neighbor>> mixed_results;
+    // Retain raw evidence outside individual operation/query timing.
+    // Whole-loop CPU now includes this diagnostic bookkeeping.
+    for (const auto& suffix : {".post.neighbors.csv", ".mixed.neighbors.csv"}) {
+        require(not std::filesystem::exists(path + suffix), "CRUD evidence path already exists");
+    }
     uint64_t mixed_hits = 0;
     double mutation_cpu_ms = 0;
     double query_cpu_ms = 0;
@@ -720,6 +793,7 @@ measure_crud(vsag::lite::Index& index,
             for (const auto& neighbor : *result) {
                 mixed_hits += expected.count(neighbor.id);
             }
+            mixed_results.push_back(std::move(*result));
         }
     }
     const double cpu_ms = 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
@@ -756,6 +830,22 @@ measure_crud(vsag::lite::Index& index,
                     "API post-CRUD reload changed result");
         }
     }
+    const auto write_neighbors = [&](const std::string& suffix, const auto& rows, bool mixed) {
+        std::ofstream evidence(path + suffix);
+        evidence << "event,cycle,query,rank,id,distance\n";
+        for (uint64_t event = 0; event < rows.size(); ++event) {
+            for (uint64_t rank = 0; rank < rows[event].size(); ++rank) {
+                const auto& neighbor = rows[event][rank];
+                evidence << event << ',' << (mixed ? (event + 1) * query_every : cycles) << ','
+                         << event % queries.size() << ',' << rank << ',' << neighbor.id << ','
+                         << std::hexfloat << neighbor.distance << '\n';
+            }
+        }
+        evidence.close();
+        require(static_cast<bool>(evidence), "CRUD neighbor evidence write failed");
+    };
+    write_neighbors(".post.neighbors.csv", results, false);
+    write_neighbors(".mixed.neighbors.csv", mixed_results, true);
     std::ofstream samples(path + ".samples.csv");
     samples << "cycle,update_changed_us,restore_us,remove_us,readd_us\n";
     for (uint64_t i = 0; i < cycles; ++i) {
@@ -1041,6 +1131,7 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
     try {
         if (argc == 2 and std::string(argv[1]) == "--self-test") {
             test_reverse_replacement();
+            test_persistent_update();
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
         }

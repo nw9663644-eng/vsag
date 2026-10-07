@@ -318,3 +318,7 @@ full100k churn, fresh build timing, persistent-update retrieval or new holdout. 
 42 processes pass exact final-query Save-Load checks; raw samples reconstruct timing
 medians, but post/mixed truth hits remain runner aggregates. No library/PR/default
 policy change, universal performance benefit or new sanitizer/coverage claim follows.
+
+## Native CRUD raw audit (2026-10-07)
+
+[Report](results/crud-raw-20261007/README.md): 6,600 native post/mixed query events independently recomputed from returned IDs and archived truth reproduce the preceding 100k results. FP32/FP16 persistent changed-vector query and Save/Load pass a bounded exhaustive oracle fixture. No library policy adoption, new performance gain, held-out query or concurrent-call claim; the quality/cost decision remains open.
