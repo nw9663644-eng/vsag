@@ -232,3 +232,16 @@ Initial builds remain identical. A separate6-process changed/restore control
 in both versions; mutation CPU624.749 versus624.339 ms is essentially unchanged.
 Do not call this an all-Update speedup, final quality acceptance or new holdout.
 Remove/Add topology drift and public RaBitQ delivery remain open.
+
+## Remove/Add attribution, 2026-10-07
+
+[Phase diagnostics](results/remove-add-trace-20261007/README.md) reproduce
+10,000 rolling-query events twice at the original Cohere10k budget128. Thirteen
+cycles change sampled hits: Remove has seven losses/one gain, Add two losses/seven
+gains. These are different sampled queries, so their signed sums do not explain
+the full0.960-to0.940 recall drop. Ten full-query checkpoints change survivor
+edges but no immediate hits. ID-based edges exclude the removed ID and avoid
+compaction artifacts; per-cycle queries exclude deleted truth. Both phases now
+have reproducible events for further routing controls, not a proven faulty
+statement or new retention policy. Release4/4, Release/ASan fixtures and
+format/tidy15 pass; no library source or budget changes and no new coverage claim.

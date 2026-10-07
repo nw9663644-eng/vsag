@@ -1,0 +1,42 @@
+[
+  {
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "lite/benchmark/graph_mutation_trace.cpp"
+    ],
+    "exit": 0,
+    "log": "check-0.log"
+  },
+  {
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_mutation_trace.py",
+      "build-lite-fragment-release/lite_graph_mutation_trace",
+      "build-lite-fragment-release/lite_graph_crud_quality"
+    ],
+    "exit": 0,
+    "log": "check-1.log"
+  },
+  {
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_mutation_trace.py",
+      "build-lite-baseline-asan/lite_graph_mutation_trace",
+      "build-lite-baseline-asan/lite_graph_crud_quality"
+    ],
+    "exit": 0,
+    "log": "check-2.log"
+  },
+  {
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fragment-release",
+      "--output-on-failure"
+    ],
+    "exit": 0,
+    "log": "check-3.log"
+  }
+]

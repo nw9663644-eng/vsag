@@ -1,0 +1,37 @@
+{
+  "parent": "f98da57f5f3804daf2eb628644c15eb5dfb2f1c9",
+  "files": {
+    "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_mutation_trace": "3fe282b2521981bd314053c200e0cadd78513947c8be68e44f615178d42147ce",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/libvsag-lite.so": "c0c8a6f535355194cb0ac726aac661189c4cede3048504cf30a888774e045d38",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_mutation_trace.cpp": "f54008d8d6499b0fe7538ee1a56485206bf9d8fb4faa934eeafe0effd093bad6",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+  },
+  "runs": [
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_mutation_trace",
+        "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+        "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+        "/home/ubuntu/project/vsag-lite-remove-add-trace-20261007/events-r2.csv"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_mutation_trace",
+        "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+        "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+        "/home/ubuntu/project/vsag-lite-remove-add-trace-20261007/events-r3.csv"
+      ],
+      "exit": 0
+    }
+  ]
+}

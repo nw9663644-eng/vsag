@@ -1824,3 +1824,8 @@ full-ID recall limitation.
 See [identical graph Update verification](results/noop-update-20261007/README.md)
 for snapshot preservation, validation boundaries and separate same-value versus
 actual-changed workload results.
+
+See [Remove/Add phase diagnostics](results/remove-add-trace-20261007/README.md)
+for the optional `lite_graph_mutation_trace` tool, reproducible mutation events,
+truth exclusion and external-ID edge statistics. This diagnoses the remaining
+full-ID churn quality drop; it is not a performance improvement or new acceptance.

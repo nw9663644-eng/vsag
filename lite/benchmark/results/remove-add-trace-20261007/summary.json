@@ -1,0 +1,16 @@
+{
+  "rows": 10000,
+  "changed_rows": 13,
+  "distribution": {
+    "remove": {
+      "-1": 7,
+      "1": 1
+    },
+    "add": {
+      "1": 7,
+      "-1": 2
+    }
+  },
+  "sampled_remove_delta": -6,
+  "sampled_add_delta": 5
+}

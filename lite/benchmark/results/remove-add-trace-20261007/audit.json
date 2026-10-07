@@ -1,0 +1,28 @@
+{
+  "summary": {
+    "rows": 10000,
+    "changed_rows": 13,
+    "distribution": {
+      "remove": {
+        "-1": 7,
+        "1": 1
+      },
+      "add": {
+        "1": 7,
+        "-1": 2
+      }
+    },
+    "sampled_remove_delta": -6,
+    "sampled_add_delta": 5
+  },
+  "host_files_rehashed": {
+    "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot": true,
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_mutation_trace": true,
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/libvsag-lite.so": true,
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_mutation_trace.cpp": true,
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs": true,
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs": true
+  },
+  "truth_exclusion_rechecked": true,
+  "manifest_files": 42
+}

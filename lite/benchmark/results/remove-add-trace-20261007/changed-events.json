@@ -1,0 +1,145 @@
+[
+  {
+    "cycle": 1099,
+    "id": 1909,
+    "query": 99,
+    "k": 10,
+    "before_hits": 9,
+    "remove_hits": 8,
+    "add_hits": 8,
+    "remove_delta": -1,
+    "add_delta": 0
+  },
+  {
+    "cycle": 1399,
+    "id": 9209,
+    "query": 99,
+    "k": 10,
+    "before_hits": 8,
+    "remove_hits": 8,
+    "add_hits": 9,
+    "remove_delta": 0,
+    "add_delta": 1
+  },
+  {
+    "cycle": 2048,
+    "id": 5168,
+    "query": 48,
+    "k": 10,
+    "before_hits": 9,
+    "remove_hits": 9,
+    "add_hits": 10,
+    "remove_delta": 0,
+    "add_delta": 1
+  },
+  {
+    "cycle": 2088,
+    "id": 2808,
+    "query": 88,
+    "k": 10,
+    "before_hits": 10,
+    "remove_hits": 9,
+    "add_hits": 9,
+    "remove_delta": -1,
+    "add_delta": 0
+  },
+  {
+    "cycle": 2148,
+    "id": 4268,
+    "query": 48,
+    "k": 10,
+    "before_hits": 10,
+    "remove_hits": 9,
+    "add_hits": 10,
+    "remove_delta": -1,
+    "add_delta": 1
+  },
+  {
+    "cycle": 2509,
+    "id": 1219,
+    "query": 9,
+    "k": 10,
+    "before_hits": 10,
+    "remove_hits": 9,
+    "add_hits": 9,
+    "remove_delta": -1,
+    "add_delta": 0
+  },
+  {
+    "cycle": 3000,
+    "id": 3000,
+    "query": 0,
+    "k": 10,
+    "before_hits": 7,
+    "remove_hits": 7,
+    "add_hits": 6,
+    "remove_delta": 0,
+    "add_delta": -1
+  },
+  {
+    "cycle": 4477,
+    "id": 1107,
+    "query": 77,
+    "k": 10,
+    "before_hits": 10,
+    "remove_hits": 9,
+    "add_hits": 10,
+    "remove_delta": -1,
+    "add_delta": 1
+  },
+  {
+    "cycle": 4577,
+    "id": 207,
+    "query": 77,
+    "k": 10,
+    "before_hits": 10,
+    "remove_hits": 9,
+    "add_hits": 10,
+    "remove_delta": -1,
+    "add_delta": 1
+  },
+  {
+    "cycle": 5908,
+    "id": 2428,
+    "query": 8,
+    "k": 10,
+    "before_hits": 9,
+    "remove_hits": 8,
+    "add_hits": 9,
+    "remove_delta": -1,
+    "add_delta": 1
+  },
+  {
+    "cycle": 6977,
+    "id": 8607,
+    "query": 77,
+    "k": 10,
+    "before_hits": 9,
+    "remove_hits": 10,
+    "add_hits": 10,
+    "remove_delta": 1,
+    "add_delta": 0
+  },
+  {
+    "cycle": 7112,
+    "id": 4392,
+    "query": 12,
+    "k": 10,
+    "before_hits": 8,
+    "remove_hits": 8,
+    "add_hits": 7,
+    "remove_delta": 0,
+    "add_delta": -1
+  },
+  {
+    "cycle": 7908,
+    "id": 4428,
+    "query": 8,
+    "k": 10,
+    "before_hits": 8,
+    "remove_hits": 8,
+    "add_hits": 9,
+    "remove_delta": 0,
+    "add_delta": 1
+  }
+]
