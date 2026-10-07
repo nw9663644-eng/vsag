@@ -1,0 +1,4 @@
+Consolidate compiler generated dependencies of target full_load_memory
+[ 50%] Building CXX object CMakeFiles/full_load_memory.dir/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp.o
+[100%] Linking CXX executable full_load_memory
+[100%] Built target full_load_memory

@@ -1,0 +1,53 @@
+{
+  "source_parent": "70a5d986dd03016f3c4df5bd2c6d105ff0133750",
+  "new_helper_sha256": "90a10e6084f9e8f6e092e0279aa5845c4fec0047feb6696a6ee168b74a31570b",
+  "cpu": 0,
+  "replicates": 7,
+  "order": "cyclic rotate full/full_reverse/default/diverse each replicate",
+  "phase": "load only; no base/query matrices, no search/build/save, input stream closed then malloc_trim",
+  "cache": "read each input once before runs; no eviction control, warm attempted",
+  "dimension": 768,
+  "count": 100000,
+  "full_library_source": "d18c82a1f1f23ff84362516e86af5f3cb2e34475",
+  "snapshot_quality": "initial pre-CRUD snapshots; Full compressed/reverse .952/Lite default .958/diverse .961333; different recall/topology",
+  "configs": {
+    "full": {
+      "binary": "build-full-known-runner/full_load_memory",
+      "binary_sha256": "0d7951d01fc4dbb35db7f29a6acb532c4f77a75ae99fc47c6b3afa72375877ea",
+      "snapshot": "/home/ubuntu/project/vsag-lite-full-cohere-20261006/full-rep0.snapshot",
+      "snapshot_sha256": "72793a6c9c23bb7aab86823b68e6d62643710d64b4a8de107189c9260f5dff97"
+    },
+    "default": {
+      "binary": "build-lite-fragment-release/lite_load_memory",
+      "binary_sha256": "c4c3827652be29675846ed10a520b07e33ba5d9b309b7a8556507f6ef8d1bdbd",
+      "snapshot": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-default.snapshot",
+      "snapshot_sha256": "4124feb3d7e82f2ab52caadfb8cfc2bb63fca34acb29684f6c38ad83291579ce"
+    },
+    "diverse": {
+      "binary": "build-lite-online-diverse-release/lite_load_memory",
+      "binary_sha256": "1f5f6ade2b49b9568913681f6105580eeb744bb08a357181b380e73ee8197959",
+      "snapshot": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-diverse.snapshot",
+      "snapshot_sha256": "db6e6a9e269359513ffff1692c185d5921d922d8d4eb1ae779a3e7364e044c63"
+    },
+    "full_reverse": {
+      "binary": "build-full-known-runner/full_load_memory",
+      "binary_sha256": "0d7951d01fc4dbb35db7f29a6acb532c4f77a75ae99fc47c6b3afa72375877ea",
+      "snapshot": "/home/ubuntu/project/vsag-lite-full-reverse-20261006/full-every1-r0.snapshot",
+      "snapshot_sha256": "e2a8274da3942dab9566f1a18bd88425cfad0bc270edff4caee8c804138d1c00"
+    }
+  },
+  "full_profiles": {
+    "full": {
+      "graph_storage_type": "compressed",
+      "use_reverse_edges": false,
+      "support_force_remove": false
+    },
+    "full_reverse": {
+      "graph_storage_type": "flat",
+      "use_reverse_edges": true,
+      "support_force_remove": true
+    }
+  },
+  "measurement_date": "2026-10-07",
+  "original_output_directory": "/home/ubuntu/project/vsag-lite-load-reverse-20261006"
+}

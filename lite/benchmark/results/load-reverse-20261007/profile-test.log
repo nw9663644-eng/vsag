@@ -1,0 +1,2 @@
+Full/Lite load, positive memory metrics, count mismatch, invalid CLI and corrupt/missing snapshot checks passed.
+Optional Full reverse-edge profile, mismatch and invalid profile checks passed.

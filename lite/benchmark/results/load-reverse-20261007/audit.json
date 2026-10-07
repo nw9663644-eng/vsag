@@ -1,0 +1,90 @@
+{
+  "full": {
+    "load_ms": {
+      "median": 182.189761,
+      "min": 181.243436,
+      "max": 183.694488
+    },
+    "loaded_rss_kib": {
+      "median": 445008.0,
+      "min": 444976.0,
+      "max": 445132.0
+    },
+    "process_peak_rss_kib": {
+      "median": 575968.0,
+      "min": 575932.0,
+      "max": 576092.0
+    },
+    "snapshot_bytes": {
+      "median": 313616358.0,
+      "min": 313616358.0,
+      "max": 313616358.0
+    }
+  },
+  "full_reverse": {
+    "load_ms": {
+      "median": 145.93062,
+      "min": 143.819783,
+      "max": 148.009809
+    },
+    "loaded_rss_kib": {
+      "median": 568320.0,
+      "min": 568156.0,
+      "max": 568372.0
+    },
+    "process_peak_rss_kib": {
+      "median": 699304.0,
+      "min": 699148.0,
+      "max": 699360.0
+    },
+    "snapshot_bytes": {
+      "median": 316237502.0,
+      "min": 316237502.0,
+      "max": 316237502.0
+    }
+  },
+  "default": {
+    "load_ms": {
+      "median": 137.407182,
+      "min": 136.434668,
+      "max": 139.683547
+    },
+    "loaded_rss_kib": {
+      "median": 341196.0,
+      "min": 341060.0,
+      "max": 341324.0
+    },
+    "process_peak_rss_kib": {
+      "median": 341844.0,
+      "min": 341712.0,
+      "max": 341976.0
+    },
+    "snapshot_bytes": {
+      "median": 321600064.0,
+      "min": 321600064.0,
+      "max": 321600064.0
+    }
+  },
+  "diverse": {
+    "load_ms": {
+      "median": 128.712466,
+      "min": 128.039356,
+      "max": 129.979226
+    },
+    "loaded_rss_kib": {
+      "median": 331892.0,
+      "min": 331720.0,
+      "max": 331972.0
+    },
+    "process_peak_rss_kib": {
+      "median": 332624.0,
+      "min": 332452.0,
+      "max": 332696.0
+    },
+    "snapshot_bytes": {
+      "median": 317024600.0,
+      "min": 317024600.0,
+      "max": 317024600.0
+    }
+  }
+}

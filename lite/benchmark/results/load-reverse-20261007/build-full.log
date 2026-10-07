@@ -1,0 +1,16 @@
+Consolidate compiler generated dependencies of target full_load_memory
+[ 50%] Building CXX object CMakeFiles/full_load_memory.dir/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp.o
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp: In function ‘int {anonymous}::run(const string&, uint64_t, uint64_t, bool)’:
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp:68:68: error: expression cannot be used as a function
+   68 |         R"(,"index_param":{"max_degree":16,"ef_construction":128,)"(
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+   69 |             force_remove ? R"("graph_storage_type":"flat","support_force_remove":true,)"
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   70 |                            R"("use_reverse_edges":true,)"
+      |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   71 |                          : R"("graph_storage_type":"compressed",)") +
+      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+gmake[3]: *** [CMakeFiles/full_load_memory.dir/build.make:76: CMakeFiles/full_load_memory.dir/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/load_memory.cpp.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:169: CMakeFiles/full_load_memory.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:176: CMakeFiles/full_load_memory.dir/rule] Error 2
+gmake: *** [Makefile:173: full_load_memory] Error 2

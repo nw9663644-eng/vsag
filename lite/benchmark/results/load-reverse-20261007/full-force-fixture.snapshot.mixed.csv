@@ -1,0 +1,2 @@
+query_event,query,latency_us,hits,returned_count
+0,0,59.439000,1,1

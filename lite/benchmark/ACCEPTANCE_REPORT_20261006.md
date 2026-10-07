@@ -115,14 +115,19 @@ Default loaded RSS is 23.38% lower and warm load 25.26% faster for these profile
 Lite snapshots here are larger than Full. Loader retains no base/query/build
 arrays. Full empty creation is outside timing; Lite static Load includes creation;
 peaks cover startup/load. These are not reverse-ON Full memory measurements.
-Reverse adjacency needs its own load-only experiment before claiming that ratio.
+The [2026-10-07 load-only follow-up](results/load-reverse-20261007/README.md) now
+measures the corrected Full profile: median loaded RSS 568320 KiB versus default
+Lite 341196 KiB (-39.96%), warm load 145.931 versus 137.407 ms (-5.84%). These are
+initial pre-CRUD snapshots, common quality floor with different recall, not cold
+start or exactly equal-quality performance. The earlier table remains historical.
 
 ## Adoption and next gates
 
 1. Keep default online policy unchanged. Diversity remains experimental opt-in:
    SIFT 1:40 regresses, and GIST mixed timing has only one process per mode.
-2. Measure corrected reverse-ON Full load-only memory with the existing common
-   loader and rotated fresh processes; do not reuse compressed-profile memory.
+2. Corrected reverse-ON Full load-only comparison is now recorded in the linked
+   2026-10-07 follow-up. Keep lifecycle/profile boundaries explicit; prioritize
+   build and maintenance profiling rather than more load-only repetitions.
 3. Confirm the mentor's RaBitQ public deliverable, then design the minimal backend
    from existing codec/source evidence. Gate training ownership, filters, serial
    CRUD, slot compaction, snapshot validation/versioning, SIMD fallback and accuracy

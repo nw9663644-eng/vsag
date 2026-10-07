@@ -1,0 +1,12 @@
+{
+  "source_parent": "70a5d986dd03016f3c4df5bd2c6d105ff0133750",
+  "shared_library": "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so.0.0.0",
+  "shared_sha256": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72",
+  "source_sha256": {
+    "lite/benchmark/load_memory.cpp": "90a10e6084f9e8f6e092e0279aa5845c4fec0047feb6696a6ee168b74a31570b",
+    "lite/benchmark/test_load_memory.py": "5cef9096123b4158af8c4a8824a4b79c2f8fd32e62b2d1ca85d629069dcbc707",
+    "src/algorithm/hgraph/hgraph_serialize.cpp": "2ea94732a3a31085988bbe32db89c27629d1037cfe90d3129348df7481f93930",
+    "src/datacell/graph_datacell.h": "3b56f5799edc02ecebe093b114d5b23f6169bdc252340a341a1fbe7b951aa23b"
+  },
+  "note": "Full shared source d18c82a cached incremental build; no library rebuild; snapshots are initial pre-CRUD files"
+}

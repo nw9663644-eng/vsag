@@ -55,7 +55,7 @@ rss() {
     throw std::runtime_error("VmRSS unavailable");
 }
 int
-run(const std::string& snapshot, uint64_t dim, uint64_t count) {
+run(const std::string& snapshot, uint64_t dim, uint64_t count, bool force_remove) {
     require(dim <= static_cast<uint64_t>(std::numeric_limits<int32_t>::max()) and
                 count <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()),
             "dimensions or count out of range");
@@ -63,11 +63,14 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count) {
     malloc_trim(0);
     const auto before_create = rss();
 #ifdef VSAG_BENCH_FULL
-    const auto parameters = std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") +
-                            std::to_string(dim) +
-                            R"(,"index_param":{"max_degree":16,"ef_construction":128,)"
-                            R"("graph_storage_type":"compressed","base_quantization_type":"fp32",)"
-                            R"("store_raw_vector":true}})";
+    const auto parameters =
+        std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") + std::to_string(dim) +
+        R"(,"index_param":{"max_degree":16,"ef_construction":128,)" +
+        (force_remove ? R"("graph_storage_type":"flat","support_force_remove":true,)"
+                        R"("use_reverse_edges":true,)"
+                      : R"("graph_storage_type":"compressed",)") +
+        R"("base_quantization_type":"fp32",)"
+        R"("store_raw_vector":true}})";
     auto created = vsag::Factory::CreateIndex("hgraph", parameters);
     require(static_cast<bool>(created), "Full index create failed");
     auto index = *created;
@@ -81,6 +84,7 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count) {
 #ifdef VSAG_BENCH_FULL
         require(static_cast<bool>(index->Deserialize(input)), "Full load failed");
 #else
+        require(not force_remove, "force-remove profile is only available for Full");
         auto loaded = vsag::lite::Index::Load(input);
         require(static_cast<bool>(loaded), "Lite load failed");
         auto index = std::move(*loaded);
@@ -110,8 +114,11 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count) {
 int
 main(int argc, char** argv) {
     try {
-        require(argc == 4, "usage: load_memory SNAPSHOT DIM COUNT");
-        return run(argv[1], number(argv[2]), number(argv[3]));
+        require(argc == 4 or argc == 5,
+                "usage: load_memory SNAPSHOT DIM COUNT [compressed|force-remove]");
+        const std::string profile = argc == 5 ? argv[4] : "compressed";
+        require(profile == "compressed" or profile == "force-remove", "invalid load profile");
+        return run(argv[1], number(argv[2]), number(argv[3]), profile == "force-remove");
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

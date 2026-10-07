@@ -1797,3 +1797,10 @@ Run `test_load_memory.py FULL_BINARY LITE_BINARY FIXTURE_DIRECTORY` against
 `full-fixture.snapshot` and `lite-fixture.snapshot` made by the existing builders.
 The [Cohere load-only comparison](results/load-memory-20261006/README.md) contains
 seven runs per mode, fixture checks, source hashes and measurement limitations.
+
+## Loading the physical-delete Full profile
+
+`full_load_memory SNAPSHOT DIM COUNT force-remove` uses flat storage and reverse edges.
+The default (or explicit `compressed`) profile keeps existing behavior. Lite rejects
+the Full-only profile. See [the corrected load-only comparison](results/load-reverse-20261007/README.md)
+for lifecycle, source provenance and the limits of the memory comparison.
