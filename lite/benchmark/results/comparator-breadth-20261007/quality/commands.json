@@ -1,0 +1,74 @@
+[
+  {
+    "name": "default-build",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-comparator-final-20261007/default-build-new-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-comparator-breadth-20261007/quality/default-build.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0,
+    "snapshot_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38"
+  },
+  {
+    "name": "default-crud",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-comparator-final-20261007/default-crud-new-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-comparator-breadth-20261007/quality/default-crud.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0,
+    "snapshot_sha256": "30f72427989e511c55539337a8b67bf0b9f97ced2d5b0765fbbb6b818572f281"
+  },
+  {
+    "name": "diverse-build",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-comparator-final-20261007/diverse-build-new-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-comparator-breadth-20261007/quality/diverse-build.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0,
+    "snapshot_sha256": "2270b193c7325096e641c125e6d2d0e069ea15bf105950f5e8d3cfe05129e2df"
+  },
+  {
+    "name": "diverse-crud",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-comparator-final-20261007/diverse-crud-new-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-comparator-breadth-20261007/quality/diverse-crud.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0,
+    "snapshot_sha256": "a0e3c7af43c467aafeac3da5d223514708d488950135a719bf39b855c7674ca8"
+  }
+]

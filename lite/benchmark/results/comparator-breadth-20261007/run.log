@@ -1,0 +1,25 @@
+sift100k-build-old-r0 22.93 0.956000
+sift100k-build-new-r0 19.74 0.956000
+sift100k-crud-old-r0 23.15 0.956000
+sift100k-crud-new-r0 19.73 0.956000
+gist10k-build-old-r0 2.1599999999999997 0.916000
+gist10k-build-new-r0 1.98 0.916000
+gist10k-crud-old-r0 3.0300000000000002 0.907000
+gist10k-crud-new-r0 2.53 0.907000
+gist10k-crud-new-r1 2.5500000000000003 0.907000
+gist10k-crud-old-r1 2.96 0.907000
+gist10k-build-new-r1 2.25 0.916000
+gist10k-build-old-r1 2.43 0.916000
+sift100k-crud-new-r1 22.68 0.956000
+sift100k-crud-old-r1 24.06 0.956000
+sift100k-build-new-r1 19.14 0.956000
+sift100k-build-old-r1 23.29 0.956000
+sift100k-build-old-r2 22.959999999999997 0.956000
+sift100k-build-new-r2 19.5 0.956000
+sift100k-crud-old-r2 24.25 0.956000
+sift100k-crud-new-r2 19.72 0.956000
+gist10k-build-old-r2 2.4 0.916000
+gist10k-build-new-r2 2.27 0.916000
+gist10k-crud-old-r2 2.76 0.907000
+gist10k-crud-new-r2 2.74 0.907000
+Completed24 runs/12 exact pairs

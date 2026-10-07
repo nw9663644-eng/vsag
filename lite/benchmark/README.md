@@ -1812,3 +1812,7 @@ See [typed comparator verification](results/comparator-20261007/README.md)
 for exact old/new result and snapshot checks and fixed-budget CPU comparisons.
 Optional `lite_graph_crud_quality` query output also creates an ordered ID/hexfloat
 distance `.neighbors.csv` sidecar; the existing hit CSV schema remains unchanged.
+
+See [SIFT100k/GIST10k comparator follow-up](results/comparator-breadth-20261007/README.md)
+for fixed-budget cross-scale equivalence, whole-process CPU results and the
+Cohere full-ID routing diagnosis.

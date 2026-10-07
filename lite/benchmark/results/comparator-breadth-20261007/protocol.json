@@ -1,0 +1,46 @@
+{
+  "source_parent": "d806f14825eb35942655d1732c0f6cf5969302b2",
+  "cpu": 0,
+  "replicates": 3,
+  "policy": "default OFF only",
+  "graph_degree": 16,
+  "construction_query_budget": 128,
+  "flows": {
+    "build": {
+      "rounds": 0,
+      "ops": 1
+    },
+    "crud": {
+      "rounds": 1,
+      "ops": 1000
+    }
+  },
+  "cases": {
+    "sift100k": {
+      "directory": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000",
+      "input_sha256": {
+        "base.fvecs": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba",
+        "groundtruth.ivecs": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54",
+        "queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+        "manifest.json": "c96edb654e75e76023cbd9052bb6570f7df9bda592f08b6c995fdc23b5d284a3"
+      }
+    },
+    "gist10k": {
+      "directory": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "input_sha256": {
+        "base.fvecs": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444",
+        "groundtruth.ivecs": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038",
+        "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+        "manifest.json": "73ad11bbac90d7f9b18d771b5d9c7a64947e6be276d11dd7285b41886476a51a"
+      }
+    }
+  },
+  "binary_sha256": "42470223f10a2479ed71227938b5a9e203f957f447ee5b8eaa38b03ec0aa1b86",
+  "library_sha256": {
+    "old": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f",
+    "new": "d9c5373b109e8573493d333365f033c1826524c23ae171df97b173a82d7f6f82"
+  },
+  "snapshot_retention": "new per-pair temporary snapshots streamed byte-compared and hashed, then removed after success only; existing inputs/history untouched",
+  "timing": "whole process /usr/bin/time user+system, no profiler, builds/tests not running; not isolated CRUD",
+  "quality": "same observed diagnostic queries, fixed128, exact equivalence only; no new recall acceptance gate or retuning"
+}

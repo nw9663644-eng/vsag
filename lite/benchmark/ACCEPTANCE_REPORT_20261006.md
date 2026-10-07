@@ -173,3 +173,24 @@ Release default4/4, diversity3/3, ASan+UBSan6/6; fresh Lite emitted-source/inter
 header coverage957/1060=90.28%, format/tidy15 pass. Core dispatch change is
 semantics-preserving on these checks, while default full-ID churn recall remains
 0.933. Quality diagnosis and100k/other-distribution verification remain open.
+
+## Breadth and routing follow-up, 2026-10-07
+
+[Cross-scale follow-up](results/comparator-breadth-20261007/README.md) adds
+SIFT100k/128dim and GIST10k/960dim default-policy old/new comparisons, 24 runs
+at fixed degree16/budget128, three processes per case/flow/variant. Whole-process
+CPU medians: SIFT build22.96 to19.50 s (-15.07%), build plus1000 CRUD cycles
+24.06 to19.73 (-18.00%); GIST build2.40 to2.25 (-6.25%), build plus CRUD
+2.96 to2.55 (-13.85%). All12 old/new snapshot pairs streamed byte-equal before
+cleaning only generated temporary snapshots; ordered ID/hex-distance outputs
+and recall remain identical. SIFT recall0.956, GIST0.916 before/0.907 after
+these small-fraction cycles; this is not full-ID churn, exact equal-quality Full
+comparison or an isolated mutation/query speedup. No new implementation change.
+
+On existing Cohere10k full-ID snapshots, scalar per-query hits match all400
+native historical rows and current native aggregate recall. All missed truth
+IDs are unvisited (visited-not-returned0). Default misses40 to67, stored-edge
+reach9672 to9068 and zero-in nodes0 to6, while weak component remains one and
+reverse reach10000. Stored-edge reach excludes the actual search implicit ring.
+This supports investigating traversal, saturated pruning and slot compaction;
+it does not identify a unique cause or fix the0.933 default quality limit.

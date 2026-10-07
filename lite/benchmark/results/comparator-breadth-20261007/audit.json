@@ -1,0 +1,42 @@
+[
+  {
+    "case": "sift100k",
+    "flow": "build",
+    "cpu_seconds": {
+      "old": 22.959999999999997,
+      "new": 19.5
+    },
+    "change_percent": -15.069686411149819,
+    "recall": "0.956000"
+  },
+  {
+    "case": "sift100k",
+    "flow": "crud",
+    "cpu_seconds": {
+      "old": 24.06,
+      "new": 19.73
+    },
+    "change_percent": -17.996674979218618,
+    "recall": "0.956000"
+  },
+  {
+    "case": "gist10k",
+    "flow": "build",
+    "cpu_seconds": {
+      "old": 2.4,
+      "new": 2.25
+    },
+    "change_percent": -6.25,
+    "recall": "0.916000"
+  },
+  {
+    "case": "gist10k",
+    "flow": "crud",
+    "cpu_seconds": {
+      "old": 2.96,
+      "new": 2.5500000000000003
+    },
+    "change_percent": -13.851351351351337,
+    "recall": "0.907000"
+  }
+]
