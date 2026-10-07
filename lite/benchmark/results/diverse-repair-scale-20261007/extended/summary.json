@@ -1,0 +1,116 @@
+[
+  {
+    "dataset": "sift",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.948,
+      "mixed_recall_at_k": 0.9521,
+      "crud_loop_cpu_ms": 5921.464,
+      "mixed_query_cpu_ms": 258.043,
+      "mixed_loop_cpu_ms": 6186.672,
+      "update_changed_p50_us": 287.522,
+      "restore_p50_us": 156.036,
+      "remove_p50_us": 8.149,
+      "readd_p50_us": 142.297,
+      "mixed_search_p50_us": 260.875,
+      "mixed_search_p99_us": 370.831
+    }
+  },
+  {
+    "dataset": "sift",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.95,
+      "mixed_recall_at_k": 0.9529,
+      "crud_loop_cpu_ms": 6010.654,
+      "mixed_query_cpu_ms": 257.518,
+      "mixed_loop_cpu_ms": 6275.048,
+      "update_changed_p50_us": 293.563,
+      "restore_p50_us": 156.567,
+      "remove_p50_us": 11.419,
+      "readd_p50_us": 141.226,
+      "mixed_search_p50_us": 259.464,
+      "mixed_search_p99_us": 371.321
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.723,
+      "mixed_recall_at_k": 0.7293,
+      "crud_loop_cpu_ms": 11562.919,
+      "mixed_query_cpu_ms": 516.695,
+      "mixed_loop_cpu_ms": 12082.341,
+      "update_changed_p50_us": 584.985,
+      "restore_p50_us": 306.323,
+      "remove_p50_us": 9.979,
+      "readd_p50_us": 252.175,
+      "mixed_search_p50_us": 519.068,
+      "mixed_search_p99_us": 706.904
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.726,
+      "mixed_recall_at_k": 0.7312,
+      "crud_loop_cpu_ms": 12024.328,
+      "mixed_query_cpu_ms": 524.471,
+      "mixed_loop_cpu_ms": 12557.855,
+      "update_changed_p50_us": 600.915,
+      "restore_p50_us": 315.031,
+      "remove_p50_us": 13.51,
+      "readd_p50_us": 256.194,
+      "mixed_search_p50_us": 525.317,
+      "mixed_search_p99_us": 724.582
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.897,
+      "mixed_recall_at_k": 0.8924,
+      "crud_loop_cpu_ms": 10391.814,
+      "mixed_query_cpu_ms": 468.221,
+      "mixed_loop_cpu_ms": 10867.51,
+      "update_changed_p50_us": 521.538,
+      "restore_p50_us": 262.993,
+      "remove_p50_us": 10.349,
+      "readd_p50_us": 227.154,
+      "mixed_search_p50_us": 472.33,
+      "mixed_search_p99_us": 684.574
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.9,
+      "mixed_recall_at_k": 0.8937,
+      "crud_loop_cpu_ms": 10717.489,
+      "mixed_query_cpu_ms": 473.377,
+      "mixed_loop_cpu_ms": 11200.008,
+      "update_changed_p50_us": 533.407,
+      "restore_p50_us": 268.774,
+      "remove_p50_us": 14.86,
+      "readd_p50_us": 230.645,
+      "mixed_search_p50_us": 477.598,
+      "mixed_search_p99_us": 685.414
+    }
+  }
+]

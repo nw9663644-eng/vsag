@@ -1858,3 +1858,11 @@ The [bounded refill experiment](results/diverse-repair-20261007/README.md) impro
 10k full-churn recall, including independently reserved Cohere queries, but is
 not adopted. Its patch is archived; production source remains unchanged. Larger
 scale and mixed-workload cost checks remain necessary.
+
+## 100k changed-update/mixed validation (2026-10-07)
+
+The [scale report](results/diverse-repair-scale-20261007/README.md) reuses the same
+repair candidate and archived initial graphs. Small recall gains after10,000 cycles
+come with mutation CPU increases; default adoption remains unsupported. Raw timing
+samples and aggregate/round-trip checks are archived, with explicit limits on
+per-query post/mixed truth evidence.

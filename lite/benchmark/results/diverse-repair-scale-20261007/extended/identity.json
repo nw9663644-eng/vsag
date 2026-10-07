@@ -1,0 +1,27 @@
+{
+  "parent": "684564a3bbdd646c1aba34da99d740e253cc1a07",
+  "files": {
+    "/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005/sift-100k-initial.snapshot": "ebb1a3554e0a4abcdbf788cad1bfb8a03503246e5c75c7775a628234bbcdf0e7",
+    "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/base.fvecs": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba",
+    "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+    "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54",
+    "/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005/gist-100k-initial.snapshot": "92e5fe645fa704d3e659f6995228c150c897b933456344707b412b41f42eae9c",
+    "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+    "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+    "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-default.snapshot": "4124feb3d7e82f2ab52caadfb8cfc2bb63fca34acb29684f6c38ad83291579ce",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/base.fvecs": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs": "258d70c586da932a1e55e1587ea3509087e8b8510c723d31538634e9a534160e",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/AGENTS.md": "c79d4d2fc7a397283ee11b55be7e26ac8e49b6e13fac6e5449d841b9349c44fd",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/docs/agents/coding-standards.md": "5095cc1e1608c543aebc7dbd4baf0dacc86a0e0ac72a1b65dfe06b821ab11959",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/docs/agents/build-and-test.md": "eae2c520d5f9298ed2714b6abb70c71dc34236d93d84a5e20d5d967d754184f9",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/docs/agents/contribution-workflow.md": "487a98884a03614f58fba7e49d380693675c5a1d6edc1e4bb7510c67b20b0555",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp": "9fdc572ca943fdc82a2537b14ce072f16a0d209702fda266d494eb39e880e543",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe": "0fd6440ef1da73bea11deec689f732bcb30f21d753485defc9e681c613445717"
+  },
+  "libraries": {
+    "baseline": "c0c8a6f535355194cb0ac726aac661189c4cede3048504cf30a888774e045d38",
+    "candidate": "90a639108b2aee88094cb320a5ba9c5824e5534a51292b1c483e347d296a9b13"
+  }
+}

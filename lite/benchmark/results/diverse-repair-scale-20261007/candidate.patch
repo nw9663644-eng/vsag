@@ -1,0 +1,96 @@
+diff --git a/src/lite/graph_backend.cpp b/src/lite/graph_backend.cpp
+index 9ef67ef..d3a1292 100644
+--- a/src/lite/graph_backend.cpp
++++ b/src/lite/graph_backend.cpp
+@@ -665,8 +665,38 @@ private:
+             const uint64_t needed = max_degree_ - repaired.size();
+             const uint64_t retained = std::min(needed, ranked.size());
+             repaired.reserve(repaired.size() + retained);
+-            for (uint64_t i = 0; i < retained; ++i) {
+-                repaired.push_back(ranked[i].slot);
++#if defined(VSAG_LITE_EXPERIMENT_DIVERSE_REPAIR)
++            if (not fp16_) {
++                // Prefer directions not covered by retained links, following Full's
++                // alpha=1 pairwise predicate. Preserve old links and refill rejected
++                // candidates by distance if needed to keep the original degree.
++                for (const auto& candidate : ranked) {
++                    const bool occluded =
++                        std::any_of(repaired.begin(), repaired.end(), [&](uint64_t selected) {
++                            return distance(selected, candidate.slot) < candidate.distance;
++                        });
++                    if (not occluded) {
++                        repaired.push_back(candidate.slot);
++                        if (repaired.size() == old_neighbors.size() + retained) {
++                            break;
++                        }
++                    }
++                }
++                for (const auto& candidate : ranked) {
++                    if (repaired.size() == old_neighbors.size() + retained) {
++                        break;
++                    }
++                    if (std::find(repaired.begin(), repaired.end(), candidate.slot) ==
++                        repaired.end()) {
++                        repaired.push_back(candidate.slot);
++                    }
++                }
++            } else
++#endif
++            {
++                for (uint64_t i = 0; i < retained; ++i) {
++                    repaired.push_back(ranked[i].slot);
++                }
+             }
+             sync_incoming(source, old_neighbors);
+         }
+diff --git a/src/lite/graph_backend_test.cpp b/src/lite/graph_backend_test.cpp
+index 086e7f4..c5add6a 100644
+--- a/src/lite/graph_backend_test.cpp
++++ b/src/lite/graph_backend_test.cpp
+@@ -933,3 +933,46 @@ TEST_CASE("Lite update repairs old outgoing targets that lose their only incomin
+         }
+     }
+ }
++
++TEST_CASE("Lite repair preserves links and refills bounded candidate directions", "[lite-graph]") {
++    for (const bool fp16 : {false, true}) {
++        for (const bool collinear : {false, true}) {
++            const std::vector<int64_t> ids{0, 1, 2, 3, 4, 5};
++            const std::vector<float> vectors{
++                0, 0, 1, 0, 0, 1, 2, 0, collinear ? 3.0F : 0.0F, collinear ? 0.0F : 3.0F, 8, 8};
++            const std::vector<std::vector<uint64_t>> links{
++                {1, 2}, {0, 3}, {3, 4}, {0, 1}, {0, 5}, {4, 3}};
++            std::vector<uint16_t> encoded;
++            encoded.reserve(vectors.size());
++            for (const float value : vectors) {
++                encoded.push_back(vsag::lite::detail::encode_fp16(value));
++            }
++            auto graph =
++                fp16 ? vsag::lite::detail::restore_fp16_graph_backend(2, 2, 8, ids, encoded, links)
++                     : vsag::lite::detail::restore_graph_backend(2, 2, 8, ids, vectors, links);
++            REQUIRE(graph);
++            REQUIRE((*graph)->Remove(2));
++            REQUIRE((*graph)->Size() == 5);
++            REQUIRE((*graph)->LinkCountAt(0) == 2);
++            REQUIRE((*graph)->IdAt((*graph)->LinkAt(0, 0)) == 1);
++            int64_t expected = 3;
++#if defined(VSAG_LITE_EXPERIMENT_DIVERSE_REPAIR)
++            if (not fp16 and not collinear) {
++                expected = 4;
++            }
++#endif
++            REQUIRE((*graph)->IdAt((*graph)->LinkAt(0, 1)) == expected);
++            require_incoming_matches(**graph);
++            for (uint64_t source = 0; source < (*graph)->Size(); ++source) {
++                REQUIRE((*graph)->LinkCountAt(source) <= 2);
++                std::unordered_set<uint64_t> unique;
++                for (uint64_t edge = 0; edge < (*graph)->LinkCountAt(source); ++edge) {
++                    const uint64_t target = (*graph)->LinkAt(source, edge);
++                    REQUIRE(target < (*graph)->Size());
++                    REQUIRE(target != source);
++                    REQUIRE(unique.insert(target).second);
++                }
++            }
++        }
++    }
++}

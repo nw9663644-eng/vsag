@@ -1,0 +1,29 @@
+[
+  {
+    "path": "/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005/sift-100k-initial.snapshot",
+    "version": 2,
+    "dim": 128,
+    "count": 100000,
+    "kind": 2,
+    "degree": 16,
+    "ef": 128
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-independent-crud-quality-20261005/gist-100k-initial.snapshot",
+    "version": 2,
+    "dim": 960,
+    "count": 100000,
+    "kind": 2,
+    "degree": 16,
+    "ef": 128
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/cohere-100000-default.snapshot",
+    "version": 2,
+    "dim": 768,
+    "count": 100000,
+    "kind": 2,
+    "degree": 16,
+    "ef": 128
+  }
+]

@@ -306,3 +306,15 @@ intervals include zero. Cohere whole-CPU medians4.46/4.54s and SIFT single-run
 cost2.31/2.60s show no established cost benefit. The prototype was archived and
 withdrawn from active source pending100k/mixed/changed-update validation. Default
 CTest4/4 passes; no new sanitizer, coverage or universal quality gate is claimed.
+
+## 2026-10-07: 100k repair cost/quality tradeoff
+
+The [100k scale validation](results/diverse-repair-scale-20261007/README.md) runs
+changed-update/restore/remove/re-add with interleaved queries from shared historical
+initial snapshots. After10,000 cycles (10% IDs), SIFT/GIST/Cohere post recall improves
+.948/.723/.897 to .950/.726/.900 in three repeats, while mutation-block CPU medians
+increase1.51%/3.99%/3.13%. The1,000-cycle pilot has no final recall gain. This is not
+full100k churn, fresh build timing, persistent-update retrieval or new holdout. All
+42 processes pass exact final-query Save-Load checks; raw samples reconstruct timing
+medians, but post/mixed truth hits remain runner aggregates. No library/PR/default
+policy change, universal performance benefit or new sanitizer/coverage claim follows.

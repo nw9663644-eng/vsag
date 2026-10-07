@@ -1,0 +1,21 @@
+{
+  "scale": 100000,
+  "cycles": 1000,
+  "mutation_calls_per_cycle": 4,
+  "query_every": [
+    10,
+    1
+  ],
+  "repeats": {
+    "10": 3,
+    "1": 1
+  },
+  "cpu": 0,
+  "query_ef": 128,
+  "entry": "uniform",
+  "neighbor_order": "preserve",
+  "candidate": "unchanged bounded direction refill patch from684564a",
+  "same_initial": true,
+  "queries": "existing observed100; no new holdout",
+  "scope": "1% live-ID changed-update/mixed pilot; not full100k churn or end-to-end build timing"
+}

@@ -1,0 +1,230 @@
+[
+  {
+    "dataset": "sift",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.956,
+      "mixed_recall_at_k": 0.952,
+      "crud_loop_cpu_ms": 572.373,
+      "mixed_query_cpu_ms": 25.079,
+      "mixed_loop_cpu_ms": 598.147,
+      "update_changed_p50_us": 281.894,
+      "restore_p50_us": 148.896,
+      "remove_p50_us": 8.069,
+      "readd_p50_us": 139.957,
+      "mixed_search_p50_us": 248.075,
+      "mixed_search_p99_us": 343.411
+    }
+  },
+  {
+    "dataset": "sift",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.956,
+      "mixed_recall_at_k": 0.952,
+      "crud_loop_cpu_ms": 577.641,
+      "mixed_query_cpu_ms": 24.476,
+      "mixed_loop_cpu_ms": 602.767,
+      "update_changed_p50_us": 280.353,
+      "restore_p50_us": 151.696,
+      "remove_p50_us": 11.32,
+      "readd_p50_us": 138.897,
+      "mixed_search_p50_us": 247.974,
+      "mixed_search_p99_us": 336.372
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.742,
+      "mixed_recall_at_k": 0.744,
+      "crud_loop_cpu_ms": 1181.95,
+      "mixed_query_cpu_ms": 51.879,
+      "mixed_loop_cpu_ms": 1234.536,
+      "update_changed_p50_us": 588.476,
+      "restore_p50_us": 315.573,
+      "remove_p50_us": 9.86,
+      "readd_p50_us": 256.625,
+      "mixed_search_p50_us": 512.428,
+      "mixed_search_p99_us": 686.884
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.742,
+      "mixed_recall_at_k": 0.744,
+      "crud_loop_cpu_ms": 1203.097,
+      "mixed_query_cpu_ms": 51.971,
+      "mixed_loop_cpu_ms": 1255.972,
+      "update_changed_p50_us": 596.826,
+      "restore_p50_us": 316.153,
+      "remove_p50_us": 13.28,
+      "readd_p50_us": 256.774,
+      "mixed_search_p50_us": 517.216,
+      "mixed_search_p99_us": 671.614
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "baseline",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.892,
+      "mixed_recall_at_k": 0.89,
+      "crud_loop_cpu_ms": 1042.076,
+      "mixed_query_cpu_ms": 47.176,
+      "mixed_loop_cpu_ms": 1090.087,
+      "update_changed_p50_us": 518.197,
+      "restore_p50_us": 266.454,
+      "remove_p50_us": 10.18,
+      "readd_p50_us": 230.604,
+      "mixed_search_p50_us": 479.167,
+      "mixed_search_p99_us": 631.124
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "candidate",
+    "query_every": 10,
+    "runs": 3,
+    "median": {
+      "recall_at_k": 0.892,
+      "mixed_recall_at_k": 0.89,
+      "crud_loop_cpu_ms": 1059.589,
+      "mixed_query_cpu_ms": 47.382,
+      "mixed_loop_cpu_ms": 1107.759,
+      "update_changed_p50_us": 523.827,
+      "restore_p50_us": 266.583,
+      "remove_p50_us": 14.69,
+      "readd_p50_us": 228.504,
+      "mixed_search_p50_us": 482.167,
+      "mixed_search_p99_us": 624.025
+    }
+  },
+  {
+    "dataset": "sift",
+    "variant": "baseline",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.956,
+      "mixed_recall_at_k": 0.9527,
+      "crud_loop_cpu_ms": 563.902,
+      "mixed_query_cpu_ms": 241.833,
+      "mixed_loop_cpu_ms": 807.958,
+      "update_changed_p50_us": 273.233,
+      "restore_p50_us": 148.625,
+      "remove_p50_us": 8.31,
+      "readd_p50_us": 139.347,
+      "mixed_search_p50_us": 241.894,
+      "mixed_search_p99_us": 350.201
+    }
+  },
+  {
+    "dataset": "sift",
+    "variant": "candidate",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.956,
+      "mixed_recall_at_k": 0.9527,
+      "crud_loop_cpu_ms": 594.117,
+      "mixed_query_cpu_ms": 255.397,
+      "mixed_loop_cpu_ms": 851.827,
+      "update_changed_p50_us": 294.433,
+      "restore_p50_us": 152.146,
+      "remove_p50_us": 11.53,
+      "readd_p50_us": 140.976,
+      "mixed_search_p50_us": 256.404,
+      "mixed_search_p99_us": 365.222
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "baseline",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.742,
+      "mixed_recall_at_k": 0.7436,
+      "crud_loop_cpu_ms": 1133.337,
+      "mixed_query_cpu_ms": 504.198,
+      "mixed_loop_cpu_ms": 1641.118,
+      "update_changed_p50_us": 577.176,
+      "restore_p50_us": 286.594,
+      "remove_p50_us": 10.26,
+      "readd_p50_us": 245.785,
+      "mixed_search_p50_us": 507.968,
+      "mixed_search_p99_us": 702.603
+    }
+  },
+  {
+    "dataset": "gist",
+    "variant": "candidate",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.742,
+      "mixed_recall_at_k": 0.7435,
+      "crud_loop_cpu_ms": 1179.068,
+      "mixed_query_cpu_ms": 505.09,
+      "mixed_loop_cpu_ms": 1687.575,
+      "update_changed_p50_us": 590.376,
+      "restore_p50_us": 299.333,
+      "remove_p50_us": 13.709,
+      "readd_p50_us": 256.233,
+      "mixed_search_p50_us": 508.057,
+      "mixed_search_p99_us": 696.544
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "baseline",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.892,
+      "mixed_recall_at_k": 0.8912,
+      "crud_loop_cpu_ms": 1004.657,
+      "mixed_query_cpu_ms": 459.446,
+      "mixed_loop_cpu_ms": 1467.421,
+      "update_changed_p50_us": 507.279,
+      "restore_p50_us": 247.795,
+      "remove_p50_us": 10.43,
+      "readd_p50_us": 221.095,
+      "mixed_search_p50_us": 467.28,
+      "mixed_search_p99_us": 669.544
+    }
+  },
+  {
+    "dataset": "cohere",
+    "variant": "candidate",
+    "query_every": 1,
+    "runs": 1,
+    "median": {
+      "recall_at_k": 0.892,
+      "mixed_recall_at_k": 0.8912,
+      "crud_loop_cpu_ms": 1041.96,
+      "mixed_query_cpu_ms": 466.517,
+      "mixed_loop_cpu_ms": 1511.825,
+      "update_changed_p50_us": 514.967,
+      "restore_p50_us": 256.154,
+      "remove_p50_us": 15.03,
+      "readd_p50_us": 230.144,
+      "mixed_search_p50_us": 474.968,
+      "mixed_search_p99_us": 686.224
+    }
+  }
+]
