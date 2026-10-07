@@ -1,0 +1,144 @@
+[
+  {
+    "name": "release-build-final",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fragment-release",
+      "--target",
+      "lite_graph_slot_probe",
+      "lite_graph_route_probe",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "release-fixtures-final",
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_slot_probe.py",
+      "build-lite-fragment-release/lite_graph_slot_probe"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-baseline-asan",
+      "--target",
+      "lite_graph_slot_probe",
+      "lite_graph_route_probe",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-fixtures",
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_slot_probe.py",
+      "build-lite-baseline-asan/lite_graph_slot_probe"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "release-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fragment-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "format",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "lite/benchmark/graph_slot_probe.cpp",
+      "lite/benchmark/graph_route_probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tidy",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fragment-release",
+      "lite/benchmark/graph_slot_probe.cpp",
+      "lite/benchmark/graph_route_probe.cpp"
+    ],
+    "exit": 1
+  },
+  {
+    "name": "release-build-repaired",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fragment-release",
+      "--target",
+      "lite_graph_slot_probe",
+      "lite_graph_route_probe",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "release-fixtures-repaired",
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_slot_probe.py",
+      "build-lite-fragment-release/lite_graph_slot_probe"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-build-repaired",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-baseline-asan",
+      "--target",
+      "lite_graph_slot_probe",
+      "lite_graph_route_probe",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "asan-fixtures-repaired",
+    "command": [
+      "python3",
+      "lite/benchmark/test_graph_slot_probe.py",
+      "build-lite-baseline-asan/lite_graph_slot_probe"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "format-repaired",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "lite/benchmark/graph_slot_probe.cpp",
+      "lite/benchmark/graph_route_probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tidy-repaired",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fragment-release",
+      "lite/benchmark/graph_slot_probe.cpp",
+      "lite/benchmark/graph_route_probe.cpp"
+    ],
+    "exit": 0
+  }
+]

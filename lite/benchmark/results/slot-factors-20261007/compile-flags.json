@@ -1,0 +1,26 @@
+{
+  "build-lite-fragment-release": [
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -O3 -DNDEBUG -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_slot_probe.dir/benchmark/graph_slot_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp"
+    },
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -O3 -DNDEBUG -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_route_probe.dir/benchmark/graph_route_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp"
+    }
+  ],
+  "build-lite-baseline-asan": [
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -fsanitize=address,undefined -fno-omit-frame-pointer -g -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_slot_probe.dir/benchmark/graph_slot_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp"
+    },
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -fsanitize=address,undefined -fno-omit-frame-pointer -g -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_route_probe.dir/benchmark/graph_route_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp"
+    }
+  ]
+}

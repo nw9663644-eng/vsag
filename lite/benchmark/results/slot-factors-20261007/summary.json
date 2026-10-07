@@ -1,0 +1,312 @@
+[
+  {
+    "case": "initial",
+    "masks": [
+      {
+        "mask": 0,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 1,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 2,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 3,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 4,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 5,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 6,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 7,
+        "recall": 0.96,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      }
+    ],
+    "all_restored_ordered_ids_equal": true
+  },
+  {
+    "case": "full-churn",
+    "masks": [
+      {
+        "mask": 0,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 1,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 2,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 3,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 4,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 5,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 6,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 7,
+        "recall": 0.94,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      }
+    ],
+    "all_restored_ordered_ids_equal": true
+  },
+  {
+    "case": "cycle-1099",
+    "masks": [
+      {
+        "mask": 0,
+        "recall": 0.957,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 1,
+        "recall": 0.958,
+        "wins": 1,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 2,
+        "recall": 0.957,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 3,
+        "recall": 0.958,
+        "wins": 1,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 4,
+        "recall": 0.957,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 5,
+        "recall": 0.958,
+        "wins": 1,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 6,
+        "recall": 0.957,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 7,
+        "recall": 0.958,
+        "wins": 1,
+        "losses": 0,
+        "ties": 3
+      }
+    ],
+    "all_restored_ordered_ids_equal": true
+  },
+  {
+    "case": "cycle-3000",
+    "masks": [
+      {
+        "mask": 0,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 1,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 2,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 3,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 4,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 5,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      },
+      {
+        "mask": 6,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 2
+      },
+      {
+        "mask": 7,
+        "recall": 0.949,
+        "wins": 0,
+        "losses": 0,
+        "ties": 3
+      }
+    ],
+    "all_restored_ordered_ids_equal": true
+  },
+  {
+    "case": "cycle-7112",
+    "masks": [
+      {
+        "mask": 0,
+        "recall": 0.937,
+        "wins": 0,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 1,
+        "recall": 0.938,
+        "wins": 1,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 2,
+        "recall": 0.937,
+        "wins": 0,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 3,
+        "recall": 0.938,
+        "wins": 1,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 4,
+        "recall": 0.937,
+        "wins": 0,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 5,
+        "recall": 0.938,
+        "wins": 1,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 6,
+        "recall": 0.937,
+        "wins": 0,
+        "losses": 0,
+        "ties": 5
+      },
+      {
+        "mask": 7,
+        "recall": 0.938,
+        "wins": 1,
+        "losses": 0,
+        "ties": 5
+      }
+    ],
+    "all_restored_ordered_ids_equal": true
+  }
+]

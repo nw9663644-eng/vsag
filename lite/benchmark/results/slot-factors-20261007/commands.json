@@ -1,0 +1,257 @@
+[
+  {
+    "case": "initial",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/initial.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+    "reference_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38"
+  },
+  {
+    "case": "initial-legacy",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/initial.legacy.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "case": "initial-ordered",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/initial-ordered.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/initial-ordered.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+    "reference_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38"
+  },
+  {
+    "case": "full-churn",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/full-churn.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "1f46f6a6eae6d213899d7b70bce2fc05cec7c56d22f19195ef7d17fee113b607",
+    "reference_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38"
+  },
+  {
+    "case": "full-churn-legacy",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/full-churn.legacy.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "case": "full-churn-ordered",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/full-churn-ordered.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/full-churn-ordered.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "7f53fcc11569522dd2d254f5fb79910880a2ffd74d157451727bc540b030221e",
+    "reference_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38"
+  },
+  {
+    "case": "cycle-1099",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-1099.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "f1d754285cf57bbd75447e267038b529c7d33b2fdba792da4bf4c50ffb0ff337",
+    "reference_sha256": "a343045c0ed8ecb64a5aec3216064cc32096c4deac2cd83eb845e18a6ef91de4"
+  },
+  {
+    "case": "cycle-1099-legacy",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-1099.legacy.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "case": "cycle-1099-ordered",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-1099-ordered.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-1099-ordered.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "dff5560f7040800e9650aab008cc52867e568893102defe5a56df01b1701626d",
+    "reference_sha256": "a343045c0ed8ecb64a5aec3216064cc32096c4deac2cd83eb845e18a6ef91de4"
+  },
+  {
+    "case": "cycle-3000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-3000.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "d75d047a777016cffdb339807cdd09af97f5b131cb3c89971577f7cf5e039f82",
+    "reference_sha256": "556a4e3aca329ff0688d6d06bbce14699d290aa8afde27ba088f0943797392ae"
+  },
+  {
+    "case": "cycle-3000-legacy",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-3000.legacy.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "case": "cycle-3000-ordered",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-3000-ordered.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-3000-ordered.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "5ef2dd6528b650cf80fe65d75a02b423fc0d6228a91f1597c5b3f987910435a5",
+    "reference_sha256": "556a4e3aca329ff0688d6d06bbce14699d290aa8afde27ba088f0943797392ae"
+  },
+  {
+    "case": "cycle-7112",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-7112.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "dcf223b75fca923cd06b0b3a08aedfbb465fcc1a8edc3fbe4c092377a37fc8b6",
+    "reference_sha256": "5cb200ea9a5c50e97b393791d072c46ef99cabc446918775b7e898ed809a997e"
+  },
+  {
+    "case": "cycle-7112-legacy",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-7112.legacy.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "case": "cycle-7112-ordered",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-7112-ordered.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-slot-factors-20261007/final/cycle-7112-ordered.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0,
+    "snapshot_sha256": "51c1e32b01eb36eff92b63e38964bd242b59ec7f172f93f936a57fdb629fe5d0",
+    "reference_sha256": "5cb200ea9a5c50e97b393791d072c46ef99cabc446918775b7e898ed809a997e"
+  }
+]

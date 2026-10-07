@@ -519,6 +519,16 @@ struct SearchTrace {
     uint64_t route_nodes{};
     uint64_t distance_evaluations{};
     bool early_stop{};
+    uint64_t tie_comparisons{};
+};
+
+// Diagnostic overrides only: production routing remains in GraphBackend.
+struct SlotRouting {
+    std::vector<uint64_t> previous;
+    std::vector<uint64_t> next;
+    std::vector<uint64_t> tie_rank;
+    bool restore_ring{};
+    bool restore_ties{};
 };
 
 SearchTrace
@@ -526,7 +536,13 @@ search(const GraphSnapshot& graph,
        const std::vector<uint64_t>& entries,
        const std::string& entry_mode,
        const float* query,
-       uint64_t k) {
+       uint64_t k,
+       const SlotRouting* routing = nullptr) {
+    require(routing == nullptr or
+                (entry_mode == "uniform" and routing->previous.size() == graph.ids.size() and
+                 routing->next.size() == graph.ids.size() and
+                 routing->tie_rank.size() == graph.ids.size()),
+            "invalid slot routing override");
     k = std::min<uint64_t>(k, graph.ids.size());
     SearchTrace trace;
     trace.visited.resize(graph.ids.size(), 0);
@@ -577,8 +593,28 @@ search(const GraphSnapshot& graph,
             static_cast<uint64_t>(std::count(route_visited.begin(), route_visited.end(), 1));
     }
     const uint64_t ef = std::min<uint64_t>(graph.ids.size(), std::max(k, graph.ef_search));
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> best(&closer);
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(&farther);
+    const auto candidate_closer = [&](const Candidate& left, const Candidate& right) {
+        if (left.distance == right.distance and left.slot != right.slot) {
+            ++trace.tie_comparisons;
+            if (routing != nullptr and routing->restore_ties) {
+                return routing->tie_rank[left.slot] < routing->tie_rank[right.slot];
+            }
+        }
+        return closer(left, right);
+    };
+    const auto candidate_farther = [&](const Candidate& left, const Candidate& right) {
+        if (left.distance == right.distance and left.slot != right.slot) {
+            ++trace.tie_comparisons;
+            if (routing != nullptr and routing->restore_ties) {
+                return routing->tie_rank[left.slot] > routing->tie_rank[right.slot];
+            }
+        }
+        return farther(left, right);
+    };
+    std::priority_queue<Candidate, std::vector<Candidate>, decltype(candidate_closer)> best(
+        candidate_closer);
+    std::priority_queue<Candidate, std::vector<Candidate>, decltype(candidate_farther)> candidates(
+        candidate_farther);
     auto visit = [&](uint64_t slot) {
         if (trace.visited[slot] != 0) {
             return;
@@ -599,14 +635,19 @@ search(const GraphSnapshot& graph,
     while (not candidates.empty()) {
         const Candidate current = candidates.top();
         candidates.pop();
-        if (best.size() == ef and closer(best.top(), current)) {
+        if (best.size() == ef and candidate_closer(best.top(), current)) {
             trace.early_stop = true;
             break;
         }
         ++trace.expanded;
         if (graph.ids.size() > 1) {
-            visit((current.slot + graph.ids.size() - 1) % graph.ids.size());
-            visit((current.slot + 1) % graph.ids.size());
+            if (routing != nullptr and routing->restore_ring) {
+                visit(routing->previous[current.slot]);
+                visit(routing->next[current.slot]);
+            } else {
+                visit((current.slot + graph.ids.size() - 1) % graph.ids.size());
+                visit((current.slot + 1) % graph.ids.size());
+            }
         }
         for (const uint64_t neighbor : graph.links[current.slot]) {
             visit(neighbor);
@@ -991,8 +1032,12 @@ run(const std::string& snapshot,
 
 }  // namespace
 
+// The slot-factor diagnostic reuses this translation unit with a distinct entry point.
+#ifndef VSAG_LITE_ROUTE_PROBE_MAIN
+#define VSAG_LITE_ROUTE_PROBE_MAIN main
+#endif
 int
-main(int argc, char** argv) {
+VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
     try {
         if (argc == 2 and std::string(argv[1]) == "--self-test") {
             test_reverse_replacement();

@@ -1,0 +1,42 @@
+[
+  {
+    "path": "/home/ubuntu/project/vsag-lite-slot-factors-20261007/initial-ordered.snapshot",
+    "sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-slot-factors-20261007/full-churn-ordered.snapshot",
+    "sha256": "7f53fcc11569522dd2d254f5fb79910880a2ffd74d157451727bc540b030221e",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-1099-ordered.snapshot",
+    "sha256": "dff5560f7040800e9650aab008cc52867e568893102defe5a56df01b1701626d",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 9999,
+    "edges": 159984
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-3000-ordered.snapshot",
+    "sha256": "5ef2dd6528b650cf80fe65d75a02b423fc0d6228a91f1597c5b3f987910435a5",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-slot-factors-20261007/cycle-7112-ordered.snapshot",
+    "sha256": "51c1e32b01eb36eff92b63e38964bd242b59ec7f172f93f936a57fdb629fe5d0",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  }
+]

@@ -1841,3 +1841,13 @@ withdrawn; this is negative evidence, not a new accepted graph policy.
 See [occluded reverse-link rejection](results/occluded-link-20261007/README.md)
 for local event recovery that did not improve full churn. The prototype was
 withdrawn; no new default graph policy was adopted.
+
+## Slot-factor routing diagnosis (2026-10-07)
+
+The opt-in `lite_graph_slot_probe SNAPSHOT REFERENCE DATASET OUTPUT.csv` separates
+reference entry selection (mask bit1), implicit ring (bit2) and distance tie order
+(bit4) while retaining stored ef and external edges. FP32v2 little-endian only;
+reference order must cover live IDs. Queries missing any recorded truth ID are
+excluded. Mask0 is checked against native API ID sets; other masks are diagnostics.
+See [the report](results/slot-factors-20261007/README.md) for limitations, fixture
+commands and offline raw-data audit. Existing output files are rejected.

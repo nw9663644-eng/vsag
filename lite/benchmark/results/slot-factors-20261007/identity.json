@@ -1,0 +1,15 @@
+{
+  "parent": "60f2241cfbcf05f131dbe1b6a8c0ef04858e6256",
+  "files": {
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/CMakeLists.txt": "3efebdb798affc977bc98caefd0fe07b31e54f92063ac2495ed2a2ca411aeff5",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp": "56855e79da01a99bac4484d410ff1f3680168bda6cec520dfef491ea9a5cd14f",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp": "9fdc572ca943fdc82a2537b14ce072f16a0d209702fda266d494eb39e880e543",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/test_graph_slot_probe.py": "d6a0a23468cc0d4ccff6cbb434fff51fe7d923f879b398e8d934bb42bd27d95d",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe": "e031ddb0d9ef0f87442fdec893334fa72d8310dbfd4c361fe8d68e31158067b7",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/libvsag-lite.so": "c0c8a6f535355194cb0ac726aac661189c4cede3048504cf30a888774e045d38",
+    "/home/ubuntu/project/vsag-lite-slot-factors-20261007/route-probe-before": "d058bb4bfa7b92fd039e2edd5c26b27cd30484381a8744a7af903e66fe2edabd",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_graph_slot_probe": "8e207928dcda96f64dd1309f7f5d413ef051e6476dfb17886bfb38882371aa40",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+  }
+}

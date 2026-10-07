@@ -283,3 +283,14 @@ ended .931 versus .940. Whole-process CPU medians were 5.54 versus 5.45 seconds,
 with no demonstrated benefit. The candidate was withdrawn and the default
 restored/retested (4/4). This is negative evidence on observed queries, not a
 new accepted policy or independent quality gate.
+
+## 2026-10-07: slot factors separated
+
+The [slot-factor diagnostic](results/slot-factors-20261007/README.md) isolates
+entries, implicit ring and tie order at stored ef128. Restoring entries alone
+recovers one hit at each of two previously observed events. All eight masks
+remain .940 after full churn; no per-query hit improvement at that endpoint.
+All-restored factors match physically reordered controls; default diagnostic
+ID sets match native APIs. Library policy and quality floor remain unchanged.
+Next prioritize stored-topology maintenance and validate any candidate with
+full CRUD cost, cross-distribution data and independent queries.
