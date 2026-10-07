@@ -1816,3 +1816,7 @@ distance `.neighbors.csv` sidecar; the existing hit CSV schema remains unchanged
 See [SIFT100k/GIST10k comparator follow-up](results/comparator-breadth-20261007/README.md)
 for fixed-budget cross-scale equivalence, whole-process CPU results and the
 Cohere full-ID routing diagnosis.
+
+See [Update outgoing-target repair](results/update-incoming-20261007/README.md)
+for a failing-then-passing FP32/FP16 regression, real phase trace and the remaining
+full-ID recall limitation.

@@ -163,6 +163,11 @@ public:
             }
             ensure_incoming(slot);
             repair(affected_nodes, old_neighbors);
+            // Replacing outgoing edges can orphan old targets, even when they did not
+            // point back to this slot. Their outgoing lists do not need rebuilding.
+            for (const uint64_t target : old_neighbors) {
+                ensure_incoming(target);
+            }
             return {};
         } catch (const std::invalid_argument&) {
             return failure(ErrorType::INVALID_ARGUMENT, "vector exceeds FP16 range");

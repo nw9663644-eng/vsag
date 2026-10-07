@@ -1,0 +1,254 @@
+[
+  {
+    "name": "before-build-r0",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r0.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r0.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r0.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-build-r0",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r0.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r0.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r0.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "before-crud-r0",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r0.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r0.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r0.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-crud-r0",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r0.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r0.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r0.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "after-crud-r1",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r1.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r1.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r1.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "before-crud-r1",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r1.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r1.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r1.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-build-r1",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r1.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r1.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r1.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "before-build-r1",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r1.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r1.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r1.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "before-build-r2",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r2.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r2.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-build-r2.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-build-r2",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r2.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r2.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-build-r2.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  },
+  {
+    "name": "before-crud-r2",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r2.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r2.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before-crud-r2.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "after-crud-r2",
+    "command": [
+      "/usr/bin/time",
+      "-f",
+      "%U,%S,%e",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r2.cpu.csv",
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r2.snapshot",
+      "1",
+      "10000",
+      "/home/ubuntu/project/vsag-lite-update-incoming-20261007/after-crud-r2.queries.csv"
+    ],
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "exit": 0
+  }
+]

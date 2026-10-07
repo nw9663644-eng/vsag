@@ -1,0 +1,14 @@
+{
+  "source_parent": "a62fc0ceb719f6c2364f7f7c5a448f7554a0f137",
+  "trace_source_sha256": "528b9320d7c7f625c6ee85bd96c17b552ec9381cf0e26a9a99f365b36303c003",
+  "trace_binary_sha256": "947e167bb75397e2d5ad138c75f0ea9e5b8133c05e6a4febde8a8478576c0f65",
+  "initial_snapshot": "/home/ubuntu/project/vsag-lite-comparator-final-20261007/default-build-new-r0.snapshot",
+  "initial_sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+  "before_library_sha256": "d9c5373b109e8573493d333365f033c1826524c23ae171df97b173a82d7f6f82",
+  "after_library_sha256": "8ca4c1efb516cf765709bb540015c84ac05f02486555fc14e6e3d025f7aacdfb",
+  "build_command": "c++ -std=c++17 -O2 -g -Iinclude -Isrc phase_trace.cpp -Lbuild-lite-fragment-release -Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release -lvsag-lite -o phase_trace",
+  "scope": "Internal Backend, not public Index; scalar phase counters, not perf/quality timing",
+  "formatted_source_sha256": "f1fd2f330d06414d3a98da74a528a831b5d6e0127d215f11248cdcb1b960284a",
+  "formatted_binary_sha256": "697c2b65e6a60dd6fa921b17407685214e4e457fb19218c1db353aa145f0254c",
+  "formatting_note": "Original host probe used default style; publication uses repository style, recompiled and both traces replayed identically."
+}

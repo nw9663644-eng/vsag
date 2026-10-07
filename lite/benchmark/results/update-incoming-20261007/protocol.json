@@ -1,0 +1,32 @@
+{
+  "source_parent": "a62fc0ceb719f6c2364f7f7c5a448f7554a0f137",
+  "source_sha256": {
+    "src/lite/graph_backend.cpp": "366c03dbbb2ccd2df80af7699065f0e0c070b2e536053a1674d6835ab0411dab",
+    "src/lite/graph_backend_test.cpp": "0e93cac38b6274d17ad366658c85cb80bf564aab9507cf86f464b70942fd2b06"
+  },
+  "dataset": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+  "input_sha256": {
+    "source-base-ids.i64": "9e1c19b3fdc185411bd1a987deb6a9fda2531116aac060a84c4d878854d1c099",
+    "base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+    "groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d",
+    "source-query-ids.i64": "96bdba67cd0b5e6dc0f9e399f66b17eae627eac812d0620119e87687d789546a",
+    "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "manifest.json": "cabf8f33b909207197c88c94866f50a0a2f9fa85933235cb1e00111537ba37a3"
+  },
+  "libraries": {
+    "before": {
+      "path": "/home/ubuntu/project/vsag-lite-update-incoming-20261007/before",
+      "sha256": "d9c5373b109e8573493d333365f033c1826524c23ae171df97b173a82d7f6f82"
+    },
+    "after": {
+      "path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "sha256": "8ca4c1efb516cf765709bb540015c84ac05f02486555fc14e6e3d025f7aacdfb"
+    }
+  },
+  "runner_sha256": "42470223f10a2479ed71227938b5a9e203f957f447ee5b8eaa38b03ec0aa1b86",
+  "cpu": 0,
+  "repeats": 3,
+  "operations": "same-vector Update/Remove/Add,10000 distinct original IDs; build-only vs build+CRUD; fixed16/128",
+  "timing": "whole-process CPU; no concurrent build/test/profiler; not isolated mutation",
+  "retention": "keep first-replicate snapshots only; later generated snapshots hashed/checked then removed"
+}

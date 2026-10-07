@@ -1,0 +1,33 @@
+[1/2] Building CXX object CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o
+FAILED: CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o
+/usr/bin/c++  -I/home/ubuntu/project/vsag-lite-baseline-v01/src -I/home/ubuntu/project/vsag-lite-baseline-v01/include -I/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/.. -I/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-build/generated-includes -O3 -DNDEBUG -std=c++17 -MD -MT CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o -MF CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o.d -o CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp: In function ‘void CATCH2_INTERNAL_TEST_33()’:
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:910:38: error: no matching function for call to ‘vsag::lite::detail::Backend::Search(const float&, int, int)’
+  910 |         auto found = (*graph)->Search(query, 1, 4);
+      |                      ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+In file included from /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:29:
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:24:5: note: candidate: ‘virtual tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error> vsag::lite::detail::Backend::Search(const float*, uint64_t, uint64_t) const’
+   24 |     Search(const float* query, uint64_t dim, uint64_t k) const = 0;
+      |     ^~~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:24:25: note:   no known conversion for argument 1 from ‘const float’ to ‘const float*’
+   24 |     Search(const float* query, uint64_t dim, uint64_t k) const = 0;
+      |            ~~~~~~~~~~~~~^~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:26:5: note: candidate: ‘virtual tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error> vsag::lite::detail::Backend::Search(const float*, uint64_t, uint64_t, const IdFilter&) const’
+   26 |     Search(const float* query, uint64_t dim, uint64_t k, const IdFilter& filter) const = 0;
+      |     ^~~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:26:5: note:   candidate expects 4 arguments, 3 provided
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:916:41: error: no matching function for call to ‘vsag::lite::detail::Backend::Search(const float&, int, int, const IdFilter&)’
+  916 |         auto filtered = (*graph)->Search(query, 1, 1, only_target);
+      |                         ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:29:
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:24:5: note: candidate: ‘virtual tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error> vsag::lite::detail::Backend::Search(const float*, uint64_t, uint64_t) const’
+   24 |     Search(const float* query, uint64_t dim, uint64_t k) const = 0;
+      |     ^~~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:24:5: note:   candidate expects 3 arguments, 4 provided
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:26:5: note: candidate: ‘virtual tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error> vsag::lite::detail::Backend::Search(const float*, uint64_t, uint64_t, const IdFilter&) const’
+   26 |     Search(const float* query, uint64_t dim, uint64_t k, const IdFilter& filter) const = 0;
+      |     ^~~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h:26:25: note:   no known conversion for argument 1 from ‘const float’ to ‘const float*’
+   26 |     Search(const float* query, uint64_t dim, uint64_t k, const IdFilter& filter) const = 0;
+      |            ~~~~~~~~~~~~~^~~~~
+ninja: build stopped: subcommand failed.

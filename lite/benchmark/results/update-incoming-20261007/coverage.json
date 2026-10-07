@@ -1,0 +1,6 @@
+{
+  "covered": 959,
+  "total": 1062,
+  "percent": 90.30131826741996,
+  "scope": "emitted Lite sources/internal headers; unit-only; no Full/extern/benchmark"
+}

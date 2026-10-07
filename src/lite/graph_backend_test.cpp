@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "lite/backend.h"
+#include "lite/fp16_codec.h"
 
 using vsag::lite::detail::make_brute_force_backend;
 using vsag::lite::detail::make_fp16_graph_backend;
@@ -887,4 +888,48 @@ TEST_CASE("Lite FP16 restore and conversion reject unsafe inputs", "[lite-graph]
     REQUIRE(graph);
     REQUIRE_FALSE((*graph)->Search(&huge, 1, 1));
     REQUIRE((*graph)->Search(&small, 1, 1)->front().id == 17);
+}
+
+TEST_CASE("Lite update repairs old outgoing targets that lose their only incoming edge",
+          "[lite-graph]") {
+    const std::vector<int64_t> ids{0, 1, 2, 3};
+    const std::vector<float> vectors{0.0F, 100.0F, 1.0F, 2.0F};
+    const std::vector<std::vector<uint64_t>> links{{1, 2}, {2, 3}, {0, 3}, {0, 2}};
+    for (const bool fp16 : {false, true}) {
+        for (const float replacement : {0.0F, 0.25F}) {
+            auto graph =
+                fp16 ? vsag::lite::detail::restore_fp16_graph_backend(
+                           1,
+                           2,
+                           128,
+                           ids,
+                           {vsag::lite::detail::encode_fp16(0.0F),
+                            vsag::lite::detail::encode_fp16(100.0F),
+                            vsag::lite::detail::encode_fp16(1.0F),
+                            vsag::lite::detail::encode_fp16(2.0F)},
+                           links)
+                     : vsag::lite::detail::restore_graph_backend(1, 2, 128, ids, vectors, links);
+            REQUIRE(graph);
+            REQUIRE((*graph)->IncomingLinkCountAt(1) == 1);
+            require_incoming_matches(**graph);
+            REQUIRE((*graph)->Update(0, &replacement, 1));
+            REQUIRE((*graph)->IncomingLinkCountAt(1) > 0);
+            require_incoming_matches(**graph);
+            for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
+                REQUIRE((*graph)->LinkCountAt(slot) <= 2);
+                REQUIRE((*graph)->IncomingLinkCountAt(slot) > 0);
+            }
+            const float query = 100.0F;
+            auto found = (*graph)->Search(&query, 1, 4);
+            REQUIRE(found);
+            REQUIRE(found->size() == 4);
+            REQUIRE(found->front().id == 1);
+            REQUIRE(found->front().distance == 0.0F);
+            const vsag::lite::IdFilter only_target = [](int64_t id) { return id == 1; };
+            auto filtered = (*graph)->Search(&query, 1, 1, only_target);
+            REQUIRE(filtered);
+            REQUIRE(filtered->size() == 1);
+            REQUIRE(filtered->front().id == 1);
+        }
+    }
 }

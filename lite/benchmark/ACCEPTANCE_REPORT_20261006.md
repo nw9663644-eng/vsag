@@ -194,3 +194,23 @@ reach9672 to9068 and zero-in nodes0 to6, while weak component remains one and
 reverse reach10000. Stored-edge reach excludes the actual search implicit ring.
 This supports investigating traversal, saturated pruning and slot compaction;
 it does not identify a unique cause or fix the0.933 default quality limit.
+
+## Confirmed Update repair omission, 2026-10-07
+
+[Update repair](results/update-incoming-20261007/README.md) now checks former
+outgoing targets after replacing neighbors, using existing safe incoming repair
+without rebuilding their outgoing lists. A four-node regression fails on old code
+and passes108 assertions on FP32/FP16 with same/changed updates. The actual
+Cohere10k trace first orphaned ID3626 at cycle97 Update ID4527; after fixing,
+all10000 cycles complete without newly orphaned nodes. No global guarantee follows.
+
+Default/diverse Release4/4 and3/3, ASan+UBSan6/6, fresh emitted Lite source/internal
+header coverage959/1062=90.30%, format/tidy15 pass. Twelve public API processes
+retain identical initial builds, successful mutations/counts and exact roundtrips.
+Full-ID endpoint recall changes only0.933 to0.934 (one additional hit), still below
+the prior0.95 floor. The confirmed omission is fixed; overall quality is not.
+
+Slot-order restoration preserves all vectors/ID-based edges but changes none of
+100 hit counts. Only56.495% of original stored edges remain after restored-content
+churn. This supports investigating unnecessary Update rewiring and Remove/Add
+neighbor drift, not raising observed-query budgets or blaming slot order alone.

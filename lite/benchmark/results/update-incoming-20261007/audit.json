@@ -1,0 +1,26 @@
+[
+  {
+    "flow": "build",
+    "variant": "before",
+    "cpu_seconds_median": 2.03,
+    "recall": "0.960000"
+  },
+  {
+    "flow": "build",
+    "variant": "after",
+    "cpu_seconds_median": 1.79,
+    "recall": "0.960000"
+  },
+  {
+    "flow": "crud",
+    "variant": "before",
+    "cpu_seconds_median": 6.390000000000001,
+    "recall": "0.933000"
+  },
+  {
+    "flow": "crud",
+    "variant": "after",
+    "cpu_seconds_median": 6.25,
+    "recall": "0.934000"
+  }
+]

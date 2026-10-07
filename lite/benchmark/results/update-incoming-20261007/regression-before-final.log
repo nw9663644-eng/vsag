@@ -1,0 +1,21 @@
+Filters: "Lite update repairs old outgoing targets*"
+Randomness seeded to: 1146556202
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+lite_graph_tests is a Catch2 v3.7.1 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Lite update repairs old outgoing targets that lose their only incoming edge
+-------------------------------------------------------------------------------
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:892
+...............................................................................
+
+/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp:903: FAILED:
+  REQUIRE( (*graph)->IncomingLinkCountAt(1) > 0 )
+with expansion:
+  0 > 0
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 8 | 7 passed | 1 failed
