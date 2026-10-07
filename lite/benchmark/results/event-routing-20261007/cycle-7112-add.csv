@@ -1,0 +1,2 @@
+query,hits,truth_visited,truth_not_visited,visited_not_returned,visited_nodes,expanded_nodes,route_nodes,distance_evaluations,early_stop
+0,7,7,3,0,1144,128,0,1144,1

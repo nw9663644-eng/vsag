@@ -1,0 +1,114 @@
+[
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-original-order.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-original-order.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached-original-order.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached-original-order.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-order.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-order.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-topology.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-topology.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-order.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-12",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-order.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-topology.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-12",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-topology.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  }
+]

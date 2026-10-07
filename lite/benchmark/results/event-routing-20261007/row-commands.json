@@ -1,0 +1,82 @@
+[
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-573.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-573.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-6727.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-6727.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-7664.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-7664.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482-573-6727-7664.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482-573-6727-7664.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  }
+]

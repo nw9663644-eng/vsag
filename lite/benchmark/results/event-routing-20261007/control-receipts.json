@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-original-order.snapshot",
+    "sha256": "dff5560f7040800e9650aab008cc52867e568893102defe5a56df01b1701626d",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 9999,
+    "edges": 159984
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached.snapshot",
+    "sha256": "cb20fdcbd013bcdb37332e48047e661e65dfaab9025b281271170c0aaffa55af",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 9999,
+    "edges": 159979
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove-detached-original-order.snapshot",
+    "sha256": "c08b610e23edb32ffe8065e98ad1eabdbd38f6d4585f423731c0759d4c27dcb8",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 9999,
+    "edges": 159979
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-order.snapshot",
+    "sha256": "5ef2dd6528b650cf80fe65d75a02b423fc0d6228a91f1597c5b3f987910435a5",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add-original-topology.snapshot",
+    "sha256": "23fdbe97ea1ee5ea6fbe582cd53c094f7ff60f82693c8e04762f12f4b2d71e28",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-order.snapshot",
+    "sha256": "51c1e32b01eb36eff92b63e38964bd242b59ec7f172f93f936a57fdb629fe5d0",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add-original-topology.snapshot",
+    "sha256": "561238c3511255bde5146bfd43853e788d18532029f01d1fa1ca85d87bfbff5f",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  }
+]

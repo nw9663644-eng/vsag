@@ -1,0 +1,4 @@
+/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect.cpp: In function ‘int main(int, char**)’:
+/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect.cpp:23:32: error: ‘class std::unique_ptr<vsag::lite::Index>’ has no member named ‘Search’
+   23 |     const auto native = index->Search(queries[0].data(), graph.dim, 10);
+      |                                ^~~~~~

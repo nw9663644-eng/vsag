@@ -1,0 +1,35 @@
+{
+  "parent": "15e0c0c9b7f3341829ffb5dc9473b263c6cd3514",
+  "snapshot_count": 22,
+  "scope": "Cohere10k 768, original observed query99/0/12, budget128, CPU0; diagnostic controls, no performance result",
+  "compile_commands": [
+    [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-Iinclude",
+      "-Isrc",
+      "-Iextern/expected/include",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay.cpp",
+      "-Lbuild-lite-fragment-release",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "-lvsag-lite",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay"
+    ],
+    [
+      "c++",
+      "-std=c++17",
+      "-O3",
+      "-Iinclude",
+      "-Isrc",
+      "-Iextern/expected/include",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect.cpp",
+      "-Lbuild-lite-fragment-release",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "-lvsag-lite",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect"
+    ]
+  ]
+}

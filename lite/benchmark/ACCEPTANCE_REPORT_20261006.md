@@ -245,3 +245,17 @@ compaction artifacts; per-cycle queries exclude deleted truth. Both phases now
 have reproducible events for further routing controls, not a proven faulty
 statement or new retention policy. Release4/4, Release/ASan fixtures and
 format/tidy15 pass; no library source or budget changes and no new coverage claim.
+
+## Event routing controls, 2026-10-07
+
+[Three-event controls](results/event-routing-20261007/README.md) distinguish
+slot-order sensitivity from stored-edge replacement. Restoring surviving/pre-cycle
+order recovers the sampled losses at1099 and7112; restoring old topology at the
+current order does not. At3000 the opposite holds. Replacing only6727→3000 with
+6727→1707, preserving all other ordered edges/slots/vector bytes, recovers query0
+hits6→7. Target1707 retains one incoming edge, so zero-orphan checks alone do not
+ensure finite-budget route quality. All22 states load/query through public APIs
+and match scalar returned ID sets; raw compressed node exports and available
+host snapshots are audited. No library policy, budget or quality gate changes,
+no new timing/ASan/coverage claims. Next evaluate a general opt-in incoming
+retention control, with full CRUD cost/quality and independent-query validation.

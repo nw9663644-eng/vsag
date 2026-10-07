@@ -1,0 +1,28 @@
+{
+  "receipt": {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-single-edge-6727-1707.snapshot",
+    "sha256": "83485b273253704ee77e585564525e69a0e13eac14e51d2da2c9169e4414446a",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "build-lite-fragment-release/lite_graph_route_probe",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-single-edge-6727-1707.snapshot",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-single-edge-6727-1707.csv",
+    "128",
+    "uniform",
+    "preserve",
+    "1"
+  ],
+  "exit": 0,
+  "source": 6727,
+  "replaced_target": 3000,
+  "restored_target": 1707,
+  "position": 14
+}

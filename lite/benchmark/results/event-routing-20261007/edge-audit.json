@@ -1,0 +1,17 @@
+{
+  "only_changed_source": [
+    6727
+  ],
+  "row_length": 16,
+  "only_replaced_edge": [
+    6727,
+    3000,
+    1707
+  ],
+  "incoming_1707_removed": 2,
+  "incoming_1707_added": 1,
+  "incoming_3000_added": 4,
+  "incoming_3000_control": 3,
+  "double_scalar_distance_6727_1707": 0.30217575359597393,
+  "double_scalar_distance_6727_3000": 0.30022109521359047
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay.cpp",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "clang-tidy-15",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay.cpp",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect.cpp",
+      "--",
+      "-std=c++17",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/extern/expected/include"
+    ],
+    "exit": 0
+  }
+]

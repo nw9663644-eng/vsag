@@ -1,0 +1,157 @@
+[
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay",
+      "/home/ubuntu/project/vsag-lite-noop-update-20261007/before-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-before.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-remove.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-99",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-1099-add.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-remove.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-12",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-before.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-12",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-remove.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-12",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-7112-add.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "exit": 0
+  }
+]

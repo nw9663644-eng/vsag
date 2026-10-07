@@ -1829,3 +1829,7 @@ See [Remove/Add phase diagnostics](results/remove-add-trace-20261007/README.md)
 for the optional `lite_graph_mutation_trace` tool, reproducible mutation events,
 truth exclusion and external-ID edge statistics. This diagnoses the remaining
 full-ID churn quality drop; it is not a performance improvement or new acceptance.
+
+See [event-specific routing controls](results/event-routing-20261007/README.md)
+for slot-order versus topology attribution and a single-edge recovery case.
+These observed-query diagnostics do not adopt a new graph policy.

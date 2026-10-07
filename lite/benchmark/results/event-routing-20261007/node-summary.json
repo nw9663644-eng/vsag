@@ -1,0 +1,259 @@
+[
+  {
+    "name": "cycle-1099-add.nodes.csv.gz",
+    "count": 10000,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1060,
+    "missed_truth_ids": [
+      1838,
+      9348
+    ]
+  },
+  {
+    "name": "cycle-1099-before.nodes.csv.gz",
+    "count": 10000,
+    "hits": 9,
+    "truth_visited": 9,
+    "visited": 1056,
+    "missed_truth_ids": [
+      1838
+    ]
+  },
+  {
+    "name": "cycle-1099-remove-detached-original-order.nodes.csv.gz",
+    "count": 9999,
+    "hits": 9,
+    "truth_visited": 9,
+    "visited": 1056,
+    "missed_truth_ids": [
+      1838
+    ]
+  },
+  {
+    "name": "cycle-1099-remove-detached.nodes.csv.gz",
+    "count": 9999,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1079,
+    "missed_truth_ids": [
+      1838,
+      9348
+    ]
+  },
+  {
+    "name": "cycle-1099-remove-original-order.nodes.csv.gz",
+    "count": 9999,
+    "hits": 9,
+    "truth_visited": 9,
+    "visited": 1056,
+    "missed_truth_ids": [
+      1838
+    ]
+  },
+  {
+    "name": "cycle-1099-remove.nodes.csv.gz",
+    "count": 9999,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1079,
+    "missed_truth_ids": [
+      1838,
+      9348
+    ]
+  },
+  {
+    "name": "cycle-3000-add-original-order.nodes.csv.gz",
+    "count": 10000,
+    "hits": 6,
+    "truth_visited": 6,
+    "visited": 1002,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430,
+      1707
+    ]
+  },
+  {
+    "name": "cycle-3000-add-original-topology.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-3000-add.nodes.csv.gz",
+    "count": 10000,
+    "hits": 6,
+    "truth_visited": 6,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430,
+      1707
+    ]
+  },
+  {
+    "name": "cycle-3000-before.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-3000-remove.nodes.csv.gz",
+    "count": 9999,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 987,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-3000-restore-482-573-6727-7664.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-3000-restore-482.nodes.csv.gz",
+    "count": 10000,
+    "hits": 6,
+    "truth_visited": 6,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430,
+      1707
+    ]
+  },
+  {
+    "name": "cycle-3000-restore-573.nodes.csv.gz",
+    "count": 10000,
+    "hits": 6,
+    "truth_visited": 6,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430,
+      1707
+    ]
+  },
+  {
+    "name": "cycle-3000-restore-6727.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-3000-restore-7664.nodes.csv.gz",
+    "count": 10000,
+    "hits": 6,
+    "truth_visited": 6,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430,
+      1707
+    ]
+  },
+  {
+    "name": "cycle-3000-single-edge-6727-1707.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1001,
+    "missed_truth_ids": [
+      865,
+      4006,
+      6430
+    ]
+  },
+  {
+    "name": "cycle-7112-add-original-order.nodes.csv.gz",
+    "count": 10000,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1128,
+    "missed_truth_ids": [
+      4984,
+      9934
+    ]
+  },
+  {
+    "name": "cycle-7112-add-original-topology.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1144,
+    "missed_truth_ids": [
+      4725,
+      4984,
+      9934
+    ]
+  },
+  {
+    "name": "cycle-7112-add.nodes.csv.gz",
+    "count": 10000,
+    "hits": 7,
+    "truth_visited": 7,
+    "visited": 1144,
+    "missed_truth_ids": [
+      4725,
+      4984,
+      9934
+    ]
+  },
+  {
+    "name": "cycle-7112-before.nodes.csv.gz",
+    "count": 10000,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1128,
+    "missed_truth_ids": [
+      4984,
+      9934
+    ]
+  },
+  {
+    "name": "cycle-7112-remove.nodes.csv.gz",
+    "count": 9999,
+    "hits": 8,
+    "truth_visited": 8,
+    "visited": 1128,
+    "missed_truth_ids": [
+      4984,
+      9934
+    ]
+  }
+]

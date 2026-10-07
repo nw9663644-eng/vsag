@@ -1,0 +1,42 @@
+[
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482.snapshot",
+    "sha256": "3a0227dc5d1bc16d6fb19c7c5e9be19c4cf70829f1b8d28ea68254daf04f7632",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-573.snapshot",
+    "sha256": "5a1fcabc04e17cde96a6b9ba1b4756092eb459ede3ac17d6c91c08ed1447b0ff",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-6727.snapshot",
+    "sha256": "83485b273253704ee77e585564525e69a0e13eac14e51d2da2c9169e4414446a",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-7664.snapshot",
+    "sha256": "36057202490c6389f558fef07cafa6cece0ce08aae5e3fb0e7d3a3b0c9e274ec",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  },
+  {
+    "path": "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-restore-482-573-6727-7664.snapshot",
+    "sha256": "1162c79de1485d0c21875499261c912e89cb117bb8b146b7d9b37d29ee2696b3",
+    "vector_bytes_equal_by_id": true,
+    "ordered_edges_equal_to_requested": true,
+    "count": 10000,
+    "edges": 160000
+  }
+]

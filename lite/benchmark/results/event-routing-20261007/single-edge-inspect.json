@@ -1,0 +1,12 @@
+{
+  "command": [
+    "taskset",
+    "-c",
+    "0",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/inspect",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-single-edge-6727-1707.snapshot",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+    "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-single-edge-6727-1707.nodes.csv"
+  ],
+  "exit": 0
+}
