@@ -1,0 +1,73 @@
+[
+  {
+    "name": "default-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fragment-release",
+      "--target",
+      "lite_graph_tests",
+      "lite_tests",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-fixture",
+    "command": [
+      "build-lite-fragment-release/lite_graph_tests",
+      "[occluded-link]"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "candidate-fixture",
+    "command": [
+      "build-lite-occluded-release/lite_graph_tests",
+      "[occluded-link]"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fragment-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "candidate-ctest",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-occluded-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "format",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "src/lite/graph_backend.cpp",
+      "src/lite/graph_backend_test.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "tidy",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-occluded-release",
+      "src/lite/graph_backend.cpp",
+      "src/lite/graph_backend_test.cpp"
+    ],
+    "exit": 0
+  }
+]

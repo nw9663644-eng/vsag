@@ -1,0 +1,59 @@
+diff --git a/src/lite/graph_backend.cpp b/src/lite/graph_backend.cpp
+index 9ef67ef..468f8f9 100644
+--- a/src/lite/graph_backend.cpp
++++ b/src/lite/graph_backend.cpp
+@@ -772,6 +772,19 @@ private:
+             std::find(neighbors.begin(), neighbors.end(), target) != neighbors.end()) {
+             return;
+         }
++#if defined(VSAG_LITE_EXPERIMENT_OCCLUDED_LINK)
++        // Conservative FP32 experiment based on Full's alpha=1 neighbor heuristic.
++        // Keep the first incoming link and never prune an undersized row here.
++        if (not fp16_ and neighbors.size() == max_degree_ and not incoming_[target].empty()) {
++            const float target_distance = distance(source, target);
++            for (const uint64_t neighbor : neighbors) {
++                if (distance(source, neighbor) < target_distance and
++                    distance(neighbor, target) < target_distance) {
++                    return;
++                }
++            }
++        }
++#endif
+         const auto old_neighbors = neighbors;
+         neighbors.push_back(target);
+         if (neighbors.size() > max_degree_) {
+diff --git a/src/lite/graph_backend_test.cpp b/src/lite/graph_backend_test.cpp
+index 086e7f4..e39001f 100644
+--- a/src/lite/graph_backend_test.cpp
++++ b/src/lite/graph_backend_test.cpp
+@@ -933,3 +933,30 @@ TEST_CASE("Lite update repairs old outgoing targets that lose their only incomin
+         }
+     }
+ }
++
++TEST_CASE("Graph occluded reverse-link retention", "[lite-graph][occluded-link]") {
++    auto graph = vsag::lite::detail::restore_graph_backend(
++        1, 2, 128, {0, 1, 2, 3}, {0.F, 0.1F, -1.F, 1.F}, {{1, 2}, {0, 3}, {0, 3}, {1, 2}});
++    REQUIRE(graph);
++    const float vector = 0.2F;
++    REQUIRE((*graph)->Add(4, &vector, 1));
++    REQUIRE((*graph)->Size() == 5);
++    require_incoming_matches(**graph);
++#if defined(VSAG_LITE_EXPERIMENT_OCCLUDED_LINK)
++    REQUIRE((*graph)->LinkAt(0, 0) == 1);
++    REQUIRE((*graph)->LinkAt(0, 1) == 2);
++#else
++    REQUIRE((*graph)->LinkAt(0, 0) == 1);
++    REQUIRE((*graph)->LinkAt(0, 1) == 4);
++#endif
++    // Rejection must not isolate the new node or exceed the existing degree bound.
++    for (uint64_t slot = 0; slot < (*graph)->Size(); ++slot) {
++        REQUIRE((*graph)->IncomingLinkCountAt(slot) > 0);
++        REQUIRE((*graph)->LinkCountAt(slot) <= 2);
++    }
++    const auto found = (*graph)->Search(&vector, 1, 5);
++    REQUIRE(found);
++    REQUIRE(found->size() == 5);
++    REQUIRE(found->front().id == 4);
++    REQUIRE(found->front().distance == 0.F);
++}

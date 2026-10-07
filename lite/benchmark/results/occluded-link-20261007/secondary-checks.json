@@ -1,0 +1,106 @@
+[
+  {
+    "name": "event-build",
+    "command": [
+      "g++",
+      "-std=c++17",
+      "-O3",
+      "-Iinclude",
+      "-Isrc",
+      "-Iextern/expected/include",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add.cpp",
+      "-Lbuild-lite-fragment-release",
+      "-lvsag-lite",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "baseline-event-add",
+    "command": [
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-event.snapshot"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-occluded-link-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "baseline-event-query",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-event.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-event.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-occluded-link-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "baseline-same-initial",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_mutation_trace",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/same-initial-baseline.events.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-occluded-link-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "candidate-event-add",
+    "command": [
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-remove.snapshot",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/candidate-event.snapshot"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release",
+    "exit": 0
+  },
+  {
+    "name": "candidate-event-query",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/candidate-event.snapshot",
+      "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/candidate-event.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release",
+    "exit": 0
+  },
+  {
+    "name": "candidate-same-initial",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_mutation_trace",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-occluded-link-20261007/same-initial-candidate.events.csv"
+    ],
+    "library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release",
+    "exit": 0
+  }
+]

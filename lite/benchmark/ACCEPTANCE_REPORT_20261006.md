@@ -272,3 +272,14 @@ below the .95 historical floor. These are existing observed queries, not new
 holdout acceptance. The library and test prototype were removed and the
 restored default passed 4/4 CTest. No default policy, new ASan result or public
 RaBitQ delivery is implied.
+
+## 2026-10-07: occluded reverse-link rejection
+
+The [occluded-link experiment](results/occluded-link-20261007/README.md)
+preserved a previously identified routing edge and recovered one query from
+6 to 7 hits at the same budget. However, three full 10,000-cycle CRUD repeats
+ended at recall .928 versus baseline .940; the same-initial-graph diagnostic
+ended .931 versus .940. Whole-process CPU medians were 5.54 versus 5.45 seconds,
+with no demonstrated benefit. The candidate was withdrawn and the default
+restored/retested (4/4). This is negative evidence on observed queries, not a
+new accepted policy or independent quality gate.

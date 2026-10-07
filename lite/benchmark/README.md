@@ -1837,3 +1837,7 @@ These observed-query diagnostics do not adopt a new graph policy.
 See [two-incoming retention rejection](results/two-incoming-20261007/README.md)
 for initial-build gains that did not survive full churn. The prototype was
 withdrawn; this is negative evidence, not a new accepted graph policy.
+
+See [occluded reverse-link rejection](results/occluded-link-20261007/README.md)
+for local event recovery that did not improve full churn. The prototype was
+withdrawn; no new default graph policy was adopted.

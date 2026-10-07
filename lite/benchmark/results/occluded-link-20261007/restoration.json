@@ -1,0 +1,32 @@
+{
+  "source_parent": "247b7e130708752b247b6daa214856fd50ccb425",
+  "checks": [
+    {
+      "name": "restored-build",
+      "command": [
+        "cmake",
+        "--build",
+        "build-lite-fragment-release",
+        "--target",
+        "lite_graph_tests",
+        "lite_tests",
+        "-j2"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "restored-ctest",
+      "command": [
+        "ctest",
+        "--test-dir",
+        "build-lite-fragment-release",
+        "--output-on-failure"
+      ],
+      "exit": 0
+    }
+  ],
+  "sources": {
+    "graph_backend.cpp": "2c71cc17cf1421f1983c5cdbbd0f93d95651b22521bdbbf74ee764371560d19f",
+    "graph_backend_test.cpp": "0e93cac38b6274d17ad366658c85cb80bf564aab9507cf86f464b70942fd2b06"
+  }
+}

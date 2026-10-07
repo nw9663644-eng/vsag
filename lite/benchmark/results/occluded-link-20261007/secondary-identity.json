@@ -1,0 +1,15 @@
+{
+  "/home/ubuntu/project/vsag-lite-baseline-v01/src/impl/pruning_strategy.cpp": "7e14cd00865ef817d5fc07addc5fdac3b34ba6697eac365c9c83359d2da1b952",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/src/algorithm/hgraph/hgraph_build.cpp": "971c9202f0cfc088c99c51a4606cf7e1306f747c8ce653d8a04427539a74520e",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_mutation_trace.cpp": "f54008d8d6499b0fe7538ee1a56485206bf9d8fb4faa934eeafe0effd093bad6",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp": "75cdbc683041d19390fe214f96dfb19abbfea5c0c4ce0ff9740c5dbae9283e41",
+  "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add.cpp": "bb9d4e49e2b8b8773fc99219fd73667f0ec57ac9965ca4f1b31d5e04007ffd87",
+  "/home/ubuntu/project/vsag-lite-occluded-link-20261007/event_add": "93551f34563d0db5270acf378bbfbc5781219cdb19afdface0783d6ecf19298d",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/replay.cpp": "991b75e390bc5553c09d292aa3ef55fd770a607d1b595c30ed9ce591b17be591",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/controls.py": "8d2a3e158c503f1f76631f9a467b5fad92ffe17c6e55364ef0c3c74d750ab9cf",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-before.snapshot": "556a4e3aca329ff0688d6d06bbce14699d290aa8afde27ba088f0943797392ae",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-remove.snapshot": "0b9a68699daf386152847ca42434be1d577ec3769c308cae97b082bc144d3970",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/cycle-3000-add.snapshot": "d75d047a777016cffdb339807cdd09af97f5b131cb3c89971577f7cf5e039f82",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0/queries.fvecs": "e92cf9fb4499874762d0ac6739096bc5109f26ef00b17960f4bef9763e9a0a6b",
+  "/home/ubuntu/project/vsag-lite-event-routing-20261007/query-0/groundtruth.ivecs": "2d4d34978d20664f5bf7629111f80eaee50e662720e9b2d63c7ed2115fbd04ba"
+}

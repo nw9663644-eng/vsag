@@ -1,0 +1,75 @@
+{
+  "same_ids_and_vector_bytes": true,
+  "baseline_reproduces_original_snapshot": true,
+  "critical_edge_baseline": false,
+  "critical_edge_candidate": true,
+  "candidate_critical_row_preserved": true,
+  "event_query": {
+    "baseline": [
+      {
+        "query": "0",
+        "hits": "6",
+        "truth_visited": "6",
+        "truth_not_visited": "4",
+        "visited_not_returned": "0",
+        "visited_nodes": "1001",
+        "expanded_nodes": "129",
+        "route_nodes": "0",
+        "distance_evaluations": "1001",
+        "early_stop": "1"
+      }
+    ],
+    "candidate": [
+      {
+        "query": "0",
+        "hits": "7",
+        "truth_visited": "7",
+        "truth_not_visited": "3",
+        "visited_not_returned": "0",
+        "visited_nodes": "1001",
+        "expanded_nodes": "129",
+        "route_nodes": "0",
+        "distance_evaluations": "1001",
+        "early_stop": "1"
+      }
+    ]
+  },
+  "same_initial": {
+    "baseline": {
+      "cycle": "9999",
+      "id": "1809",
+      "common_queries": "100",
+      "k": "10",
+      "before_hits": "940",
+      "remove_hits": "940",
+      "add_hits": "940",
+      "before_edges": "159969",
+      "remove_edges": "159984",
+      "add_edges": "159979",
+      "remove_dropped": "0",
+      "remove_added": "15",
+      "add_dropped": "5",
+      "add_added": "0"
+    },
+    "candidate": {
+      "cycle": "9999",
+      "id": "1809",
+      "common_queries": "100",
+      "k": "10",
+      "before_hits": "931",
+      "remove_hits": "930",
+      "add_hits": "931",
+      "before_edges": "159970",
+      "remove_edges": "159984",
+      "add_edges": "159982",
+      "remove_dropped": "0",
+      "remove_added": "14",
+      "add_dropped": "2",
+      "add_added": "0"
+    }
+  },
+  "snapshot_hashes": {
+    "baseline": "d75d047a777016cffdb339807cdd09af97f5b131cb3c89971577f7cf5e039f82",
+    "candidate": "4e63bdf0b4540fca54f93936dbf146f442ee8d880f811a1332bef6cea8f52669"
+  }
+}

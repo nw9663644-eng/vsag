@@ -1,0 +1,233 @@
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Third-party override: dependency=CATCH2, pin=v3.7.1, source=default, variable=none; expected pinned variable VSAG_THIRDPARTY_CATCH2_3_7_1; deprecated legacy fallback VSAG_THIRDPARTY_CATCH2 is unset
+[1/9] Creating directories for 'catch2-populate'
+[1/9] Performing download step (download, verify and extract) for 'catch2-populate'
+-- Downloading...
+   dst='/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/v3.7.1.tar.gz'
+   timeout='30 seconds'
+   inactivity timeout='5 seconds'
+-- Using src='https://github.com/catchorg/Catch2/archive/refs/tags/v3.7.1.tar.gz'
+CMake Error at catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/download-catch2-populate.cmake:170 (message):
+  Each download failed!
+
+    error: downloading 'https://github.com/catchorg/Catch2/archive/refs/tags/v3.7.1.tar.gz' failed
+          status_code: 28
+          status_string: "Timeout was reached"
+          log:
+          --- LOG BEGIN ---
+            Trying 20.205.243.166:443...
+
+  Connected to github.com (20.205.243.166) port 443 (#0)
+
+  ALPN, offering h2
+
+  ALPN, offering http/1.1
+
+  TLSv1.0 (OUT), TLS header, Certificate Status (22):
+
+  [5 bytes data]
+
+  TLSv1.3 (OUT), TLS handshake, Client hello (1):
+
+  [512 bytes data]
+
+  TLSv1.2 (IN), TLS header, Certificate Status (22):
+
+  [5 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Server hello (2):
+
+  [122 bytes data]
+
+  TLSv1.2 (IN), TLS header, Finished (20):
+
+  [5 bytes data]
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Encrypted Extensions (8):
+
+  [19 bytes data]
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Certificate (11):
+
+  [2741 bytes data]
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, CERT verify (15):
+
+  [78 bytes data]
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Finished (20):
+
+  [36 bytes data]
+
+  TLSv1.2 (OUT), TLS header, Finished (20):
+
+  [5 bytes data]
+
+  TLSv1.3 (OUT), TLS change cipher, Change cipher spec (1):
+
+  [1 bytes data]
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (OUT), TLS handshake, Finished (20):
+
+  [36 bytes data]
+
+  SSL connection using TLSv1.3 / TLS_AES_128_GCM_SHA256
+
+  ALPN, server accepted to use h2
+
+  Server certificate:
+
+   subject: CN=github.com
+   start date: Sep  1 00:00:00 2026 GMT
+   expire date: Nov 29 23:59:59 2026 GMT
+   subjectAltName: host "github.com" matched cert's "github.com"
+   issuer: C=GB; O=Sectigo Limited; CN=Sectigo Public Server Authentication CA DV E36
+   SSL certificate verify result: unable to get local issuer certificate (20), continuing anyway.
+
+  Using HTTP2, server supports multiplexing
+
+  Connection state changed (HTTP/2 confirmed)
+
+  Copying HTTP/2 data in stream buffer to connection buffer after upgrade:
+  len=0
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  Using Stream ID: 1 (easy handle 0x55f41ae84cf0)
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  GET /catchorg/Catch2/archive/refs/tags/v3.7.1.tar.gz HTTP/2
+
+  Host: github.com
+
+  user-agent: curl/7.81.0
+
+  accept: */*
+
+
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+
+  [57 bytes data]
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.3 (IN), TLS handshake, Newsession Ticket (4):
+
+  [57 bytes data]
+
+  old SSL session ID is stale, removing
+
+  TLSv1.2 (IN), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  Operation too slow.  Less than 1 bytes/sec transferred the last 5 seconds
+
+  TLSv1.2 (OUT), TLS header, Supplemental data (23):
+
+  [5 bytes data]
+
+  [1 bytes data]
+
+  stopped the pause stream!
+
+  Connection #0 to host github.com left intact
+
+
+
+          --- LOG END ---
+
+
+
+
+FAILED: catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download
+cd /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps && /usr/bin/cmake -P /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/download-catch2-populate.cmake && /usr/bin/cmake -P /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/verify-catch2-populate.cmake && /usr/bin/cmake -P /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/extract-catch2-populate.cmake && /usr/bin/cmake -E touch /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/_deps/catch2-subbuild/catch2-populate-prefix/src/catch2-populate-stamp/catch2-populate-download
+ninja: build stopped: subcommand failed.
+
+CMake Error at /usr/share/cmake-3.22/Modules/FetchContent.cmake:1087 (message):
+  Build step for catch2 failed: 1
+Call Stack (most recent call first):
+  /usr/share/cmake-3.22/Modules/FetchContent.cmake:1216:EVAL:2 (__FetchContent_directPopulate)
+  /usr/share/cmake-3.22/Modules/FetchContent.cmake:1216 (cmake_language)
+  /usr/share/cmake-3.22/Modules/FetchContent.cmake:1259 (FetchContent_Populate)
+  /home/ubuntu/project/vsag-lite-baseline-v01/extern/catch2/catch2.cmake:15 (FetchContent_MakeAvailable)
+  CMakeLists.txt:77 (include)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-occluded-release/CMakeFiles/CMakeOutput.log".
