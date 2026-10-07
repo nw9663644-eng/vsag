@@ -1,0 +1,28 @@
+{
+  "source_parent": "549a44d9479ed7538cc47e003d68530ddf92b2e4",
+  "dataset": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+  "cpu": 0,
+  "replicates": 3,
+  "flows": [
+    "build",
+    "crud"
+  ],
+  "crud": "10000 distinct IDs, same-vector Update/Remove/Add; no query budget changes",
+  "comparison": "same new diagnostic runner, old/new libraries selected explicitly with LD_LIBRARY_PATH",
+  "old_library": {
+    "default": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f",
+    "diverse": "f0bc3c5d66b321e2aadf6afd663cd1421be9517a5871f2f1948bc5e07c61f7c5"
+  },
+  "new_library": {
+    "default": "d9c5373b109e8573493d333365f033c1826524c23ae171df97b173a82d7f6f82",
+    "diverse": "2cda05e2abfa140dbe9e9c1c723c5d0915cf2b334a62e20dddae03ae4d0892be"
+  },
+  "runner": {
+    "default": "42470223f10a2479ed71227938b5a9e203f957f447ee5b8eaa38b03ec0aa1b86",
+    "diverse": "8e82a3108c0a3db59e94a04d466017cc6930dcc2761ad1ea7ebc98f7fc893ae4"
+  },
+  "sources": {
+    "src/lite/graph_backend.cpp": "379dd4e258815e72d83a04b18a65f5495a98ed6ea23588a4efd1ce92cdcadc91",
+    "lite/benchmark/graph_crud_quality.cpp": "abb496c49a067923af7cd6e6cbfbb4de21818a8896d5c824d5583f383a933168"
+  }
+}

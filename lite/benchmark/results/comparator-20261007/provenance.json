@@ -1,0 +1,9 @@
+{
+  "parent": "549a44d9479ed7538cc47e003d68530ddf92b2e4",
+  "source_sha256": {
+    "src/lite/graph_backend.cpp": "379dd4e258815e72d83a04b18a65f5495a98ed6ea23588a4efd1ce92cdcadc91",
+    "src/impl/heap/standard_heap.h": "8347f1d2cacccfe6c6d11c629896ce3ebcdf3a22de35f71e8f3715ef841df2de",
+    "src/impl/heap/distance_heap.h": "e2d253fb5d5cc8581f4be5106e67055fa7a9e824505eda5ab5969a0d65c315e5",
+    "lite/benchmark/graph_crud_quality.cpp": "abb496c49a067923af7cd6e6cbfbb4de21818a8896d5c824d5583f383a933168"
+  }
+}

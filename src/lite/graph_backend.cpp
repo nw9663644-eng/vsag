@@ -39,6 +39,21 @@ farther(const Candidate& left, const Candidate& right) {
            (left.distance == right.distance and left.slot > right.slot);
 }
 
+// Concrete comparator types let heap operations inline the existing total ordering.
+struct Closer {
+    bool
+    operator()(const Candidate& left, const Candidate& right) const {
+        return closer(left, right);
+    }
+};
+
+struct Farther {
+    bool
+    operator()(const Candidate& left, const Candidate& right) const {
+        return farther(left, right);
+    }
+};
+
 class GraphBackend final : public Backend {
 public:
     GraphBackend(uint64_t dimension, uint64_t max_degree, uint64_t ef_search, bool fp16 = false)
@@ -261,11 +276,9 @@ public:
             }
             const uint64_t ef = std::min(Size(), std::max(k, budget));
             // With closer as Compare, top() is the farthest candidate and pop() evicts it.
-            std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> best(&closer);
-            std::priority_queue<Candidate, std::vector<Candidate>, decltype(&closer)> accepted(
-                &closer);
-            std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(
-                &farther);
+            std::priority_queue<Candidate, std::vector<Candidate>, Closer> best;
+            std::priority_queue<Candidate, std::vector<Candidate>, Closer> accepted;
+            std::priority_queue<Candidate, std::vector<Candidate>, Farther> candidates;
             std::vector<uint8_t> visited(Size(), 0);
             std::vector<uint16_t> encoded_query;
             if (fp16_) {
@@ -633,7 +646,7 @@ private:
                     ranked.push_back({candidate, distance(source, candidate)});
                 }
             }
-            std::sort(ranked.begin(), ranked.end(), closer);
+            std::sort(ranked.begin(), ranked.end(), Closer{});
             const uint64_t needed = max_degree_ - repaired.size();
             const uint64_t retained = std::min(needed, ranked.size());
             repaired.reserve(repaired.size() + retained);
@@ -755,7 +768,7 @@ private:
             }
             std::sort(ranked.begin(),
                       ranked.begin() + static_cast<std::ptrdiff_t>(neighbors.size()),
-                      closer);
+                      Closer{});
             uint64_t dropped = max_degree_;
             for (uint64_t i = neighbors.size(); i > 0; --i) {
                 const uint64_t candidate = ranked[i - 1].slot;

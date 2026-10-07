@@ -1,0 +1,7 @@
+	linux-vdso.so.1 (0x00007fff5a7b7000)
+	libvsag-lite.so => /home/ubuntu/project/vsag-lite-comparator-20261007/old-default/libvsag-lite.so (0x00007fa09295b000)
+	libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fa092727000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fa092707000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fa0924de000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fa0923f7000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fa09298e000)

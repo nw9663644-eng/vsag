@@ -1,0 +1,12 @@
+[
+  {
+    "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "command": "/usr/bin/c++ -DVSAG_LITE_HAS_X86_SIMD -I/home/ubuntu/project/vsag-lite-baseline-v01/include -I/home/ubuntu/project/vsag-lite-baseline-v01/src -O3 -DNDEBUG -fPIC -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp",
+    "file": "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp"
+  },
+  {
+    "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release",
+    "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -O3 -DNDEBUG -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_crud_quality.dir/benchmark/graph_crud_quality.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_crud_quality.cpp",
+    "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_crud_quality.cpp"
+  }
+]

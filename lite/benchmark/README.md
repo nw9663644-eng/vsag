@@ -1807,3 +1807,8 @@ for lifecycle, source provenance and the limits of the memory comparison.
 
 See [CPU0 build/maintenance profiling](results/cpu-profile-20261007/README.md)
 for source-bound call stacks, counters and the full-ID churn quality limitation.
+
+See [typed comparator verification](results/comparator-20261007/README.md)
+for exact old/new result and snapshot checks and fixed-budget CPU comparisons.
+Optional `lite_graph_crud_quality` query output also creates an ordered ID/hexfloat
+distance `.neighbors.csv` sidecar; the existing hit CSV schema remains unchanged.

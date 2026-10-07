@@ -1,0 +1,64 @@
+{
+  "scope": "Lite src/internal headers + public index.h; no extern/full/benchmark",
+  "covered": 957,
+  "total": 1060,
+  "percent": 90.28301886792453,
+  "files": {
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx.cpp": {
+      "covered": 6,
+      "total": 6
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp": {
+      "covered": 202,
+      "total": 231
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_codec.h": {
+      "covered": 37,
+      "total": 38
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend_utils.h": {
+      "covered": 11,
+      "total": 11
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx2.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx512.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp": {
+      "covered": 118,
+      "total": 131
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h": {
+      "covered": 3,
+      "total": 23
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx2.cpp": {
+      "covered": 6,
+      "total": 6
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance.cpp": {
+      "covered": 11,
+      "total": 16
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance.cpp": {
+      "covered": 28,
+      "total": 28
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_sse.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp": {
+      "covered": 520,
+      "total": 555
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx512.cpp": {
+      "covered": 6,
+      "total": 6
+    }
+  }
+}

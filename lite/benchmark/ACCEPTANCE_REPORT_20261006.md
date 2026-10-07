@@ -159,3 +159,17 @@ used in earlier Cohere studies; this exploratory protocol did not predeclare
 a new acceptance gate. Preserve the negative result and investigate quality
 at full-ID churn; earlier low-fraction churn passes do not generalize.
 No library change or diversity default adoption follows from this diagnostic.
+
+## Typed comparator follow-up, 2026-10-07
+
+[Comparator optimization](results/comparator-20261007/README.md) preserves
+ordering/budgets and all recorded old/new snapshots and ordered neighbors across
+48 runs. After verification builds finished,24 final runs give whole-process
+CPU medians for default build2.18 to1.90 s (-12.84%), build plus full-ID CRUD
+7.15 to6.59 s (-7.83%); diversity build2.47 to2.15 (-12.96%), build plus CRUD
+8.21 to7.19 (-12.42%). This is Cohere10k only, three processes per configuration,
+not an isolated mutation/query ratio or statistical/global optimum claim.
+Release default4/4, diversity3/3, ASan+UBSan6/6; fresh Lite emitted-source/internal
+header coverage957/1060=90.28%, format/tidy15 pass. Core dispatch change is
+semantics-preserving on these checks, while default full-ID churn recall remains
+0.933. Quality diagnosis and100k/other-distribution verification remain open.

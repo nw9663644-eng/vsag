@@ -91,6 +91,9 @@ run(const std::string& directory,
     require(query_results.empty() or not std::filesystem::exists(query_results),
             "query results path already exists");
 
+    require(query_results.empty() or not std::filesystem::exists(query_results + ".neighbors.csv"),
+            "neighbor results path already exists");
+
     auto base = read_records<float>(base_path, dim);
     auto queries = read_records<float>(query_path, dim);
     auto truth = read_records<int32_t>(truth_path, k);
@@ -154,6 +157,17 @@ run(const std::string& directory,
                          << static_cast<double>(query_hits[i]) / k << '\n';
         }
         require(static_cast<bool>(query_output), "query results write failed");
+        std::ofstream neighbors(query_results + ".neighbors.csv");
+        require(static_cast<bool>(neighbors), "neighbor results open failed");
+        neighbors << "query,rank,id,distance\n" << std::hexfloat;
+        for (uint64_t query = 0; query < before.size(); ++query) {
+            for (uint64_t rank = 0; rank < before[query].size(); ++rank) {
+                const auto& neighbor = before[query][rank];
+                neighbors << query << ',' << rank << ',' << neighbor.id << ',' << neighbor.distance
+                          << '\n';
+            }
+        }
+        require(static_cast<bool>(neighbors), "neighbor results write failed");
     }
     start = Clock::now();
     std::ofstream output(snapshot, std::ios::binary);

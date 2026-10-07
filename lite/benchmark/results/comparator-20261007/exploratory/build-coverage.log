@@ -1,0 +1,13 @@
+[0/1] Re-running CMake...
+-- Third-party override: dependency=CATCH2, pin=v3.7.1, source=default, variable=none; expected pinned variable VSAG_THIRDPARTY_CATCH2_3_7_1; deprecated legacy fallback VSAG_THIRDPARTY_CATCH2 is unset
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-coverage
+[1/8] Building CXX object CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp.o
+[2/8] Building CXX object CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp.o
+[3/8] Building CXX object CMakeFiles/lite_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index_test.cpp.o
+[4/8] Building CXX object CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o
+[5/8] Linking CXX shared library libvsag-lite.so
+[6/8] Linking CXX executable lite_tests
+[7/8] Building CXX object CMakeFiles/lite_graph_tests.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp.o
+[8/8] Linking CXX executable lite_graph_tests

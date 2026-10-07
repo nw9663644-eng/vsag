@@ -1,0 +1,7 @@
+	linux-vdso.so.1 (0x00007fff16f5f000)
+	libvsag-lite.so => /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-online-diverse-release/libvsag-lite.so (0x00007fed70e08000)
+	libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fed70bd4000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fed70bb4000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fed7098b000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fed708a4000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fed70e39000)

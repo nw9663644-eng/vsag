@@ -1,0 +1,25 @@
+default-build-old-r0 2.1399999999999997 0.960000
+default-build-new-r0 1.9000000000000001 0.960000
+default-crud-old-r0 7.1499999999999995 0.933000
+default-crud-new-r0 6.7 0.933000
+diverse-build-old-r0 2.4699999999999998 0.982000
+diverse-build-new-r0 2.15 0.982000
+diverse-crud-old-r0 8.21 0.960000
+diverse-crud-new-r0 7.19 0.960000
+diverse-crud-new-r1 7.13 0.960000
+diverse-crud-old-r1 8.42 0.960000
+diverse-build-new-r1 2.11 0.982000
+diverse-build-old-r1 2.47 0.982000
+default-crud-new-r1 6.51 0.933000
+default-crud-old-r1 7.18 0.933000
+default-build-new-r1 1.8900000000000001 0.960000
+default-build-old-r1 2.1799999999999997 0.960000
+default-build-old-r2 2.38 0.960000
+default-build-new-r2 1.9300000000000002 0.960000
+default-crud-old-r2 7.06 0.933000
+default-crud-new-r2 6.59 0.933000
+diverse-build-old-r2 2.46 0.982000
+diverse-build-new-r2 2.1599999999999997 0.982000
+diverse-crud-old-r2 8.190000000000001 0.960000
+diverse-crud-new-r2 7.64 0.960000
+Completed 24 paired runs
