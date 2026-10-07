@@ -1,0 +1,36 @@
+{
+  "source_parent": "d8e12eccb93152561d9ae856283bf9add821ce41",
+  "dataset": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+  "dataset_sha256": {
+    "source-base-ids.i64": "9e1c19b3fdc185411bd1a987deb6a9fda2531116aac060a84c4d878854d1c099",
+    "base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+    "groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d",
+    "source-query-ids.i64": "96bdba67cd0b5e6dc0f9e399f66b17eae627eac812d0620119e87687d789546a",
+    "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "manifest.json": "cabf8f33b909207197c88c94866f50a0a2f9fa85933235cb1e00111537ba37a3"
+  },
+  "binaries": {
+    "default": {
+      "path": "build-lite-fragment-release/lite_graph_crud_quality",
+      "sha256": "072b402711f79cfda1284d44b8b18effafedba8f474bf5e24466691c6cb72be1"
+    },
+    "diverse": {
+      "path": "build-lite-online-diverse-release/lite_graph_crud_quality",
+      "sha256": "5568b94c4e0c93b3f116f0f286e4117d63c8b09c76d29afd1b7ba056bd30ae2c"
+    }
+  },
+  "cpu": 0,
+  "sampling": "cpu-clock:u 199Hz, DWARF8192, root perf; target CPU0",
+  "repeats": 2,
+  "flows": {
+    "build": {
+      "rounds": 0,
+      "ops": 1
+    },
+    "crud": {
+      "rounds": 1,
+      "ops": 10000
+    }
+  },
+  "scope": "Whole process including data IO, initial flat staging, graph build, same-vector Update/Remove/Add, query and snapshot. Stack attribution separates identifiable API paths, not isolated phase timing."
+}

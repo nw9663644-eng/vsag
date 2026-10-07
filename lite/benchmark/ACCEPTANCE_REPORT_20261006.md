@@ -142,3 +142,20 @@ start or exactly equal-quality performance. The earlier table remains historical
 Core serial functionality is implemented and tested. Public quantized delivery,
 final accepted scope and remaining comparison gaps are still open. The whole
 project cannot yet be described as complete or globally optimal.
+
+## CPU profiling and full-ID churn follow-up, 2026-10-07
+
+[CPU0 diagnostic](results/cpu-profile-20261007/README.md) attributes about half
+of build/Update/reinsert user-mode samples to distance calculation, with heap
+comparison also a hotspot. Counters confirm approximately one CPU utilized for
+this workload. Sampling is diagnostic; it is not isolated phase latency or a
+new production speedup.
+
+Cohere10k/768dim, query128, all10000 original IDs each receive same-vector
+Update/Remove/Add once. Existing100 observed queries retain recall0.933 for
+default (initial0.960), diversity0.960 (initial0.982), identically in both
+sampling repeats and separate counter runs. Default falls below the0.95 floor
+used in earlier Cohere studies; this exploratory protocol did not predeclare
+a new acceptance gate. Preserve the negative result and investigate quality
+at full-ID churn; earlier low-fraction churn passes do not generalize.
+No library change or diversity default adoption follows from this diagnostic.

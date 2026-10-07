@@ -1,0 +1,102 @@
+[
+  {
+    "name": "default-build-stat",
+    "command": [
+      "sudo",
+      "-n",
+      "perf",
+      "stat",
+      "-x",
+      ",",
+      "-e",
+      "task-clock,cycles,instructions,cache-misses,context-switches,cpu-migrations,page-faults",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/default-build-stat.stat.csv",
+      "--",
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/default-build-stat.snapshot",
+      "0",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "default-crud-stat",
+    "command": [
+      "sudo",
+      "-n",
+      "perf",
+      "stat",
+      "-x",
+      ",",
+      "-e",
+      "task-clock,cycles,instructions,cache-misses,context-switches,cpu-migrations,page-faults",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/default-crud-stat.stat.csv",
+      "--",
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-fragment-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/default-crud-stat.snapshot",
+      "1",
+      "10000"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "diverse-build-stat",
+    "command": [
+      "sudo",
+      "-n",
+      "perf",
+      "stat",
+      "-x",
+      ",",
+      "-e",
+      "task-clock,cycles,instructions,cache-misses,context-switches,cpu-migrations,page-faults",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/diverse-build-stat.stat.csv",
+      "--",
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-online-diverse-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/diverse-build-stat.snapshot",
+      "0",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "diverse-crud-stat",
+    "command": [
+      "sudo",
+      "-n",
+      "perf",
+      "stat",
+      "-x",
+      ",",
+      "-e",
+      "task-clock,cycles,instructions,cache-misses,context-switches,cpu-migrations,page-faults",
+      "-o",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/diverse-crud-stat.stat.csv",
+      "--",
+      "taskset",
+      "-c",
+      "0",
+      "build-lite-online-diverse-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/home/ubuntu/project/vsag-lite-cpu-profile-20261007/diverse-crud-stat.snapshot",
+      "1",
+      "10000"
+    ],
+    "exit": 0
+  }
+]

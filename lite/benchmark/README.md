@@ -1804,3 +1804,6 @@ seven runs per mode, fixture checks, source hashes and measurement limitations.
 The default (or explicit `compressed`) profile keeps existing behavior. Lite rejects
 the Full-only profile. See [the corrected load-only comparison](results/load-reverse-20261007/README.md)
 for lifecycle, source provenance and the limits of the memory comparison.
+
+See [CPU0 build/maintenance profiling](results/cpu-profile-20261007/README.md)
+for source-bound call stacks, counters and the full-ID churn quality limitation.

@@ -1,0 +1,2 @@
+[ perf record: Woken up 14 times to write data ]
+[ perf record: Captured and wrote 3.399 MB /home/ubuntu/project/vsag-lite-cpu-profile-20261007/default-build-r1.data (418 samples) ]

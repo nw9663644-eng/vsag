@@ -1,0 +1,29 @@
+{
+  "source_parent": "d8e12eccb93152561d9ae856283bf9add821ce41",
+  "source_hashes": {
+    "src/lite/graph_backend.cpp": "d068620fa80a34cf0054a7bb4d9012b127f4742633f99a0df56450cb33bced5c",
+    "lite/benchmark/graph_crud_quality.cpp": "d4de25a0a89cef9342ea591bee509d83d6b642f4fe34571f64192862e5d69604",
+    "src/lite/fp32_distance_avx512.cpp": "f2f06a590bdc14c5aa97d8f4896aabad191877ead5e9245c96850f1a188ba7e2"
+  },
+  "libraries": {
+    "default": {
+      "path": "build-lite-fragment-release/libvsag-lite.so",
+      "sha256": "a9e7a9832443e915423e7bb33232243c12fbaba2ee996511a24acafd72da510f"
+    },
+    "diverse": {
+      "path": "build-lite-online-diverse-release/libvsag-lite.so",
+      "sha256": "f0bc3c5d66b321e2aadf6afd663cd1421be9517a5871f2f1948bc5e07c61f7c5"
+    }
+  },
+  "perf_data": {
+    "default-build-r0.data": "88f51e2fb36629e0309f1ee9c4084f2d104c35f3b06d19ca0abdf2489848ce49",
+    "diverse-build-r0.data": "6bded9637f26b3214bd000b966ee638ea9cadeefb5357c94d52027d26e7e03cb",
+    "default-build-r1.data": "6c9d6d8712385282a9ea86f2e0f6740b55779381cba57de4603a26c6e267df59",
+    "default-crud-r1.data": "8598b3795d14f38b513b879980b6e37f6aeb7daca7df86debf38e6a0dca97fb0",
+    "default-crud-r0.data": "deea53d8c87a11bdc7664107ccb7dc4ff48787432b6312b0ee4325b83fc1ddbc",
+    "diverse-crud-r0.data": "aecc455734ac21b5ba765312c64c4fb73d9c8d8ec658c6e27c457051d6c8c333",
+    "diverse-build-r1.data": "9e0f905cd1bd2666e7fe2209a3ddfb7de8bf597c1321aff0abd31030f763b3a0",
+    "diverse-crud-r1.data": "c27c78f385a858fbae8aab383f5ba27ba44cc51fcc6b65207b3eaef69ebda909"
+  },
+  "note": "No library change; raw perf.data and snapshots stay on server; compressed exact perf script exports published."
+}

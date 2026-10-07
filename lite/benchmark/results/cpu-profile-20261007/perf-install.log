@@ -1,0 +1,54 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages were automatically installed and are no longer required:
+  libfwupd2 libfwupdplugin5 libgcab-1.0-0 libgusb2 libllvm14 libmbim-glib4
+  libmbim-proxy libmm-glib0 libqmi-glib5 libqmi-proxy libsmbios-c2 libtcl8.6
+  modemmanager tcl tcl8.6 usb-modeswitch usb-modeswitch-data
+Use 'sudo apt autoremove' to remove them.
+The following additional packages will be installed:
+  linux-tools-5.15.0-190
+The following NEW packages will be installed:
+  linux-tools-5.15.0-190 linux-tools-5.15.0-190-generic
+0 upgraded, 2 newly installed, 0 to remove and 65 not upgraded.
+Need to get 7,962 kB of archives.
+After this operation, 28.2 MB of additional disk space will be used.
+Get:1 http://mirrors.tencentyun.com/ubuntu jammy-updates/main amd64 linux-tools-5.15.0-190 amd64 5.15.0-190.200 [7,961 kB]
+Get:2 http://mirrors.tencentyun.com/ubuntu jammy-updates/main amd64 linux-tools-5.15.0-190-generic amd64 5.15.0-190.200 [1,788 B]
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+Fetched 7,962 kB in 1s (8,690 kB/s)
+Selecting previously unselected package linux-tools-5.15.0-190.
+(Reading database ...
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 135987 files and directories currently installed.)
+Preparing to unpack .../linux-tools-5.15.0-190_5.15.0-190.200_amd64.deb ...
+Unpacking linux-tools-5.15.0-190 (5.15.0-190.200) ...
+Selecting previously unselected package linux-tools-5.15.0-190-generic.
+Preparing to unpack .../linux-tools-5.15.0-190-generic_5.15.0-190.200_amd64.deb ...
+Unpacking linux-tools-5.15.0-190-generic (5.15.0-190.200) ...
+Setting up linux-tools-5.15.0-190 (5.15.0-190.200) ...
+Setting up linux-tools-5.15.0-190-generic (5.15.0-190.200) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline

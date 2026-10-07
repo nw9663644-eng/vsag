@@ -1,0 +1,199 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 418  of event 'cpu-clock:u'
+# Event count (approx.): 2100502250
+#
+# Overhead  Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      IPC   [IPC Coverage]
+# ........  ..........................................................................................................................................................................................................................................................................................................................................................................................................................................................................................  ....................
+#
+    46.41%  [.] vsag::lite::detail::avx512_fp32_distance                                                                                                                                                                                                                                                                                                                                                                                                                                                -      -
+            |
+            |--40.19%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()
+            |          vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+            |          |
+            |          |--38.28%--vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+            |          |          vsag::lite::detail::make_graph_backend
+            |          |          vsag::lite::Index::BuildGraph
+            |          |          vsag::lite::Index::BuildGraph
+            |          |          (anonymous namespace)::run
+            |          |          main
+            |          |          __libc_start_call_main
+            |          |          __libc_start_main_impl (inlined)
+            |          |          _start
+            |          |
+            |           --1.91%--vsag::lite::detail::(anonymous namespace)::GraphBackend::Search
+            |                     vsag::lite::Index::Search
+            |                     (anonymous namespace)::run
+            |                     main
+            |                     __libc_start_call_main
+            |                     __libc_start_main_impl (inlined)
+            |                     _start
+            |
+             --6.22%--vsag::lite::detail::(anonymous namespace)::GraphBackend::link
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+                       vsag::lite::detail::make_graph_backend
+                       vsag::lite::Index::BuildGraph
+                       vsag::lite::Index::BuildGraph
+                       (anonymous namespace)::run
+                       main
+                       __libc_start_call_main
+                       __libc_start_main_impl (inlined)
+                       _start
+
+    13.64%  [.] vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()                                                                                                                                                                                                                                                                          -      -
+            |
+            ---vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+               vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+               vsag::lite::detail::make_graph_backend
+               vsag::lite::Index::BuildGraph
+               vsag::lite::Index::BuildGraph
+               (anonymous namespace)::run
+               main
+               __libc_start_call_main
+               __libc_start_main_impl (inlined)
+               _start
+
+     8.61%  [.] vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl                                                                                                                                                                                                                                                                                                                                                                                                                     -      -
+            |
+             --8.13%--vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+                       vsag::lite::detail::make_graph_backend
+                       vsag::lite::Index::BuildGraph
+                       vsag::lite::Index::BuildGraph
+                       (anonymous namespace)::run
+                       main
+                       __libc_start_call_main
+                       __libc_start_main_impl (inlined)
+                       _start
+
+     7.18%  [.] std::__adjust_heap<__gnu_cxx::__normal_iterator<vsag::lite::detail::(anonymous namespace)::Candidate*, std::vector<vsag::lite::detail::(anonymous namespace)::Candidate, std::allocator<vsag::lite::detail::(anonymous namespace)::Candidate> > >, long, vsag::lite::detail::(anonymous namespace)::Candidate, __gnu_cxx::__ops::_Iter_comp_iter<bool (*)(vsag::lite::detail::(anonymous namespace)::Candidate const&, vsag::lite::detail::(anonymous namespace)::Candidate const&)> >  -      -
+            |
+            |--4.31%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+            |          vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+            |          vsag::lite::detail::make_graph_backend
+            |          vsag::lite::Index::BuildGraph
+            |          vsag::lite::Index::BuildGraph
+            |          (anonymous namespace)::run
+            |          main
+            |          __libc_start_call_main
+            |          __libc_start_main_impl (inlined)
+            |          _start
+            |
+             --2.87%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+                       vsag::lite::detail::make_graph_backend
+                       vsag::lite::Index::BuildGraph
+                       vsag::lite::Index::BuildGraph
+                       (anonymous namespace)::run
+                       main
+                       __libc_start_call_main
+                       __libc_start_main_impl (inlined)
+                       _start
+
+     6.22%  [.] vsag::lite::detail::(anonymous namespace)::closer                                                                                                                                                                                                                                                                                                                                                                                                                                       -      -
+            |
+            |--4.07%--std::__adjust_heap<__gnu_cxx::__normal_iterator<vsag::lite::detail::(anonymous namespace)::Candidate*, std::vector<vsag::lite::detail::(anonymous namespace)::Candidate, std::allocator<vsag::lite::detail::(anonymous namespace)::Candidate> > >, long, vsag::lite::detail::(anonymous namespace)::Candidate, __gnu_cxx::__ops::_Iter_comp_iter<bool (*)(vsag::lite::detail::(anonymous namespace)::Candidate const&, vsag::lite::detail::(anonymous namespace)::Candidate const&)> >
+            |          |
+            |           --3.59%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()
+            |                     vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+            |                     vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+            |                     vsag::lite::detail::make_graph_backend
+            |                     vsag::lite::Index::BuildGraph
+            |                     vsag::lite::Index::BuildGraph
+            |                     (anonymous namespace)::run
+            |                     main
+            |                     __libc_start_call_main
+            |                     __libc_start_main_impl (inlined)
+            |                     _start
+            |
+             --2.15%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+                       vsag::lite::detail::make_graph_backend
+                       vsag::lite::Index::BuildGraph
+                       vsag::lite::Index::BuildGraph
+                       (anonymous namespace)::run
+                       main
+                       __libc_start_call_main
+                       __libc_start_main_impl (inlined)
+                       _start
+
+     5.98%  [.] vsag::lite::detail::(anonymous namespace)::farther                                                                                                                                                                                                                                                                                                                                                                                                                                      -      -
+            |
+            |--3.59%--std::__adjust_heap<__gnu_cxx::__normal_iterator<vsag::lite::detail::(anonymous namespace)::Candidate*, std::vector<vsag::lite::detail::(anonymous namespace)::Candidate, std::allocator<vsag::lite::detail::(anonymous namespace)::Candidate> > >, long, vsag::lite::detail::(anonymous namespace)::Candidate, __gnu_cxx::__ops::_Iter_comp_iter<bool (*)(vsag::lite::detail::(anonymous namespace)::Candidate const&, vsag::lite::detail::(anonymous namespace)::Candidate const&)> >
+            |          vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+            |          vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+            |          vsag::lite::detail::make_graph_backend
+            |          vsag::lite::Index::BuildGraph
+            |          vsag::lite::Index::BuildGraph
+            |          (anonymous namespace)::run
+            |          main
+            |          __libc_start_call_main
+            |          __libc_start_main_impl (inlined)
+            |          _start
+            |
+             --2.39%--vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl(float const*, unsigned long, unsigned long, std::function<bool (long)> const*, unsigned long) const::{lambda(unsigned long)#1}::operator()
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::SearchImpl
+                       vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+                       vsag::lite::detail::make_graph_backend
+                       vsag::lite::Index::BuildGraph
+                       vsag::lite::Index::BuildGraph
+                       (anonymous namespace)::run
+                       main
+                       __libc_start_call_main
+                       __libc_start_main_impl (inlined)
+                       _start
+
+     2.87%  [.] std::ostream::put                                                                                                                                                                                                                                                                                                                                                                                                                                                                       -      -
+            |
+            ---vsag::lite::Index::Save
+               (anonymous namespace)::run
+               main
+               __libc_start_call_main
+               __libc_start_main_impl (inlined)
+               _start
+
+     2.39%  [.] std::ostream::sentry::sentry                                                                                                                                                                                                                                                                                                                                                                                                                                                            -      -
+            |
+            ---std::ostream::put
+               vsag::lite::Index::Save
+               (anonymous namespace)::run
+               main
+               __libc_start_call_main
+               __libc_start_main_impl (inlined)
+               _start
+
+     1.20%  [.] std::__find_if<__gnu_cxx::__normal_iterator<unsigned long const*, std::vector<unsigned long, std::allocator<unsigned long> > >, __gnu_cxx::__ops::_Iter_equals_val<unsigned long const> >                                                                                                                                                                                                                                                                                               -      -
+            |
+            ---vsag::lite::detail::(anonymous namespace)::GraphBackend::link
+               vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+               vsag::lite::detail::make_graph_backend
+               vsag::lite::Index::BuildGraph
+               vsag::lite::Index::BuildGraph
+               (anonymous namespace)::run
+               main
+               __libc_start_call_main
+               __libc_start_main_impl (inlined)
+               _start
+
+     0.96%  [.] vsag::lite::detail::(anonymous namespace)::GraphBackend::link                                                                                                                                                                                                                                                                                                                                                                                                                           -      -
+            |
+            ---vsag::lite::detail::(anonymous namespace)::GraphBackend::Add
+               vsag::lite::detail::make_graph_backend
+               vsag::lite::Index::BuildGraph
+               vsag::lite::Index::BuildGraph
+               (anonymous namespace)::run
+               main
+               __libc_start_call_main
+               __libc_start_main_impl (inlined)
+               _start
+
+     0.72%  [.] __memmove_avx512_unaligned_erms                                                                                                                                                                                                                                                                                                                                                                                                                                                         -      -
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

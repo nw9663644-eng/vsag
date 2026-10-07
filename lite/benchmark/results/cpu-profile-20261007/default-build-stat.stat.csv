@@ -1,0 +1,9 @@
+# started on Wed Oct  7 15:35:32 2026
+
+2094.85,msec,task-clock,2094845734,100.00,0.998,CPUs utilized
+7740825124,,cycles,2095192463,100.00,3.695,GHz
+12995189311,,instructions,2095192463,100.00,1.68,insn per cycle
+343760668,,cache-misses,2095192463,100.00,,
+5,,context-switches,2094845734,100.00,2.387,/sec
+1,,cpu-migrations,2094845734,100.00,0.477,/sec
+47565,,page-faults,2094845734,100.00,22.706,K/sec

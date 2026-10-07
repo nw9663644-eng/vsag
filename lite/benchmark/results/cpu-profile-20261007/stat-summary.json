@@ -1,0 +1,334 @@
+[
+  {
+    "name": "default-build-stat",
+    "counters": {
+      "task-clock": {
+        "value": 2094.85,
+        "unit": "msec",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.998",
+          "CPUs utilized"
+        ]
+      },
+      "cycles": {
+        "value": 7740825124.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "3.695",
+          "GHz"
+        ]
+      },
+      "instructions": {
+        "value": 12995189311.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.68",
+          "insn per cycle"
+        ]
+      },
+      "cache-misses": {
+        "value": 343760668.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "",
+          ""
+        ]
+      },
+      "context-switches": {
+        "value": 5.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "2.387",
+          "/sec"
+        ]
+      },
+      "cpu-migrations": {
+        "value": 1.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.477",
+          "/sec"
+        ]
+      },
+      "page-faults": {
+        "value": 47565.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "22.706",
+          "K/sec"
+        ]
+      }
+    },
+    "quality": {
+      "base_count": "10000",
+      "query_count": "100",
+      "dim": "768",
+      "k": "10",
+      "rounds": "0",
+      "crud_ops": "1",
+      "recall_at_k": "0.960000",
+      "build_ms": "1891.441974",
+      "search_p50_us": "258.034000",
+      "search_p99_us": "317.833000",
+      "save_ms": "130.910116",
+      "load_ms": "7.455678",
+      "snapshot_bytes": "32160064"
+    }
+  },
+  {
+    "name": "default-crud-stat",
+    "counters": {
+      "task-clock": {
+        "value": 7023.4,
+        "unit": "msec",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.999",
+          "CPUs utilized"
+        ]
+      },
+      "cycles": {
+        "value": 25935246452.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "3.693",
+          "GHz"
+        ]
+      },
+      "instructions": {
+        "value": 36543050004.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.41",
+          "insn per cycle"
+        ]
+      },
+      "cache-misses": {
+        "value": 1154945279.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "",
+          ""
+        ]
+      },
+      "context-switches": {
+        "value": 17.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "2.420",
+          "/sec"
+        ]
+      },
+      "cpu-migrations": {
+        "value": 1.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.142",
+          "/sec"
+        ]
+      },
+      "page-faults": {
+        "value": 47565.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "6.772",
+          "K/sec"
+        ]
+      }
+    },
+    "quality": {
+      "base_count": "10000",
+      "query_count": "100",
+      "dim": "768",
+      "k": "10",
+      "rounds": "1",
+      "crud_ops": "10000",
+      "recall_at_k": "0.933000",
+      "build_ms": "1948.763507",
+      "search_p50_us": "224.475000",
+      "search_p99_us": "278.794000",
+      "save_ms": "130.668273",
+      "load_ms": "7.986847",
+      "snapshot_bytes": "32160064"
+    }
+  },
+  {
+    "name": "diverse-build-stat",
+    "counters": {
+      "task-clock": {
+        "value": 2454.46,
+        "unit": "msec",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.999",
+          "CPUs utilized"
+        ]
+      },
+      "cycles": {
+        "value": 9070767236.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "3.696",
+          "GHz"
+        ]
+      },
+      "instructions": {
+        "value": 14014569363.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.55",
+          "insn per cycle"
+        ]
+      },
+      "cache-misses": {
+        "value": 416842800.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "",
+          ""
+        ]
+      },
+      "context-switches": {
+        "value": 7.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "2.852",
+          "/sec"
+        ]
+      },
+      "cpu-migrations": {
+        "value": 1.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.407",
+          "/sec"
+        ]
+      },
+      "page-faults": {
+        "value": 47564.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "19.379",
+          "K/sec"
+        ]
+      }
+    },
+    "quality": {
+      "base_count": "10000",
+      "query_count": "100",
+      "dim": "768",
+      "k": "10",
+      "rounds": "0",
+      "crud_ops": "1",
+      "recall_at_k": "0.982000",
+      "build_ms": "2243.909734",
+      "search_p50_us": "315.412000",
+      "search_p99_us": "367.832000",
+      "save_ms": "127.325100",
+      "load_ms": "6.774936",
+      "snapshot_bytes": "31709896"
+    }
+  },
+  {
+    "name": "diverse-crud-stat",
+    "counters": {
+      "task-clock": {
+        "value": 7925.36,
+        "unit": "msec",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.000",
+          "CPUs utilized"
+        ]
+      },
+      "cycles": {
+        "value": 29249057180.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "3.691",
+          "GHz"
+        ]
+      },
+      "instructions": {
+        "value": 39759106133.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.36",
+          "insn per cycle"
+        ]
+      },
+      "cache-misses": {
+        "value": 1325318017.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "",
+          ""
+        ]
+      },
+      "context-switches": {
+        "value": 15.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "1.893",
+          "/sec"
+        ]
+      },
+      "cpu-migrations": {
+        "value": 1.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "0.126",
+          "/sec"
+        ]
+      },
+      "page-faults": {
+        "value": 47566.0,
+        "unit": "",
+        "enabled_percent": 100.0,
+        "derived": [
+          "6.002",
+          "K/sec"
+        ]
+      }
+    },
+    "quality": {
+      "base_count": "10000",
+      "query_count": "100",
+      "dim": "768",
+      "k": "10",
+      "rounds": "1",
+      "crud_ops": "10000",
+      "recall_at_k": "0.960000",
+      "build_ms": "2200.509897",
+      "search_p50_us": "248.325000",
+      "search_p99_us": "298.664000",
+      "save_ms": "128.898388",
+      "load_ms": "7.718564",
+      "snapshot_bytes": "32038184"
+    }
+  }
+]
