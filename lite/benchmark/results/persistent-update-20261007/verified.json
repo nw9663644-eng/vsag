@@ -1,0 +1,52 @@
+{
+  "pass_checks": true,
+  "query_states": 1200,
+  "updates": 60000,
+  "host_snapshots_available": true,
+  "distance_checks": 12000,
+  "host_sources_available": true,
+  "results": [
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "initial_hits": 956,
+      "changed_hits": 954,
+      "mutation_cpu_ms": 2905.586
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "initial_hits": 956,
+      "changed_hits": 954,
+      "mutation_cpu_ms": 2980.4
+    },
+    {
+      "dataset": "gist",
+      "variant": "baseline",
+      "initial_hits": 742,
+      "changed_hits": 736,
+      "mutation_cpu_ms": 5788.828
+    },
+    {
+      "dataset": "gist",
+      "variant": "candidate",
+      "initial_hits": 742,
+      "changed_hits": 736,
+      "mutation_cpu_ms": 5985.841
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "initial_hits": 891,
+      "changed_hits": 894,
+      "mutation_cpu_ms": 5202.492
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "initial_hits": 891,
+      "changed_hits": 899,
+      "mutation_cpu_ms": 5370.14
+    }
+  ]
+}

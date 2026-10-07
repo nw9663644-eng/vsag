@@ -3,6 +3,7 @@
 This experimental tool records a deterministic standalone Lite BruteForce baseline. It does not claim a performance improvement.
 
 See [ACCEPTANCE_REPORT_20261006.md](ACCEPTANCE_REPORT_20261006.md) for current acceptance boundaries and adoption decisions.
+See [persistent changed-vector replay](results/persistent-update-20261007/README.md) for the opt-in Update-only mode, changed-data truth, and quality/cost evidence.
 See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independently recomputed 100k recall and bounded persistent-update correctness.
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\

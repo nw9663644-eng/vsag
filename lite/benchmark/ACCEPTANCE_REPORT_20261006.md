@@ -322,3 +322,7 @@ policy change, universal performance benefit or new sanitizer/coverage claim fol
 ## Native CRUD raw audit (2026-10-07)
 
 [Report](results/crud-raw-20261007/README.md): 6,600 native post/mixed query events independently recomputed from returned IDs and archived truth reproduce the preceding 100k results. FP32/FP16 persistent changed-vector query and Save/Load pass a bounded exhaustive oracle fixture. No library policy adoption, new performance gain, held-out query or concurrent-call claim; the quality/cost decision remains open.
+
+## Persistent changed-vector replay (2026-10-07)
+
+[Report](results/persistent-update-20261007/README.md): 60,000 Update calls retain changed vectors on SIFT/GIST/Cohere100k; all 1,200 initial/final query states and 12,000 returned distances were audited. Candidate final recall ties baseline on SIFT/GIST and gains 5/1000 hits on Cohere; single-run mutation CPU increases about 2.6–3.4%. No default adoption or stable performance claim. Initial/final use changed truths, so topology effects need a storage-only control.

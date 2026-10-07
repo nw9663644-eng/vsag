@@ -667,6 +667,120 @@ search(const GraphSnapshot& graph,
     return trace;
 }
 
+// Update-only replay with externally recomputed truth for the changed dataset.
+int
+run_persistent_updates(const std::string& snapshot,
+                       const std::string& directory,
+                       const std::string& path,
+                       uint64_t cycles) {
+    for (const auto& suffix : {"", ".neighbors.csv", ".updates.csv"}) {
+        require(not std::filesystem::exists(path + suffix), "persistent output already exists");
+    }
+    const auto graph = load_snapshot(snapshot);
+    require(cycles > 0 and cycles <= graph.ids.size(), "invalid persistent update count");
+    require(std::gcd(uint64_t{8191}, static_cast<uint64_t>(graph.ids.size())) == 1,
+            "persistent schedule must visit distinct slots");
+    const auto queries =
+        read_records<float>(directory + "/queries.fvecs", static_cast<int32_t>(graph.dim));
+    std::ifstream truth_input(directory + "/groundtruth.ivecs", std::ios::binary);
+    const auto k = read_dim(truth_input);
+    const auto initial_truth = read_records<int32_t>(directory + "/groundtruth.ivecs", k);
+    const auto changed_truth = read_records<int32_t>(directory + "/changed-groundtruth.ivecs", k);
+    require(initial_truth.size() == queries.size() and changed_truth.size() == queries.size() and
+                static_cast<uint64_t>(k) <= graph.ids.size(),
+            "persistent truth shape mismatch");
+    for (const auto& truth : {initial_truth, changed_truth}) {
+        for (const auto& row : truth) {
+            std::unordered_set<int32_t> unique;
+            for (const int32_t id : row) {
+                require(graph.slots.count(id) != 0 and unique.insert(id).second,
+                        "invalid persistent truth ID");
+            }
+        }
+    }
+    std::ifstream input(snapshot, std::ios::binary);
+    auto loaded = vsag::lite::Index::Load(input);
+    require(static_cast<bool>(loaded), "persistent native load failed");
+    auto& index = **loaded;
+    std::ofstream neighbors(path + ".neighbors.csv");
+    std::ofstream updates(path + ".updates.csv");
+    neighbors << "phase,query,rank,id,distance\n";
+    updates << "cycle,id,original_first,changed_first,latency_us\n";
+    using Clock = std::chrono::steady_clock;
+    std::vector<std::vector<vsag::lite::Neighbor>> final_results;
+    const auto measure = [&](const char* phase, const auto& truth, bool retain) {
+        uint64_t hits = 0;
+        for (uint64_t q = 0; q < queries.size(); ++q) {
+            auto result =
+                index.SearchWithOptions(queries[q].data(), graph.dim, k, {graph.ef_search});
+            require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
+                    "persistent native search failed");
+            const std::unordered_set<int64_t> expected(truth[q].begin(), truth[q].end());
+            for (uint64_t rank = 0; rank < result->size(); ++rank) {
+                const auto& neighbor = (*result)[rank];
+                hits += expected.count(neighbor.id);
+                neighbors << phase << ',' << q << ',' << rank << ',' << neighbor.id << ','
+                          << std::hexfloat << neighbor.distance << '\n';
+            }
+            if (retain) {
+                final_results.push_back(std::move(*result));
+            }
+        }
+        return static_cast<double>(hits) / static_cast<double>(queries.size() * k);
+    };
+    const double initial_recall = measure("initial", initial_truth, false);
+    double mutation_cpu_ms = 0;
+    for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
+        const auto cpu_start = std::clock();
+        const uint64_t slot = (cycle * 8191ULL) % graph.ids.size();
+        const float* original = graph.vectors.data() + slot * graph.dim;
+        std::vector<float> changed(original, original + graph.dim);
+        changed[0] += 0.125F;
+        require(std::isfinite(changed[0]) and changed[0] != original[0],
+                "persistent update must change the FP32 representation");
+        const auto start = Clock::now();
+        require(static_cast<bool>(index.Update(graph.ids[slot], changed.data(), graph.dim)),
+                "persistent native update failed");
+        const auto latency =
+            std::chrono::duration<double, std::micro>(Clock::now() - start).count();
+        mutation_cpu_ms += 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
+        updates << cycle << ',' << graph.ids[slot] << ',' << std::hexfloat << original[0] << ','
+                << changed[0] << ',' << std::defaultfloat << std::setprecision(9) << latency
+                << '\n';
+    }
+    require(index.Size() == graph.ids.size(), "persistent live count changed");
+    const double changed_recall = measure("changed", changed_truth, true);
+    std::stringstream saved(std::ios::in | std::ios::out | std::ios::binary);
+    require(static_cast<bool>(index.Save(saved)), "persistent native save failed");
+    saved.seekg(0);
+    auto reloaded = vsag::lite::Index::Load(saved);
+    require(static_cast<bool>(reloaded) and (*reloaded)->Size() == index.Size(),
+            "persistent native reload failed");
+    for (uint64_t q = 0; q < queries.size(); ++q) {
+        auto result =
+            (*reloaded)->SearchWithOptions(queries[q].data(), graph.dim, k, {graph.ef_search});
+        require(static_cast<bool>(result) and result->size() == final_results[q].size(),
+                "persistent reloaded search failed");
+        for (uint64_t rank = 0; rank < result->size(); ++rank) {
+            require((*result)[rank].id == final_results[q][rank].id and
+                        (*result)[rank].distance == final_results[q][rank].distance,
+                    "persistent roundtrip result mismatch");
+        }
+    }
+    neighbors.close();
+    updates.close();
+    require(static_cast<bool>(neighbors) and static_cast<bool>(updates),
+            "persistent evidence write failed");
+    std::ofstream output(path);
+    output << "cycles,query_count,k,initial_recall,changed_recall,mutation_cpu_ms,roundtrip\n";
+    output << cycles << ',' << queries.size() << ',' << k << ',' << std::fixed
+           << std::setprecision(6) << initial_recall << ',' << changed_recall << ','
+           << mutation_cpu_ms << ",1\n";
+    output.close();
+    require(static_cast<bool>(output), "persistent summary write failed");
+    return 0;
+}
+
 // Bounded exact oracle: integer coordinates are represented exactly in FP32/FP16.
 // The budget covers all nodes, so this checks mutation/persistence, not ANN recall.
 void
@@ -1134,6 +1248,14 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
             test_persistent_update();
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
+        }
+        if (argc > 1 and std::string(argv[1]) == "--persistent-update") {
+            require(argc == 6, "usage: --persistent-update SNAPSHOT DATASET OUTPUT CYCLES");
+            const std::string count = argv[5];
+            require(
+                not count.empty() and count.find_first_not_of("0123456789") == std::string::npos,
+                "invalid persistent update count");
+            return run_persistent_updates(argv[2], argv[3], argv[4], std::stoull(count));
         }
         require(
             argc >= 4 and argc <= 10,
