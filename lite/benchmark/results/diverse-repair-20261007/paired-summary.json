@@ -1,0 +1,58 @@
+[
+  {
+    "dataset": "cohere",
+    "queries": 100,
+    "baseline": 0.94,
+    "candidate": 0.95,
+    "wins": 9,
+    "losses": 1,
+    "ties": 90,
+    "bootstrap_mean_delta_95": [
+      0.003,
+      0.018
+    ],
+    "sign_p": 0.021484375
+  },
+  {
+    "dataset": "sift",
+    "queries": 100,
+    "baseline": 0.979,
+    "candidate": 0.984,
+    "wins": 3,
+    "losses": 3,
+    "ties": 94,
+    "bootstrap_mean_delta_95": [
+      -0.004,
+      0.018
+    ],
+    "sign_p": 1
+  },
+  {
+    "dataset": "gist",
+    "queries": 100,
+    "baseline": 0.874,
+    "candidate": 0.884,
+    "wins": 15,
+    "losses": 11,
+    "ties": 74,
+    "bootstrap_mean_delta_95": [
+      -0.003,
+      0.025
+    ],
+    "sign_p": 0.557197093963623
+  },
+  {
+    "dataset": "validation",
+    "queries": 300,
+    "baseline": 0.94,
+    "candidate": 0.948,
+    "wins": 26,
+    "losses": 8,
+    "ties": 266,
+    "bootstrap_mean_delta_95": [
+      0.0023333333333333335,
+      0.014
+    ],
+    "sign_p": 0.0029350556433200836
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "parent": "a7313cdd12300e9d80f72f1f8e7a0b23b504ff5b",
+  "files": {
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_crud_quality": "42470223f10a2479ed71227938b5a9e203f957f447ee5b8eaa38b03ec0aa1b86",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp": "c74227188515798f0dfa1107037119f4e50f61d542f68f8e31573d59ce75439f",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp": "1361ee38db3a0bfa62efd46aba7fcefacd9808983e3efe187f50de9d089f3945",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+    "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+  },
+  "library_sha256": {
+    "baseline": "c0c8a6f535355194cb0ac726aac661189c4cede3048504cf30a888774e045d38",
+    "candidate": "90a639108b2aee88094cb320a5ba9c5824e5534a51292b1c483e347d296a9b13"
+  }
+}

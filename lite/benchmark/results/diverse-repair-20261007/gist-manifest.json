@@ -1,0 +1,8 @@
+{
+  "source": "maknee/gist1m fbin mirror of ANN_GIST1M",
+  "source_base_prefix": 10000,
+  "queries_prefix": 100,
+  "dimension": 960,
+  "k": 10,
+  "groundtruth": "recomputed squared-L2, ties by ascending ID"
+}

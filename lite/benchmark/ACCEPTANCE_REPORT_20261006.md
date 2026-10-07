@@ -294,3 +294,15 @@ All-restored factors match physically reordered controls; default diagnostic
 ID sets match native APIs. Library policy and quality floor remain unchanged.
 Next prioritize stored-topology maintenance and validate any candidate with
 full CRUD cost, cross-distribution data and independent queries.
+
+## 2026-10-07: direction-aware refill remains a candidate
+
+The [repair experiment](results/diverse-repair-20261007/README.md) preserves valid
+links and prioritizes non-occluded refill candidates, with distance fallback to
+retain degree. Cohere10k full churn improves .940 to .950 in three repeats;
+300 reserved queries improve .940 to .948, still below the historical .95 target.
+SIFT/GIST10k single observations improve .979/.874 to .984/.884; their paired
+intervals include zero. Cohere whole-CPU medians4.46/4.54s and SIFT single-run
+cost2.31/2.60s show no established cost benefit. The prototype was archived and
+withdrawn from active source pending100k/mixed/changed-update validation. Default
+CTest4/4 passes; no new sanitizer, coverage or universal quality gate is claimed.

@@ -1,0 +1,7 @@
+{
+  "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp": "c74227188515798f0dfa1107037119f4e50f61d542f68f8e31573d59ce75439f",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend_test.cpp": "0f42ab1a276aa66711397725d0cac4ff5e1c7766dd29e703a07faa7085dfb1ab",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-diverse-repair-release/libvsag-lite.so": "90a639108b2aee88094cb320a5ba9c5824e5534a51292b1c483e347d296a9b13",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe": "e031ddb0d9ef0f87442fdec893334fa72d8310dbfd4c361fe8d68e31158067b7",
+  "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/prepare_cohere.py": "d0f066605719ff4473b8b61292731503d148f8b2335e06277cc327286b453d75"
+}

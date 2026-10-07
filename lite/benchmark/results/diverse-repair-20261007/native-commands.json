@@ -1,0 +1,121 @@
+[
+  {
+    "name": "cohere-initial",
+    "stem": "baseline-build-r0",
+    "dataset": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/cohere-initial.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "cohere-baseline",
+    "stem": "baseline-crud-r0",
+    "dataset": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/baseline-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/baseline-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/cohere-baseline.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "cohere-candidate",
+    "stem": "candidate-crud-r0",
+    "dataset": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/candidate-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/candidate-crud-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/cohere-candidate.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-diverse-repair-release",
+    "exit": 0
+  },
+  {
+    "name": "sift-baseline",
+    "stem": "sift-baseline-crud",
+    "dataset": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-baseline-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-baseline-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-baseline.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "sift-candidate",
+    "stem": "sift-candidate-crud",
+    "dataset": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-candidate-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-candidate-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/sift-candidate.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-diverse-repair-release",
+    "exit": 0
+  },
+  {
+    "name": "gist-baseline",
+    "stem": "gist-baseline-crud",
+    "dataset": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-baseline-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-baseline-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-baseline.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/before",
+    "exit": 0
+  },
+  {
+    "name": "gist-candidate",
+    "stem": "gist-candidate-crud",
+    "dataset": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_slot_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-candidate-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-candidate-crud.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/gist-candidate.native.csv"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-diverse-repair-release",
+    "exit": 0
+  }
+]

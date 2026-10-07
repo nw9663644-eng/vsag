@@ -1851,3 +1851,10 @@ reference order must cover live IDs. Queries missing any recorded truth ID are
 excluded. Mask0 is checked against native API ID sets; other masks are diagnostics.
 See [the report](results/slot-factors-20261007/README.md) for limitations, fixture
 commands and offline raw-data audit. Existing output files are rejected.
+
+## Direction-aware repair candidate (2026-10-07)
+
+The [bounded refill experiment](results/diverse-repair-20261007/README.md) improves
+10k full-churn recall, including independently reserved Cohere queries, but is
+not adopted. Its patch is archived; production source remains unchanged. Larger
+scale and mixed-workload cost checks remain necessary.

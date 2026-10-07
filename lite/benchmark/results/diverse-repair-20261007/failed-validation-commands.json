@@ -1,0 +1,20 @@
+[
+  {
+    "name": "cohere-validation-initial",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/lite_graph_route_probe",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/baseline-build-r0.snapshot",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000",
+      "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/cohere-validation-initial.csv",
+      "128",
+      "uniform",
+      "preserve",
+      "1"
+    ],
+    "library": "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/before",
+    "exit": 1
+  }
+]

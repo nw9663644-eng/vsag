@@ -1,0 +1,14 @@
+{
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+  "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d",
+  "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000/base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+  "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000/queries.fvecs": "2faed4d0f16e0d6c2020f6579bbc8895c9a36cdc4f2d8c4c426551c18c91eac7",
+  "/home/ubuntu/project/vsag-lite-diverse-repair-20261007/validation/scale-10000/groundtruth.ivecs": "32d93bb0792eb128a860c8c29ce4744058a8d9359eb23a4ae2cc86e61d6e6bd6",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/base.fvecs": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+  "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8",
+  "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/base.fvecs": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444",
+  "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+  "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038"
+}

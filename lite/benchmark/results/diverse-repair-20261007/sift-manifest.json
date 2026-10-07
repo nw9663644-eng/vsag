@@ -1,0 +1,14 @@
+{
+  "source_url": "https://ann-benchmarks.com/sift-128-euclidean.hdf5",
+  "source_sha256": "dd6f0a6ed6b7ebb8934680f861a33ed01ff33991eaee4fd60914d854a0ca5984",
+  "base_prefix": 10000,
+  "queries_prefix": 100,
+  "dimension": 128,
+  "k": 10,
+  "groundtruth": "recomputed squared-L2, ties by ascending ID on selected prefix",
+  "files_sha256": {
+    "base.fvecs": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0",
+    "queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+    "groundtruth.ivecs": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8"
+  }
+}
