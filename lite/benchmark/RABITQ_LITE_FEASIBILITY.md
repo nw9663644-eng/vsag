@@ -212,3 +212,28 @@ compatibility with the existing Lite API. A future inbound-edge index or Remove
 optimization should be justified with a workload showing that Remove is the
 dominant cost; ARM SIMD and batch-four full-scan work remain optional follow-up
 experiments.
+
+## Internal codec extraction: first backend integration step (2026-10-08)
+
+The existing model training, FHT/Kac transform, fast 8-bit encoding, 3+5 packing,
+metadata and contiguous code storage now live in `src/lite/rabitq_codec.h`.
+The benchmark probe includes that shared internal module rather than defining a
+second codec. Header functions are inline so multiple consumers link safely.
+SIMD selection, graph maintenance, public configuration and snapshot parsing have
+not moved in this step. There is still no public RaBitQ backend.
+
+`python3 lite/benchmark/test_rabitq_codec_module.py` compares the extracted code
+with the frozen pre-extraction implementation at `03c2357`. It checks identical
+centroids, sign masks, scalar/filter/supplement bytes and all six float metadata
+fields for 28 records across dimensions 1/7/8/17/128/768/960, including a two
+translation-unit linkage check, replacement, hole compaction and bounds rejection.
+Use `--sanitize` for ASan+UBSan. The original codec probe self-test also passes.
+These are functional regression checks, not a new performance or coverage claim.
+
+The next implementation must adapt a fixed trained model and mutable graph state
+to the Lite backend contract, preserve caller-owned decode scratch semantics,
+and define an independently versioned encoded snapshot before exposing selection.
+Existing public FP32/FP16 formats must remain compatible. Public RaBitQ distances
+are quantized estimates and must not be documented as exact original-vector L2.
+
+中文：本轮仅完成正式接入所需的内部编码模块拆分与复用，编码结果逐字节回归一致；尚未开放RaBitQ配置、正式后端或公共快照。下一步是固定模型与可变图状态的后端适配、调用者解码缓冲区及独立版本持久化，不能将本轮当作正式接入完成或新性能成绩。
