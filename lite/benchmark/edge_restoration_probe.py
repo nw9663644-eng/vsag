@@ -42,7 +42,7 @@ def row(f, code, count, degree, source):
     return targets
 
 
-def build_control(snapshot, adjacency, cycles, mask):
+def build_control(snapshot, adjacency, cycles, mask, replacement_vectors=None):
     if mask not in range(4):
         raise ValueError('restore mask must be 0..3')
     with Path(snapshot).open('rb') as source, Path(adjacency).open('rb') as edges:
@@ -86,15 +86,31 @@ def build_control(snapshot, adjacency, cycles, mask):
                 if written != len(block):
                     raise OSError('short memory snapshot write')
                 remaining -= len(block)
-            for a in updated:
-                offset = vector_start + 4 * a * dim
-                before = struct.unpack('<f', os.pread(fd, 4, offset))[0]
-                encoded = struct.pack('<f', before + 0.125)
-                after = struct.unpack('<f', encoded)[0]
-                if not math.isfinite(after) or after == before:
-                    raise ValueError('update must change a finite FP32 value')
-                if os.pwrite(fd, encoded, offset) != 4:
-                    raise OSError('short coordinate write')
+            if replacement_vectors is None:
+                for a in updated:
+                    offset = vector_start + 4 * a * dim
+                    before = struct.unpack('<f', os.pread(fd, 4, offset))[0]
+                    encoded = struct.pack('<f', before + 0.125)
+                    after = struct.unpack('<f', encoded)[0]
+                    if not math.isfinite(after) or after == before:
+                        raise ValueError('update must change a finite FP32 value')
+                    if os.pwrite(fd, encoded, offset) != 4:
+                        raise OSError('short coordinate write')
+            else:
+                with Path(replacement_vectors).open('rb') as replacements:
+                    if Path(replacement_vectors).stat().st_size != cycles * (4 + 4 * dim):
+                        raise ValueError('replacement file length mismatch')
+                    for cycle in range(cycles):
+                        if struct.unpack('<I', read_exact(replacements, 4))[0] != dim:
+                            raise ValueError('replacement dimension mismatch')
+                        data = read_exact(replacements, 4 * dim)
+                        values = struct.unpack('<' + 'f' * dim, data)
+                        offset = vector_start + 4 * ((cycle * 8191) % count) * dim
+                        before = os.pread(fd, 4 * dim, offset)
+                        if not all(math.isfinite(x) for x in values) or struct.unpack('<' + 'f' * dim, before) == values:
+                            raise ValueError('replacement must change a finite vector')
+                        if os.pwrite(fd, data, offset) != len(data):
+                            raise OSError('short replacement write')
             for targets in chosen:
                 data = struct.pack('<' + 'Q' * (len(targets) + 1), len(targets), *targets)
                 if os.write(fd, data) != len(data):
@@ -104,18 +120,20 @@ def build_control(snapshot, adjacency, cycles, mask):
                            ef_search=ef, restored_rows=restored, explicit_edges=sum(map(len, chosen)),
                            input_snapshot_sha256=digest(snapshot), adjacency_sha256=digest(adjacency),
                            control_sha256=digest('/proc/self/fd/' + str(fd)))
+            if replacement_vectors is not None:
+                receipt['replacement_vectors_sha256'] = digest(replacement_vectors)
             return fd, receipt
         except BaseException:
             os.close(fd)
             raise
 
 
-def run(snapshot, adjacency, dataset, output, cycles, mask, binary):
+def run(snapshot, adjacency, dataset, output, cycles, mask, binary, replacement_vectors=None):
     output = Path(output)
     for suffix in ['', '.neighbors.csv', '.receipt.json']:
         if Path(str(output) + suffix).exists():
             raise ValueError('output already exists')
-    fd, receipt = build_control(snapshot, adjacency, cycles, mask)
+    fd, receipt = build_control(snapshot, adjacency, cycles, mask, replacement_vectors)
     try:
         path = '/proc/self/fd/' + str(fd)
         command = [str(Path(binary).resolve()), path, path, str(Path(dataset).resolve()), str(output)]
@@ -135,5 +153,6 @@ if __name__ == '__main__':
     parser.add_argument('cycles', type=int)
     parser.add_argument('mask', type=int, choices=range(4))
     parser.add_argument('binary')
+    parser.add_argument('--replacement-vectors')
     args = parser.parse_args()
     run(**vars(args))

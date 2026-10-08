@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "command": "cmake --build build-lite-fragment-release --target lite_graph_route_probe lite_graph_slot_probe -j2",
+      "exit": 0,
+      "archived_log": "whole-update-build.log"
+    },
+    {
+      "command": "python3 lite/benchmark/test_replacement_update_probe.py build-lite-fragment-release/lite_graph_route_probe build-lite-fragment-release/lite_graph_slot_probe",
+      "exit": 0,
+      "archived_log": "whole-update-fixture.log"
+    },
+    {
+      "command": "cmake --build build-lite-baseline-asan --target lite_graph_route_probe lite_graph_slot_probe -j2",
+      "exit": 0,
+      "archived_log": "whole-update-asan-build.log"
+    },
+    {
+      "command": "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 lite/benchmark/test_replacement_update_probe.py build-lite-baseline-asan/lite_graph_route_probe build-lite-baseline-asan/lite_graph_slot_probe",
+      "exit": 0,
+      "archived_log": "whole-update-asan-fixture.log"
+    },
+    {
+      "command": "python3 lite/benchmark/test_persistent_update_probe.py build-lite-fragment-release/lite_graph_route_probe --persistent-update trace",
+      "exit": 0,
+      "archived_log": "whole-update-old-persistent.log"
+    },
+    {
+      "command": "python3 lite/benchmark/test_persistent_update_probe.py build-lite-fragment-release/lite_graph_route_probe --storage-only-update trace",
+      "exit": 0,
+      "archived_log": "whole-update-old-storage.log"
+    },
+    {
+      "command": "python3 lite/benchmark/test_edge_restoration_probe.py build-lite-fragment-release/lite_graph_slot_probe",
+      "exit": 0,
+      "archived_log": "whole-update-old-restoration.log"
+    },
+    {
+      "command": "python3 lite/benchmark/test_graph_slot_probe.py build-lite-fragment-release/lite_graph_slot_probe",
+      "exit": 0,
+      "archived_log": "whole-update-old-slot.log"
+    },
+    {
+      "command": "clang-format-15 --dry-run --Werror lite/benchmark/graph_route_probe.cpp",
+      "exit": 0,
+      "archived_log": "whole-update-format.log"
+    },
+    {
+      "command": "clang-tidy-15 lite/benchmark/graph_route_probe.cpp -- -std=c++17 -Ilite/include -Isrc -Iinclude -Ithirdparty",
+      "exit": 0,
+      "archived_log": "whole-update-tidy.log"
+    }
+  ],
+  "asan_compile_flags": [
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -fsanitize=address,undefined -fno-omit-frame-pointer -g -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_slot_probe.dir/benchmark/graph_slot_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_slot_probe.cpp"
+    },
+    {
+      "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan",
+      "command": "/usr/bin/c++ -I/home/ubuntu/project/vsag-lite-baseline-v01/include -fsanitize=address,undefined -fno-omit-frame-pointer -g -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/lite_graph_route_probe.dir/benchmark/graph_route_probe.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp",
+      "file": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/graph_route_probe.cpp"
+    }
+  ],
+  "python_syntax_compilation_exit": 0,
+  "scope": "Diagnostic tools only; library unchanged"
+}

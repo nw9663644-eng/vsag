@@ -1,0 +1,200 @@
+{
+  "pass_checks": true,
+  "host_snapshots_verified": 3,
+  "host_sources_verified": true,
+  "factor_query_states": 2000,
+  "native_calibrations": 2000,
+  "slot_query_states": 16000,
+  "distance_checks": 20000,
+  "native_distance_checks": 20000,
+  "replacement_vectors_checked": 3000,
+  "query_history": "all historically observed; not blind",
+  "results": [
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.947,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1149.23,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.949,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1155.36,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.004,
+        0.011
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": 2,
+      "wins": 1,
+      "losses": 2,
+      "ties": 97,
+      "gained_truth": 4,
+      "lost_truth": 2
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.948,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1150.19,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.951,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1156.25,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.003,
+        0.012
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": 3,
+      "wins": 1,
+      "losses": 1,
+      "ties": 98,
+      "gained_truth": 4,
+      "lost_truth": 1
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.885,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1265.88,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.884,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1293.97,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.007,
+        0.005
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": -1,
+      "wins": 4,
+      "losses": 5,
+      "ties": 91,
+      "gained_truth": 4,
+      "lost_truth": 5
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.885,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1266.92,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.884,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1295.11,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.007,
+        0.005
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": -1,
+      "wins": 4,
+      "losses": 5,
+      "ties": 91,
+      "gained_truth": 4,
+      "lost_truth": 5
+    },
+    {
+      "dataset": "gist",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 300,
+      "recall": 0.7546666666666667,
+      "explicit_edges": 1599985,
+      "mean_visited_nodes": 1290.07,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "gist",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 300,
+      "recall": 0.7066666666666667,
+      "explicit_edges": 1599985,
+      "mean_visited_nodes": 1413.2166666666667,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.062,
+        -0.035
+      ],
+      "two_sided_sign_p": 3.3927095067658777e-09,
+      "net_hits": -144,
+      "wins": 29,
+      "losses": 94,
+      "ties": 177,
+      "gained_truth": 65,
+      "lost_truth": 209
+    },
+    {
+      "dataset": "gist",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 300,
+      "recall": 0.7553333333333333,
+      "explicit_edges": 1599985,
+      "mean_visited_nodes": 1291.04,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "gist",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 300,
+      "recall": 0.707,
+      "explicit_edges": 1599985,
+      "mean_visited_nodes": 1413.76,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.06233333333333333,
+        -0.035333333333333335
+      ],
+      "two_sided_sign_p": 3.3927095067658777e-09,
+      "net_hits": -145,
+      "wins": 29,
+      "losses": 94,
+      "ties": 177,
+      "gained_truth": 65,
+      "lost_truth": 210
+    }
+  ]
+}

@@ -683,19 +683,25 @@ trace_updates(const GraphSnapshot& initial,
               const std::vector<std::vector<int32_t>>& truth,
               const std::vector<std::vector<vsag::lite::Neighbor>>& native,
               const std::string& path,
-              uint64_t cycles) {
+              uint64_t cycles,
+              const std::vector<std::vector<float>>* replacements = nullptr) {
     auto changed = read_snapshot(saved);
     require(changed.ids == initial.ids and changed.dim == initial.dim and
                 changed.max_degree == initial.max_degree and changed.ef_search == initial.ef_search,
             "trace snapshot identity changed");
     std::vector<uint8_t> updated(initial.ids.size(), 0);
+    std::vector<uint64_t> replacement_cycles(initial.ids.size(), cycles);
     for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
         updated[cycle * 8191ULL % initial.ids.size()] = 1;
+        replacement_cycles[cycle * 8191ULL % initial.ids.size()] = cycle;
     }
     for (uint64_t slot = 0; slot < initial.ids.size(); ++slot) {
         for (uint64_t d = 0; d < initial.dim; ++d) {
-            const float expected = initial.vectors[slot * initial.dim + d] +
-                                   (updated[slot] != 0 and d == 0 ? 0.125F : 0.0F);
+            float expected = initial.vectors[slot * initial.dim + d] +
+                             (updated[slot] != 0 and d == 0 ? 0.125F : 0.0F);
+            if (replacements != nullptr and updated[slot] != 0) {
+                expected = (*replacements)[replacement_cycles[slot]][d];
+            }
             require(changed.vectors[slot * initial.dim + d] == expected,
                     "trace saved vector mismatch");
         }
@@ -782,7 +788,8 @@ run_persistent_updates(const std::string& snapshot,
                        const std::string& path,
                        uint64_t cycles,
                        bool storage_only = false,
-                       bool trace = false) {
+                       bool trace = false,
+                       bool replacement_mode = false) {
     for (const auto& suffix : {"", ".neighbors.csv", ".updates.csv"}) {
         require(not std::filesystem::exists(path + suffix), "persistent output already exists");
     }
@@ -803,6 +810,23 @@ run_persistent_updates(const std::string& snapshot,
     require(cycles > 0 and cycles <= graph.ids.size(), "invalid persistent update count");
     require(std::gcd(uint64_t{8191}, static_cast<uint64_t>(graph.ids.size())) == 1,
             "persistent schedule must visit distinct slots");
+    std::vector<std::vector<float>> replacements;
+    if (replacement_mode) {
+        require(not storage_only, "replacement mode requires native Update");
+        replacements =
+            read_records<float>(directory + "/replacement.fvecs", static_cast<int32_t>(graph.dim));
+        require(replacements.size() == cycles, "replacement count mismatch");
+        for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
+            const float* original =
+                graph.vectors.data() + (cycle * 8191ULL % graph.ids.size()) * graph.dim;
+            require(std::all_of(replacements[cycle].begin(),
+                                replacements[cycle].end(),
+                                [](float value) { return std::isfinite(value); }) and
+                        not std::equal(
+                            replacements[cycle].begin(), replacements[cycle].end(), original),
+                    "replacement must change a finite vector");
+        }
+    }
     const auto queries =
         read_records<float>(directory + "/queries.fvecs", static_cast<int32_t>(graph.dim));
     std::ifstream truth_input(directory + "/groundtruth.ivecs", std::ios::binary);
@@ -868,9 +892,13 @@ run_persistent_updates(const std::string& snapshot,
         const uint64_t slot = (cycle * 8191ULL) % graph.ids.size();
         const float* original = graph.vectors.data() + slot * graph.dim;
         std::vector<float> changed(original, original + graph.dim);
-        changed[0] += 0.125F;
-        require(std::isfinite(changed[0]) and changed[0] != original[0],
-                "persistent update must change the FP32 representation");
+        if (replacement_mode) {
+            changed = replacements[cycle];
+        } else {
+            changed[0] += 0.125F;
+            require(std::isfinite(changed[0]) and changed[0] != original[0],
+                    "persistent update must change the FP32 representation");
+        }
         const auto start = Clock::now();
         if (storage_only) {
             uint32_t bits = 0;
@@ -965,7 +993,14 @@ run_persistent_updates(const std::string& snapshot,
         }
     }
     if (trace) {
-        trace_updates(graph, saved, queries, changed_truth, final_results, path, cycles);
+        trace_updates(graph,
+                      saved,
+                      queries,
+                      changed_truth,
+                      final_results,
+                      path,
+                      cycles,
+                      replacement_mode ? &replacements : nullptr);
     }
     neighbors.close();
     updates.close();
@@ -1457,9 +1492,11 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
             return 0;
         }
         if (argc > 1 and (std::string(argv[1]) == "--persistent-update" or
-                          std::string(argv[1]) == "--storage-only-update")) {
+                          std::string(argv[1]) == "--storage-only-update" or
+                          std::string(argv[1]) == "--replacement-update")) {
             require(argc == 6 or (argc == 7 and std::string(argv[6]) == "trace"),
-                    "usage: (--persistent-update|--storage-only-update) SNAPSHOT DATASET OUTPUT "
+                    "usage: (--persistent-update|--storage-only-update|--replacement-update) "
+                    "SNAPSHOT DATASET OUTPUT "
                     "CYCLES [trace]");
             const std::string count = argv[5];
             require(
@@ -1470,7 +1507,8 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
                                           argv[4],
                                           std::stoull(count),
                                           std::string(argv[1]) == "--storage-only-update",
-                                          argc == 7);
+                                          argc == 7,
+                                          std::string(argv[1]) == "--replacement-update");
         }
         require(
             argc >= 4 and argc <= 10,
