@@ -1,0 +1,76 @@
+{
+  "pass_checks": true,
+  "host_snapshot_verified": true,
+  "host_sources_verified": true,
+  "query_states": 400,
+  "truth_visits": 4000,
+  "distance_checks": 4000,
+  "results": [
+    {
+      "variant": "baseline",
+      "phases": {
+        "maintained": {
+          "hits": 736,
+          "unvisited_truth": 264,
+          "visited_not_returned": 0,
+          "mean_visited_nodes": 1288.6
+        },
+        "original": {
+          "hits": 741,
+          "unvisited_truth": 259,
+          "visited_not_returned": 0,
+          "mean_visited_nodes": 1287.09
+        }
+      },
+      "edge_changes": {
+        "removed:10": 69519,
+        "removed:11": 10152,
+        "removed:01": 125325,
+        "removed:00": 7244,
+        "added:10": 71504,
+        "added:11": 8167,
+        "added:00": 120865,
+        "added:01": 11634
+      },
+      "changed_rows": 83734,
+      "changed_edge_sets": 81427,
+      "lost_truth": 27,
+      "gained_truth": 22,
+      "lost_truth_zero_final_incoming": 0,
+      "lost_truth_incoming_decreased": 9
+    },
+    {
+      "variant": "candidate",
+      "phases": {
+        "maintained": {
+          "hits": 736,
+          "unvisited_truth": 264,
+          "visited_not_returned": 0,
+          "mean_visited_nodes": 1286.55
+        },
+        "original": {
+          "hits": 741,
+          "unvisited_truth": 259,
+          "visited_not_returned": 0,
+          "mean_visited_nodes": 1287.09
+        }
+      },
+      "edge_changes": {
+        "removed:10": 69591,
+        "removed:11": 10132,
+        "removed:01": 125402,
+        "removed:00": 6695,
+        "added:10": 71440,
+        "added:11": 8283,
+        "added:00": 119397,
+        "added:01": 12631
+      },
+      "changed_rows": 83657,
+      "changed_edge_sets": 81322,
+      "lost_truth": 28,
+      "gained_truth": 23,
+      "lost_truth_zero_final_incoming": 0,
+      "lost_truth_incoming_decreased": 10
+    }
+  ]
+}

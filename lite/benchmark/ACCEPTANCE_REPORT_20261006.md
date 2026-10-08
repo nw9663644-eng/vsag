@@ -330,3 +330,7 @@ policy change, universal performance benefit or new sanitizer/coverage claim fol
 ## 2026-10-08: storage-only topology control
 
 [Report](results/storage-control-20261007/README.md): six unchanged-topology controls patch 60,000 coordinates and audit 12,000 returned distances. At fixed ef128, storage-only recall SIFT/GIST/Cohere is 0.956/0.741/0.889; native baseline Update is 0.954/0.736/0.894 and candidate Update 0.954/0.736/0.899. Paired topology effects are distribution-dependent. No default adoption or API performance claim; next inspect GIST maintenance edge changes before selecting a production policy. Existing observed queries and the single-coordinate protocol limit generalization.
+
+## 2026-10-08: GIST Update routing trace
+
+[Report](results/update-trace-20261008/README.md): both fixed-budget GIST100k Update policies reproduce 736/1000 native hits against 741/1000 on unchanged topology. Scalar traces calibrated to native/control returned IDs attribute missing truth to unvisited nodes, with zero visited-but-not-returned truth. Updating 10% of IDs changes roughly 81% of neighbor sets; all lost truth targets still have incoming edges. This narrows the next diagnosis to changed routes under broad maintenance, without identifying a causal edge or adopting a policy. Four hundred query states, 4,000 truth flags and 4,000 scalar distances pass the evidence audit; no new held-out evaluation or performance gain is claimed.

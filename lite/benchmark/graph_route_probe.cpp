@@ -96,9 +96,9 @@ struct GraphSnapshot {
 };
 
 GraphSnapshot
-load_snapshot(const std::string& path) {
-    std::ifstream input(path, std::ios::binary | std::ios::ate);
-    require(static_cast<bool>(input), "snapshot open failed");
+read_snapshot(std::istream& input) {
+    input.clear();
+    input.seekg(0, std::ios::end);
     const uint64_t available = static_cast<uint64_t>(input.tellg());
     input.seekg(0);
     char magic[8];
@@ -150,6 +150,13 @@ load_snapshot(const std::string& path) {
     }
     require(static_cast<uint64_t>(input.tellg()) == available, "snapshot trailing bytes");
     return graph;
+}
+
+GraphSnapshot
+load_snapshot(const std::string& path) {
+    std::ifstream input(path, std::ios::binary);
+    require(static_cast<bool>(input), "snapshot open failed");
+    return read_snapshot(input);
 }
 
 float
@@ -667,19 +674,130 @@ search(const GraphSnapshot& graph,
     return trace;
 }
 
+// Trace the saved native topology and the same changed vectors on original links.
+// Scalar routing is diagnostic; require agreement with the native returned ID set.
+void
+trace_updates(const GraphSnapshot& initial,
+              std::istream& saved,
+              const std::vector<std::vector<float>>& queries,
+              const std::vector<std::vector<int32_t>>& truth,
+              const std::vector<std::vector<vsag::lite::Neighbor>>& native,
+              const std::string& path,
+              uint64_t cycles) {
+    auto changed = read_snapshot(saved);
+    require(changed.ids == initial.ids and changed.dim == initial.dim and
+                changed.max_degree == initial.max_degree and changed.ef_search == initial.ef_search,
+            "trace snapshot identity changed");
+    std::vector<uint8_t> updated(initial.ids.size(), 0);
+    for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
+        updated[cycle * 8191ULL % initial.ids.size()] = 1;
+    }
+    for (uint64_t slot = 0; slot < initial.ids.size(); ++slot) {
+        for (uint64_t d = 0; d < initial.dim; ++d) {
+            const float expected = initial.vectors[slot * initial.dim + d] +
+                                   (updated[slot] != 0 and d == 0 ? 0.125F : 0.0F);
+            require(changed.vectors[slot * initial.dim + d] == expected,
+                    "trace saved vector mismatch");
+        }
+    }
+    std::ofstream edges(path + ".edges.csv");
+    edges << "action,source,target,source_updated,target_updated\n";
+    const auto edge_delta = [&](const auto& from, const auto& to, const char* action) {
+        for (uint64_t source = 0; source < from.size(); ++source) {
+            for (const auto target : from[source]) {
+                if (std::find(to[source].begin(), to[source].end(), target) == to[source].end()) {
+                    edges << action << ',' << initial.ids[source] << ',' << initial.ids[target]
+                          << ',' << static_cast<uint64_t>(updated[source]) << ','
+                          << static_cast<uint64_t>(updated[target]) << '\n';
+                }
+            }
+        }
+    };
+    edge_delta(initial.links, changed.links, "removed");
+    edge_delta(changed.links, initial.links, "added");
+    edges.close();
+    require(static_cast<bool>(edges), "trace edge output failed");
+    std::ofstream final_edges(path + ".final-edges.csv");
+    final_edges << "source,rank,target\n";
+    for (uint64_t source = 0; source < changed.links.size(); ++source) {
+        for (uint64_t rank = 0; rank < changed.links[source].size(); ++rank) {
+            final_edges << changed.ids[source] << ',' << rank << ','
+                        << changed.ids[changed.links[source][rank]] << '\n';
+        }
+    }
+    final_edges.close();
+    require(static_cast<bool>(final_edges), "trace final edge output failed");
+    std::ofstream routes(path + ".routes.csv");
+    std::ofstream evidence(path + ".route-truth.csv");
+    std::ofstream neighbors(path + ".trace-neighbors.csv");
+    routes << "phase,query,hits,visited_truth,visited_nodes,expanded,early_stop\n";
+    evidence << "phase,query,id,visited,returned\n";
+    neighbors << "phase,query,rank,id,distance\n";
+    for (const auto* phase : {"maintained", "original"}) {
+        const auto entries = select_entries(changed, "uniform");
+        for (uint64_t q = 0; q < queries.size(); ++q) {
+            const auto trace =
+                search(changed, entries, "uniform", queries[q].data(), truth[q].size());
+            std::unordered_set<int64_t> returned;
+            for (uint64_t rank = 0; rank < trace.result.size(); ++rank) {
+                const auto& item = trace.result[rank];
+                const auto id = changed.ids[item.slot];
+                returned.insert(id);
+                neighbors << phase << ',' << q << ',' << rank << ',' << id << ',' << std::hexfloat
+                          << item.distance << '\n';
+            }
+            if (std::string(phase) == "maintained") {
+                require(returned.size() == native[q].size(), "trace/native result count differs");
+                for (const auto& item : native[q]) {
+                    require(returned.count(item.id) != 0, "trace/native returned IDs differ");
+                }
+            }
+            uint64_t hits = 0;
+            uint64_t visited_truth = 0;
+            for (const auto id : truth[q]) {
+                const auto visited = trace.visited[changed.slots.at(id)];
+                hits += returned.count(id);
+                visited_truth += visited;
+                evidence << phase << ',' << q << ',' << id << ',' << static_cast<uint64_t>(visited)
+                         << ',' << returned.count(id) << '\n';
+            }
+            routes << phase << ',' << q << ',' << hits << ',' << visited_truth << ','
+                   << std::count(trace.visited.begin(), trace.visited.end(), 1) << ','
+                   << trace.expanded << ',' << trace.early_stop << '\n';
+        }
+        changed.links = initial.links;
+    }
+    routes.close();
+    evidence.close();
+    neighbors.close();
+    require(
+        static_cast<bool>(routes) and static_cast<bool>(evidence) and static_cast<bool>(neighbors),
+        "trace routing output failed");
+}
+
 // Update-only replay with externally recomputed truth for the changed dataset.
 int
 run_persistent_updates(const std::string& snapshot,
                        const std::string& directory,
                        const std::string& path,
                        uint64_t cycles,
-                       bool storage_only = false) {
+                       bool storage_only = false,
+                       bool trace = false) {
     for (const auto& suffix : {"", ".neighbors.csv", ".updates.csv"}) {
         require(not std::filesystem::exists(path + suffix), "persistent output already exists");
     }
     if (storage_only) {
         require(not std::filesystem::exists(path + ".control.csv"),
                 "storage control receipt already exists");
+    }
+    if (trace) {
+        for (const auto& suffix : {".edges.csv",
+                                   ".routes.csv",
+                                   ".route-truth.csv",
+                                   ".trace-neighbors.csv",
+                                   ".final-edges.csv"}) {
+            require(not std::filesystem::exists(path + suffix), "trace output already exists");
+        }
     }
     const auto graph = load_snapshot(snapshot);
     require(cycles > 0 and cycles <= graph.ids.size(), "invalid persistent update count");
@@ -845,6 +963,9 @@ run_persistent_updates(const std::string& snapshot,
                         (*result)[rank].distance == final_results[q][rank].distance,
                     "persistent roundtrip result mismatch");
         }
+    }
+    if (trace) {
+        trace_updates(graph, saved, queries, changed_truth, final_results, path, cycles);
     }
     neighbors.close();
     updates.close();
@@ -1337,9 +1458,9 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
         }
         if (argc > 1 and (std::string(argv[1]) == "--persistent-update" or
                           std::string(argv[1]) == "--storage-only-update")) {
-            require(argc == 6,
+            require(argc == 6 or (argc == 7 and std::string(argv[6]) == "trace"),
                     "usage: (--persistent-update|--storage-only-update) SNAPSHOT DATASET OUTPUT "
-                    "CYCLES");
+                    "CYCLES [trace]");
             const std::string count = argv[5];
             require(
                 not count.empty() and count.find_first_not_of("0123456789") == std::string::npos,
@@ -1348,7 +1469,8 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
                                           argv[3],
                                           argv[4],
                                           std::stoull(count),
-                                          std::string(argv[1]) == "--storage-only-update");
+                                          std::string(argv[1]) == "--storage-only-update",
+                                          argc == 7);
         }
         require(
             argc >= 4 and argc <= 10,
