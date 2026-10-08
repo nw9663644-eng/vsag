@@ -13,6 +13,16 @@ See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independ
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\
 
+## Export every recorded experiment table
+
+```bash
+python3 /path/to/vsag/lite/benchmark/export_experiment_tables.py /new/output/directory
+```
+
+Python 3 standard library only. `ALL_EXPERIMENTS.md` lists every published table row together and retains complete source reports, prose-only historical measurements and negative results. `tables.json` records original columns, values and SHA256. Source revision identifies report content, not a common measured library version. Output must be a new directory outside `results/`. This exporter does not rerun benchmarks, verify raw artifacts, infer throughput, fill missing metrics or declare acceptance; use each study's linked verifier for evidence checks.
+
+上述命令一次导出全部实验表格及完整来源；保留历史数值、否定结果、协议和限制。JSON记录原始列名、数值、来源哈希；资料提交不等于统一被测库版本。输出必须是 `results/` 外的新目录，不覆盖已有数据。不重跑实验、不校验原始制品、不推算吞吐、不补缺项、不自动判定验收。
+
 ## Directory layout
 
 - `lite/benchmark/main.cpp`, `dataset_main.cpp`, and `run_*.sh`:
