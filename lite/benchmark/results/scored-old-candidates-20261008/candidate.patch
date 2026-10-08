@@ -1,0 +1,41 @@
+--- a/src/lite/graph_backend.cpp
++++ b/src/lite/graph_backend.cpp
+@@ -153,6 +153,38 @@
+             if (not neighbors) {
+                 return tl::unexpected(neighbors.error());
+             }
++#if defined(VSAG_LITE_EXPERIMENT_SCORED_OLD_UPDATE)
++            if (not fp16_ and not neighbors->empty()) {
++                // Reuse only old candidates competitive under the new query geometry.
++                // Keep the ANN search/budget and degree; add at most one old row.
++                std::array<Candidate, K_MAX_DEGREE * 2> ranked{};
++                uint64_t ranked_size = 0;
++                float cutoff = 0.0F;
++                for (const uint64_t candidate : *neighbors) {
++                    const float score = distance(vector, encoded, candidate);
++                    ranked[ranked_size++] = {candidate, score};
++                    cutoff = std::max(cutoff, score);
++                }
++                for (const uint64_t candidate : extras_[slot]) {
++                    if (candidate == slot or
++                        std::find(neighbors->begin(), neighbors->end(), candidate) !=
++                            neighbors->end()) {
++                        continue;
++                    }
++                    const float score = distance(vector, encoded, candidate);
++                    if (score < cutoff) {
++                        ranked[ranked_size++] = {candidate, score};
++                    }
++                }
++                if (ranked_size > neighbors->size()) {
++                    std::sort(ranked.begin(), ranked.begin() + ranked_size, Closer{});
++                    neighbors->resize(std::min(max_degree_, ranked_size));
++                    for (uint64_t i = 0; i < neighbors->size(); ++i) {
++                        (*neighbors)[i] = ranked[i].slot;
++                    }
++                }
++            }
++#endif
+             for (uint64_t neighbor : *neighbors) {
+                 extras_[neighbor].reserve(max_degree_ + 1);
+             }
