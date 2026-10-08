@@ -266,3 +266,39 @@ coverage figure is claimed; final library promotion still requires its coverage
 gate and lifecycle tests.
 
 中文：内部解码及调用者自有缓冲区已实现并验证，解决未来VectorAt适配需要的逆变换和所有权问题。重建向量是近似值，不能冒充原始输入，也不能据此重新编码保存；正式持久化必须直接保存模型和编码。正式后端、配置和公共快照仍待接入。
+
+## Shared mutable graph gate (2026-10-08)
+
+`src/lite/rabitq_graph_state.h` now owns the fixed-model graph search and mutable
+state previously defined in the codec probe. The standalone Generic/AVX2/AVX512
+3-bit filter dispatch is also under `src/lite`; the opt-in probe target keeps
+its existing per-file ISA flags. Model/code storage, external IDs, directed
+adjacency, optional inbound adjacency and mutation repair use the same measured
+implementation. The internal state does not import benchmark paths, filesystem
+operations or `getrusage`. An optional CPU clock callback preserves benchmark
+scan accounting; without a callback CPU scan counters stay zero. The probe's
+small wrapper supplies its existing process CPU clock.
+
+CSR expansion now rejects missing/nonzero origins, invalid end boundaries,
+decreasing and out-of-range offsets before iterator arithmetic. This is a safe
+internal construction boundary, not a new public snapshot version.
+
+`python3 lite/benchmark/test_rabitq_graph_module.py` compares the extracted
+state with frozen `ec990a2` definitions using 360 paired Update/Remove/Add
+operations, directed topology and nonsequential/negative external IDs. It checks
+IDs, code planes, all metadata, ordered edges, visited/reordered counts and
+ordered query distances after every cycle, with inbound adjacency both enabled
+and disabled. It also covers duplicate insertion, empty/singleton states,
+last-slot deletion and malformed CSR offsets. Add `--sanitize` for ASan+UBSan.
+The probe's existing persistence/CRUD self-test remains available and passes.
+These tests do not establish production latency, new whole-library coverage,
+public ABI support or readiness of all error paths.
+
+Remaining integration work is concrete: adapt this state to `Backend`, support
+external-ID filtering and per-call search budgets, avoid compacting the complete
+adjacency into CSR for every production search, translate failures at API
+boundaries, and persist model/code/state through an encoded format. Configuration
+must not expose RaBitQ until these lifecycle paths work together. Existing
+FP32/FP16 defaults and snapshot versions remain unchanged.
+
+中文：本轮将已有固定模型图检索和可变CRUD状态提取为Lite内部模块，SIMD距离分派同步迁到src/lite，探针复用同一实现；计时回调避免正式模块依赖实验计时器。360次新旧逐操作对照及损坏CSR边界回归用于证明拆分没有改变已测行为。尚未开放正式RaBitQ后端；下一步是Backend适配、过滤/查询预算、去除每次查询全图CSR重建及编码持久化。

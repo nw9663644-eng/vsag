@@ -4,7 +4,7 @@
 #include "simd/kernels/rabitq_compute.h"
 #include "simd/traits/simd_traits_avx512.h"
 
-namespace vsag::lite::experiment {
+namespace vsag::lite::detail::rabitq {
 
 float
 rabitq_filter_ip_avx512(const float* query, const uint8_t* filter, uint64_t dim) {
@@ -12,4 +12,4 @@ rabitq_filter_ip_avx512(const float* query, const uint8_t* filter, uint64_t dim)
         query, filter, dim, rabitq_filter_ip_generic);
 }
 
-}  // namespace vsag::lite::experiment
+}  // namespace vsag::lite::detail::rabitq

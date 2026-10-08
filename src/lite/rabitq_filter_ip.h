@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-namespace vsag::lite::experiment {
+namespace vsag::lite::detail::rabitq {
 
 using RaBitQFilterIP = float (*)(const float*, const uint8_t*, uint64_t);
 
@@ -20,4 +20,4 @@ rabitq_filter_ip_avx512(const float* query, const uint8_t* filter, uint64_t dim)
 RaBitQFilterIP
 select_rabitq_filter_ip();
 
-}  // namespace vsag::lite::experiment
+}  // namespace vsag::lite::detail::rabitq

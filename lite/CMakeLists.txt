@@ -121,17 +121,17 @@ if(ENABLE_RABITQ_LITE_PROBE)
     target_include_directories(lite_rabitq_layout_probe PRIVATE "${VSAG_ROOT}/src")
     add_executable(lite_rabitq_codec_probe
         benchmark/rabitq_lite_codec_probe.cpp
-        benchmark/rabitq_filter_ip.cpp)
+        "${VSAG_ROOT}/src/lite/rabitq_filter_ip.cpp")
     target_include_directories(lite_rabitq_codec_probe PRIVATE ../src)
     target_link_libraries(lite_rabitq_codec_probe PRIVATE vsag::lite)
     target_compile_options(lite_rabitq_codec_probe PRIVATE -Wall -Wextra -Wpedantic)
     if(VSAG_LITE_HAS_X86_SIMD)
         target_sources(lite_rabitq_codec_probe PRIVATE
-            benchmark/rabitq_filter_ip_avx2.cpp
-            benchmark/rabitq_filter_ip_avx512.cpp)
-        set_source_files_properties(benchmark/rabitq_filter_ip_avx2.cpp
+            "${VSAG_ROOT}/src/lite/rabitq_filter_ip_avx2.cpp"
+            "${VSAG_ROOT}/src/lite/rabitq_filter_ip_avx512.cpp")
+        set_source_files_properties("${VSAG_ROOT}/src/lite/rabitq_filter_ip_avx2.cpp"
             PROPERTIES COMPILE_FLAGS "-mavx2 -mfma")
-        set_source_files_properties(benchmark/rabitq_filter_ip_avx512.cpp
+        set_source_files_properties("${VSAG_ROOT}/src/lite/rabitq_filter_ip_avx512.cpp"
             PROPERTIES COMPILE_FLAGS "-mavx512f -mavx512dq -mavx512bw -mavx512vl")
         target_compile_definitions(lite_rabitq_codec_probe PRIVATE VSAG_LITE_RABITQ_X86_SIMD)
     endif()

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "rabitq_filter_ip.h"
 
-namespace vsag::lite::experiment {
+namespace vsag::lite::detail::rabitq {
 
 float
 rabitq_filter_ip_generic(const float* query, const uint8_t* filter, uint64_t dim) {
@@ -40,4 +40,4 @@ select_rabitq_filter_ip() {
     return selected;
 }
 
-}  // namespace vsag::lite::experiment
+}  // namespace vsag::lite::detail::rabitq
