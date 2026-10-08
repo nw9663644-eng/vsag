@@ -1,0 +1,98 @@
+Start testing: Oct 08 21:34 CST
+----------------------------------------------------------
+1/5 Testing: lite_rabitq_api
+1/5 Test: lite_rabitq_api
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_rabitq_api_tests" "[lite-rabitq]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release
+"lite_rabitq_api" start time: Oct 08 21:34 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-rabitq]
+Randomness seeded to: 1396180003
+===============================================================================
+All tests passed (2118 assertions in 6 test cases)
+
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"lite_rabitq_api" end time: Oct 08 21:34 CST
+"lite_rabitq_api" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/5 Testing: lite_unit
+2/5 Test: lite_unit
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_tests" "[lite]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release
+"lite_unit" start time: Oct 08 21:34 CST
+Output:
+----------------------------------------------------------
+Filters: [lite]
+Randomness seeded to: 1808373612
+===============================================================================
+All tests passed (22509 assertions in 13 test cases)
+
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"lite_unit" end time: Oct 08 21:34 CST
+"lite_unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/5 Testing: lite_scale
+3/5 Test: lite_scale
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_tests" "[lite-scale]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release
+"lite_scale" start time: Oct 08 21:34 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-scale]
+Randomness seeded to: 873635164
+===============================================================================
+All tests passed (100029 assertions in 1 test case)
+
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"lite_scale" end time: Oct 08 21:34 CST
+"lite_scale" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/5 Testing: lite_graph
+4/5 Test: lite_graph
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_tests" "[lite-graph]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release
+"lite_graph" start time: Oct 08 21:34 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-graph]
+Randomness seeded to: 1050105653
+===============================================================================
+All tests passed (545120 assertions in 14 test cases)
+
+<end of output>
+Test time =   0.38 sec
+----------------------------------------------------------
+Test Passed.
+"lite_graph" end time: Oct 08 21:34 CST
+"lite_graph" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/5 Testing: lite_quantization_probe_self_test
+5/5 Test: lite_quantization_probe_self_test
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_quantization_probe" "--self-test"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release
+"lite_quantization_probe_self_test" start time: Oct 08 21:34 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"lite_quantization_probe_self_test" end time: Oct 08 21:34 CST
+"lite_quantization_probe_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 08 21:34 CST

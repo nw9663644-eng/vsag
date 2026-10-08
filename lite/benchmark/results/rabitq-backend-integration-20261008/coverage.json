@@ -1,0 +1,279 @@
+{
+  "scope": "Fresh unit runs; Lite src/include executable lines, gcov union; tests/vendor excluded",
+  "hit": 2149,
+  "total": 2284,
+  "percent": 94.0893169877408,
+  "files": [
+    {
+      "path": "src/lite/backend.h",
+      "hit": 26,
+      "total": 26,
+      "missing": []
+    },
+    {
+      "path": "src/lite/backend_utils.h",
+      "hit": 11,
+      "total": 11,
+      "missing": []
+    },
+    {
+      "path": "src/lite/bruteforce_backend.cpp",
+      "hit": 118,
+      "total": 131,
+      "missing": [
+        45,
+        63,
+        64,
+        65,
+        66,
+        67,
+        207,
+        208,
+        209,
+        225,
+        226,
+        227,
+        228
+      ]
+    },
+    {
+      "path": "src/lite/fp16_codec.h",
+      "hit": 37,
+      "total": 38,
+      "missing": [
+        17
+      ]
+    },
+    {
+      "path": "src/lite/fp16_distance.cpp",
+      "hit": 28,
+      "total": 28,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp16_distance_avx.cpp",
+      "hit": 6,
+      "total": 6,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp16_distance_avx2.cpp",
+      "hit": 6,
+      "total": 6,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp16_distance_avx512.cpp",
+      "hit": 6,
+      "total": 6,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp32_distance.cpp",
+      "hit": 11,
+      "total": 16,
+      "missing": [
+        26,
+        27,
+        29,
+        30,
+        33
+      ]
+    },
+    {
+      "path": "src/lite/fp32_distance_avx2.cpp",
+      "hit": 3,
+      "total": 3,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp32_distance_avx512.cpp",
+      "hit": 3,
+      "total": 3,
+      "missing": []
+    },
+    {
+      "path": "src/lite/fp32_distance_sse.cpp",
+      "hit": 3,
+      "total": 3,
+      "missing": []
+    },
+    {
+      "path": "src/lite/graph_backend.cpp",
+      "hit": 527,
+      "total": 562,
+      "missing": [
+        81,
+        90,
+        121,
+        122,
+        123,
+        124,
+        154,
+        185,
+        186,
+        187,
+        188,
+        400,
+        420,
+        596,
+        604,
+        606,
+        729,
+        773,
+        838,
+        843,
+        844,
+        845,
+        846,
+        867,
+        868,
+        869,
+        870,
+        906,
+        907,
+        908,
+        909,
+        945,
+        946,
+        947,
+        948
+      ]
+    },
+    {
+      "path": "src/lite/index.cpp",
+      "hit": 221,
+      "total": 250,
+      "missing": [
+        35,
+        63,
+        64,
+        65,
+        66,
+        70,
+        71,
+        75,
+        76,
+        77,
+        107,
+        108,
+        208,
+        214,
+        221,
+        322,
+        339,
+        340,
+        341,
+        342,
+        343,
+        353,
+        364,
+        365,
+        366,
+        367,
+        386,
+        387,
+        394
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_backend.cpp",
+      "hit": 120,
+      "total": 131,
+      "missing": [
+        40,
+        82,
+        83,
+        136,
+        137,
+        152,
+        153,
+        156,
+        157,
+        186,
+        204
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_codec.h",
+      "hit": 291,
+      "total": 298,
+      "missing": [
+        180,
+        192,
+        193,
+        226,
+        255,
+        313,
+        385
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_filter_ip.cpp",
+      "hit": 22,
+      "total": 25,
+      "missing": [
+        34,
+        35,
+        38
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_filter_ip_avx2.cpp",
+      "hit": 0,
+      "total": 3,
+      "missing": [
+        10,
+        11,
+        12
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_filter_ip_avx512.cpp",
+      "hit": 3,
+      "total": 3,
+      "missing": []
+    },
+    {
+      "path": "src/lite/rabitq_graph_state.h",
+      "hit": 524,
+      "total": 552,
+      "missing": [
+        219,
+        220,
+        221,
+        342,
+        354,
+        907,
+        911,
+        912,
+        913,
+        914,
+        916,
+        917,
+        919,
+        920,
+        921,
+        922,
+        923,
+        924,
+        927,
+        928,
+        929,
+        930,
+        932,
+        933,
+        956,
+        957,
+        1006,
+        766
+      ]
+    },
+    {
+      "path": "src/lite/rabitq_snapshot.h",
+      "hit": 183,
+      "total": 183,
+      "missing": []
+    }
+  ]
+}

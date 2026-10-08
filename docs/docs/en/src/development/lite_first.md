@@ -266,3 +266,43 @@ Snapshots retain their configured default. The consumer example builds with
 budget8 then queries with budget64. Calls still require external serialization;
 this feature does not add a concurrent-call guarantee. Bigger query budgets
 spend more work and may improve recall, but do not guarantee a quality target.
+
+## Opt-in 8-bit RaBitQ candidate
+
+Build the standalone target with `-DENABLE_RABITQ_LITE_BACKEND=ON` to enable
+`BuildGraph(VectorStorage::RABITQ8, degree, ef_search)`. The option is OFF by
+default. Disabled builds return `UNSUPPORTED_INDEX_OPERATION` for this selection;
+the original flat index remains intact. This candidate requires a nonempty flat
+training set, dimension at most 1,048,576, at most 1,000,000 live records, degree
+2–64 and ef at least degree. The deterministic training seed is currently 47.
+
+Inputs remain finite FP32 L2 vectors. The backend owns a fixed trained centroid,
+four FHT/Kac sign-mask rounds and 3+5 split code planes. Add/Update use the fixed
+model without retraining. Search traverses 3-bit filter estimates and ranks
+candidates with 8-bit estimates. These are approximate distances, not exact
+original-vector squared L2. Filtering accepts external IDs when the callback
+returns true; rejected nodes remain traversable. Per-call budgets do not change
+stored defaults. Filtered and unfiltered approximate paths need not return
+identical rows even with an allow-all callback.
+
+Save writes independent little-endian `VSAGLQ01` version 1 model/code/ID/graph
+payloads, never decoded-and-reencoded vectors. Load preserves query results and
+remains mutable, including after removing all records. Only enabled builds load
+this candidate format. Existing `VSAGLT01` v1/v2/v3 retain their original paths;
+experimental `VSLRBQ01` snapshots are not accepted as this candidate format.
+Streams must be seekable. Header sizes are checked against remaining bytes before
+large allocations. No checksum, atomic file replacement or concurrent calls are
+provided. Extreme finite values that overflow model/transform arithmetic fail
+without replacing the existing index.
+
+**Initial CRUD uses a full-state transaction copy.** This preserves the original
+state on failed Add/Update/Remove, but introduces O(index state) work and temporary
+memory for every mutation. This is a correctness candidate, not a validated
+performance improvement. Remove's bool result cannot distinguish a missing ID
+from allocation failure; either failure retains the state. Error construction
+itself can allocate, as with the existing Lite error contract. Build retains
+temporary FP32 vectors and a temporary FP32 graph; peak build RSS is not steady
+quantized RSS. Three-distribution quality/performance and long-CRUD acceptance
+remain pending. Do not infer those results from older standalone probe numbers.
+
+Use the opt-in `lite_rabitq_example` build target for the public API lifecycle.

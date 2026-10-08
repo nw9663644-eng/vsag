@@ -1,0 +1,23 @@
+{
+  "parent": "63745c5d8d285908fb7c4c59f4a6dc859ae80549",
+  "scope": "Functional integration; no new performance measurements",
+  "sources": {
+    "include/vsag/lite/index.h": "52ca865d07e12c0c845a68d136e70be975bf7db22a6d9ae1ef051f6a472af127",
+    "src/lite/backend.h": "2fd4fd5d6655daf99654628adf7cac1b020a085759d5b5d2ede05157e7d97682",
+    "src/lite/index.cpp": "909280c6213e5cfb5aa218b5c71476ff57c3d69743243efd64db4b316533a00d",
+    "src/lite/rabitq_backend.cpp": "bc4fab847312732bc95d826b670ea39daeabbf69c7b904dde3bae62420f39a6d",
+    "src/lite/rabitq_snapshot.h": "82e87814f9abb862a4ce524b9e40b0b2d724f2c25dab64f351430b0c9f68a2b0",
+    "src/lite/rabitq_codec.h": "ce110b508f67f869b47d58e7c95871f0e61f7602bb57e2f64219e3d8defe9ec6",
+    "src/lite/rabitq_graph_state.h": "171c763cd82123f729ff2ddc512d43e041d9fa7ba7ce60e587803cc44a216201",
+    "src/lite/rabitq_backend_test.cpp": "9552653a024d3a0b672766b8340dd7327e4973587ace9efd2450e5bed1246b8b",
+    "lite/CMakeLists.txt": "c159c75d22cd940915f9ca573a0861afdee21e64c7a543f4205c52218ee946fa",
+    "lite/example/rabitq_example.cpp": "a0fdf419f16efd7439211b954095cdfd79e66f4d292da70e02fecdc9c9a534a3",
+    "lite/benchmark/test_rabitq_candidate.py": "49ab0bcba1942fd945c466481a4ff46795462418b4728bb8293f994cc7659ab3"
+  },
+  "release_library_sha256": "43d42ac6b697c809b42007580dcd9ebeb918c2a3e81e48a7f3a0fe8d9212757b",
+  "coverage": {
+    "hit": 2149,
+    "total": 2284,
+    "percent": 94.0893169877408
+  }
+}

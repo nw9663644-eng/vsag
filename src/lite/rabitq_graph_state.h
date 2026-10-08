@@ -784,6 +784,16 @@ public:
         return result;
     }
 
+    [[nodiscard]] uint64_t
+    LinkCountAt(uint64_t slot) const {
+        return adjacency_.at(slot).size();
+    }
+
+    [[nodiscard]] uint64_t
+    LinkAt(uint64_t slot, uint64_t edge) const {
+        return adjacency_.at(slot).at(edge);
+    }
+
     [[nodiscard]] int64_t
     IdAt(uint64_t slot) const {
         codec_require(slot < ids_.size(), "mutable graph ID outside storage");

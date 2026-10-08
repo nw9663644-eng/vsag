@@ -105,3 +105,12 @@ Per-query graph budgets are available through SearchWithOptions and SearchOption
 They preserve the configured construction/mutation budget and snapshot options.
 See the [English guide](../docs/docs/en/src/development/lite_first.md#per-query-graph-budget)
 and [Chinese guide](../docs/docs/zh/src/development/lite_first.md) for the contract and example.
+
+## Opt-in RaBitQ backend candidate / 可选RaBitQ候选后端
+
+Configure `-DENABLE_RABITQ_LITE_BACKEND=ON` and select
+`BuildGraph(VectorStorage::RABITQ8, degree, ef_search)`. This is a functional
+candidate, not a completed performance acceptance: initial mutations copy the
+entire state for failure atomicity. See the canonical [English documentation](../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
+and [中文说明](../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端)
+for model lifecycle, approximate distances, limits and snapshot compatibility.

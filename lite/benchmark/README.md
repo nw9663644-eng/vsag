@@ -13,6 +13,10 @@ See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independ
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\
 
+## Integrated RaBitQ backend candidate
+
+The opt-in public API lifecycle is now connected; see [functional integration evidence](results/rabitq-backend-integration-20261008/README.md) and the canonical [English](../../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate) / [Chinese](../../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端) pages. Integrated large-scale performance remains pending; mutations currently copy the whole state for failure atomicity. Do not relabel old standalone probe measurements as this candidate's performance.
+
 ## Export every recorded experiment table
 
 ```bash

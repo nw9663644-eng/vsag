@@ -169,7 +169,13 @@ train(const std::vector<float>& base, uint64_t count, uint64_t dim, uint32_t see
     for (uint8_t& value : model.flips) {
         value = static_cast<uint8_t>(bytes(generator));
     }
+    for (float value : model.centroid) {
+        codec_require(std::isfinite(value), "training centroid overflow");
+    }
     model.Transform(model.centroid);
+    for (float value : model.centroid) {
+        codec_require(std::isfinite(value), "training transform overflow");
+    }
     return model;
 }
 
@@ -373,9 +379,13 @@ normalize(const Model& model, const float* input, float& norm) {
     double squared = 0.0;
     for (uint64_t d = 0; d < model.dim; ++d) {
         values[d] -= model.centroid[d];
-        squared += values[d] * values[d];
+        codec_require(std::isfinite(values[d]), "normalization transform overflow");
+        const float term = values[d] * values[d];
+        squared += std::isfinite(term) ? static_cast<double>(term)
+                                       : static_cast<double>(values[d]) * values[d];
     }
     norm = squared < 1e-5 ? 1.0F : static_cast<float>(std::sqrt(squared));
+    codec_require(std::isfinite(norm) and norm > 0.0F, "normalization norm overflow");
     for (float& value : values) {
         value /= norm;
     }

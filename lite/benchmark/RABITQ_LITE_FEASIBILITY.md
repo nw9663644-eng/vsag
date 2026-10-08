@@ -334,3 +334,21 @@ boundary; the future public Index adapter must translate them into its existing
 new whole-library coverage/quality/performance result.
 
 中文：内部查询已支持外部ID过滤及单次预算，并去掉检索和维护选邻前全图CSR复制。拒绝节点仍可遍历，结果用8bit估计排序，距离相同按外部ID排序；单次预算不改持久化配置。原实验Search保留旧槽位平局语义以便回归；allow-all过滤与未过滤近似路径不承诺始终完全相同。下一步正式Backend适配、异常翻译和编码Save/Load，公共后端仍未开放。
+
+## Public API opt-in functional candidate (2026-10-08)
+
+The first public-API candidate now implements `VectorStorage::RABITQ8` through
+`Index::BuildGraph` when `ENABLE_RABITQ_LITE_BACKEND=ON`. The fixed-model backend
+supports Add/Update/Remove, external-ID filtered Search, per-query budgets and
+owned encoded Save/Load. It uses the independent `VSAGLQ01` v1 format; disabled
+builds reject selection and the new format. Existing v1/v2/v3 Lite formats retain
+normal handling. This supersedes earlier statements that no public selection is
+available, but does not supersede the outstanding performance promotion gates.
+
+Initial mutations copy the complete state before changing it. This is an
+explicit correctness-first tradeoff, not a scalable final CRUD implementation.
+Three-distribution final quality/performance, mutation transaction cost and
+steady-memory measurements still need to be run on this integrated candidate.
+See canonical [English](../../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
+and [Chinese](../../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端)
+documentation and [integration evidence](results/rabitq-backend-integration-20261008/README.md).
