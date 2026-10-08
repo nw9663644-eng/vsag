@@ -50,6 +50,27 @@ int main() {
     for(bool incoming : {false,true}) {
         current::MutableGraphState now(model,codes,topology,ids,4,8,false,incoming);
         historical::MutableGraphState old(model,codes,old_topology,ids,4,8,false,incoming);
+        const auto reject_all = now.SearchWithOptions(base.data(),4,0,[](int64_t){return false;});
+        if(!reject_all.neighbors.empty() || reject_all.visited == 0 || reject_all.reordered != 0) return 16;
+        const auto original_degree = now.GetMaxDegree();
+        const auto original_budget = now.GetEfSearch();
+        uint64_t callback_calls=0;
+        const auto filtered=now.SearchWithOptions(base.data(),count,1000,[&](int64_t id){
+            ++callback_calls;
+            return id==42 || id==-8;
+        });
+        if(filtered.neighbors.size()!=2 || callback_calls!=count || filtered.visited!=count) return 17;
+        for(const auto& neighbor:filtered.neighbors)
+            if(now.IdAt(neighbor.id)!=42 && now.IdAt(neighbor.id)!=-8) return 18;
+        if(now.GetEfSearch()!=original_budget || now.GetMaxDegree()!=original_degree) return 19;
+        const auto zero=now.SearchWithOptions(base.data(),0,1,[&](int64_t){++callback_calls;return true;});
+        if(!zero.neighbors.empty() || callback_calls!=count) return 20;
+        if(now.SearchWithOptions(base.data(),3,1).neighbors.size()!=3) return 21;
+        bool callback_threw=false;
+        try { (void)now.SearchWithOptions(base.data(),3,8,[](int64_t)->bool{throw std::runtime_error("filter");}); }
+        catch(const std::runtime_error&) {callback_threw=true;}
+        if(!callback_threw) return 22;
+        now.Validate();
         for(uint64_t cycle=0;cycle<60;++cycle) {
             const auto id=now.IdAt(cycle%now.Size());
             std::vector<float> vector(base.begin()+(cycle%count)*dim,base.begin()+(cycle%count+1)*dim);
@@ -82,6 +103,18 @@ int main() {
         now.Validate(); old.Validate();
         if(now.Search(base.data(),1).neighbors[0].id!=0) return 14;
     }
+    // Identical vectors isolate external-ID tie ordering from slot ordering.
+    std::vector<float> same(count*dim,1.0F);
+    auto tie_model=current::train(same,count,dim,47);
+    current::EncodedRecords tie_codes(dim);
+    for(uint64_t i=0;i<count;++i) tie_codes.Append(current::encode(tie_model,same.data()));
+    current::MutableGraphState ties(tie_model,tie_codes,topology,ids,4,8);
+    for(const auto& result : {ties.SearchWithOptions(same.data(),3,8),
+                              ties.SearchWithOptions(same.data(),3,8,[](int64_t){return true;})}) {
+        if(result.neighbors.size()!=3) return 23;
+        const std::vector<int64_t> expected={-8,9,11};
+        for(uint64_t i=0;i<3;++i) if(ties.IdAt(result.neighbors[i].id)!=expected[i]) return 24;
+    }
     for(const auto& bad : std::vector<current::GraphTopology>{
             {{}, {}}, {{1}, {}}, {{0, 2}, {0}}, {{0, 1, 0}, {0}}}) {
         bool rejected=false;
@@ -89,7 +122,7 @@ int main() {
         catch(const std::runtime_error&) { rejected=true; }
         if(!rejected) return 15;
     }
-    std::cout<<"PASS: "<<operations<<" paired mutations; IDs/codes/topology/search exact, incoming on/off, empty/singleton\n";
+    std::cout<<"PASS: "<<operations<<" paired mutations; IDs/codes/topology/search exact, incoming on/off, filters/budgets/external-ID ties, empty/singleton\n";
 }
 """
     with tempfile.TemporaryDirectory(prefix="vsag-graph-module-") as directory:

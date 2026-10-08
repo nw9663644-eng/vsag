@@ -302,3 +302,35 @@ must not expose RaBitQ until these lifecycle paths work together. Existing
 FP32/FP16 defaults and snapshot versions remain unchanged.
 
 中文：本轮将已有固定模型图检索和可变CRUD状态提取为Lite内部模块，SIMD距离分派同步迁到src/lite，探针复用同一实现；计时回调避免正式模块依赖实验计时器。360次新旧逐操作对照及损坏CSR边界回归用于证明拆分没有改变已测行为。尚未开放正式RaBitQ后端；下一步是Backend适配、过滤/查询预算、去除每次查询全图CSR重建及编码持久化。
+
+## Internal query contract gate (2026-10-08)
+
+Mutable-state search and mutation neighbor discovery now traverse adjacency
+vectors directly through the same range-based search implementation as CSR.
+`GetGraph()` still compacts explicitly for persistence/inspection, but ordinary
+search no longer allocates and copies the complete edge payload first. This is
+an implementation-level removal of whole-topology work; no percentage latency
+or CPU improvement is claimed without a new matched measurement.
+
+`MutableGraphState::SearchWithOptions(query, k, budget, filter)` supplies the
+future backend adapter's per-call contract. Zero budget uses the stored default;
+positive budget is clamped to `[min(k, Size()), Size()]`. It does not mutate
+construction or persisted settings. A filter receives external IDs and true
+means allowed. Rejected nodes remain traversable. Filtered search ranks visited
+allowed nodes with the full 8-bit estimate and may return fewer than k results.
+This can differ from unfiltered search, which reranks the coarse ef shortlist;
+an allow-all callback is not promised bit-identical results for every graph.
+The new contract breaks full-distance ties by external ID. Legacy `Search`
+retains its measured slot-tie behavior for existing experiment comparisons.
+
+Regression checks retain exact IDs/codes/topology/query results across 360
+paired mutations with the pre-extraction implementation. Additional checks cover
+reject-all routing, accepted nonsequential/negative external IDs, callback count,
+zero k, low/high budget clamping, unchanged defaults, throwing callbacks and
+external-ID ties on identical vectors. Release and ASan+UBSan pass; the probe's
+existing self-test also passes. Callback exceptions propagate at this internal
+boundary; the future public Index adapter must translate them into its existing
+`tl::expected` error contract. This is not public RaBitQ API availability or a
+new whole-library coverage/quality/performance result.
+
+中文：内部查询已支持外部ID过滤及单次预算，并去掉检索和维护选邻前全图CSR复制。拒绝节点仍可遍历，结果用8bit估计排序，距离相同按外部ID排序；单次预算不改持久化配置。原实验Search保留旧槽位平局语义以便回归；allow-all过滤与未过滤近似路径不承诺始终完全相同。下一步正式Backend适配、异常翻译和编码Save/Load，公共后端仍未开放。

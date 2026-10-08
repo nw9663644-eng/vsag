@@ -3,6 +3,7 @@
 #pragma once
 
 #include <chrono>
+#include <functional>
 #include <limits>
 #include <queue>
 #include <unordered_map>
@@ -168,14 +169,19 @@ struct GraphSearchResult {
     uint64_t reordered{};
 };
 
+template <typename NeighborRange>
 inline GraphSearchResult
-graph_search(const std::vector<float>& query,
-             float query_norm,
-             const EncodedRecords& codes,
-             const GraphTopology& graph,
-             uint64_t k,
-             uint64_t ef_search) {
-    codec_require(graph.Size() == codes.Size(), "graph and encoded records disagree");
+graph_search_impl(const std::vector<float>& query,
+                  float query_norm,
+                  const EncodedRecords& codes,
+                  NeighborRange neighbors,
+                  uint64_t k,
+                  uint64_t ef_search,
+                  const std::vector<int64_t>* external_ids = nullptr,
+                  const std::function<bool(int64_t)>& filter = {}) {
+    codec_require(external_ids == nullptr or external_ids->size() == codes.Size(),
+                  "search ID count mismatch");
+    codec_require(not filter or external_ids != nullptr, "filtered search needs external IDs");
     k = std::min(k, codes.Size());
     if (k == 0) {
         return {};
@@ -185,6 +191,15 @@ graph_search(const std::vector<float>& query,
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(&farther);
     std::vector<uint8_t> visited(codes.Size(), 0);
     uint64_t visited_count = 0;
+    uint64_t filtered_reorders = 0;
+    const auto rank = [external_ids](const Candidate& left, const Candidate& right) {
+        if (left.distance != right.distance) {
+            return left.distance < right.distance;
+        }
+        return external_ids == nullptr ? left.id < right.id
+                                       : (*external_ids)[left.id] < (*external_ids)[right.id];
+    };
+    std::priority_queue<Candidate, std::vector<Candidate>, decltype(rank)> accepted(rank);
 
     auto visit = [&](uint64_t slot) {
         if (visited[slot] != 0) {
@@ -193,6 +208,19 @@ graph_search(const std::vector<float>& query,
         visited[slot] = 1;
         ++visited_count;
         const auto estimate = filter_estimate(query, query_norm, codes.At(slot));
+        // Rejected nodes remain traversable. Rank every visited allowed ID using
+        // the complete 8-bit estimate; filtering must not sever routing paths.
+        if (filter and filter((*external_ids)[slot])) {
+            ++filtered_reorders;
+            const Candidate value{
+                slot, full_distance(query, query_norm, codes.At(slot), estimate.centered_ip)};
+            if (accepted.size() < k) {
+                accepted.push(value);
+            } else if (rank(value, accepted.top())) {
+                accepted.pop();
+                accepted.push(value);
+            }
+        }
         const Candidate next{slot, estimate.distance};
         candidates.push(next);
         best.push(next);
@@ -224,14 +252,22 @@ graph_search(const std::vector<float>& query,
             visit((current.id + codes.Size() - 1) % codes.Size());
             visit((current.id + 1) % codes.Size());
         }
-        for (uint64_t edge = graph.offsets[current.id]; edge < graph.offsets[current.id + 1];
-             ++edge) {
-            visit(graph.neighbors[edge]);
+        const auto range = neighbors(current.id);
+        for (auto edge = range.first; edge != range.second; ++edge) {
+            visit(*edge);
         }
     }
 
+    if (filter) {
+        std::vector<Candidate> result(accepted.size());
+        for (uint64_t i = result.size(); i > 0; --i) {
+            result[i - 1] = accepted.top();
+            accepted.pop();
+        }
+        return {std::move(result), visited_count, filtered_reorders};
+    }
     const uint64_t reorder_count = best.size();
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> reordered(&better);
+    std::priority_queue<Candidate, std::vector<Candidate>, decltype(rank)> reordered(rank);
     while (not best.empty()) {
         const uint64_t slot = best.top().id;
         best.pop();
@@ -240,7 +276,7 @@ graph_search(const std::vector<float>& query,
         const Candidate next{slot, full_distance(query, query_norm, code, estimate.centered_ip)};
         if (reordered.size() < k) {
             reordered.push(next);
-        } else if (better(next, reordered.top())) {
+        } else if (rank(next, reordered.top())) {
             reordered.pop();
             reordered.push(next);
         }
@@ -251,6 +287,38 @@ graph_search(const std::vector<float>& query,
         reordered.pop();
     }
     return {std::move(result), visited_count, reorder_count};
+}
+
+inline GraphSearchResult
+graph_search(const std::vector<float>& query,
+             float query_norm,
+             const EncodedRecords& codes,
+             const GraphTopology& graph,
+             uint64_t k,
+             uint64_t ef_search) {
+    codec_require(graph.Size() == codes.Size(), "graph and encoded records disagree");
+    const auto range = [&graph](uint64_t slot) {
+        return std::make_pair(
+            graph.neighbors.begin() + static_cast<int64_t>(graph.offsets[slot]),
+            graph.neighbors.begin() + static_cast<int64_t>(graph.offsets[slot + 1]));
+    };
+    return graph_search_impl(query, query_norm, codes, range, k, ef_search);
+}
+
+inline GraphSearchResult
+graph_search_adjacency(const std::vector<float>& query,
+                       float query_norm,
+                       const EncodedRecords& codes,
+                       const std::vector<std::vector<uint64_t>>& adjacency,
+                       uint64_t k,
+                       uint64_t ef_search,
+                       const std::vector<int64_t>* external_ids = nullptr,
+                       const std::function<bool(int64_t)>& filter = {}) {
+    codec_require(adjacency.size() == codes.Size(), "graph and encoded records disagree");
+    const auto range = [&adjacency](uint64_t slot) {
+        return std::make_pair(adjacency[slot].begin(), adjacency[slot].end());
+    };
+    return graph_search_impl(query, query_norm, codes, range, k, ef_search, external_ids, filter);
 }
 
 inline std::vector<std::vector<uint64_t>>
@@ -552,8 +620,22 @@ public:
         codec_require(query != nullptr, "null mutable graph query");
         float query_norm = 0.0F;
         const auto normalized = normalize(model_, query, query_norm);
-        return graph_search(
-            normalized, query_norm, codes_, compact_graph(adjacency_), k, ef_search_);
+        return graph_search_adjacency(normalized, query_norm, codes_, adjacency_, k, ef_search_);
+    }
+
+    // Per-call budget and external-ID filtering for the future Backend adapter.
+    // Does not change construction, mutation or persisted defaults.
+    [[nodiscard]] GraphSearchResult
+    SearchWithOptions(const float* query,
+                      uint64_t k,
+                      uint64_t budget,
+                      const std::function<bool(int64_t)>& filter = {}) const {
+        codec_require(query != nullptr, "null mutable graph query");
+        float query_norm = 0.0F;
+        const auto normalized = normalize(model_, query, query_norm);
+        const uint64_t ef = budget == 0 ? ef_search_ : budget;
+        return graph_search_adjacency(
+            normalized, query_norm, codes_, adjacency_, k, ef, &ids_, filter);
     }
 
     void
@@ -849,12 +931,8 @@ private:
         }
         const uint64_t requested =
             std::min(Size(), desired + static_cast<uint64_t>(excluded < Size()));
-        const auto found = graph_search(query,
-                                        query_norm,
-                                        codes_,
-                                        compact_graph(adjacency_),
-                                        requested,
-                                        std::max(ef_search_, count * 4));
+        const auto found = graph_search_adjacency(
+            query, query_norm, codes_, adjacency_, requested, std::max(ef_search_, count * 4));
         std::vector<uint64_t> result;
         result.reserve(desired);
         for (const auto& candidate : found.neighbors) {
