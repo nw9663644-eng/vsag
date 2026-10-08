@@ -65,7 +65,7 @@ public:
     tl::expected<void, Error>
     Add(int64_t id, const float* vector, uint64_t dim);
     /** Update an existing ID; a missing ID or invalid vector is an error.
-     * FP32/FP16 graph updates preserve topology when the stored representation is identical.
+     * Graph updates preserve topology when the complete stored representation is identical.
      */
     tl::expected<void, Error>
     Update(int64_t id, const float* vector, uint64_t dim);

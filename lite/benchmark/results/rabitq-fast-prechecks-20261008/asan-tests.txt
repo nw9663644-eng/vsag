@@ -1,0 +1,130 @@
+Start testing: Oct 08 21:57 CST
+----------------------------------------------------------
+1/7 Testing: lite_rabitq_api
+1/7 Test: lite_rabitq_api
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_rabitq_api_tests" "[lite-rabitq]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_rabitq_api" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-rabitq]
+Randomness seeded to: 2306497272
+===============================================================================
+All tests passed (2291 assertions in 8 test cases)
+
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"lite_rabitq_api" end time: Oct 08 21:57 CST
+"lite_rabitq_api" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/7 Testing: lite_unit
+2/7 Test: lite_unit
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_tests" "[lite]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_unit" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+Filters: [lite]
+Randomness seeded to: 3915635327
+===============================================================================
+All tests passed (22509 assertions in 13 test cases)
+
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"lite_unit" end time: Oct 08 21:57 CST
+"lite_unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/7 Testing: lite_scale
+3/7 Test: lite_scale
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_tests" "[lite-scale]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_scale" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-scale]
+Randomness seeded to: 4274549574
+===============================================================================
+All tests passed (100029 assertions in 1 test case)
+
+<end of output>
+Test time =   1.43 sec
+----------------------------------------------------------
+Test Passed.
+"lite_scale" end time: Oct 08 21:57 CST
+"lite_scale" time elapsed: 00:00:01
+----------------------------------------------------------
+
+4/7 Testing: lite_graph
+4/7 Test: lite_graph
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_graph_tests" "[lite-graph]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_graph" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-graph]
+Randomness seeded to: 2269253995
+===============================================================================
+All tests passed (545120 assertions in 14 test cases)
+
+<end of output>
+Test time =   6.79 sec
+----------------------------------------------------------
+Test Passed.
+"lite_graph" end time: Oct 08 21:57 CST
+"lite_graph" time elapsed: 00:00:06
+----------------------------------------------------------
+
+5/7 Testing: lite_quantization_probe_self_test
+5/7 Test: lite_quantization_probe_self_test
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_quantization_probe" "--self-test"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_quantization_probe_self_test" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"lite_quantization_probe_self_test" end time: Oct 08 21:57 CST
+"lite_quantization_probe_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/7 Testing: lite_rabitq_layout_probe
+6/7 Test: lite_rabitq_layout_probe
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_rabitq_layout_probe"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_rabitq_layout_probe" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+rabitq_lite_layout_probe: PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"lite_rabitq_layout_probe" end time: Oct 08 21:57 CST
+"lite_rabitq_layout_probe" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/7 Testing: lite_rabitq_codec_probe
+7/7 Test: lite_rabitq_codec_probe
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_rabitq_codec_probe"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_rabitq_codec_probe" start time: Oct 08 21:57 CST
+Output:
+----------------------------------------------------------
+rabitq_lite_codec_probe: PASS
+<end of output>
+Test time =   0.21 sec
+----------------------------------------------------------
+Test Passed.
+"lite_rabitq_codec_probe" end time: Oct 08 21:57 CST
+"lite_rabitq_codec_probe" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 08 21:57 CST

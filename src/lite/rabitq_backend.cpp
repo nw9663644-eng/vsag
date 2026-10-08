@@ -36,6 +36,9 @@ public:
         if (not valid) {
             return valid;
         }
+        if (state_.Contains(id)) {
+            return failure(ErrorType::INVALID_ARGUMENT, "duplicate ID");
+        }
         if (Size() >= 1000000) {
             return failure(ErrorType::INVALID_ARGUMENT, "RaBitQ record limit exceeded");
         }
@@ -57,7 +60,14 @@ public:
         if (not valid) {
             return valid;
         }
+        if (not state_.Contains(id)) {
+            return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
+        }
         return guarded([&]() -> tl::expected<void, Error> {
+            const auto encoded = rabitq::encode(state_.GetModel(), vector);
+            if (state_.SameEncoding(id, encoded)) {
+                return {};
+            }
             auto next = state_;
             if (not next.Update(id, vector)) {
                 return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
@@ -69,6 +79,9 @@ public:
 
     bool
     Remove(int64_t id) override {
+        if (not state_.Contains(id)) {
+            return false;
+        }
         try {
             auto next = state_;
             if (not next.Remove(id)) {

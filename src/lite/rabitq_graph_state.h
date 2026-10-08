@@ -3,6 +3,7 @@
 #pragma once
 
 #include <chrono>
+#include <cstring>
 #include <functional>
 #include <limits>
 #include <queue>
@@ -454,6 +455,31 @@ public:
     [[nodiscard]] uint64_t
     Size() const {
         return codes_.Size();
+    }
+
+    [[nodiscard]] bool
+    Contains(int64_t id) const {
+        return slots_.find(id) != slots_.end();
+    }
+
+    [[nodiscard]] bool
+    SameEncoding(int64_t id, const Encoded& code) const {
+        const auto found = slots_.find(id);
+        if (found == slots_.end() or code.filter.size() != codes_.FilterBytes() or
+            code.supplement.size() != codes_.SupplementBytes()) {
+            return false;
+        }
+        const auto stored = codes_.At(found->second);
+        const EncodedMetadata metadata{code.norm,
+                                       code.code_norm,
+                                       code.error,
+                                       code.filter_norm,
+                                       code.filter_error,
+                                       code.lower_bound_error};
+        static_assert(sizeof(EncodedMetadata) == 6 * sizeof(float));
+        return std::equal(code.filter.begin(), code.filter.end(), stored.filter) and
+               std::equal(code.supplement.begin(), code.supplement.end(), stored.supplement) and
+               std::memcmp(&metadata, &stored.metadata, sizeof(metadata)) == 0;
     }
 
     [[nodiscard]] bool

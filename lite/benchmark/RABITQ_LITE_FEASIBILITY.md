@@ -352,3 +352,20 @@ steady-memory measurements still need to be run on this integrated candidate.
 See canonical [English](../../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
 and [Chinese](../../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端)
 documentation and [integration evidence](results/rabitq-backend-integration-20261008/README.md).
+
+## Invalid-ID and identical-encoding fast paths (2026-10-08)
+
+Public RaBitQ Add rejects duplicate IDs before cloning a transaction; Update and
+Remove reject absent IDs before cloning. Update compares both 3+5 planes and all
+six metadata fields using exact stored bytes. Identical encodings retain the
+entire snapshot unchanged and do not request topology repair. Encoding still
+allocates scratch and may fail. Genuine changes still copy the state; the
+precheck currently adds an encoding pass for changed updates, so changed-update
+cost requires measurement and a prepared-code reuse step before broad speed
+claims. Legacy experimental MutableGraphState::Update semantics are unchanged.
+
+See [bounded fast-path evidence](results/rabitq-fast-prechecks-20261008/README.md).
+The same-value synthetic measurement is not SIFT/GIST/Cohere acceptance and not
+a claim that full transaction copying has been removed from changed CRUD.
+
+中文：重复ID/缺失ID前置检查及完整编码同值早退已接入；同值更新不改图或快照，两组位平面相同但元数据不同仍算真实变更。真实改值继续全状态复制，当前多一次预编码，后续需复用准备好的编码并优化真实变更事务。不要将同值合成试验速度推广为整个CRUD优化。

@@ -1,0 +1,10 @@
+{
+  "parent": "aa79efe2545448aa1f5a1385e0571b6a3bedeee9",
+  "sources": {
+    "include/vsag/lite/index.h": "671b9a018a272a657e2ead97a154797f5006ab46f9edb59e4815036e1b57f62a",
+    "src/lite/rabitq_backend.cpp": "b4dbcf79a9a7da04356fea2d290536827d57b2eb9dfd7bafb579c3835007cba7",
+    "src/lite/rabitq_graph_state.h": "aa803e8d181601f5ce7ffd95749d71463f9a8287de099b0be79abc719b704e51",
+    "src/lite/rabitq_backend_test.cpp": "dfb3efc97652bdb1d8cf68ecf77ae72d6c7ee704a086970d7f6e6d5d43f6632d",
+    "lite/benchmark/test_rabitq_candidate.py": "c1b5cffe2cb5d986333f04e4617776678e01826612e70fed7a3a6c5c9d22ba80"
+  }
+}

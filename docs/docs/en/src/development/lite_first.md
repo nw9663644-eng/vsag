@@ -295,9 +295,15 @@ large allocations. No checksum, atomic file replacement or concurrent calls are
 provided. Extreme finite values that overflow model/transform arithmetic fail
 without replacing the existing index.
 
-**Initial CRUD uses a full-state transaction copy.** This preserves the original
+Duplicate Add and absent Update/Remove IDs are checked before transaction copying.
+Update encodes the requested vector and compares both planes plus all six metadata
+fields against the stored record. Identical complete encodings return without
+changing topology or snapshot bytes; plane identity alone is not sufficient.
+This still performs encoding and can fail on allocation or internal arithmetic.
+
+**Mutations that change state still use a full-state transaction copy.** This preserves the original
 state on failed Add/Update/Remove, but introduces O(index state) work and temporary
-memory for every mutation. This is a correctness candidate, not a validated
+memory for every state-changing mutation. This is a correctness candidate, not a validated
 performance improvement. Remove's bool result cannot distinguish a missing ID
 from allocation failure; either failure retains the state. Error construction
 itself can allocate, as with the existing Lite error contract. Build retains

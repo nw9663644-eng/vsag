@@ -286,3 +286,45 @@ TEST_CASE("RaBitQ incoming adjacency survives directed CRUD repair", "[lite-rabi
     REQUIRE(tiny.Search(base.data(), 1).neighbors.empty());
     REQUIRE(tiny.GetMutationFallbacks() == 0);
 }
+
+TEST_CASE("RaBitQ unchanged complete encoding preserves exact snapshot", "[lite-rabitq]") {
+    for (uint64_t dim : {1, 17, 128, 768, 960}) {
+        auto index = make_index(dim);
+        std::vector<float> vector(dim, 0.25F);
+        REQUIRE(index->Update(INT64_MIN, vector.data(), dim));
+        const auto before = snapshot(*index);
+        for (uint64_t repeat = 0; repeat < 10; ++repeat) {
+            REQUIRE(index->Update(INT64_MIN, vector.data(), dim));
+        }
+        REQUIRE(snapshot(*index) == before);
+        REQUIRE_FALSE(index->Add(INT64_MIN, vector.data(), dim));
+        REQUIRE_FALSE(index->Update(-1, vector.data(), dim));
+        REQUIRE_FALSE(index->Remove(-1));
+        REQUIRE(snapshot(*index) == before);
+    }
+}
+
+TEST_CASE("RaBitQ no-op detection includes metadata and both planes", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    std::vector<float> base{0, 1, 2};
+    const auto model = codec::train(base, 3, 1, 47);
+    codec::EncodedRecords records(1);
+    const auto code = codec::encode(model, base.data());
+    records.Append(code);
+    codec::MutableGraphState state(model, records, {{0, 0}, {}}, {42}, 2, 2);
+    REQUIRE(state.Contains(42));
+    REQUIRE_FALSE(state.Contains(7));
+    REQUIRE(state.SameEncoding(42, code));
+    REQUIRE_FALSE(state.SameEncoding(7, code));
+    auto changed = code;
+    changed.norm = std::nextafter(changed.norm, INFINITY);
+    REQUIRE_FALSE(state.SameEncoding(42, changed));
+    changed = code;
+    changed.filter[0] ^= 1;
+    REQUIRE_FALSE(state.SameEncoding(42, changed));
+    changed = code;
+    changed.supplement[0] ^= 1;
+    REQUIRE_FALSE(state.SameEncoding(42, changed));
+    changed.filter.clear();
+    REQUIRE_FALSE(state.SameEncoding(42, changed));
+}
