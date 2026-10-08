@@ -1,0 +1,98 @@
+{
+  "pass_checks": true,
+  "activation": {
+    "coordinate-sift": {
+      "updates": 10000,
+      "qualified_updates": 391,
+      "qualified_candidates": 1101,
+      "selected_candidates": 1000,
+      "selected_update_rate": 0.0391,
+      "mean_examined": 4.8024
+    },
+    "coordinate-cohere": {
+      "updates": 10000,
+      "qualified_updates": 1159,
+      "qualified_candidates": 2638,
+      "selected_candidates": 2436,
+      "selected_update_rate": 0.1159,
+      "mean_examined": 6.4923
+    },
+    "coordinate-gist": {
+      "updates": 10000,
+      "qualified_updates": 3460,
+      "qualified_candidates": 9436,
+      "selected_candidates": 8315,
+      "selected_update_rate": 0.346,
+      "mean_examined": 8.0147
+    },
+    "whole-sift": {
+      "updates": 1000,
+      "qualified_updates": 75,
+      "qualified_candidates": 107,
+      "selected_candidates": 104,
+      "selected_update_rate": 0.075,
+      "mean_examined": 15.359
+    },
+    "whole-cohere": {
+      "updates": 1000,
+      "qualified_updates": 148,
+      "qualified_candidates": 256,
+      "selected_candidates": 239,
+      "selected_update_rate": 0.148,
+      "mean_examined": 14.07
+    },
+    "whole-gist": {
+      "updates": 1000,
+      "qualified_updates": 146,
+      "qualified_candidates": 198,
+      "selected_candidates": 190,
+      "selected_update_rate": 0.146,
+      "mean_examined": 15.345
+    }
+  },
+  "gist_coordinate_mechanism": {
+    "baseline_edges": 1599930,
+    "candidate_edges": 1599998,
+    "changed_ordered_sources": 12588,
+    "changed_neighbor_set_sources": 11414,
+    "changed_set_updated_sources": 4461,
+    "changed_set_other_sources": 6953,
+    "removed_edges": 18166,
+    "added_edges": 18234,
+    "edge_categories": {
+      "removed_source_updated": 10634,
+      "removed_target_updated": 3378,
+      "added_source_updated": 10634,
+      "added_target_other": 12610,
+      "removed_source_other": 7532,
+      "added_source_other": 7600,
+      "removed_target_other": 14788,
+      "added_target_updated": 5624
+    },
+    "zero_incoming_baseline": 26,
+    "zero_incoming_candidate": 22,
+    "incoming_changed_nodes": 15097,
+    "incoming_delta_sum_abs": 22660,
+    "forward_reachable_from_zero_baseline": 89642,
+    "forward_reachable_from_zero_candidate": 89202,
+    "reverse_reachable_to_zero_baseline": 99955,
+    "reverse_reachable_to_zero_candidate": 99955,
+    "immediate_selected_edges": 8315,
+    "selection_sources": 3460,
+    "selected_edges_surviving_final": 7974,
+    "selected_edges_absent_baseline_final": 7914,
+    "selected_edges_surviving_and_distinct_final": 7573,
+    "route_net_hits": -9,
+    "route_query_wins": 18,
+    "route_query_losses": 24,
+    "route_query_ties": 258,
+    "mean_visited_nodes_delta": -6.196666666666666,
+    "mean_expanded_delta": -0.18333333333333332,
+    "net_truth_visited_delta": -9,
+    "lost_truth_ids": 35,
+    "lost_truth_unvisited_candidate": 35,
+    "gained_truth_ids": 26,
+    "gained_truth_visited_candidate": 26
+  },
+  "decision": "distance-only reuse changes routing coverage; test diversity/connectivity gate"
+}
