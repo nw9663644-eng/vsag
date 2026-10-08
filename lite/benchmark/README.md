@@ -3,6 +3,7 @@
 This experimental tool records a deterministic standalone Lite BruteForce baseline. It does not claim a performance improvement.
 
 See [ACCEPTANCE_REPORT_20261006.md](ACCEPTANCE_REPORT_20261006.md) for current acceptance boundaries and adoption decisions.
+See [row-restoration cross-distribution validation](results/restoration-validation-20261008/README.md) for frozen comparisons, supplementary-query history and exploratory uncertainty.
 See [GIST row-restoration ablation](results/edge-restoration-20261008/README.md) for controlled updated/other-source row factors on unchanged vector geometry.
 See [GIST Update routing trace](results/update-trace-20261008/README.md) for edge changes and paired truth-visit diagnostics.
 See [storage-only control](results/storage-control-20261007/README.md) for the paired effect of Update topology maintenance on changed-data recall.

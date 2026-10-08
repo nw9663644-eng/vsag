@@ -1,0 +1,198 @@
+{
+  "pass_checks": true,
+  "host_snapshots_verified": 3,
+  "host_sources_verified": true,
+  "factor_query_states": 2000,
+  "native_calibrations": 2000,
+  "slot_query_states": 16000,
+  "distance_checks": 20000,
+  "gist_history": "historically observed; not selection queries; not blind",
+  "results": [
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.954,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1139.16,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.957,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1145.94,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        0.0,
+        0.008
+      ],
+      "two_sided_sign_p": 0.5,
+      "net_hits": 3,
+      "wins": 2,
+      "losses": 0,
+      "ties": 98,
+      "gained_truth": 4,
+      "lost_truth": 1
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.954,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1140.56,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.957,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1146.76,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        0.0,
+        0.008
+      ],
+      "two_sided_sign_p": 0.5,
+      "net_hits": 3,
+      "wins": 2,
+      "losses": 0,
+      "ties": 98,
+      "gained_truth": 4,
+      "lost_truth": 1
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.894,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1248.09,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.894,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1250.81,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.003,
+        0.003
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": 0,
+      "wins": 1,
+      "losses": 1,
+      "ties": 98,
+      "gained_truth": 1,
+      "lost_truth": 1
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 100,
+      "recall": 0.899,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1253.78,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 100,
+      "recall": 0.906,
+      "explicit_edges": 1600000,
+      "mean_visited_nodes": 1256.18,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.004,
+        0.025
+      ],
+      "two_sided_sign_p": 1.0,
+      "net_hits": 7,
+      "wins": 2,
+      "losses": 2,
+      "ties": 96,
+      "gained_truth": 9,
+      "lost_truth": 2
+    },
+    {
+      "dataset": "gist-supplement",
+      "variant": "baseline",
+      "mask": 0,
+      "query_count": 300,
+      "recall": 0.683,
+      "explicit_edges": 1599930,
+      "mean_visited_nodes": 1325.9566666666667,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "gist-supplement",
+      "variant": "baseline",
+      "mask": 1,
+      "query_count": 300,
+      "recall": 0.6853333333333333,
+      "explicit_edges": 1599930,
+      "mean_visited_nodes": 1328.37,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.005666666666666667,
+        0.010333333333333333
+      ],
+      "two_sided_sign_p": 0.5811144541766469,
+      "net_hits": 7,
+      "wins": 44,
+      "losses": 38,
+      "ties": 218,
+      "gained_truth": 61,
+      "lost_truth": 54
+    },
+    {
+      "dataset": "gist-supplement",
+      "variant": "candidate",
+      "mask": 0,
+      "query_count": 300,
+      "recall": 0.684,
+      "explicit_edges": 1599931,
+      "mean_visited_nodes": 1327.1433333333334,
+      "visited_not_returned": 0
+    },
+    {
+      "dataset": "gist-supplement",
+      "variant": "candidate",
+      "mask": 1,
+      "query_count": 300,
+      "recall": 0.6896666666666667,
+      "explicit_edges": 1599931,
+      "mean_visited_nodes": 1333.8433333333332,
+      "visited_not_returned": 0,
+      "exploratory_paired_bootstrap_95": [
+        -0.002,
+        0.013333333333333334
+      ],
+      "two_sided_sign_p": 0.1539127693264563,
+      "net_hits": 17,
+      "wins": 42,
+      "losses": 29,
+      "ties": 229,
+      "gained_truth": 64,
+      "lost_truth": 47
+    }
+  ]
+}
