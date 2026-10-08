@@ -103,6 +103,49 @@ struct Model {
             }
         }
     }
+
+    // Reverse the exact sequence used by Transform, including the truncated
+    // dimension Kac steps. The caller owns the buffer; no mutable model scratch.
+    void
+    InverseTransform(std::vector<float>& values) const {
+        codec_require(
+            dim > 0 and values.size() == dim and flips.size() == K_ROUNDS * ((dim + 7) / 8),
+            "inverse transform model or dimension mismatch");
+        const uint64_t bytes = (dim + 7) / 8;
+        const uint64_t truncated_dim = floor_power_of_two(dim);
+        const float scale = 1.0F / std::sqrt(static_cast<float>(truncated_dim));
+        if (truncated_dim != dim) {
+            for (float& value : values) {
+                value *= 4.0F;
+            }
+        }
+        for (uint32_t remaining = K_ROUNDS; remaining > 0; --remaining) {
+            const uint32_t round = remaining - 1;
+            if (truncated_dim != dim) {
+                const uint64_t half = dim / 2;
+                const uint64_t offset = dim % 2 + half;
+                for (uint64_t i = 0; i < half; ++i) {
+                    const float left = values[i];
+                    const float right = values[i + offset];
+                    values[i] = (left + right) * 0.5F;
+                    values[i + offset] = (left - right) * 0.5F;
+                }
+                if (dim % 2 != 0) {
+                    values[half] /= std::sqrt(2.0F);
+                }
+            }
+            float* block = round % 2 == 0 ? values.data() : values.data() + dim - truncated_dim;
+            fht(block, truncated_dim);
+            for (uint64_t d = 0; d < truncated_dim; ++d) {
+                block[d] *= scale;
+            }
+            for (uint64_t d = 0; d < dim; ++d) {
+                if ((flips[round * bytes + d / 8] & (1U << (d % 8))) != 0U) {
+                    values[d] = -values[d];
+                }
+            }
+        }
+    }
 };
 
 inline Model
@@ -399,6 +442,32 @@ read_plane_code(const uint8_t* planes,
         }
     }
     return code;
+}
+
+// Reconstruct an approximate original-space vector, not the original FP32
+// input or the quantizer's distance estimate. Persistence must retain the model
+// and encoded planes directly instead of decoding and re-encoding this value.
+inline const float*
+decode(const Model& model, const EncodedView& code, std::vector<float>& scratch) {
+    codec_require(model.dim > 0 and model.centroid.size() == model.dim and
+                      code.filter != nullptr and code.supplement != nullptr and
+                      std::isfinite(code.metadata.norm) and code.metadata.norm > 0.0F and
+                      std::isfinite(code.metadata.code_norm) and code.metadata.code_norm > 0.0F,
+                  "invalid decoding model or metadata");
+    scratch.resize(model.dim);
+    const uint64_t plane_bytes = (model.dim + 7) / 8;
+    for (uint64_t d = 0; d < model.dim; ++d) {
+        const uint32_t high = read_plane_code(code.filter, plane_bytes, d, K_FILTER_BITS, true);
+        const uint32_t low =
+            read_plane_code(code.supplement, plane_bytes, d, K_SUPPLEMENT_BITS, false);
+        const float centered = static_cast<float>((high << K_SUPPLEMENT_BITS) | low) - 127.5F;
+        scratch[d] = centered * code.metadata.norm / code.metadata.code_norm + model.centroid[d];
+    }
+    model.InverseTransform(scratch);
+    for (float value : scratch) {
+        codec_require(std::isfinite(value), "non-finite decoded vector");
+    }
+    return scratch.data();
 }
 
 inline float

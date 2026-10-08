@@ -26,6 +26,7 @@ def main():
 #include "historical.h"
 #include <cstring>
 #include <iostream>
+#include <limits>
 namespace current = vsag::lite::detail::rabitq;
 uint64_t second_translation_unit();
 int main() {
@@ -37,6 +38,15 @@ int main() {
         auto old = historical::train(base, 4, dim, 47);
         auto now = current::train(base, 4, dim, 47);
         if (old.centroid != now.centroid || old.flips != now.flips) return 2;
+        for (uint64_t row = 0; row < 4; ++row) {
+            std::vector<float> values(base.begin() + row * dim, base.begin() + (row + 1) * dim);
+            const auto reference = values;
+            now.Transform(values);
+            now.InverseTransform(values);
+            for (uint64_t d = 0; d < dim; ++d) {
+                if (std::fabs(values[d] - reference[d]) > 2e-5F) return 7;
+            }
+        }
         current::EncodedRecords records(dim);
         for (uint64_t row = 0; row < 4; ++row) {
             auto a = historical::encode(old, base.data() + row * dim);
@@ -46,6 +56,21 @@ int main() {
             const float y[] = {b.norm,b.code_norm,b.error,b.filter_norm,b.filter_error,b.lower_bound_error};
             if (std::memcmp(x,y,sizeof(x))) return 4;
             records.Append(b);
+            std::vector<float> scratch;
+            const float* pointer = current::decode(now, records.At(row), scratch);
+            if (pointer != scratch.data() || scratch.size() != dim) return 8;
+            // Independently construct transformed quantized reconstruction from
+            // scalar bytes, then verify the decoded value by forward transform.
+            std::vector<float> projected = scratch;
+            now.Transform(projected);
+            for (uint64_t d = 0; d < dim; ++d) {
+                const float expected = (float(a.scalar[d]) - 127.5F) * a.norm / a.code_norm + old.centroid[d];
+                if (std::fabs(projected[d] - expected) > 3e-5F * std::max(1.0F,std::fabs(expected))) return 9;
+            }
+            std::vector<float> other;
+            const auto preserved = scratch;
+            (void)current::decode(now, records.At(row), other);
+            if (scratch != preserved || other.data() == pointer) return 10;
             ++checked;
         }
         records.Replace(1,current::encode(now,base.data()));
@@ -54,8 +79,27 @@ int main() {
         bool rejected = false;
         try { (void)records.At(3); } catch (const std::runtime_error&) { rejected = true; }
         if (!rejected) return 6;
+        auto invalid = now;
+        invalid.flips.clear();
+        std::vector<float> scratch;
+        rejected = false;
+        try { (void)current::decode(invalid, records.At(0), scratch); }
+        catch (const std::runtime_error&) { rejected = true; }
+        if (!rejected) return 11;
+        auto view = records.At(0);
+        view.metadata.code_norm = 0;
+        rejected = false;
+        try { (void)current::decode(now, view, scratch); }
+        catch (const std::runtime_error&) { rejected = true; }
+        if (!rejected) return 12;
+        view = records.At(0);
+        view.metadata.norm = std::numeric_limits<float>::infinity();
+        rejected = false;
+        try { (void)current::decode(now, view, scratch); }
+        catch (const std::runtime_error&) { rejected = true; }
+        if (!rejected) return 13;
     }
-    std::cout << "PASS: " << checked << " exact records, 7 dimensions, 2 translation units\n";
+    std::cout << "PASS: " << checked << " exact records, 7 dimensions, 2 translation units, inverse/decode ownership checks\n";
 }
 """
     second = '#include "lite/rabitq_codec.h"\nuint64_t second_translation_unit() { return vsag::lite::detail::rabitq::K_TOTAL_BITS; }\n'

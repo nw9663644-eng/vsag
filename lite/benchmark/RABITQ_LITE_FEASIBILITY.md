@@ -237,3 +237,32 @@ Existing public FP32/FP16 formats must remain compatible. Public RaBitQ distance
 are quantized estimates and must not be documented as exact original-vector L2.
 
 中文：本轮仅完成正式接入所需的内部编码模块拆分与复用，编码结果逐字节回归一致；尚未开放RaBitQ配置、正式后端或公共快照。下一步是固定模型与可变图状态的后端适配、调用者解码缓冲区及独立版本持久化，不能将本轮当作正式接入完成或新性能成绩。
+
+## Caller-owned vector reconstruction gate (2026-10-08)
+
+The internal codec now supplies `Model::InverseTransform` and
+`decode(model, encoded_view, scratch)`. The inverse reverses the four sign/FHT
+rounds, alternating truncated blocks and Kac walk, including odd dimensions and
+the final non-power-of-two scaling. Reconstruction reads the 3+5 scalar code,
+restores centered scale/centroid, and applies that inverse. Scratch belongs to
+the caller; there is no model-owned mutable decoding buffer. Returned pointers
+remain valid only while that caller's scratch storage is unchanged/alive.
+
+The value is a quantized reconstruction, not the original FP32 input and not
+an assertion that Euclidean distance to that reconstruction equals the RaBitQ
+distance estimate. This is the required boundary for a future
+`Backend::VectorAt(slot, scratch)` adapter. Encoded persistence must save the
+model, code planes and metadata directly, never use decoded values as a lossless
+snapshot payload. Rebuilding or converting from this representation would be
+lossy and needs an explicit API/documentation decision.
+
+Tests extend the frozen byte-identity regression with transform/inverse round
+trips, independent scalar-byte reconstruction checked in transformed space,
+separate scratch ownership, malformed sign masks, zero code norm and infinite
+norm rejection. Release and ASan+UBSan pass for 28 records across seven dimensions;
+the original probe self-test also passes. No public backend, new format, quality
+or performance claim is introduced by this internal step. No fresh whole-library
+coverage figure is claimed; final library promotion still requires its coverage
+gate and lifecycle tests.
+
+中文：内部解码及调用者自有缓冲区已实现并验证，解决未来VectorAt适配需要的逆变换和所有权问题。重建向量是近似值，不能冒充原始输入，也不能据此重新编码保存；正式持久化必须直接保存模型和编码。正式后端、配置和公共快照仍待接入。
