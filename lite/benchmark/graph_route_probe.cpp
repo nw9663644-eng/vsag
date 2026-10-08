@@ -672,9 +672,14 @@ int
 run_persistent_updates(const std::string& snapshot,
                        const std::string& directory,
                        const std::string& path,
-                       uint64_t cycles) {
+                       uint64_t cycles,
+                       bool storage_only = false) {
     for (const auto& suffix : {"", ".neighbors.csv", ".updates.csv"}) {
         require(not std::filesystem::exists(path + suffix), "persistent output already exists");
+    }
+    if (storage_only) {
+        require(not std::filesystem::exists(path + ".control.csv"),
+                "storage control receipt already exists");
     }
     const auto graph = load_snapshot(snapshot);
     require(cycles > 0 and cycles <= graph.ids.size(), "invalid persistent update count");
@@ -701,7 +706,7 @@ run_persistent_updates(const std::string& snapshot,
     std::ifstream input(snapshot, std::ios::binary);
     auto loaded = vsag::lite::Index::Load(input);
     require(static_cast<bool>(loaded), "persistent native load failed");
-    auto& index = **loaded;
+    auto* index = loaded->get();
     std::ofstream neighbors(path + ".neighbors.csv");
     std::ofstream updates(path + ".updates.csv");
     neighbors << "phase,query,rank,id,distance\n";
@@ -712,7 +717,7 @@ run_persistent_updates(const std::string& snapshot,
         uint64_t hits = 0;
         for (uint64_t q = 0; q < queries.size(); ++q) {
             auto result =
-                index.SearchWithOptions(queries[q].data(), graph.dim, k, {graph.ef_search});
+                index->SearchWithOptions(queries[q].data(), graph.dim, k, {graph.ef_search});
             require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
                     "persistent native search failed");
             const std::unordered_set<int64_t> expected(truth[q].begin(), truth[q].end());
@@ -729,6 +734,16 @@ run_persistent_updates(const std::string& snapshot,
         return static_cast<double>(hits) / static_cast<double>(queries.size() * k);
     };
     const double initial_recall = measure("initial", initial_truth, false);
+    std::stringstream control(std::ios::in | std::ios::out | std::ios::binary);
+    std::vector<bool> changed_slots(graph.ids.size(), false);
+    if (storage_only) {
+        input.clear();
+        input.seekg(0);
+        control << input.rdbuf();
+        require(static_cast<bool>(control), "storage control snapshot copy failed");
+    }
+    uint64_t checked_bytes = 0;
+    uint64_t changed_bytes = 0;
     double mutation_cpu_ms = 0;
     for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
         const auto cpu_start = std::clock();
@@ -739,8 +754,19 @@ run_persistent_updates(const std::string& snapshot,
         require(std::isfinite(changed[0]) and changed[0] != original[0],
                 "persistent update must change the FP32 representation");
         const auto start = Clock::now();
-        require(static_cast<bool>(index.Update(graph.ids[slot], changed.data(), graph.dim)),
-                "persistent native update failed");
+        if (storage_only) {
+            uint32_t bits = 0;
+            std::memcpy(&bits, changed.data(), sizeof(bits));
+            control.seekp(
+                static_cast<std::streamoff>(64 + graph.ids.size() * 8 + slot * graph.dim * 4));
+            for (uint64_t byte = 0; byte < 4; ++byte) {
+                control.put(static_cast<char>((bits >> (byte * 8)) & 0xff));
+            }
+            changed_slots[slot] = true;
+        } else {
+            require(static_cast<bool>(index->Update(graph.ids[slot], changed.data(), graph.dim)),
+                    "persistent native update failed");
+        }
         const auto latency =
             std::chrono::duration<double, std::micro>(Clock::now() - start).count();
         mutation_cpu_ms += 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
@@ -748,13 +774,66 @@ run_persistent_updates(const std::string& snapshot,
                 << changed[0] << ',' << std::defaultfloat << std::setprecision(9) << latency
                 << '\n';
     }
-    require(index.Size() == graph.ids.size(), "persistent live count changed");
+    if (storage_only) {
+        require(static_cast<bool>(control), "storage control coordinate write failed");
+        input.clear();
+        input.seekg(0);
+        control.seekg(0);
+        std::vector<char> before(32768);
+        std::vector<char> after(32768);
+        uint64_t position = 0;
+        const uint64_t vector_start = 64 + graph.ids.size() * 8;
+        const uint64_t vector_end = vector_start + graph.vectors.size() * 4;
+        while (input) {
+            input.read(before.data(), static_cast<std::streamsize>(before.size()));
+            const auto bytes = input.gcount();
+            control.read(after.data(), bytes);
+            require(control.gcount() == bytes, "storage control snapshot size changed");
+            if (std::memcmp(before.data(), after.data(), bytes) != 0) {
+                for (uint64_t i = 0; i < static_cast<uint64_t>(bytes); ++i) {
+                    if (before[i] == after[i]) {
+                        continue;
+                    }
+                    ++changed_bytes;
+                    const uint64_t offset = position + i;
+                    require(offset >= vector_start and offset < vector_end,
+                            "storage control changed metadata or edges");
+                    const uint64_t relative = offset - vector_start;
+                    require(relative % (graph.dim * 4) < 4 and
+                                changed_slots[relative / (graph.dim * 4)],
+                            "storage control changed an unexpected vector coordinate");
+                }
+            }
+            position += static_cast<uint64_t>(bytes);
+        }
+        require(control.peek() == std::char_traits<char>::eof(),
+                "storage control appended unexpected bytes");
+        checked_bytes = position;
+        control.clear();
+        for (uint64_t cycle = 0; cycle < cycles; ++cycle) {
+            const uint64_t slot = cycle * 8191ULL % graph.ids.size();
+            const float expected = graph.vectors[slot * graph.dim] + 0.125F;
+            uint32_t expected_bits = 0;
+            std::memcpy(&expected_bits, &expected, sizeof(expected_bits));
+            control.seekg(static_cast<std::streamoff>(vector_start + slot * graph.dim * 4));
+            require(read<uint32_t>(control) == expected_bits,
+                    "storage control coordinate readback mismatch");
+        }
+        control.seekg(0);
+        auto changed_index = vsag::lite::Index::Load(control);
+        require(static_cast<bool>(changed_index), "storage control native load failed");
+        *loaded = std::move(*changed_index);
+        index = loaded->get();
+        // Control copying/patching is not an Update performance measurement.
+        mutation_cpu_ms = 0;
+    }
+    require(index->Size() == graph.ids.size(), "persistent live count changed");
     const double changed_recall = measure("changed", changed_truth, true);
     std::stringstream saved(std::ios::in | std::ios::out | std::ios::binary);
-    require(static_cast<bool>(index.Save(saved)), "persistent native save failed");
+    require(static_cast<bool>(index->Save(saved)), "persistent native save failed");
     saved.seekg(0);
     auto reloaded = vsag::lite::Index::Load(saved);
-    require(static_cast<bool>(reloaded) and (*reloaded)->Size() == index.Size(),
+    require(static_cast<bool>(reloaded) and (*reloaded)->Size() == index->Size(),
             "persistent native reload failed");
     for (uint64_t q = 0; q < queries.size(); ++q) {
         auto result =
@@ -778,6 +857,13 @@ run_persistent_updates(const std::string& snapshot,
            << mutation_cpu_ms << ",1\n";
     output.close();
     require(static_cast<bool>(output), "persistent summary write failed");
+    if (storage_only) {
+        std::ofstream receipt(path + ".control.csv");
+        receipt << "coordinates,checked_bytes,changed_bytes,other_bytes_equal,roundtrip\n";
+        receipt << cycles << ',' << checked_bytes << ',' << changed_bytes << ",1,1\n";
+        receipt.close();
+        require(static_cast<bool>(receipt), "storage control receipt write failed");
+    }
     return 0;
 }
 
@@ -1249,13 +1335,20 @@ VSAG_LITE_ROUTE_PROBE_MAIN(int argc, char** argv) {
             std::cout << "Reverse replacement fixtures passed\n";
             return 0;
         }
-        if (argc > 1 and std::string(argv[1]) == "--persistent-update") {
-            require(argc == 6, "usage: --persistent-update SNAPSHOT DATASET OUTPUT CYCLES");
+        if (argc > 1 and (std::string(argv[1]) == "--persistent-update" or
+                          std::string(argv[1]) == "--storage-only-update")) {
+            require(argc == 6,
+                    "usage: (--persistent-update|--storage-only-update) SNAPSHOT DATASET OUTPUT "
+                    "CYCLES");
             const std::string count = argv[5];
             require(
                 not count.empty() and count.find_first_not_of("0123456789") == std::string::npos,
                 "invalid persistent update count");
-            return run_persistent_updates(argv[2], argv[3], argv[4], std::stoull(count));
+            return run_persistent_updates(argv[2],
+                                          argv[3],
+                                          argv[4],
+                                          std::stoull(count),
+                                          std::string(argv[1]) == "--storage-only-update");
         }
         require(
             argc >= 4 and argc <= 10,

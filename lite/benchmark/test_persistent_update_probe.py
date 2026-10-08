@@ -10,6 +10,7 @@ from test_graph_route_probe import snapshot
 
 def main():
     binary = str(Path(sys.argv[1]).resolve())
+    mode = sys.argv[2] if len(sys.argv) > 2 else '--persistent-update'
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
         source = root / 'initial.snapshot'
@@ -18,7 +19,7 @@ def main():
         (root / 'groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 0))
         (root / 'changed-groundtruth.ivecs').write_bytes(struct.pack('<ii', 1, 1))
         def run(output, count='1'):
-            return subprocess.run([binary, '--persistent-update', str(source), str(root),
+            return subprocess.run([binary, mode, str(source), str(root),
                                    str(output), count], capture_output=True, text=True)
         output = root / 'result.csv'
         result = run(output)
@@ -33,7 +34,17 @@ def main():
         assert len(updates) == 1 and updates[0]['id'] == '0'
         assert float.fromhex(updates[0]['original_first']) == 0
         assert float.fromhex(updates[0]['changed_first']) == 0.125
-        for count in ['0', '4', '-1', '1x', '999999999999999999999999']:
+        if mode == '--storage-only-update':
+            receipt = next(csv.DictReader(Path(str(output) + '.control.csv').open()))
+            assert receipt['coordinates'] == '1' and receipt['other_bytes_equal'] == '1'
+            assert int(receipt['checked_bytes']) == source.stat().st_size
+            assert 0 < int(receipt['changed_bytes']) <= 4
+            assert row['mutation_cpu_ms'] == '0.000000'
+            marker = root / 'control-only.csv.control.csv'
+            marker.write_text('keep\n')
+            assert run(root / 'control-only.csv').returncode != 0
+            assert marker.read_text() == 'keep\n'
+        for count in ['0' , '4', '-1', '1x', '999999999999999999999999']:
             assert run(root / ('bad-' + count + '.csv'), count).returncode != 0
         for suffix in ['', '.neighbors.csv', '.updates.csv']:
             target = root / ('protected-' + str(len(suffix)) + '.csv')

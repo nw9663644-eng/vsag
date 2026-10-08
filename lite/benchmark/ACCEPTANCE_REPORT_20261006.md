@@ -326,3 +326,7 @@ policy change, universal performance benefit or new sanitizer/coverage claim fol
 ## Persistent changed-vector replay (2026-10-07)
 
 [Report](results/persistent-update-20261007/README.md): 60,000 Update calls retain changed vectors on SIFT/GIST/Cohere100k; all 1,200 initial/final query states and 12,000 returned distances were audited. Candidate final recall ties baseline on SIFT/GIST and gains 5/1000 hits on Cohere; single-run mutation CPU increases about 2.6–3.4%. No default adoption or stable performance claim. Initial/final use changed truths, so topology effects need a storage-only control.
+
+## 2026-10-08: storage-only topology control
+
+[Report](results/storage-control-20261007/README.md): six unchanged-topology controls patch 60,000 coordinates and audit 12,000 returned distances. At fixed ef128, storage-only recall SIFT/GIST/Cohere is 0.956/0.741/0.889; native baseline Update is 0.954/0.736/0.894 and candidate Update 0.954/0.736/0.899. Paired topology effects are distribution-dependent. No default adoption or API performance claim; next inspect GIST maintenance edge changes before selecting a production policy. Existing observed queries and the single-coordinate protocol limit generalization.

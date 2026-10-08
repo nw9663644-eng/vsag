@@ -1,0 +1,117 @@
+{
+  "pass_checks": true,
+  "query_states": 1200,
+  "coordinate_patches": 60000,
+  "host_snapshots_available": true,
+  "distance_checks": 12000,
+  "host_sources_available": true,
+  "measured_files_match_current": false,
+  "final_files_verified": true,
+  "results": [
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "initial_hits": 956,
+      "changed_hits": 956,
+      "mutation_cpu_ms": 0.0
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "initial_hits": 956,
+      "changed_hits": 956,
+      "mutation_cpu_ms": 0.0
+    },
+    {
+      "dataset": "gist",
+      "variant": "baseline",
+      "initial_hits": 742,
+      "changed_hits": 741,
+      "mutation_cpu_ms": 0.0
+    },
+    {
+      "dataset": "gist",
+      "variant": "candidate",
+      "initial_hits": 742,
+      "changed_hits": 741,
+      "mutation_cpu_ms": 0.0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "initial_hits": 891,
+      "changed_hits": 889,
+      "mutation_cpu_ms": 0.0
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "initial_hits": 891,
+      "changed_hits": 889,
+      "mutation_cpu_ms": 0.0
+    }
+  ],
+  "paired": [
+    {
+      "dataset": "sift",
+      "variant": "baseline",
+      "control_recall": 0.956,
+      "update_recall": 0.954,
+      "wins": 4,
+      "losses": 4,
+      "ties": 92,
+      "net_hits": -2
+    },
+    {
+      "dataset": "sift",
+      "variant": "candidate",
+      "control_recall": 0.956,
+      "update_recall": 0.954,
+      "wins": 4,
+      "losses": 4,
+      "ties": 92,
+      "net_hits": -2
+    },
+    {
+      "dataset": "gist",
+      "variant": "baseline",
+      "control_recall": 0.741,
+      "update_recall": 0.736,
+      "wins": 14,
+      "losses": 19,
+      "ties": 67,
+      "net_hits": -5
+    },
+    {
+      "dataset": "gist",
+      "variant": "candidate",
+      "control_recall": 0.741,
+      "update_recall": 0.736,
+      "wins": 13,
+      "losses": 18,
+      "ties": 69,
+      "net_hits": -5
+    },
+    {
+      "dataset": "cohere",
+      "variant": "baseline",
+      "control_recall": 0.889,
+      "update_recall": 0.894,
+      "wins": 6,
+      "losses": 2,
+      "ties": 92,
+      "net_hits": 5
+    },
+    {
+      "dataset": "cohere",
+      "variant": "candidate",
+      "control_recall": 0.889,
+      "update_recall": 0.899,
+      "wins": 7,
+      "losses": 2,
+      "ties": 91,
+      "net_hits": 10
+    }
+  ],
+  "control_neighbors_identical_across_libraries": true
+}
