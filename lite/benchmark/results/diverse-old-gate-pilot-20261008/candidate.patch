@@ -1,0 +1,50 @@
+--- /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp	2026-10-07 19:41:58.638055966 +0800
++++ graph_backend.cpp	2026-10-08 17:05:55.787441639 +0800
+@@ -155,0 +156,47 @@
++#if defined(VSAG_LITE_EXPERIMENT_DIVERSE_OLD_UPDATE)
++            if (not fp16_ and not neighbors->empty()) {
++                // Keep only old candidates that are competitive in the new geometry and
++                // are not occluded by a closer current candidate (Full heuristic, alpha 1).
++                std::array<Candidate, K_MAX_DEGREE * 2> ranked{};
++                uint64_t ranked_size = 0;
++                float cutoff = 0.0F;
++                for (const uint64_t candidate : *neighbors) {
++                    const float score = distance(vector, encoded, candidate);
++                    ranked[ranked_size++] = {candidate, score};
++                    cutoff = std::max(cutoff, score);
++                }
++                std::array<Candidate, K_MAX_DEGREE> qualified{};
++                uint64_t qualified_size = 0;
++                for (const uint64_t candidate : extras_[slot]) {
++                    if (candidate == slot or
++                        std::find(neighbors->begin(), neighbors->end(), candidate) !=
++                            neighbors->end()) {
++                        continue;
++                    }
++                    const float score = distance(vector, encoded, candidate);
++                    if (score < cutoff) {
++                        qualified[qualified_size++] = {candidate, score};
++                    }
++                }
++                std::sort(qualified.begin(), qualified.begin() + qualified_size, Closer{});
++                for (uint64_t i = 0; i < qualified_size; ++i) {
++                    bool diverse = true;
++                    for (uint64_t j = 0; j < ranked_size; ++j) {
++                        if (distance(qualified[i].slot, ranked[j].slot) < qualified[i].distance) {
++                            diverse = false;
++                            break;
++                        }
++                    }
++                    if (diverse) {
++                        ranked[ranked_size++] = qualified[i];
++                    }
++                }
++                if (ranked_size > neighbors->size()) {
++                    std::sort(ranked.begin(), ranked.begin() + ranked_size, Closer{});
++                    neighbors->resize(std::min(max_degree_, ranked_size));
++                    for (uint64_t i = 0; i < neighbors->size(); ++i) {
++                        (*neighbors)[i] = ranked[i].slot;
++                    }
++                }
++            }
++#endif

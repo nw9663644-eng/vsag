@@ -1,0 +1,26 @@
+{
+  "pass_checks": true,
+  "analysis": {
+    "query_count": 300,
+    "k": 10,
+    "baseline_hits": 2049,
+    "scored_hits": 2040,
+    "diverse_hits": 2040,
+    "diverse_vs_baseline": {
+      "net_hits": -9,
+      "wins": 9,
+      "losses": 14,
+      "ties": 277,
+      "different_ordered_rows": 211
+    },
+    "diverse_vs_scored": {
+      "net_hits": 0,
+      "wins": 15,
+      "losses": 15,
+      "ties": 270,
+      "different_ordered_rows": 295
+    },
+    "repeat_neighbors_exact": true,
+    "decision": "reject this strict all-ANN directional gate; it redistributes errors without recovering net recall"
+  }
+}
