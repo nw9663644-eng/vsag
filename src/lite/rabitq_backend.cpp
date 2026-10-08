@@ -64,12 +64,12 @@ public:
             return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
         }
         return guarded([&]() -> tl::expected<void, Error> {
-            const auto encoded = rabitq::encode(state_.GetModel(), vector);
-            if (state_.SameEncoding(id, encoded)) {
+            auto prepared = rabitq::prepare_encoding(state_.GetModel(), vector);
+            if (state_.SameEncoding(id, prepared.code)) {
                 return {};
             }
             auto next = state_;
-            if (not next.Update(id, vector)) {
+            if (not next.UpdatePrepared(id, std::move(prepared))) {
                 return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
             }
             state_ = std::move(next);

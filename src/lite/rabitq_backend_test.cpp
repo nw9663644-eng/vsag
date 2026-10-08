@@ -328,3 +328,59 @@ TEST_CASE("RaBitQ no-op detection includes metadata and both planes", "[lite-rab
     changed.filter.clear();
     REQUIRE_FALSE(state.SameEncoding(42, changed));
 }
+
+TEST_CASE("RaBitQ prepared mutation preserves legacy bytes and rejects damaged preparation",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (uint64_t dim : {1, 17, 128, 768, 960}) {
+        std::vector<float> base(4 * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i) * 0.17F);
+        }
+        const auto model = codec::train(base, 4, dim, 47);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t row = 0; row < 4; ++row) {
+            codes.Append(codec::encode(model, base.data() + row * dim));
+        }
+        const codec::GraphTopology graph{{0, 2, 4, 6, 8}, {1, 3, 2, 0, 3, 1, 0, 2}};
+        codec::MutableGraphState regular(model, codes, graph, {-8, 42, 97, 123}, 2, 8);
+        auto prepared_state = regular;
+        std::vector<float> replacement(dim, 0.25F);
+        REQUIRE(regular.Update(42, replacement.data()));
+        auto prepared = codec::prepare_encoding(model, replacement.data());
+        const bool applied = prepared_state.UpdatePrepared(42, std::move(prepared));
+        REQUIRE(applied);
+        regular.Validate();
+        prepared_state.Validate();
+        std::stringstream first;
+        std::stringstream second;
+        codec::save_mutable_snapshot(first, regular);
+        codec::save_mutable_snapshot(second, prepared_state);
+        REQUIRE(first.str() == second.str());
+        const auto before = second.str();
+        auto reject = [&](codec::PreparedEncoding damaged) {
+            REQUIRE_THROWS_AS(prepared_state.UpdatePrepared(42, std::move(damaged)),
+                              std::runtime_error);
+            std::stringstream unchanged;
+            codec::save_mutable_snapshot(unchanged, prepared_state);
+            REQUIRE(unchanged.str() == before);
+        };
+        auto damaged = codec::prepare_encoding(model, replacement.data());
+        damaged.query.clear();
+        reject(std::move(damaged));
+        damaged = codec::prepare_encoding(model, replacement.data());
+        damaged.code.filter.clear();
+        reject(std::move(damaged));
+        damaged = codec::prepare_encoding(model, replacement.data());
+        damaged.query[0] = NAN;
+        reject(std::move(damaged));
+        damaged = codec::prepare_encoding(model, replacement.data());
+        damaged.code.code_norm = 0;
+        reject(std::move(damaged));
+        damaged = codec::prepare_encoding(model, replacement.data());
+        damaged.code.norm = INFINITY;
+        reject(std::move(damaged));
+        REQUIRE_FALSE(
+            prepared_state.UpdatePrepared(999, codec::prepare_encoding(model, replacement.data())));
+    }
+}

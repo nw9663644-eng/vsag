@@ -1,0 +1,23 @@
+Start testing: Oct 08 22:35 CST
+----------------------------------------------------------
+1/7 Testing: lite_rabitq_api
+1/7 Test: lite_rabitq_api
+Command: "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan/lite_rabitq_api_tests" "[lite-rabitq]"
+Directory: /home/ubuntu/project/vsag-lite-baseline-v01/build-lite-baseline-asan
+"lite_rabitq_api" start time: Oct 08 22:35 CST
+Output:
+----------------------------------------------------------
+Filters: [lite-rabitq]
+Randomness seeded to: 1598679472
+===============================================================================
+All tests passed (2361 assertions in 9 test cases)
+
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"lite_rabitq_api" end time: Oct 08 22:35 CST
+"lite_rabitq_api" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 08 22:35 CST

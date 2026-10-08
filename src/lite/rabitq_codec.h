@@ -8,6 +8,7 @@
 #include <numeric>
 #include <random>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include "simd/kernels/rabitq_pack.h"
@@ -393,9 +394,11 @@ normalize(const Model& model, const float* input, float& norm) {
 }
 
 inline Encoded
-encode(const Model& model, const float* input) {
+encode_normalized(const Model& model, const std::vector<float>& normalized, float norm) {
+    codec_require(normalized.size() == model.dim and std::isfinite(norm) and norm > 0.0F,
+                  "invalid normalized encoding input");
     Encoded result;
-    auto normalized = normalize(model, input, result.norm);
+    result.norm = norm;
     result.scalar = fast_encode(normalized, result.code_norm);
     const uint64_t plane_bytes = (model.dim + 7) / 8;
     result.filter.assign(plane_bytes * K_FILTER_BITS, 0);
@@ -435,6 +438,26 @@ encode(const Model& model, const float* input) {
                       std::isfinite(result.lower_bound_error),
                   "non-finite encoding metadata");
     return result;
+}
+
+struct PreparedEncoding {
+    Encoded code;
+    std::vector<float> query;
+};
+
+// Prepare once against the fixed model, retaining query scratch for mutation.
+inline PreparedEncoding
+prepare_encoding(const Model& model, const float* input) {
+    codec_require(input != nullptr, "null encoding input");
+    float norm = 0.0F;
+    auto query = normalize(model, input, norm);
+    auto code = encode_normalized(model, query, norm);
+    return {std::move(code), std::move(query)};
+}
+
+inline Encoded
+encode(const Model& model, const float* input) {
+    return prepare_encoding(model, input).code;
 }
 
 inline uint32_t

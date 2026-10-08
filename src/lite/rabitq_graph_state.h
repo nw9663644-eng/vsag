@@ -510,13 +510,39 @@ public:
     [[nodiscard]] bool
     Update(int64_t id, const float* vector) {
         codec_require(vector != nullptr, "null mutable graph vector");
+        if (not Contains(id)) {
+            return false;
+        }
+        return UpdatePrepared(id, prepare_encoding(model_, vector));
+    }
+
+    // Trusted internal preparation must use this state's unchanged fixed model.
+    // The public adapter keeps failure atomicity by applying this to its clone.
+    [[nodiscard]] bool
+    UpdatePrepared(int64_t id, PreparedEncoding prepared) {
         const auto found = slots_.find(id);
         if (found == slots_.end()) {
             return false;
         }
+        codec_require(prepared.query.size() == model_.dim and
+                          prepared.code.filter.size() == codes_.FilterBytes() and
+                          prepared.code.supplement.size() == codes_.SupplementBytes() and
+                          std::isfinite(prepared.code.norm) and prepared.code.norm > 0.0F,
+                      "invalid prepared update shape or norm");
+        codec_require(
+            std::isfinite(prepared.code.code_norm) and prepared.code.code_norm > 0.0F and
+                std::isfinite(prepared.code.error) and std::isfinite(prepared.code.filter_norm) and
+                prepared.code.filter_norm > 0.0F and std::isfinite(prepared.code.filter_error) and
+                prepared.code.filter_error >= 1e-5F and prepared.code.filter_error <= 1.0F and
+                std::isfinite(prepared.code.lower_bound_error) and
+                prepared.code.lower_bound_error >= 0.0F,
+            "invalid prepared encoding metadata");
+        for (float value : prepared.query) {
+            codec_require(std::isfinite(value), "non-finite prepared query");
+        }
         const uint64_t slot = found->second;
-        float query_norm = 0.0F;
-        const auto query = normalize(model_, vector, query_norm);
+        const float query_norm = prepared.code.norm;
+        const auto& query = prepared.query;
         const auto neighbors = nearest(query, query_norm, slot, max_degree_);
         const auto old_neighbors = adjacency_[slot];
         std::vector<uint64_t> affected_nodes;
@@ -548,7 +574,7 @@ public:
             mutation_scan_timing_.update_cpu_us =
                 (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) - scan_cpu_start_us;
         }
-        codes_.Replace(slot, encode(model_, vector));
+        codes_.Replace(slot, std::move(prepared.code));
         replace_neighbors(slot, neighbors);
         for (uint64_t neighbor : neighbors) {
             link(neighbor, slot);

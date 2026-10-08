@@ -369,3 +369,21 @@ The same-value synthetic measurement is not SIFT/GIST/Cohere acceptance and not
 a claim that full transaction copying has been removed from changed CRUD.
 
 中文：重复ID/缺失ID前置检查及完整编码同值早退已接入；同值更新不改图或快照，两组位平面相同但元数据不同仍算真实变更。真实改值继续全状态复制，当前多一次预编码，后续需复用准备好的编码并优化真实变更事务。不要将同值合成试验速度推广为整个CRUD优化。
+
+## Prepared encoding reuse (2026-10-08)
+
+`prepare_encoding` retains normalized query scratch and the complete encoded
+record. The adapter uses that record for no-op checks and moves the same bundle
+into the cloned state's `UpdatePrepared` for real changes. Model transforms,
+normalization and the 8-bit encoding pass are not repeated for the input.
+Internal preparation must use the unchanged fixed model; shape, finite query
+and metadata validation precede topology changes. Public signatures and encoded
+format are unchanged. Full state-copy transaction costs remain.
+
+Historical codec byte tests and 360 paired graph mutations still pass. Dedicated
+fixtures compare ordinary and prepared Update snapshots across five dimensions,
+and reject malformed preparation before changing state. External allocation
+injection checks 86 current failure points; the lower count follows removal of
+redundant allocations, not omission of cases. See [bounded changed-update evidence](results/rabitq-prepared-update-20261008/README.md).
+
+中文：真实更新复用前置检查已生成的归一化查询和完整编码，避免重复变换/编码；格式和公共签名不改，事务全状态复制成本仍未消除。准备结果必须来自固定模型，尺寸/有限查询/元数据在改图前验证；当前86个分配失败点原状态保持。

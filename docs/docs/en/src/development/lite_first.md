@@ -300,6 +300,8 @@ Update encodes the requested vector and compares both planes plus all six metada
 fields against the stored record. Identical complete encodings return without
 changing topology or snapshot bytes; plane identity alone is not sufficient.
 This still performs encoding and can fail on allocation or internal arithmetic.
+For a real change, the prepared normalized query and full code are moved into
+the transaction; the mutation path does not normalize or encode that input again.
 
 **Mutations that change state still use a full-state transaction copy.** This preserves the original
 state on failed Add/Update/Remove, but introduces O(index state) work and temporary
