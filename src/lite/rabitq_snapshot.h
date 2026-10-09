@@ -4,7 +4,9 @@
 
 #include <cstring>
 #include <istream>
+#include <limits>
 #include <ostream>
+#include <type_traits>
 #include <unordered_set>
 
 #include "lite/rabitq_graph_state.h"
@@ -90,6 +92,65 @@ read_bytes(std::istream& input, uint8_t* bytes, uint64_t size) {
 inline void
 read_bytes(std::istream& input, std::vector<uint8_t>& bytes) {
     read_bytes(input, bytes.data(), bytes.size());
+}
+
+inline bool
+snapshot_little_endian() {
+    const uint16_t value = 1;
+    return *reinterpret_cast<const uint8_t*>(&value) == 1;
+}
+
+// The same block-I/O principle as native StreamReader::ReadVector, with this
+// format's explicit little-endian conversion and capacity/failure contracts.
+template <typename T>
+inline void
+write_integer_array(std::ostream& output,
+                    const std::vector<T>& values,
+                    bool bulk = snapshot_little_endian()) {
+    static_assert(std::is_same_v<T, uint64_t> or std::is_same_v<T, int64_t>);
+    codec_require(
+        values.size() <=
+            static_cast<uint64_t>(std::numeric_limits<std::streamsize>::max()) / sizeof(T),
+        "snapshot array exceeds stream capacity");
+    if (values.empty()) {
+        return;
+    }
+    if (bulk) {
+        output.write(reinterpret_cast<const char*>(values.data()),
+                     static_cast<std::streamsize>(values.size() * sizeof(T)));
+        codec_require(static_cast<bool>(output), "snapshot write failed");
+        return;
+    }
+    for (T value : values) {
+        uint64_t bits;
+        std::memcpy(&bits, &value, sizeof(bits));
+        write_u64(output, bits);
+    }
+}
+
+template <typename T>
+inline void
+read_integer_array(std::istream& input,
+                   std::vector<T>& values,
+                   bool bulk = snapshot_little_endian()) {
+    static_assert(std::is_same_v<T, uint64_t> or std::is_same_v<T, int64_t>);
+    codec_require(
+        values.size() <=
+            static_cast<uint64_t>(std::numeric_limits<std::streamsize>::max()) / sizeof(T),
+        "snapshot array exceeds stream capacity");
+    if (values.empty()) {
+        return;
+    }
+    if (bulk) {
+        input.read(reinterpret_cast<char*>(values.data()),
+                   static_cast<std::streamsize>(values.size() * sizeof(T)));
+        codec_require(static_cast<bool>(input), "truncated snapshot");
+        return;
+    }
+    for (T& value : values) {
+        const uint64_t bits = read_u64(input);
+        std::memcpy(&value, &bits, sizeof(bits));
+    }
 }
 
 inline void
@@ -212,18 +273,12 @@ save_mutable_snapshot(std::ostream& output, const MutableGraphState& state) {
     write_u64(output, state.GetMaxDegree());
     write_u64(output, state.GetEfSearch());
     write_u64(output, state.GetIds().size());
-    for (int64_t id : state.GetIds()) {
-        write_i64(output, id);
-    }
+    write_integer_array(output, state.GetIds());
     const auto graph = state.GetGraph();
     write_u64(output, graph.offsets.size());
     write_u64(output, graph.neighbors.size());
-    for (uint64_t offset : graph.offsets) {
-        write_u64(output, offset);
-    }
-    for (uint64_t neighbor : graph.neighbors) {
-        write_u64(output, neighbor);
-    }
+    write_integer_array(output, graph.offsets);
+    write_integer_array(output, graph.neighbors);
 }
 
 inline MutableGraphState
@@ -236,9 +291,9 @@ load_mutable_snapshot(std::istream& input) {
     const uint64_t id_count = read_u64(input);
     codec_require(id_count == loaded.codes.Size(), "invalid mutable snapshot ID count");
     std::vector<int64_t> ids(id_count);
+    read_integer_array(input, ids);
     std::unordered_set<int64_t> unique_ids;
-    for (int64_t& id : ids) {
-        id = read_i64(input);
+    for (int64_t id : ids) {
         codec_require(unique_ids.insert(id).second, "duplicate mutable snapshot ID");
     }
     const uint64_t offset_count = read_u64(input);
@@ -255,12 +310,8 @@ load_mutable_snapshot(std::istream& input) {
                           (offset_count + neighbor_count) * 8,
                   "encoded graph payload size mismatch");
     GraphTopology graph{std::vector<uint64_t>(offset_count), std::vector<uint64_t>(neighbor_count)};
-    for (uint64_t& offset : graph.offsets) {
-        offset = read_u64(input);
-    }
-    for (uint64_t& neighbor : graph.neighbors) {
-        neighbor = read_u64(input);
-    }
+    read_integer_array(input, graph.offsets);
+    read_integer_array(input, graph.neighbors);
     validate_graph_topology(graph, loaded.codes.Size());
     codec_require(input.peek() == std::char_traits<char>::eof(), "snapshot trailing bytes");
     return {std::move(loaded.model),

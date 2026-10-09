@@ -616,3 +616,39 @@ TEST_CASE("RaBitQ supplement SIMD matches scalar estimates and plane tails", "[l
         }
     }
 }
+
+TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    const auto check = [](const auto& values) {
+        using T = typename std::decay_t<decltype(values)>::value_type;
+        std::ostringstream scalar(std::ios::binary), block(std::ios::binary);
+        codec::write_integer_array(scalar, values, false);
+        codec::write_integer_array(block, values);
+        REQUIRE(block.str() == scalar.str());
+        for (const bool bulk : {false, codec::snapshot_little_endian()}) {
+            std::vector<T> loaded(values.size());
+            std::istringstream input(block.str(), std::ios::binary);
+            codec::read_integer_array(input, loaded, bulk);
+            REQUIRE(loaded == values);
+            if (not values.empty()) {
+                std::istringstream short_input(block.str().substr(0, block.str().size() - 1),
+                                               std::ios::binary);
+                REQUIRE_THROWS(codec::read_integer_array(short_input, loaded, bulk));
+            }
+        }
+        struct ShortWrite : std::stringbuf {
+            std::streamsize
+            xsputn(const char* data, std::streamsize count) override {
+                return std::stringbuf::xsputn(data, count > 0 ? count - 1 : count);
+            }
+        } short_buffer;
+        std::ostream output(&short_buffer);
+        if (not values.empty()) {
+            REQUIRE_THROWS(codec::write_integer_array(output, values));
+        }
+    };
+    check(std::vector<int64_t>{INT64_MIN, -1, 0, 1, INT64_MAX});
+    check(std::vector<uint64_t>{0, 1, UINT64_MAX, 0x123456789abcdef0ULL});
+    check(std::vector<int64_t>{});
+    check(std::vector<uint64_t>{});
+}
