@@ -182,27 +182,23 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
     }
     return guarded(
         [&]() -> tl::expected<std::unique_ptr<Backend>, Error> {
-            std::vector<float> base;
             std::vector<int64_t> ids;
-            if (source.Dim() == 0 or source.Size() > base.max_size() / source.Dim()) {
+            if (source.Dim() == 0 or
+                source.Size() > std::vector<float>().max_size() / source.Dim()) {
                 return failure(ErrorType::INVALID_ARGUMENT, "RaBitQ training size overflow");
             }
-            base.reserve(source.Size() * source.Dim());
             ids.reserve(source.Size());
             std::vector<float> scratch;
-            for (uint64_t slot = 0; slot < source.Size(); ++slot) {
-                const auto* vector = source.VectorAt(slot, scratch);
-                base.insert(base.end(), vector, vector + source.Dim());
-                ids.push_back(source.IdAt(slot));
-            }
-            auto model = rabitq::train(base, source.Size(), source.Dim(), 47);
+            // Row pointers are consumed before requesting the next scratch-backed row.
+            auto model = rabitq::train_rows(source.Size(), source.Dim(), 47, [&](uint64_t slot) {
+                return source.VectorAt(slot, scratch);
+            });
             rabitq::EncodedRecords codes(source.Dim());
             codes.Reserve(source.Size());
             for (uint64_t slot = 0; slot < source.Size(); ++slot) {
-                codes.Append(rabitq::encode(model, base.data() + slot * source.Dim()));
+                codes.Append(rabitq::encode(model, source.VectorAt(slot, scratch)));
+                ids.push_back(source.IdAt(slot));
             }
-            // Training input is no longer needed while building the temporary graph.
-            std::vector<float>().swap(base);
             auto graph = make_graph_backend(source, max_degree, ef_search);
             if (not graph) {
                 return tl::unexpected(graph.error());

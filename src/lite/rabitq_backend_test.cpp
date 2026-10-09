@@ -1,5 +1,6 @@
 // Copyright 2024-present the vsag project
 // SPDX-License-Identifier: Apache-2.0
+#include <algorithm>
 #include <catch2/catch_test_macros.hpp>
 #include <cmath>
 #include <cstring>
@@ -551,13 +552,14 @@ TEST_CASE("RaBitQ filter Batch4 preserves single-estimate bits", "[lite-rabitq]"
         const auto batch = codec::filter_estimate_batch4(query, query_norm, codes);
         for (uint64_t slot = 0; slot < 4; ++slot) {
             const auto single = codec::filter_estimate(query, query_norm, codes[slot]);
-            REQUIRE(std::memcmp(&batch[slot].centered_ip,
-                                &single.centered_ip,
+            REQUIRE(std::memcmp(reinterpret_cast<const unsigned char*>(&batch[slot].centered_ip),
+                                reinterpret_cast<const unsigned char*>(&single.centered_ip),
                                 sizeof(single.centered_ip)) == 0);
-            REQUIRE(std::memcmp(&batch[slot].distance, &single.distance, sizeof(single.distance)) ==
-                    0);
-            REQUIRE(std::memcmp(&batch[slot].lower_bound,
-                                &single.lower_bound,
+            REQUIRE(std::memcmp(reinterpret_cast<const unsigned char*>(&batch[slot].distance),
+                                reinterpret_cast<const unsigned char*>(&single.distance),
+                                sizeof(single.distance)) == 0);
+            REQUIRE(std::memcmp(reinterpret_cast<const unsigned char*>(&batch[slot].lower_bound),
+                                reinterpret_cast<const unsigned char*>(&single.lower_bound),
                                 sizeof(single.lower_bound)) == 0);
         }
     }
@@ -621,7 +623,8 @@ TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors"
     namespace codec = vsag::lite::detail::rabitq;
     const auto check = [](const auto& values) {
         using T = typename std::decay_t<decltype(values)>::value_type;
-        std::ostringstream scalar(std::ios::binary), block(std::ios::binary);
+        std::ostringstream scalar(std::ios::binary);
+        std::ostringstream block(std::ios::binary);
         codec::write_integer_array(scalar, values, false);
         codec::write_integer_array(block, values);
         REQUIRE(block.str() == scalar.str());
@@ -730,6 +733,46 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                     }
                 }
             }
+        }
+    }
+}
+
+TEST_CASE("RaBitQ row training supports reusable non-contiguous scratch", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (const uint64_t dim : {1ULL, 17ULL, 128ULL}) {
+        constexpr uint64_t count = 7;
+        std::vector<float> base(count * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i * 13) * .17F);
+        }
+        const auto expected = codec::train(base, count, dim, 47);
+        std::vector<float> scratch(dim);
+        uint64_t calls = 0;
+        const auto model = codec::train_rows(count, dim, 47, [&](uint64_t row) {
+            REQUIRE(row == calls % count);
+            ++calls;
+            std::copy_n(base.data() + row * dim, dim, scratch.data());
+            return scratch.data();
+        });
+        REQUIRE(calls == count * 2);
+        REQUIRE(model.dim == expected.dim);
+        REQUIRE(model.flips == expected.flips);
+        REQUIRE(std::memcmp(model.centroid.data(), expected.centroid.data(), dim * sizeof(float)) ==
+                0);
+        for (uint64_t row = 0; row < count; ++row) {
+            const auto a = codec::encode(expected, base.data() + row * dim);
+            const auto b = codec::encode(model, base.data() + row * dim);
+            REQUIRE(a.filter == b.filter);
+            REQUIRE(a.supplement == b.supplement);
+            REQUIRE(a.scalar == b.scalar);
+        }
+        for (const float invalid :
+             {std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<float>::infinity()}) {
+            base.back() = invalid;
+            REQUIRE_THROWS_AS(
+                codec::train_rows(
+                    count, dim, 47, [&](uint64_t row) { return base.data() + row * dim; }),
+                std::runtime_error);
         }
     }
 }
