@@ -290,6 +290,42 @@ TEST_CASE("Lite 100k high-dimensional end-to-end smoke", "[.][lite-scale]") {
     }
 }
 
+TEST_CASE("Lite snapshot writes vector rows in blocks and reports short writes", "[lite]") {
+    struct CountWrites : std::stringbuf {
+        uint64_t calls{0};
+        bool short_rows{false};
+        std::streamsize
+        xsputn(const char* bytes, std::streamsize count) override {
+            ++calls;
+            if (short_rows and count > 8) {
+                return std::stringbuf::xsputn(bytes, count - 1);
+            }
+            return std::stringbuf::xsputn(bytes, count);
+        }
+    };
+    for (const auto storage : {vsag::lite::VectorStorage::FP32, vsag::lite::VectorStorage::FP16}) {
+        auto created = Index::Create(17);
+        REQUIRE(created);
+        float values[17];
+        std::fill_n(values, 17, 1.25F);
+        REQUIRE((*created)->Add(-7, values, 17));
+        REQUIRE((*created)->BuildGraph(storage, 4, 8));
+        CountWrites buffer;
+        std::ostream output(&buffer);
+        REQUIRE((*created)->Save(output));
+        REQUIRE(buffer.calls < 32);
+        std::stringstream input(buffer.str());
+        auto loaded = Index::Load(input);
+        REQUIRE(loaded);
+        REQUIRE((*loaded)->Search(values, 17, 1)->front().id == -7);
+
+        CountWrites short_buffer;
+        short_buffer.short_rows = true;
+        std::ostream short_output(&short_buffer);
+        REQUIRE_FALSE((*created)->Save(short_output));
+    }
+}
+
 TEST_CASE("Lite stream failure contracts", "[lite]") {
     auto created = Index::Create(1);
     float value = 0;

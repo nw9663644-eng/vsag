@@ -15,19 +15,22 @@ namespace vsag::lite::detail::rabitq {
 
 inline void
 write_u64(std::ostream& output, uint64_t value, uint64_t bytes = 8) {
+    char encoded[8];
     for (uint64_t i = 0; i < bytes; ++i) {
-        output.put(static_cast<char>((value >> (8U * i)) & 0xffU));
+        encoded[i] = static_cast<char>((value >> (8U * i)) & 0xffU);
     }
+    output.write(encoded, static_cast<std::streamsize>(bytes));
     codec_require(static_cast<bool>(output), "snapshot write failed");
 }
 
 inline uint64_t
 read_u64(std::istream& input, uint64_t bytes = 8) {
+    char encoded[8];
+    input.read(encoded, static_cast<std::streamsize>(bytes));
+    codec_require(static_cast<bool>(input), "truncated snapshot");
     uint64_t value = 0;
     for (uint64_t i = 0; i < bytes; ++i) {
-        const int byte = input.get();
-        codec_require(byte != std::char_traits<char>::eof(), "truncated snapshot");
-        value |= static_cast<uint64_t>(static_cast<uint8_t>(byte)) << (8U * i);
+        value |= static_cast<uint64_t>(static_cast<uint8_t>(encoded[i])) << (8U * i);
     }
     return value;
 }
