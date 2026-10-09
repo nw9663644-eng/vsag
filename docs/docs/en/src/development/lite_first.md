@@ -332,3 +332,6 @@ The integrated 10k SIFT/GIST/Cohere pilot is recorded in `lite/benchmark/results
 A fresh-process10k loaded-only study is recorded at `lite/benchmark/results/integrated-load-final-20261009`: RaBitQ loaded RSS is about41–66% below FP32 on these three distributions, with no original base matrix resident. Load/first-query regressions remain; these are warm-uncontrolled RAM measurements, not cold I/O or100k/long-CRUD acceptance. The report separates current-image VmHWM from the launcher-affected getrusage high-water metric.
 
 The integrated100k pilot records lower loaded RaBitQ RSS but quality failures at stored degree16/ef128. A separate observed-query grid meets the study floors at SIFT ef512 and GIST/Cohere ef2048 for RaBitQ, with slower queries than floating modes. See `lite/benchmark/results/integrated-100k-pilot-20261009` and `integrated-100k-budget-grid-20261009`. This selection is not blind final acceptance, exact equal-recall timing or a new default; long changed-vector CRUD and Full comparisons remain pending.
+
+
+[RaBitQ architecture, snapshot layout and remaining acceptance](lite_rabitq_design.md).

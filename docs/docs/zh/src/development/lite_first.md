@@ -258,3 +258,6 @@ auto result = index->SearchWithOptions(query, dim, 10, options);
 新进程10k独立加载结果见 `lite/benchmark/results/integrated-load-final-20261009`：无原始矩阵驻留时，RaBitQ常驻RSS比FP32低约41–66%；加载/首次查询代价仍存在。RAM暖缓存不能称冷启动，也不替代100k或长期验收。报告分别记录当前进程VmHWM及可能受启动器影响的getrusage峰值。
 
 100k集成先导显示RaBitQ加载RSS更低，但固定degree16/ef128质量不足。另一个历史查询网格中，RaBitQ在SIFT ef512、GIST/Cohere ef2048达到本轮研究门槛，查询仍慢于浮点。见 `lite/benchmark/results/integrated-100k-pilot-20261009` 及 `integrated-100k-budget-grid-20261009`；这不是盲测、精确等召回性能或新默认值，长期真实改值及Full对照仍待完成。
+
+
+[RaBitQ 架构、实际快照布局与剩余验收](lite_rabitq_design.md)。
