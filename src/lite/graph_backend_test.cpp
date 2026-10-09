@@ -934,7 +934,8 @@ TEST_CASE("Lite update repairs old outgoing targets that lose their only incomin
     }
 }
 
-TEST_CASE("Lite routing admission must not discard allowed coarse-rejected entries", "[lite]") {
+TEST_CASE("Lite routing admission must not discard allowed coarse-rejected entries",
+          "[lite-graph]") {
     for (const auto storage : {vsag::lite::VectorStorage::FP32, vsag::lite::VectorStorage::FP16}) {
         auto created = vsag::lite::Index::Create(1);
         REQUIRE(created);
