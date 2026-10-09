@@ -940,7 +940,7 @@ TEST_CASE("Lite routing admission must not discard allowed coarse-rejected entri
         auto created = vsag::lite::Index::Create(1);
         REQUIRE(created);
         for (int64_t id = 0; id < 64; ++id) {
-            const float value = static_cast<float>(id);
+            const auto value = static_cast<float>(id);
             REQUIRE((*created)->Add(id, &value, 1));
         }
         REQUIRE((*created)->BuildGraph(storage, 4, 16));
@@ -958,4 +958,109 @@ TEST_CASE("Lite routing admission must not discard allowed coarse-rejected entri
         REQUIRE(rejected);
         REQUIRE(rejected->empty());
     }
+}
+
+namespace {
+class ScratchRowsBackend final : public vsag::lite::detail::Backend {
+public:
+    explicit ScratchRowsBackend(const Backend& source, bool invalid = false)
+        : source_(source), invalid_(invalid) {
+    }
+    tl::expected<void, vsag::Error>
+    Add(int64_t /*id*/, const float* /*vector*/, uint64_t /*dim*/) override {
+        return tl::unexpected(
+            vsag::Error(vsag::ErrorType::UNSUPPORTED_INDEX_OPERATION, "read only"));
+    }
+    tl::expected<void, vsag::Error>
+    Update(int64_t id, const float* vector, uint64_t dim) override {
+        return Add(id, vector, dim);
+    }
+    bool
+    Remove(int64_t /*id*/) override {
+        return false;
+    }
+    tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error>
+    Search(const float* query, uint64_t dim, uint64_t k) const override {
+        return source_.Search(query, dim, k);
+    }
+    tl::expected<std::vector<vsag::lite::Neighbor>, vsag::Error>
+    Search(const float* query,
+           uint64_t dim,
+           uint64_t k,
+           const vsag::lite::IdFilter& filter) const override {
+        return source_.Search(query, dim, k, filter);
+    }
+    [[nodiscard]] uint64_t
+    Size() const override {
+        return source_.Size();
+    }
+    [[nodiscard]] uint64_t
+    Dim() const override {
+        return source_.Dim();
+    }
+    [[nodiscard]] int64_t
+    IdAt(uint64_t slot) const override {
+        return source_.IdAt(slot);
+    }
+    [[nodiscard]] vsag::lite::BackendKind
+    Kind() const override {
+        return source_.Kind();
+    }
+    const float*
+    VectorAt(uint64_t slot, std::vector<float>& scratch) const override {
+        std::vector<float> original;
+        const auto* row = source_.VectorAt(slot, original);
+        scratch.assign(row, row + Dim());
+        if (invalid_ and slot + 1 == Size()) {
+            scratch.front() = std::numeric_limits<float>::quiet_NaN();
+        }
+        return scratch.data();
+    }
+
+private:
+    const Backend& source_;
+    bool invalid_;
+};
+}  // namespace
+
+TEST_CASE("Lite borrowed topology matches owned graph and outlives its source", "[lite-graph]") {
+    using vsag::lite::detail::build_graph_topology;
+    for (const uint64_t dim : {1ULL, 17ULL, 128ULL, 768ULL}) {
+        auto flat = make_brute_force_backend(dim);
+        REQUIRE(flat);
+        std::vector<float> vector(dim);
+        for (uint64_t slot = 0; slot < 32; ++slot) {
+            const uint64_t duplicate_row = slot / 2;
+            for (uint64_t d = 0; d < dim; ++d) {
+                vector[d] = std::sin(static_cast<float>(duplicate_row * 13 + d) * .17F);
+            }
+            REQUIRE((*flat)->Add(100 - static_cast<int64_t>(slot * 7), vector.data(), dim));
+        }
+        auto owned = make_graph_backend(**flat, 4, 16);
+        REQUIRE(owned);
+        ScratchRowsBackend scratch(**flat);
+        auto borrowed = build_graph_topology(**flat, 4, 16);
+        auto buffered = build_graph_topology(scratch, 4, 16);
+        REQUIRE(borrowed);
+        REQUIRE(buffered);
+        REQUIRE(*borrowed == *buffered);
+        ScratchRowsBackend invalid(**flat, true);
+        REQUIRE_FALSE(build_graph_topology(invalid, 4, 16));
+        REQUIRE((*flat)->Size() == 32);
+        REQUIRE_FALSE(build_graph_topology(**flat, 1, 16));
+        REQUIRE_FALSE(build_graph_topology(**flat, 4, 2));
+        REQUIRE_FALSE(build_graph_topology(**owned, 4, 16));
+        flat->reset();
+        for (uint64_t slot = 0; slot < (*owned)->Size(); ++slot) {
+            REQUIRE((*borrowed)[slot].size() == (*owned)->LinkCountAt(slot));
+            for (uint64_t edge = 0; edge < (*borrowed)[slot].size(); ++edge) {
+                REQUIRE((*borrowed)[slot][edge] == (*owned)->LinkAt(slot, edge));
+            }
+        }
+    }
+    auto empty = make_brute_force_backend(1);
+    REQUIRE(empty);
+    auto links = build_graph_topology(**empty, 2, 2);
+    REQUIRE(links);
+    REQUIRE(links->empty());
 }

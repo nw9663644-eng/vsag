@@ -61,14 +61,16 @@ public:
                  uint64_t max_degree,
                  uint64_t ef_search,
                  bool fp16 = false,
-                 bool journal_mutations = true)
+                 bool journal_mutations = true,
+                 const Backend* build_source = nullptr)
         : dim_(dimension),
           max_degree_(max_degree),
           ef_search_(ef_search),
           fp16_(fp16),
           distance_(select_fp32_distance()),
           fp16_distance_(select_fp16_distance()),
-          journal_mutations_(journal_mutations) {
+          journal_mutations_(journal_mutations),
+          build_source_(build_source) {
     }
 
     void
@@ -80,7 +82,7 @@ public:
         }
         if (fp16_) {
             fp16_vectors_.reserve(count * Dim());
-        } else {
+        } else if (build_source_ == nullptr) {
             vectors_.reserve(count * Dim());
         }
         ids_.reserve(count);
@@ -92,6 +94,11 @@ public:
     void
     EnableMutationJournal() {
         journal_mutations_ = true;
+    }
+
+    std::vector<std::vector<uint64_t>>
+    TakeBuildLinks() {
+        return std::move(extras_);
     }
 
     // Back up only rows touched by a mutation. Rollback reuses retained capacity
@@ -248,7 +255,7 @@ public:
             }
             if (fp16_) {
                 grow(fp16_vectors_, (Size() + 1) * dim);
-            } else {
+            } else if (build_source_ == nullptr) {
                 grow(vectors_, (Size() + 1) * dim);
             }
             grow(ids_, Size() + 1);
@@ -261,7 +268,7 @@ public:
             slots_.emplace(id, Size());
             if (fp16_) {
                 fp16_vectors_.insert(fp16_vectors_.end(), encoded.begin(), encoded.end());
-            } else {
+            } else if (build_source_ == nullptr) {
                 vectors_.insert(vectors_.end(), vector, vector + dim);
             }
             ids_.push_back(id);
@@ -686,6 +693,9 @@ public:
 
     [[nodiscard]] const float*
     VectorAt(uint64_t slot, std::vector<float>& scratch) const override {
+        if (build_source_ != nullptr) {
+            return build_source_->VectorAt(slot, scratch);
+        }
         if (not fp16_) {
             return vectors_.data() + slot * Dim();
         }
@@ -897,7 +907,11 @@ private:
         if (fp16_) {
             return fp16_distance_(encoded_query.data(), fp16_vectors_.data() + slot * Dim(), Dim());
         }
-        return distance_(query, vectors_.data() + slot * Dim(), Dim());
+        if (build_source_ == nullptr) {
+            return distance_(query, vectors_.data() + slot * Dim(), Dim());
+        }
+        std::vector<float> scratch;
+        return distance_(query, build_source_->VectorAt(slot, scratch), Dim());
     }
 
     [[nodiscard]] float
@@ -906,7 +920,15 @@ private:
             return fp16_distance_(
                 fp16_vectors_.data() + left * Dim(), fp16_vectors_.data() + right * Dim(), Dim());
         }
-        return distance_(vectors_.data() + left * Dim(), vectors_.data() + right * Dim(), Dim());
+        if (build_source_ == nullptr) {
+            return distance_(
+                vectors_.data() + left * Dim(), vectors_.data() + right * Dim(), Dim());
+        }
+        std::vector<float> left_scratch;
+        std::vector<float> right_scratch;
+        const auto* left_vector = VectorAt(left, left_scratch);
+        const auto* right_vector = VectorAt(right, right_scratch);
+        return distance_(left_vector, right_vector, Dim());
     }
 
     tl::expected<std::vector<uint64_t>, Error>
@@ -1015,6 +1037,8 @@ private:
     uint64_t incoming_compactions_{};
     MutationJournal* active_journal_{};
     bool journal_mutations_;
+    // Non-owning, synchronous build-only source. This graph never escapes its factory.
+    const Backend* build_source_;
 };
 
 }  // namespace
@@ -1043,6 +1067,31 @@ make_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_searc
         return failure(ErrorType::NO_ENOUGH_MEMORY, "graph allocation failed");
     } catch (const std::length_error&) {
         return failure(ErrorType::NO_ENOUGH_MEMORY, "graph capacity exceeded");
+    }
+}
+
+tl::expected<std::vector<std::vector<uint64_t>>, Error>
+build_graph_topology(const Backend& source, uint64_t max_degree, uint64_t ef_search) {
+    if (source.Kind() != BackendKind::BRUTE_FORCE or source.Dim() == 0 or max_degree < 2 or
+        max_degree > K_MAX_DEGREE or ef_search < max_degree) {
+        return failure(ErrorType::INVALID_ARGUMENT, "invalid topology options");
+    }
+    try {
+        GraphBackend graph(source.Dim(), max_degree, ef_search, false, false, &source);
+        graph.ReserveBuild(source.Size());
+        std::vector<float> scratch;
+        for (uint64_t slot = 0; slot < source.Size(); ++slot) {
+            auto added = graph.Add(source.IdAt(slot), source.VectorAt(slot, scratch), source.Dim());
+            if (not added) {
+                return tl::unexpected(added.error());
+            }
+        }
+        // Only owned adjacency leaves this scope, never the borrowed source or row pointers.
+        return graph.TakeBuildLinks();
+    } catch (const std::bad_alloc&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "topology allocation failed");
+    } catch (const std::length_error&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "topology capacity exceeded");
     }
 }
 

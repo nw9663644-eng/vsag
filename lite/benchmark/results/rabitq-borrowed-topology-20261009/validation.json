@@ -1,0 +1,21 @@
+{
+  "release_ctest": 6,
+  "asan_ubsan_ctest": 5,
+  "coverage_ctest": 5,
+  "rabitq_off_ctest": 4,
+  "format15": "passed",
+  "tidy15": "passed after correcting eight test-only diagnostics",
+  "doc_checker": "not run: no Node runtime on server; current branch lacks new upstream checker",
+  "control_head": "410a889acfa96e16847808475b21bcb74a85e7fe",
+  "control_sha256": "28bbe034658e0dfc29c635946348986c80162314d829b0da767cf3f20e409096",
+  "candidate_sha256": "0ff5757969eba4574686a920996693fbea8986561560a27ebe5bc5f4bdefe415",
+  "source_sha256": {
+    "src/lite/backend.h": "4c55f1f0b03d967d2204b9dac86e36cf35c6bb99f3a1b3785a68d9626b2de7b0",
+    "src/lite/graph_backend.cpp": "0b050801188cc3b44566a987468670cce75628a8c3c8c3ccd967bc3a74ade1e1",
+    "src/lite/rabitq_backend.cpp": "5cf5cf40dfbab60ef4089dc7ca59ac70e1e4824e4e494f232c7e106fa906e310",
+    "src/lite/graph_backend_test.cpp": "7cb367baea10f4b85ee58aca44ec44b1057ec4dd2546a815e191e5e09005724a"
+  },
+  "upstream_main": "d39a7b06caee7569bb15121d5fcfd86bb3fcbe00",
+  "pr2904_head": "36437c68954df69c3f4425e70523879899ea4e89",
+  "pr2926_head": "410c134822d73d6b08cc24f68432c1fc9b8057bd"
+}

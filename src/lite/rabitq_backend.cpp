@@ -199,20 +199,19 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
                 codes.Append(rabitq::encode(model, source.VectorAt(slot, scratch)));
                 ids.push_back(source.IdAt(slot));
             }
-            auto graph = make_graph_backend(source, max_degree, ef_search);
-            if (not graph) {
-                return tl::unexpected(graph.error());
+            auto links = build_graph_topology(source, max_degree, ef_search);
+            if (not links) {
+                return tl::unexpected(links.error());
             }
             rabitq::GraphTopology topology;
             topology.offsets.push_back(0);
             for (uint64_t slot = 0; slot < source.Size(); ++slot) {
-                for (uint64_t edge = 0; edge < (*graph)->LinkCountAt(slot); ++edge) {
-                    topology.neighbors.push_back((*graph)->LinkAt(slot, edge));
-                }
+                topology.neighbors.insert(
+                    topology.neighbors.end(), (*links)[slot].begin(), (*links)[slot].end());
                 topology.offsets.push_back(topology.neighbors.size());
             }
-            // Only the copied topology is needed to initialize the encoded state.
-            graph->reset();
+            // Release temporary adjacency before initializing the encoded state.
+            std::vector<std::vector<uint64_t>>().swap(*links);
             rabitq::MutableGraphState state(std::move(model),
                                             std::move(codes),
                                             topology,
