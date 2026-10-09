@@ -1,0 +1,26 @@
+{
+  "control_commit": "4fc5191c2f03bc639cbe399f06c8ebd495f7e9d5",
+  "candidate_production_commit": "624252f5549c1c3cac12f663293effa0b0eabce3",
+  "control_library_sha256": "8a7bdd2fa9658107e9b9262acc0b5bf157e1c1882deeb3d958dff4bb3b02c021",
+  "candidate_library_sha256": "56d934876fb17fb41b765ec7526208369da7e227e0f169d43301d8c089e82550",
+  "tool_source_sha256": "6ff159618f346000f1ecca3183d7b296d1965ec982c385064e344afeb4de17d4",
+  "tool_binary_sha256": "80e4231250cd11d93079ec70c1b485a1a7303a7fb56eb48bf30db7f428a41bb1",
+  "compiler_arguments": "c++ -O3 -DNDEBUG -std=c++17 -Iinclude lite/benchmark/graph_heap_regression.cpp -Lbuild-lite-fp16-simd-release -Wl,-rpath,$PWD/build-lite-fp16-simd-release -lvsag-lite",
+  "library_selection": "LD_LIBRARY_PATH=/home/ubuntu/project/vsag-float-heap-control-4fc5191 or $PWD/build-lite-fp16-simd-release",
+  "validation": "byte-equal stdout CSV and concatenated snapshots for all 3 representations; internal exact before/after load checks",
+  "test_suites": {
+    "release": "6/6",
+    "asan_ubsan": "8/8",
+    "coverage": "6/6",
+    "rabitq_default_off": "4/4",
+    "direct_filter_regression": "144 assertions"
+  },
+  "production_lite_coverage": {
+    "covered": 2592,
+    "lines": 2737,
+    "percent": 94.70222871757399
+  },
+  "format": "clang-format-15 pass",
+  "tidy": "clang-tidy-15 no user diagnostics; suppressed dependency warnings",
+  "limitations": "synthetic bounded correctness only; no long real-data CRUD acceptance"
+}
