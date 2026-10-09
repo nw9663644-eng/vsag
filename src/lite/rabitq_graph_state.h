@@ -230,7 +230,7 @@ struct GraphSearchResult {
     uint64_t reordered{};
 };
 
-template <typename NeighborRange, bool PruneRejected = true>
+template <typename NeighborRange, bool PruneRejected = true, bool PrefetchCodes = true>
 inline GraphSearchResult
 graph_search_impl(const std::vector<float>& query,
                   float query_norm,
@@ -330,6 +330,14 @@ graph_search_impl(const std::vector<float>& query,
             }
             visited[slot] = 1;
             ++visited_count;
+            if constexpr (PrefetchCodes) {
+                // Match native HGraph RaBitQ: bring filter records in before batch scoring.
+                const auto* data = codes.filters.data() + slot * codes.FilterBytes();
+                for (uint64_t offset = 0; offset < codes.FilterBytes(); offset += 64) {
+                    __builtin_prefetch(data + offset, 0, 3);
+                }
+                __builtin_prefetch(codes.metadata.data() + slot, 0, 3);
+            }
             slots[count++] = slot;
             if (count == 4) {
                 flush();

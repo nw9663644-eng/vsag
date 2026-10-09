@@ -659,7 +659,7 @@ TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors"
 TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t count = 96;
-    for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}}) {
+    for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}, uint64_t{768}, uint64_t{960}}) {
         std::vector<float> base(count * dim);
         std::vector<int64_t> ids(count);
         codec::GraphTopology graph;
@@ -706,9 +706,10 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                                     return filter_mode == 1 and id % 3 == 0;
                                 };
                             }
-                            const auto run = [&](auto prune) {
+                            const auto run = [&](auto prune, auto prefetch) {
                                 return codec::graph_search_impl<decltype(range),
-                                                                decltype(prune)::value>(
+                                                                decltype(prune)::value,
+                                                                decltype(prefetch)::value>(
                                     query,
                                     norm,
                                     state.GetCodes(),
@@ -718,16 +719,19 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                                     &state.GetIds(),
                                     filter);
                             };
-                            const auto reference = run(std::false_type{});
-                            const auto candidate = run(std::true_type{});
-                            REQUIRE(candidate.visited == reference.visited);
-                            REQUIRE(candidate.reordered == reference.reordered);
-                            REQUIRE(candidate.neighbors.size() == reference.neighbors.size());
-                            for (uint64_t rank = 0; rank < candidate.neighbors.size(); ++rank) {
-                                REQUIRE(candidate.neighbors[rank].id ==
-                                        reference.neighbors[rank].id);
-                                REQUIRE(candidate.neighbors[rank].distance ==
-                                        reference.neighbors[rank].distance);
+                            const auto reference = run(std::false_type{}, std::false_type{});
+                            for (const auto& candidate :
+                                 {run(std::true_type{}, std::false_type{}),
+                                  run(std::true_type{}, std::true_type{})}) {
+                                REQUIRE(candidate.visited == reference.visited);
+                                REQUIRE(candidate.reordered == reference.reordered);
+                                REQUIRE(candidate.neighbors.size() == reference.neighbors.size());
+                                for (uint64_t rank = 0; rank < candidate.neighbors.size(); ++rank) {
+                                    REQUIRE(candidate.neighbors[rank].id ==
+                                            reference.neighbors[rank].id);
+                                    REQUIRE(candidate.neighbors[rank].distance ==
+                                            reference.neighbors[rank].distance);
+                                }
                             }
                         }
                     }

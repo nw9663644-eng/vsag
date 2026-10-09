@@ -1,0 +1,121 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2667,
+      "total": 2805,
+      "percent": 95.08021390374331
+    },
+    "shared_simd": {
+      "covered": 174,
+      "total": 176,
+      "percent": 98.86363636363636
+    },
+    "combined": {
+      "covered": 2841,
+      "total": 2981,
+      "percent": 95.30358939953037
+    }
+  },
+  "files": {
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h": {
+      "covered": 26,
+      "total": 26
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend_utils.h": {
+      "covered": 11,
+      "total": 11
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp": {
+      "covered": 118,
+      "total": 131
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_codec.h": {
+      "covered": 37,
+      "total": 38
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance.cpp": {
+      "covered": 28,
+      "total": 28
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx.cpp": {
+      "covered": 6,
+      "total": 6
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx2.cpp": {
+      "covered": 6,
+      "total": 6
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx512.cpp": {
+      "covered": 6,
+      "total": 6
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance.cpp": {
+      "covered": 11,
+      "total": 16
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx2.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx512.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_sse.cpp": {
+      "covered": 3,
+      "total": 3
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp": {
+      "covered": 691,
+      "total": 719
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp": {
+      "covered": 234,
+      "total": 268
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_backend.cpp": {
+      "covered": 121,
+      "total": 131
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_codec.h": {
+      "covered": 312,
+      "total": 316
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip.cpp": {
+      "covered": 45,
+      "total": 54
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx2.cpp": {
+      "covered": 3,
+      "total": 9
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx512.cpp": {
+      "covered": 9,
+      "total": 9
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_graph_state.h": {
+      "covered": 794,
+      "total": 822
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_snapshot.h": {
+      "covered": 200,
+      "total": 200
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/compute_l2.h": {
+      "covered": 22,
+      "total": 22
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/half_compute.h": {
+      "covered": 17,
+      "total": 17
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/rabitq_compute.h": {
+      "covered": 117,
+      "total": 119
+    },
+    "/home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/rabitq_pack.h": {
+      "covered": 18,
+      "total": 18
+    }
+  }
+}

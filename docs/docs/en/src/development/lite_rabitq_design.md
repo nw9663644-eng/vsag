@@ -53,7 +53,7 @@ Decoding uses caller-owned scratch and returns an approximate original-space vec
 
 SearchWithOptions zero uses the stored budget; the effective budget is bounded by the live count and requested result count. Query overrides do not modify construction/mutation defaults or saved settings. k=0 and an empty index after removals return no results. Filters may return fewer than k candidates.
 
-Transform/normalization costs O(D) per query; each filter and supplement evaluation also scales with D, while visited storage scales with N. Current full_distance recomputes query_sum per candidate and unfiltered reorder recomputes a filter estimate. These are concrete optimization candidates, not measured completed improvements. Higher ef cannot be described as free performance optimization.
+Transform/normalization costs O(D) per query; each filter and supplement evaluation also scales with D, while visited storage scales with N. Graph search caches query_sum once and reuses the coarse filter inner product during complete 3+5-bit scoring. Before each four-record adjacency batch, read-only cache hints prefetch the filter plane cache lines and metadata, following native HGraph RaBitQ filter prefetching. These hints do not change scoring, traversal order, visited state, filtering or persistence, and do not allocate shared query scratch. Benefits depend on dimension, cache and hardware; this is not a blanket latency guarantee. Higher ef cannot be described as free performance optimization.
 
 ## CRUD and failure boundaries
 
