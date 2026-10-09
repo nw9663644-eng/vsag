@@ -201,6 +201,8 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
             for (uint64_t slot = 0; slot < source.Size(); ++slot) {
                 codes.Append(rabitq::encode(model, base.data() + slot * source.Dim()));
             }
+            // Training input is no longer needed while building the temporary graph.
+            std::vector<float>().swap(base);
             auto graph = make_graph_backend(source, max_degree, ef_search);
             if (not graph) {
                 return tl::unexpected(graph.error());
@@ -213,6 +215,8 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
                 }
                 topology.offsets.push_back(topology.neighbors.size());
             }
+            // Only the copied topology is needed to initialize the encoded state.
+            graph->reset();
             rabitq::MutableGraphState state(std::move(model),
                                             std::move(codes),
                                             topology,
