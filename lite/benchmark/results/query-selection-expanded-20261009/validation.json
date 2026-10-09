@@ -1,0 +1,25 @@
+{
+  "tests": {
+    "release": "6/6",
+    "asan_ubsan": "5/5",
+    "coverage": "5/5",
+    "rabitq_off": "4/4"
+  },
+  "coverage_counters": "cleared 19 verified generated gcda before fresh CTest; no source/data/results deleted",
+  "format": "clang-format-15 --dry-run --Werror; five changed C++ files passed",
+  "tidy": "clang-tidy-15 warnings-as-errors; four translation units plus .*/src/lite/.* header filter passed; non-user warnings suppressed",
+  "not_run": [
+    "whole native Full suite",
+    "Node upstream docs checker (unavailable runtime/script)",
+    "new 100k/fresh Full/cold I/O/long whole-vector changed CRUD"
+  ],
+  "source_sha256": {
+    "src/lite/query_heap.h": "11e4dca3b683021a79835d53b8ec3816bc2f717c42e30cd72b5e8f9c893439f6",
+    "src/lite/graph_backend.cpp": "0fad8ef6dc6fc1c3e06b3754fbb9ddd4fc209875b558bb18006dc3d001038b7d",
+    "src/lite/graph_backend_test.cpp": "ac0a8a7d74a975b0abd045945f75a46a6accd36175e8e540b72ce6c1c0765082",
+    "src/lite/rabitq_graph_state.h": "8099aa4c1068c229edf101d59bb0812a2bc313c083d251a182eadc60a9209500",
+    "src/lite/rabitq_backend_test.cpp": "67f6aeac21e1ffc1d9bdabe8aef15173a8e39cebed370816cf0fc2305a94d64f"
+  },
+  "candidate_library_sha256": "e63099bdbe37133b27bddab8a82d69da5cf33bed72c8e3c304e7ab1c4d159558",
+  "post_timing_source_change": "Renamed three bool template parameters to required snake_case; Release shared library SHA256 unchanged; all four CTest configurations rerun, coverage counters reset before final collection."
+}

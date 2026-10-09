@@ -706,10 +706,11 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                                     return filter_mode == 1 and id % 3 == 0;
                                 };
                             }
-                            const auto run = [&](auto prune, auto prefetch) {
+                            const auto run = [&](auto prune, auto prefetch, auto select) {
                                 return codec::graph_search_impl<decltype(range),
                                                                 decltype(prune)::value,
-                                                                decltype(prefetch)::value>(
+                                                                decltype(prefetch)::value,
+                                                                decltype(select)::value>(
                                     query,
                                     norm,
                                     state.GetCodes(),
@@ -719,10 +720,11 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                                     &state.GetIds(),
                                     filter);
                             };
-                            const auto reference = run(std::false_type{}, std::false_type{});
+                            const auto reference =
+                                run(std::false_type{}, std::false_type{}, std::false_type{});
                             for (const auto& candidate :
-                                 {run(std::true_type{}, std::false_type{}),
-                                  run(std::true_type{}, std::true_type{})}) {
+                                 {run(std::true_type{}, std::false_type{}, std::true_type{}),
+                                  run(std::true_type{}, std::true_type{}, std::true_type{})}) {
                                 REQUIRE(candidate.visited == reference.visited);
                                 REQUIRE(candidate.reordered == reference.reordered);
                                 REQUIRE(candidate.neighbors.size() == reference.neighbors.size());

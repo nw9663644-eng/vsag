@@ -359,3 +359,14 @@ establish parity with Full VSAG or with FP32/FP16.
 The current Lite/native HGraph 600-query-per-dataset study is recorded in `lite/benchmark/results/acceptance-full-expanded-r1-20261009`. It uses a pinned installed Full reference, not old Lite, with explicit source/header/binary provenance. Query budgets differ (Lite512/Full128); this is not an exact matched-recall or same-budget comparison. The study records warm-load/total-RSS advantages but slower queries, larger snapshots and higher construction peaks. These observed queries are regression data, not blind holdout or long changed-vector CRUD acceptance.
 
 `python3 lite/benchmark/measure_elf_closure.py --lite LITE_SO --full FULL_SO --output NEW_OUTPUT --scratch /dev/shm` measures trusted shared-library ELF DT_NEEDED closures. It resolves recursive dependencies, counts each realpath once (including common system runtime), and applies identical `strip --strip-unneeded` only to scratch copies; originals are not changed. This scope excludes executables, headers, Python bindings, containers and dynamically loaded plugins. The recorded reduction is not a complete wheel/container/SDK size claim. Run `python3 lite/benchmark/test_measure_elf_closure.py` for dependency/deduplication/copy-only fixtures.
+
+Query-local graph heaps preserve the existing admission and traversal order.
+After unfiltered FP32/FP16 traversal ends, Lite takes the owned retained buffer,
+selects the best k candidates, and sorts only that prefix by distance then
+external ID. RaBitQ scores the same retained candidates directly instead of
+popping the entire coarse heap; its scoring formula and final ID tie-break are
+unchanged. Filtered search keeps its existing path. This follows the native
+DistanceHeap retained-buffer access pattern, without changing ef, topology,
+the public API, or snapshots. The paired regression evidence is in
+`lite/benchmark/results/query-selection-expanded-20261009`; its control is
+old Lite, not Full VSAG.

@@ -276,3 +276,5 @@ RaBitQ 每个查询或维护查询只计算一次向量求和。5-bit 补充码�
 每数据集600查询的当前Lite/原生HGraph对照见 `lite/benchmark/results/acceptance-full-expanded-r1-20261009`。Full为固定已安装原生版本，不是旧Lite，源/头文件/二进制身份均记录；查询预算Lite512/Full128不同，不是精确等召回或等预算。结果显示暖加载及整进程常驻RSS较小，但查询更慢、快照更大、构建峰值更高。已观察查询只能作为回归数据，不是盲测，也不替代长期真实改值CRUD验收。
 
 `python3 lite/benchmark/measure_elf_closure.py --lite LITE_SO --full FULL_SO --output NEW_OUTPUT --scratch /dev/shm` 用于可信共享库的 ELF DT_NEEDED 依赖闭包。递归解析依赖，按真实路径去重（包含共同系统运行库），只对scratch副本使用相同 `strip --strip-unneeded`，不改变原文件。范围不含可执行文件、头文件、Python绑定、容器及动态加载插件，不能称完整wheel/容器/SDK包体。运行 `python3 lite/benchmark/test_measure_elf_closure.py` 可检查依赖解析、去重及仅修改副本的夹具。
+
+查询局部堆保持既有候选准入和图遍历顺序。无过滤 FP32/FP16 查询在遍历结束后接管堆拥有的候选缓冲区，选择前 k 项，仅对这些结果按距离及外部 ID 排序。RaBitQ 直接对同一组保留候选评分，避免逐项弹出粗排堆；评分公式和最终 ID 排序不变，过滤路径仍保持原实现。这借鉴原生 DistanceHeap 直接访问保留缓冲区的方式，不改变 ef、拓扑、公共 API 或持久化格式。配对证据见 `lite/benchmark/results/query-selection-expanded-20261009`；对照是旧 Lite，不是 Full VSAG。

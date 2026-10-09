@@ -28,6 +28,7 @@
 
 #include "lite/backend.h"
 #include "lite/fp16_codec.h"
+#include "lite/query_heap.h"
 
 using vsag::lite::detail::make_brute_force_backend;
 using vsag::lite::detail::make_fp16_graph_backend;
@@ -1063,4 +1064,48 @@ TEST_CASE("Lite borrowed topology matches owned graph and outlives its source", 
     auto links = build_graph_topology(**empty, 2, 2);
     REQUIRE(links);
     REQUIRE(links->empty());
+}
+
+TEST_CASE("Lite query heap data preserves priority queue contents", "[lite-graph]") {
+    using Record = std::pair<float, uint64_t>;
+    const auto check = [](auto compare) {
+        for (uint64_t capacity : {0ULL, 1ULL, 2ULL, 3ULL, 16ULL, 512ULL}) {
+            std::priority_queue<Record, std::vector<Record>, decltype(compare)> reference(compare);
+            vsag::lite::detail::QueryHeap<Record, decltype(compare)> candidate(compare);
+            std::mt19937 random(47);
+            for (uint64_t step = 0; step < 2000; ++step) {
+                const Record value{static_cast<float>(random() % 17), random() % 31};
+                if (capacity != 0) {
+                    reference.push(value);
+                    candidate.push(value);
+                    if (reference.size() > capacity) {
+                        reference.pop();
+                        candidate.pop();
+                    }
+                }
+                REQUIRE(candidate.size() == reference.size());
+                REQUIRE(candidate.GetData().size() == reference.size());
+                if (not reference.empty()) {
+                    REQUIRE(candidate.top() == reference.top());
+                }
+                if (step % 37 == 0) {
+                    auto expected = reference;
+                    auto actual = candidate;
+                    auto values = actual.TakeData();
+                    std::sort(
+                        values.begin(), values.end(), [&](const auto& left, const auto& right) {
+                            return compare(right, left);
+                        });
+                    REQUIRE(values.size() == expected.size());
+                    for (const auto& value : values) {
+                        REQUIRE(value == expected.top());
+                        expected.pop();
+                    }
+                    REQUIRE(expected.empty());
+                }
+            }
+        }
+    };
+    check(std::less<Record>{});
+    check(std::greater<Record>{});
 }

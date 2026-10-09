@@ -16,6 +16,7 @@
 #include "lite/fp16_codec.h"
 #include "lite/fp16_distance.h"
 #include "lite/fp32_distance.h"
+#include "lite/query_heap.h"
 
 namespace vsag::lite::detail {
 namespace {
@@ -473,7 +474,7 @@ public:
             }
             const uint64_t ef = std::min(Size(), std::max(k, budget));
             // With closer as Compare, top() is the farthest candidate and pop() evicts it.
-            std::priority_queue<Candidate, std::vector<Candidate>, Closer> best;
+            QueryHeap<Candidate, Closer> best;
             std::priority_queue<Candidate, std::vector<Candidate>, Closer> accepted;
             std::priority_queue<Candidate, std::vector<Candidate>, Farther> candidates;
             std::vector<uint8_t> visited(Size(), 0);
@@ -537,25 +538,20 @@ public:
 
             std::vector<Neighbor> result;
             if (filter == nullptr) {
-                result.resize(best.size());
-                for (uint64_t i = result.size(); i > 0; --i) {
-                    const auto candidate = best.top();
-                    best.pop();
-                    result[i - 1] = {IdAt(candidate.slot), candidate.distance};
+                auto values = best.TakeData();
+                const auto rank = [this](const Candidate& left, const Candidate& right) {
+                    return left.distance < right.distance or
+                           (left.distance == right.distance and IdAt(left.slot) < IdAt(right.slot));
+                };
+                const uint64_t count = std::min(k, static_cast<uint64_t>(values.size()));
+                const auto end = values.begin() + static_cast<std::ptrdiff_t>(count);
+                if (count < values.size()) {
+                    std::nth_element(values.begin(), end, values.end(), rank);
                 }
-                // The heap already orders distances. Sort only equal-distance groups to preserve
-                // the public ID tie-break without re-sorting the complete result.
-                for (uint64_t begin = 0; begin < result.size();) {
-                    uint64_t end = begin + 1;
-                    while (end < result.size() and result[end].distance == result[begin].distance) {
-                        ++end;
-                    }
-                    std::sort(result.begin() + static_cast<std::ptrdiff_t>(begin),
-                              result.begin() + static_cast<std::ptrdiff_t>(end),
-                              [](const Neighbor& left, const Neighbor& right) {
-                                  return left.id < right.id;
-                              });
-                    begin = end;
+                std::sort(values.begin(), end, rank);
+                result.reserve(count);
+                for (uint64_t i = 0; i < count; ++i) {
+                    result.push_back({IdAt(values[i].slot), values[i].distance});
                 }
             } else {
                 result.reserve(accepted.size());

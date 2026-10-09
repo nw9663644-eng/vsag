@@ -8,9 +8,11 @@
 #include <functional>
 #include <limits>
 #include <queue>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 
+#include "lite/query_heap.h"
 #include "lite/rabitq_codec.h"
 #include "lite/rabitq_filter_ip.h"
 
@@ -230,7 +232,10 @@ struct GraphSearchResult {
     uint64_t reordered{};
 };
 
-template <typename NeighborRange, bool PruneRejected = true, bool PrefetchCodes = true>
+template <typename NeighborRange,
+          bool prune_rejected = true,
+          bool prefetch_codes = true,
+          bool select_without_pop = true>
 inline GraphSearchResult
 graph_search_impl(const std::vector<float>& query,
                   float query_norm,
@@ -249,7 +254,10 @@ graph_search_impl(const std::vector<float>& query,
     }
     const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
     const uint64_t ef = std::min(codes.Size(), std::max(k, ef_search));
-    std::priority_queue<Candidate, std::vector<Candidate>, Better> best;
+    std::conditional_t<select_without_pop,
+                       QueryHeap<Candidate, Better>,
+                       std::priority_queue<Candidate, std::vector<Candidate>, Better>>
+        best;
     std::priority_queue<Candidate, std::vector<Candidate>, Farther> candidates;
     std::vector<uint8_t> visited(codes.Size(), 0);
     uint64_t visited_count = 0;
@@ -278,7 +286,7 @@ graph_search_impl(const std::vector<float>& query,
             }
         }
         const Candidate next{slot, estimate.distance, estimate.centered_ip};
-        if constexpr (PruneRejected) {
+        if constexpr (prune_rejected) {
             // As in native BasicSearcher, bound heap admission before insertion.
             // The full best-heap boundary only improves: a rejected candidate can
             // never be expanded later. Preserve the existing distance/slot tie.
@@ -330,7 +338,7 @@ graph_search_impl(const std::vector<float>& query,
             }
             visited[slot] = 1;
             ++visited_count;
-            if constexpr (PrefetchCodes) {
+            if constexpr (prefetch_codes) {
                 // Match native HGraph RaBitQ: bring filter records in before batch scoring.
                 const auto* data = codes.filters.data() + slot * codes.FilterBytes();
                 for (uint64_t offset = 0; offset < codes.FilterBytes(); offset += 64) {
@@ -385,9 +393,7 @@ graph_search_impl(const std::vector<float>& query,
     }
     const uint64_t reorder_count = best.size();
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(rank)> reordered(rank);
-    while (not best.empty()) {
-        const Candidate coarse = best.top();
-        best.pop();
+    const auto reorder = [&](const Candidate& coarse) {
         const uint64_t slot = coarse.id;
         const auto code = codes.At(slot);
         const Candidate next{slot,
@@ -397,6 +403,17 @@ graph_search_impl(const std::vector<float>& query,
         } else if (rank(next, reordered.top())) {
             reordered.pop();
             reordered.push(next);
+        }
+    };
+    if constexpr (select_without_pop) {
+        for (const auto& coarse : best.TakeData()) {
+            reorder(coarse);
+        }
+    } else {
+        while (not best.empty()) {
+            const Candidate coarse = best.top();
+            best.pop();
+            reorder(coarse);
         }
     }
     std::vector<Candidate> result(reordered.size());
