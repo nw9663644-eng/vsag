@@ -463,16 +463,23 @@ public:
                 }
                 visited[slot] = 1;
                 Candidate next{slot, distance(query, encoded_query, slot)};
-                candidates.push(next);
-                best.push(next);
-                if (best.size() > ef) {
-                    best.pop();
-                }
+                // Filtered results include every allowed visited node, even if
+                // its routing score does not improve the full best heap.
                 if (filter != nullptr and (*filter)(IdAt(slot))) {
                     accepted.push(next);
                     if (accepted.size() > k) {
                         accepted.pop();
                     }
+                }
+                // Native BasicSearcher also bounds admission before heap writes.
+                // The boundary only improves; rejected nodes cannot expand later.
+                if (best.size() == ef and not closer(next, best.top())) {
+                    return;
+                }
+                candidates.push(next);
+                best.push(next);
+                if (best.size() > ef) {
+                    best.pop();
                 }
             };
             visit(0);

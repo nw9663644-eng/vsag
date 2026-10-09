@@ -933,3 +933,28 @@ TEST_CASE("Lite update repairs old outgoing targets that lose their only incomin
         }
     }
 }
+
+TEST_CASE("Lite routing admission must not discard allowed coarse-rejected entries", "[lite]") {
+    for (const auto storage : {vsag::lite::VectorStorage::FP32, vsag::lite::VectorStorage::FP16}) {
+        auto created = vsag::lite::Index::Create(1);
+        REQUIRE(created);
+        for (int64_t id = 0; id < 64; ++id) {
+            const float value = static_cast<float>(id);
+            REQUIRE((*created)->Add(id, &value, 1));
+        }
+        REQUIRE((*created)->BuildGraph(storage, 4, 16));
+        const float query = 0;
+        const vsag::lite::SearchOptions options{4};
+        // Entry54 is encountered after the best heap is full of closer entries.
+        auto result = (*created)->SearchWithOptions(
+            &query, 1, 1, options, [](int64_t id) { return id == 54; });
+        REQUIRE(result);
+        REQUIRE(result->size() == 1);
+        REQUIRE(result->front().id == 54);
+        REQUIRE(result->front().distance == 2916.0F);
+        auto rejected =
+            (*created)->SearchWithOptions(&query, 1, 1, options, [](int64_t) { return false; });
+        REQUIRE(rejected);
+        REQUIRE(rejected->empty());
+    }
+}
