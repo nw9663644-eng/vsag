@@ -270,3 +270,9 @@ auto result = index->SearchWithOptions(query, dim, 10, options);
 失败时直接丢弃替代图，完整构建成功后才启用日志并发布。
 
 RaBitQ 每个查询或维护查询只计算一次向量求和。5-bit 补充码直接复用 Full 的共享标量、SIMD 解码及尾部处理内核，按 CPU 能力分派 AVX2/AVX512，并保留标量回退。SIMD 使用原生融合乘加和向量归约，距离末位可能与旧标量逐维累加不同。测试覆盖独立标量估计、非对齐输入、位平面尾部、查询质量和修改回滚。编码、持久化格式和搜索预算保持一致。相对旧 Lite 实现的加速不能证明已与 Full VSAG 或 FP32/FP16 性能对齐。
+
+## 扩大查询样本的原生对照验收与 ELF 范围
+
+每数据集600查询的当前Lite/原生HGraph对照见 `lite/benchmark/results/acceptance-full-expanded-r1-20261009`。Full为固定已安装原生版本，不是旧Lite，源/头文件/二进制身份均记录；查询预算Lite512/Full128不同，不是精确等召回或等预算。结果显示暖加载及整进程常驻RSS较小，但查询更慢、快照更大、构建峰值更高。已观察查询只能作为回归数据，不是盲测，也不替代长期真实改值CRUD验收。
+
+`python3 lite/benchmark/measure_elf_closure.py --lite LITE_SO --full FULL_SO --output NEW_OUTPUT --scratch /dev/shm` 用于可信共享库的 ELF DT_NEEDED 依赖闭包。递归解析依赖，按真实路径去重（包含共同系统运行库），只对scratch副本使用相同 `strip --strip-unneeded`，不改变原文件。范围不含可执行文件、头文件、Python绑定、容器及动态加载插件，不能称完整wheel/容器/SDK包体。运行 `python3 lite/benchmark/test_measure_elf_closure.py` 可检查依赖解析、去重及仅修改副本的夹具。

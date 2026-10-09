@@ -353,3 +353,9 @@ dimension-order accumulation. Tests cover independent scalar estimates, unaligne
 inputs, plane tails, query quality and mutation rollback. Encoding, persistence
 and search budgets are unchanged. A speed improvement over the previous Lite implementation does not
 establish parity with Full VSAG or with FP32/FP16.
+
+## Expanded native-reference acceptance and ELF scope
+
+The current Lite/native HGraph 600-query-per-dataset study is recorded in `lite/benchmark/results/acceptance-full-expanded-r1-20261009`. It uses a pinned installed Full reference, not old Lite, with explicit source/header/binary provenance. Query budgets differ (Lite512/Full128); this is not an exact matched-recall or same-budget comparison. The study records warm-load/total-RSS advantages but slower queries, larger snapshots and higher construction peaks. These observed queries are regression data, not blind holdout or long changed-vector CRUD acceptance.
+
+`python3 lite/benchmark/measure_elf_closure.py --lite LITE_SO --full FULL_SO --output NEW_OUTPUT --scratch /dev/shm` measures trusted shared-library ELF DT_NEEDED closures. It resolves recursive dependencies, counts each realpath once (including common system runtime), and applies identical `strip --strip-unneeded` only to scratch copies; originals are not changed. This scope excludes executables, headers, Python bindings, containers and dynamically loaded plugins. The recorded reduction is not a complete wheel/container/SDK size claim. Run `python3 lite/benchmark/test_measure_elf_closure.py` for dependency/deduplication/copy-only fixtures.

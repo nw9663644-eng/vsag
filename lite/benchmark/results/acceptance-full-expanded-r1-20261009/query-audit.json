@@ -1,0 +1,182 @@
+[
+  {
+    "tag": "gist10k600-fp32-0-full",
+    "recall": 0.971,
+    "query_qps_from_latency_sum": 5518.2429848117445
+  },
+  {
+    "tag": "gist10k600-fp32-0-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 1757.984662322175
+  },
+  {
+    "tag": "gist10k600-fp32-1-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 1855.7786967573245
+  },
+  {
+    "tag": "gist10k600-fp32-1-full",
+    "recall": 0.971,
+    "query_qps_from_latency_sum": 5474.212158913134
+  },
+  {
+    "tag": "gist10k600-fp32-2-full",
+    "recall": 0.971,
+    "query_qps_from_latency_sum": 5538.107747098319
+  },
+  {
+    "tag": "gist10k600-fp32-2-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 1731.130009915133
+  },
+  {
+    "tag": "gist10k600-fp16-0-full",
+    "recall": 0.9706666666666667,
+    "query_qps_from_latency_sum": 6271.858931007428
+  },
+  {
+    "tag": "gist10k600-fp16-0-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 2273.5284417593393
+  },
+  {
+    "tag": "gist10k600-fp16-1-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 2109.310132121844
+  },
+  {
+    "tag": "gist10k600-fp16-1-full",
+    "recall": 0.9706666666666667,
+    "query_qps_from_latency_sum": 5885.067226496116
+  },
+  {
+    "tag": "gist10k600-fp16-2-full",
+    "recall": 0.9706666666666667,
+    "query_qps_from_latency_sum": 5805.371326934309
+  },
+  {
+    "tag": "gist10k600-fp16-2-lite",
+    "recall": 0.9655,
+    "query_qps_from_latency_sum": 2086.9028284514006
+  },
+  {
+    "tag": "gist10k600-rabitq8-0-full",
+    "recall": 0.9666666666666667,
+    "query_qps_from_latency_sum": 4914.007690962578
+  },
+  {
+    "tag": "gist10k600-rabitq8-0-lite",
+    "recall": 0.961,
+    "query_qps_from_latency_sum": 1946.2297462195547
+  },
+  {
+    "tag": "gist10k600-rabitq8-1-lite",
+    "recall": 0.961,
+    "query_qps_from_latency_sum": 1960.2851456910043
+  },
+  {
+    "tag": "gist10k600-rabitq8-1-full",
+    "recall": 0.967,
+    "query_qps_from_latency_sum": 5286.94036117152
+  },
+  {
+    "tag": "gist10k600-rabitq8-2-full",
+    "recall": 0.9668333333333333,
+    "query_qps_from_latency_sum": 5170.024885053118
+  },
+  {
+    "tag": "gist10k600-rabitq8-2-lite",
+    "recall": 0.961,
+    "query_qps_from_latency_sum": 2040.8210745633153
+  },
+  {
+    "tag": "cohere10k600-fp32-0-full",
+    "recall": 0.9813333333333333,
+    "query_qps_from_latency_sum": 5765.686756811386
+  },
+  {
+    "tag": "cohere10k600-fp32-0-lite",
+    "recall": 0.9873333333333333,
+    "query_qps_from_latency_sum": 1831.920393996982
+  },
+  {
+    "tag": "cohere10k600-fp32-1-lite",
+    "recall": 0.9873333333333333,
+    "query_qps_from_latency_sum": 1934.9371139149425
+  },
+  {
+    "tag": "cohere10k600-fp32-1-full",
+    "recall": 0.9813333333333333,
+    "query_qps_from_latency_sum": 5900.9443871397225
+  },
+  {
+    "tag": "cohere10k600-fp32-2-full",
+    "recall": 0.9813333333333333,
+    "query_qps_from_latency_sum": 5706.5627783108475
+  },
+  {
+    "tag": "cohere10k600-fp32-2-lite",
+    "recall": 0.9873333333333333,
+    "query_qps_from_latency_sum": 1922.2085160923796
+  },
+  {
+    "tag": "cohere10k600-fp16-0-full",
+    "recall": 0.9811666666666666,
+    "query_qps_from_latency_sum": 6173.994716480545
+  },
+  {
+    "tag": "cohere10k600-fp16-0-lite",
+    "recall": 0.987,
+    "query_qps_from_latency_sum": 2236.3672283760156
+  },
+  {
+    "tag": "cohere10k600-fp16-1-lite",
+    "recall": 0.987,
+    "query_qps_from_latency_sum": 2368.160368031066
+  },
+  {
+    "tag": "cohere10k600-fp16-1-full",
+    "recall": 0.9811666666666666,
+    "query_qps_from_latency_sum": 6417.36926877585
+  },
+  {
+    "tag": "cohere10k600-fp16-2-full",
+    "recall": 0.9811666666666666,
+    "query_qps_from_latency_sum": 6559.476583504923
+  },
+  {
+    "tag": "cohere10k600-fp16-2-lite",
+    "recall": 0.987,
+    "query_qps_from_latency_sum": 2329.945790199775
+  },
+  {
+    "tag": "cohere10k600-rabitq8-0-full",
+    "recall": 0.9786666666666667,
+    "query_qps_from_latency_sum": 5343.607832478679
+  },
+  {
+    "tag": "cohere10k600-rabitq8-0-lite",
+    "recall": 0.9835,
+    "query_qps_from_latency_sum": 2120.944768625747
+  },
+  {
+    "tag": "cohere10k600-rabitq8-1-lite",
+    "recall": 0.9835,
+    "query_qps_from_latency_sum": 2135.733267247102
+  },
+  {
+    "tag": "cohere10k600-rabitq8-1-full",
+    "recall": 0.9803333333333333,
+    "query_qps_from_latency_sum": 5377.71390925895
+  },
+  {
+    "tag": "cohere10k600-rabitq8-2-full",
+    "recall": 0.9798333333333333,
+    "query_qps_from_latency_sum": 5402.3352728707305
+  },
+  {
+    "tag": "cohere10k600-rabitq8-2-lite",
+    "recall": 0.9835,
+    "query_qps_from_latency_sum": 2109.9066552680124
+  }
+]

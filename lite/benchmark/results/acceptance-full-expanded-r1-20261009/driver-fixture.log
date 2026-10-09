@@ -1,0 +1,7 @@
+fixture-fp32-0-control 1.000000 1.939000 0.031129
+fixture-fp32-0-lite 1.000000 2.000000 0.02976
+fixture-fp16-0-control 1.000000 1.960000 0.029579
+fixture-fp16-0-lite 1.000000 2.000000 0.02913
+fixture-rabitq8-0-control 1.000000 3.140000 0.040159
+fixture-rabitq8-0-lite 1.000000 3.110000 0.03961
+storage, per-query budget, unchanged construction, paired snapshots and output guards passed

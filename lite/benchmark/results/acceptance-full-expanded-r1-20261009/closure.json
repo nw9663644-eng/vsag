@@ -1,0 +1,322 @@
+{
+  "scope": "shared-library ELF DT_NEEDED closure; system runtime included once per resolved realpath; excludes dlopen plugins, executables, headers, Python bindings, container, data and index files",
+  "strip": "GNU strip (GNU Binutils for Ubuntu) 2.38",
+  "ldd": "ldd (Ubuntu GLIBC 2.35-0ubuntu3.14) 2.35",
+  "strip_arguments": [
+    "--strip-unneeded"
+  ],
+  "script_sha256": "73679e54a862cb4cdbccc7b347b8f03c6e0fdbfa1659cc6e4cb9c796b0e3a3e2",
+  "lite": {
+    "root": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.so",
+    "files": {
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.so": {
+        "source_bytes": 356144,
+        "source_sha256": "a009523cdff49cafb701a4c7462273ea3bd7eba88928bac13a125f62d1716b2d",
+        "stripped_bytes": 310768,
+        "stripped_sha256": "73381754bc46d065f367fe5177789aa8632842e78fe835c5302ab8c079a770b6",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "source_bytes": 125488,
+        "source_sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "stripped_bytes": 125488,
+        "stripped_sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "source_bytes": 240936,
+        "source_sha256": "8d06f393f4a93bcf9b81145a259524d66a95522a646bf8d7e05b6ffdf2e63dcc",
+        "stripped_bytes": 240936,
+        "stripped_sha256": "8d06f393f4a93bcf9b81145a259524d66a95522a646bf8d7e05b6ffdf2e63dcc",
+        "dependencies": []
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "source_bytes": 2220400,
+        "source_sha256": "e01b1ce7be2987f3b8560e26d0df2623f9dd5cec17be923ae28a785bc0d32d50",
+        "stripped_bytes": 2220400,
+        "stripped_sha256": "e01b1ce7be2987f3b8560e26d0df2623f9dd5cec17be923ae28a785bc0d32d50",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "source_bytes": 940560,
+        "source_sha256": "df621c68dbfed7e843434ef2faedb9f4d4b0543ad161e9a55eaf4d4ce2443176",
+        "stripped_bytes": 940560,
+        "stripped_sha256": "df621c68dbfed7e843434ef2faedb9f4d4b0543ad161e9a55eaf4d4ce2443176",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": {
+        "source_bytes": 2260296,
+        "source_sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "stripped_bytes": 2260296,
+        "stripped_sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6"
+        ]
+      }
+    },
+    "root_source_bytes": 356144,
+    "root_stripped_bytes": 310768,
+    "closure_source_bytes": 6143824,
+    "closure_stripped_bytes": 6098448,
+    "ldd": {
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.so": "\tlinux-vdso.so.1 (0x00007ffd5c1d8000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f197ebd3000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f197eaec000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f197eacc000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f197e8a3000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f197ee56000)\n",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "\tlinux-vdso.so.1 (0x00007ffdb471b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fdc17cf0000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fdc17f43000)\n",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "\tstatically linked\n",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": "\t/lib64/ld-linux-x86-64.so.2 (0x00007f41477da000)\n\tlinux-vdso.so.1 (0x00007ffca91f2000)\n",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": "\tlinux-vdso.so.1 (0x00007ffec67b8000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f75b972e000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f75b9a48000)\n",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "\tlinux-vdso.so.1 (0x00007fffd7ddc000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f0d4b952000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f0d4b729000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f0d4bc6f000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f0d4b709000)\n"
+    }
+  },
+  "full": {
+    "root": "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so.0.0.0",
+    "files": {
+      "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so.0.0.0": {
+        "source_bytes": 576730568,
+        "source_sha256": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72",
+        "stripped_bytes": 40463344,
+        "stripped_sha256": "362f9dd0ffafec75c444a0efa84621463735601f71063490a2d7a1f104715a14",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libaio.so.1.0.1",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libfmt.so.8.1.1",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0",
+          "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.10.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30",
+          "/usr/lib/x86_64-linux-gnu/libtmglib.so.3.10.0",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": {
+        "source_bytes": 125488,
+        "source_sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "stripped_bytes": 125488,
+        "stripped_sha256": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": {
+        "source_bytes": 240936,
+        "source_sha256": "8d06f393f4a93bcf9b81145a259524d66a95522a646bf8d7e05b6ffdf2e63dcc",
+        "stripped_bytes": 240936,
+        "stripped_sha256": "8d06f393f4a93bcf9b81145a259524d66a95522a646bf8d7e05b6ffdf2e63dcc",
+        "dependencies": []
+      },
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": {
+        "source_bytes": 2220400,
+        "source_sha256": "e01b1ce7be2987f3b8560e26d0df2623f9dd5cec17be923ae28a785bc0d32d50",
+        "stripped_bytes": 2220400,
+        "stripped_sha256": "e01b1ce7be2987f3b8560e26d0df2623f9dd5cec17be923ae28a785bc0d32d50",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": {
+        "source_bytes": 2989432,
+        "source_sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "stripped_bytes": 2989432,
+        "stripped_sha256": "f7379c9331de9d66c03b439a070e8056b7419fc4213320d647952b998d026b30",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": {
+        "source_bytes": 289592,
+        "source_sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "stripped_bytes": 289592,
+        "stripped_sha256": "a962d0383ce4c2a39a81017ffd9e5b51f32fd314e411c09ddd6da21593079a8c",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": {
+        "source_bytes": 940560,
+        "source_sha256": "df621c68dbfed7e843434ef2faedb9f4d4b0543ad161e9a55eaf4d4ce2443176",
+        "stripped_bytes": 940560,
+        "stripped_sha256": "df621c68dbfed7e843434ef2faedb9f4d4b0543ad161e9a55eaf4d4ce2443176",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": {
+        "source_bytes": 7092680,
+        "source_sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "stripped_bytes": 7092680,
+        "stripped_sha256": "426b4bf536065cc63ef879444dad76dbc9f85e36e5cde906269acd6f177c5151",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": {
+        "source_bytes": 38017672,
+        "source_sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "stripped_bytes": 38017672,
+        "stripped_sha256": "1dedc9fee9ca46eb73e1abc9d989093acbb5bf1bb474fe673af7f0591fa4b2d9",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.10.0": {
+        "source_bytes": 2512896,
+        "source_sha256": "754f1214437545778d9219a398ffc7376991bc3ec7922e738c51ae98d9b1c01b",
+        "stripped_bytes": 2512896,
+        "stripped_sha256": "754f1214437545778d9219a398ffc7376991bc3ec7922e738c51ae98d9b1c01b",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "/usr/lib/x86_64-linux-gnu/libtmglib.so.3.10.0",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": {
+        "source_bytes": 395776,
+        "source_sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "stripped_bytes": 395776,
+        "stripped_sha256": "babdd0d2612d7bd2f0099ac8c82714702fb5bb47b1e2e6fdba819c97c79fc0fd",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libtmglib.so.3.10.0": {
+        "source_bytes": 431968,
+        "source_sha256": "975b62511441706eba5ee082cace0e75249fadda16f84d5a79b97a7385e3e743",
+        "stripped_bytes": 431968,
+        "stripped_sha256": "975b62511441706eba5ee082cace0e75249fadda16f84d5a79b97a7385e3e743",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3",
+          "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": {
+        "source_bytes": 2260296,
+        "source_sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "stripped_bytes": 2260296,
+        "stripped_sha256": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libaio.so.1.0.1": {
+        "source_bytes": 14456,
+        "source_sha256": "9230aa3b63b95b47171d8771b1cdd93f4abab2a86bbb7904c24d5784cdba2c05",
+        "stripped_bytes": 14456,
+        "stripped_sha256": "9230aa3b63b95b47171d8771b1cdd93f4abab2a86bbb7904c24d5784cdba2c05",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libfmt.so.8.1.1": {
+        "source_bytes": 133816,
+        "source_sha256": "d463bedd51d449b2346d329fad8080e0900120ad0aeab8bf93e325b6cff4a587",
+        "stripped_bytes": 133816,
+        "stripped_sha256": "d463bedd51d449b2346d329fad8080e0900120ad0aeab8bf93e325b6cff4a587",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30"
+        ]
+      },
+      "/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0": {
+        "source_bytes": 298776,
+        "source_sha256": "d46f9225c1883039e8a6853e6d96ca1af11d034ce186a090952e4a7c8a7c2fdc",
+        "stripped_bytes": 298776,
+        "stripped_sha256": "d46f9225c1883039e8a6853e6d96ca1af11d034ce186a090952e4a7c8a7c2fdc",
+        "dependencies": [
+          "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "/usr/lib/x86_64-linux-gnu/libc.so.6"
+        ]
+      }
+    },
+    "root_source_bytes": 576730568,
+    "root_stripped_bytes": 40463344,
+    "closure_source_bytes": 634695312,
+    "closure_stripped_bytes": 98428088,
+    "ldd": {
+      "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so.0.0.0": "\tlinux-vdso.so.1 (0x00007ffea3104000)\n\tlibgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f5c5241c000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007f5c4ffc8000)\n\tliblapacke.so.3 => /lib/x86_64-linux-gnu/liblapacke.so.3 (0x00007f5c4fd61000)\n\tlibaio.so.1 => /lib/x86_64-linux-gnu/libaio.so.1 (0x00007f5c52417000)\n\tlibfmt.so.8 => /lib/x86_64-linux-gnu/libfmt.so.8 (0x00007f5c4fd40000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f5c4fc57000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f5c4fc37000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f5c4fa0e000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f5c54b0d000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007f5c4f733000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007f5c4f6d1000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007f5c4f00c000)\n\tlibtmglib.so.3 => /lib/x86_64-linux-gnu/libtmglib.so.3 (0x00007f5c4ef9f000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f5c4ed73000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f5c4ed2b000)\n",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1": "\tlinux-vdso.so.1 (0x00007ffff13d9000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007febbf781000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007febbf9d4000)\n",
+      "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2": "\tstatically linked\n",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6": "\t/lib64/ld-linux-x86-64.so.2 (0x00007fead8e66000)\n\tlinux-vdso.so.1 (0x00007ffd03303000)\n",
+      "/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0": "\tlinux-vdso.so.1 (0x00007ffddf343000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f7366f80000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f7366e99000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f7366e79000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7366c50000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f73672ad000)\n",
+      "/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0": "\tlinux-vdso.so.1 (0x00007ffd20dc3000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fcd67fc1000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fcd67d98000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fcd680fa000)\n",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6": "\tlinux-vdso.so.1 (0x00007ffc041bf000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f8549417000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f8549731000)\n",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3": "\tlinux-vdso.so.1 (0x00007ffe68308000)\n\tlibopenblas.so.0 => /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblas.so.0 (0x00007f9a06290000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f9a061a1000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007f9a05ec6000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f9a05c9d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f9a08dab000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f9a05c55000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f9a05c35000)\n",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so": "\tlinux-vdso.so.1 (0x00007ffd85c96000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fb51cc89000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007fb51c9ae000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb51c785000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fb51f1ca000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007fb51c73d000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fb51c71d000)\n",
+      "/usr/lib/x86_64-linux-gnu/liblapacke.so.3.10.0": "\tlinux-vdso.so.1 (0x00007fff4e3ab000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007f02812c2000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007f0280bfd000)\n\tlibtmglib.so.3 => /lib/x86_64-linux-gnu/libtmglib.so.3 (0x00007f0280b92000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f0280969000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007f027e518000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f027e431000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007f027e156000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f027e136000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f0281595000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f027e0ee000)\n",
+      "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3": "\tlinux-vdso.so.1 (0x00007fff7ffd2000)\n\tlibopenblas.so.0 => /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblas.so.0 (0x00007ff627e00000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007ff627d11000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff627ae8000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007ff62780d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007ff62a2b5000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007ff6277c5000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007ff6277a5000)\n",
+      "/usr/lib/x86_64-linux-gnu/libtmglib.so.3.10.0": "\tlinux-vdso.so.1 (0x00007ffd1f373000)\n\tlibblas.so.3 => /lib/x86_64-linux-gnu/libblas.so.3 (0x00007f39f4087000)\n\tliblapack.so.3 => /lib/x86_64-linux-gnu/liblapack.so.3 (0x00007f39f39c2000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f39f38db000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f39f38bb000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f39f3692000)\n\tlibopenblas.so.0 => /lib/x86_64-linux-gnu/libopenblas.so.0 (0x00007f39f1240000)\n\tlibgfortran.so.5 => /lib/x86_64-linux-gnu/libgfortran.so.5 (0x00007f39f0f65000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f39f415e000)\n\tlibquadmath.so.0 => /lib/x86_64-linux-gnu/libquadmath.so.0 (0x00007f39f0f1d000)\n",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30": "\tlinux-vdso.so.1 (0x00007ffd47657000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fbae8879000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbae8650000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fbae8b96000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fbae8630000)\n",
+      "/usr/lib/x86_64-linux-gnu/libaio.so.1.0.1": "\tlinux-vdso.so.1 (0x00007ffd197fd000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f72af2d1000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f72af509000)\n",
+      "/usr/lib/x86_64-linux-gnu/libfmt.so.8.1.1": "\tlinux-vdso.so.1 (0x00007ffd50ba6000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f6b0784d000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f6b0782d000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f6b07604000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f6b0751d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f6b07aa4000)\n",
+      "/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0": "\tlinux-vdso.so.1 (0x00007ffe7417e000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3e1a00d000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f3e1a28a000)\n"
+    }
+  },
+  "stripped_closure_reduction_percent": 93.80415882913422
+}

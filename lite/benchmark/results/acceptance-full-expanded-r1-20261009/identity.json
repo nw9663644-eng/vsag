@@ -1,0 +1,40 @@
+{
+  "arguments": {
+    "lite_build": "build-lite-fp16-simd-release",
+    "control_library": null,
+    "full_library": "/home/ubuntu/project/vsag-full-known-install-20261006/lib/libvsag.so",
+    "full_builder": "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_rabitq_dataset_benchmark",
+    "full_loader": "/home/ubuntu/project/vsag-lite-baseline-v01/build-full-known-runner/full_load_memory",
+    "dataset": [
+      "gist10k600=/dev/shm/vsag-acceptance-expanded-r1-20261009/gist/scale-10000",
+      "cohere10k600=/dev/shm/vsag-acceptance-expanded-r1-20261009/cohere/scale-10000"
+    ],
+    "storage": [
+      "fp32",
+      "fp16",
+      "rabitq8"
+    ],
+    "output": "lite/benchmark/results/acceptance-full-expanded-r1-20261009",
+    "scratch": "/dev/shm",
+    "trials": 3,
+    "loads": 3,
+    "ef": 512,
+    "full_ef": 128,
+    "cpu": 0
+  },
+  "page_cache": "warm_uncontrolled",
+  "blas_threads": 1,
+  "omp_threads": 1,
+  "query_warmup_rounds": 0,
+  "construction_ef": 128,
+  "degree": 16,
+  "lite_library_sha256": "a009523cdff49cafb701a4c7462273ea3bd7eba88928bac13a125f62d1716b2d",
+  "reference_library_sha256": "9aeaa550703f116bef2959769d4f2f03da254b07c906ba941d8186224cc70c72",
+  "native_full_profile": "small",
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  8\nOn-line CPU(s) list:                     0-7\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9K65 192-Core Processor\nCPU family:                              26\nModel:                                   0\nThread(s) per core:                      2\nCore(s) per socket:                      4\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4500.06\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm rep_good nopl cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core invpcid_single ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr wbnoinvd arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid movdiri movdir64b fsrm\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               192 KiB (4 instances)\nL1i cache:                               128 KiB (4 instances)\nL2 cache:                                4 MiB (4 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-7\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n",
+  "git_head": "3f27573a7a45ee6f44bb8f3b53cb55b601fc3cc1",
+  "git_diff": "",
+  "script_sha256": "6c9cf8b48117ef74559e7f0c636ba89f0299780803e485aad54e792e60719e11",
+  "lite_builder_sha256": "c058f22d85971de3e9697e050d50d5545bff98f0110d2cd90e001ed76affd17d",
+  "lite_loader_sha256": "8331e96f15ff65399f60703fb583c5366c627d7c5fdda135a1868f786e3b3e78"
+}

@@ -67,3 +67,5 @@ deployment package with dependency closure. Default cohorts may have only
 100 queries, making P99 an unstable tail estimate. Same degree/budget/ISA
 capabilities do not make two graph topologies equivalent. Report recall,
 limitations, configurations, Full revision provenance and all raw trials.
+
+For the scoped runtime ELF-closure tool and expanded native-reference evidence, see the canonical [English Lite guide](../../docs/docs/en/src/development/lite_first.md#expanded-native-reference-acceptance-and-elf-scope) and [Chinese guide](../../docs/docs/zh/src/development/lite_first.md).
