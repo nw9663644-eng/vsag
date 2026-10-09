@@ -1,0 +1,14 @@
+{
+  "base.fvecs": {
+    "bytes": 384400000,
+    "sha256": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97"
+  },
+  "queries.fvecs": {
+    "bytes": 384400,
+    "sha256": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278"
+  },
+  "groundtruth.ivecs": {
+    "bytes": 4400,
+    "sha256": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+  }
+}

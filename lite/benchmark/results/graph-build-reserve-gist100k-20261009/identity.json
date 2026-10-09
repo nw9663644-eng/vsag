@@ -1,0 +1,38 @@
+{
+  "arguments": {
+    "lite_build": "build-lite-fp16-simd-release",
+    "control_library": "/home/ubuntu/project/vsag-build-reserve-control-3242489/libvsag-lite.so",
+    "full_library": null,
+    "full_builder": null,
+    "full_loader": null,
+    "dataset": [
+      "gist100k=/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000"
+    ],
+    "storage": [
+      "fp32",
+      "fp16"
+    ],
+    "output": "lite/benchmark/results/graph-build-reserve-gist100k-20261009",
+    "scratch": "/dev/shm",
+    "trials": 3,
+    "loads": 3,
+    "ef": 512,
+    "full_ef": null,
+    "cpu": 0
+  },
+  "page_cache": "warm_uncontrolled",
+  "blas_threads": 1,
+  "omp_threads": 1,
+  "query_warmup_rounds": 0,
+  "construction_ef": 128,
+  "degree": 16,
+  "lite_library_sha256": "b695e6711cd5b1de7eda4aefb869324d08b1c9ab9434a273c66f365394ed649e",
+  "reference_library_sha256": "56d934876fb17fb41b765ec7526208369da7e227e0f169d43301d8c089e82550",
+  "native_full_profile": null,
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  8\nOn-line CPU(s) list:                     0-7\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9K65 192-Core Processor\nCPU family:                              26\nModel:                                   0\nThread(s) per core:                      2\nCore(s) per socket:                      4\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4500.06\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm rep_good nopl cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core invpcid_single ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr wbnoinvd arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid movdiri movdir64b fsrm\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               192 KiB (4 instances)\nL1i cache:                               128 KiB (4 instances)\nL2 cache:                                4 MiB (4 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-7\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n",
+  "git_head": "3242489deff29cf301615efd462bbc992c6efe8b",
+  "git_diff": "diff --git a/src/lite/graph_backend.cpp b/src/lite/graph_backend.cpp\nindex 6b5e059..16acc2d 100644\n--- a/src/lite/graph_backend.cpp\n+++ b/src/lite/graph_backend.cpp\n@@ -71,6 +71,24 @@ public:\n           journal_mutations_(journal_mutations) {\n     }\n \n+    void\n+    ReserveBuild(uint64_t count) {\n+        if (count > ids_.max_size() or count > extras_.max_size() or count > incoming_.max_size() or\n+            (fp16_ ? count > fp16_vectors_.max_size() / Dim()\n+                   : count > vectors_.max_size() / Dim())) {\n+            throw std::length_error(\"graph build capacity exceeded\");\n+        }\n+        if (fp16_) {\n+            fp16_vectors_.reserve(count * Dim());\n+        } else {\n+            vectors_.reserve(count * Dim());\n+        }\n+        ids_.reserve(count);\n+        extras_.reserve(count);\n+        incoming_.reserve(count);\n+        slots_.reserve(count);\n+    }\n+\n     void\n     EnableMutationJournal() {\n         journal_mutations_ = true;\n@@ -1010,6 +1028,7 @@ make_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_searc\n     try {\n         auto graph =\n             std::make_unique<GraphBackend>(source.Dim(), max_degree, ef_search, false, false);\n+        graph->ReserveBuild(source.Size());\n         std::vector<float> scratch;\n         for (uint64_t slot = 0; slot < source.Size(); ++slot) {\n             auto added =\n@@ -1036,6 +1055,7 @@ make_fp16_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_\n     try {\n         auto graph =\n             std::make_unique<GraphBackend>(source.Dim(), max_degree, ef_search, true, false);\n+        graph->ReserveBuild(source.Size());\n         std::vector<float> scratch;\n         for (uint64_t slot = 0; slot < source.Size(); ++slot) {\n             auto added =\n",
+  "script_sha256": "6c9cf8b48117ef74559e7f0c636ba89f0299780803e485aad54e792e60719e11",
+  "lite_builder_sha256": "24154582fef946038e87295b1c1545e4dc70317ab5f788b88b2ca80fb4dfe9b8",
+  "lite_loader_sha256": "0fc9a63c4f3b939d5fd172fb8d358f8383cda943b20a4e1267b1f438adf35d1c"
+}
