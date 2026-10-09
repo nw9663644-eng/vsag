@@ -1,0 +1,17 @@
+{
+  "baseline_head": "a1d81048bfef5f1cc744f36baa7f94a2dcbe2de9",
+  "candidate_diff_sha256": "a470e8743b3431bbf7683fa168611871bcfcce46f8fa4ebb5ab3133c681dab85",
+  "libraries": {
+    "baseline": "4c744028cbbd6b37537d00ccf06f481bfacf86a3e4b7713ffa4e1b38f8770b0c",
+    "candidate": "d9034e16fe85ad6d78402a891a609d52b85e9c1beb5c58db33f65fcf69c01aef"
+  },
+  "plan": {
+    "cpu": 0,
+    "repeats": 3,
+    "storage": "rabitq8",
+    "degree": 16,
+    "ef": 128,
+    "queries": 100,
+    "crud_rounds": 0
+  }
+}

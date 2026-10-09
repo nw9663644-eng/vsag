@@ -31,6 +31,20 @@ filter_centered_ip(const std::vector<float>& query, const uint8_t* filter) {
     return compute(query.data(), filter, query.size());
 }
 
+inline void
+filter_centered_ip_batch4(const std::vector<float>& query,
+                          const std::array<EncodedView, 4>& codes,
+                          float* results) {
+    static const auto compute = select_rabitq_filter_ip_batch4();
+    compute(query.data(),
+            codes[0].filter,
+            codes[1].filter,
+            codes[2].filter,
+            codes[3].filter,
+            query.size(),
+            results);
+}
+
 inline float
 supplement_ip(const std::vector<float>& query, const uint8_t* supplement) {
     static const auto compute = select_rabitq_supplement_ip();
@@ -60,6 +74,27 @@ filter_estimate(const std::vector<float>& query, float query_norm, const Encoded
     const float estimate = distance - error;
     const float lower_bound = estimate - 1e-5F * std::max(1.0F, std::fabs(estimate));
     return {distance, lower_bound, centered_ip};
+}
+
+inline std::array<FilterEstimate, 4>
+filter_estimate_batch4(const std::vector<float>& query,
+                       float query_norm,
+                       const std::array<EncodedView, 4>& codes) {
+    float centered_ips[4];
+    filter_centered_ip_batch4(query, codes, centered_ips);
+    std::array<FilterEstimate, 4> results;
+    for (uint32_t lane = 0; lane < 4; ++lane) {
+        const auto& metadata = codes[lane].metadata;
+        const float normalized_ip =
+            centered_ips[lane] / metadata.filter_norm / metadata.filter_error;
+        const float distance = l2_distance(metadata.norm, query_norm, normalized_ip);
+        const float error = 2.0F * metadata.norm * query_norm * K_ERROR_RATE *
+                            metadata.lower_bound_error / metadata.filter_error;
+        const float estimate = distance - error;
+        results[lane] = {
+            distance, estimate - 1e-5F * std::max(1.0F, std::fabs(estimate)), centered_ips[lane]};
+    }
+    return results;
 }
 
 inline float
@@ -228,20 +263,13 @@ graph_search_impl(const std::vector<float>& query,
     };
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(rank)> accepted(rank);
 
-    auto visit = [&](uint64_t slot) {
-        if (visited[slot] != 0) {
-            return;
-        }
-        visited[slot] = 1;
-        ++visited_count;
-        const auto estimate = filter_estimate(query, query_norm, codes.At(slot));
+    auto process_visited = [&](uint64_t slot, const EncodedView& code, FilterEstimate estimate) {
         // Rejected nodes remain traversable. Rank every visited allowed ID using
         // the complete 8-bit estimate; filtering must not sever routing paths.
         if (filter and filter((*external_ids)[slot])) {
             ++filtered_reorders;
             const Candidate value{
-                slot,
-                full_distance(query, query_norm, codes.At(slot), estimate.centered_ip, query_sum)};
+                slot, full_distance(query, query_norm, code, estimate.centered_ip, query_sum)};
             if (accepted.size() < k) {
                 accepted.push(value);
             } else if (rank(value, accepted.top())) {
@@ -254,6 +282,53 @@ graph_search_impl(const std::vector<float>& query,
         best.push(next);
         if (best.size() > ef) {
             best.pop();
+        }
+    };
+    auto visit = [&](uint64_t slot) {
+        if (visited[slot] != 0) {
+            return;
+        }
+        visited[slot] = 1;
+        ++visited_count;
+        const auto code = codes.At(slot);
+        process_visited(slot, code, filter_estimate(query, query_norm, code));
+    };
+    auto visit_range = [&](auto first, auto last) {
+        std::array<uint64_t, 4> slots{};
+        uint32_t count = 0;
+        const auto flush = [&]() {
+            std::array<EncodedView, 4> batch_codes{};
+            for (uint32_t lane = 0; lane < count; ++lane) {
+                batch_codes[lane] = codes.At(slots[lane]);
+            }
+            if (count == 4) {
+                const auto estimates = filter_estimate_batch4(query, query_norm, batch_codes);
+                for (uint32_t lane = 0; lane < 4; ++lane) {
+                    process_visited(slots[lane], batch_codes[lane], estimates[lane]);
+                }
+            } else {
+                for (uint32_t lane = 0; lane < count; ++lane) {
+                    process_visited(slots[lane],
+                                    batch_codes[lane],
+                                    filter_estimate(query, query_norm, batch_codes[lane]));
+                }
+            }
+            count = 0;
+        };
+        for (auto edge = first; edge != last; ++edge) {
+            const uint64_t slot = *edge;
+            if (visited[slot] != 0) {
+                continue;
+            }
+            visited[slot] = 1;
+            ++visited_count;
+            slots[count++] = slot;
+            if (count == 4) {
+                flush();
+            }
+        }
+        if (count != 0) {
+            flush();
         }
     };
 
@@ -281,9 +356,7 @@ graph_search_impl(const std::vector<float>& query,
             visit((current.id + 1) % codes.Size());
         }
         const auto range = neighbors(current.id);
-        for (auto edge = range.first; edge != range.second; ++edge) {
-            visit(*edge);
-        }
+        visit_range(range.first, range.second);
     }
 
     if (filter) {

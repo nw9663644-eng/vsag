@@ -13,6 +13,18 @@ rabitq_filter_ip_avx512(const float* query, const uint8_t* filter, uint64_t dim)
         query, filter, dim, rabitq_filter_ip_generic);
 }
 
+void
+rabitq_filter_ip_batch4_avx512(const float* query,
+                               const uint8_t* filter0,
+                               const uint8_t* filter1,
+                               const uint8_t* filter2,
+                               const uint8_t* filter3,
+                               uint64_t dim,
+                               float* results) {
+    simd::RaBitQFloatThreeBitCenteredIPBatch4Impl<simd::RaBitQTraits<simd::Avx512RaBitQTag>>(
+        query, filter0, filter1, filter2, filter3, dim, results, rabitq_filter_ip_batch4_generic);
+}
+
 float
 rabitq_supplement_ip_avx512(const float* query, const uint8_t* supplement, uint64_t dim) {
     return simd::RaBitQFloatSupplementCodeIPImpl<simd::RaBitQTraits<simd::Avx512RaBitQTag>>(

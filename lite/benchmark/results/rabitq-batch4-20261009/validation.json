@@ -1,0 +1,8 @@
+{
+  "release": "6/6 passed",
+  "asan_ubsan": "8/8 passed with leak detection",
+  "coverage": {"tests": "6/6 passed", "covered": 1257, "total": 1315, "percent": 95.6},
+  "quality": {"clang_format_15": "passed", "clang_tidy_15": "passed", "diff_check": "passed"},
+  "paired_processes": 18,
+  "byte_identical_query_neighbor_pairs": 9
+}

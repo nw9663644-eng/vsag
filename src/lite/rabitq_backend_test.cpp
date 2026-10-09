@@ -525,6 +525,44 @@ TEST_CASE("RaBitQ cached query sums preserve complete distance bits", "[lite-rab
     }
 }
 
+TEST_CASE("RaBitQ filter Batch4 preserves single-estimate bits", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (const uint64_t dim : {1, 7, 17, 128, 768, 960}) {
+        constexpr uint64_t count = 8;
+        std::vector<float> base(count * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i) * 0.19F);
+        }
+        const auto model = codec::train(base, count, dim, 91);
+        std::vector<float> query(dim);
+        for (uint64_t d = 0; d < dim; ++d) {
+            query[d] = std::cos(static_cast<float>(d) * 0.11F);
+        }
+        float query_norm = 0.0F;
+        query = codec::normalize(model, query.data(), query_norm);
+        codec::EncodedRecords records(dim);
+        for (uint64_t slot = 0; slot < 4; ++slot) {
+            records.Append(codec::encode(model, base.data() + slot * dim));
+        }
+        std::array<codec::EncodedView, 4> codes;
+        for (uint64_t slot = 0; slot < 4; ++slot) {
+            codes[slot] = records.At(slot);
+        }
+        const auto batch = codec::filter_estimate_batch4(query, query_norm, codes);
+        for (uint64_t slot = 0; slot < 4; ++slot) {
+            const auto single = codec::filter_estimate(query, query_norm, codes[slot]);
+            REQUIRE(std::memcmp(&batch[slot].centered_ip,
+                                &single.centered_ip,
+                                sizeof(single.centered_ip)) == 0);
+            REQUIRE(std::memcmp(&batch[slot].distance, &single.distance, sizeof(single.distance)) ==
+                    0);
+            REQUIRE(std::memcmp(&batch[slot].lower_bound,
+                                &single.lower_bound,
+                                sizeof(single.lower_bound)) == 0);
+        }
+    }
+}
+
 TEST_CASE("RaBitQ supplement SIMD matches scalar estimates and plane tails", "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;
     std::vector<codec::RaBitQFilterIP> kernels{codec::rabitq_supplement_ip_generic,

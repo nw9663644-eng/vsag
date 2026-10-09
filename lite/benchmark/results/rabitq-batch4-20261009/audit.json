@@ -1,0 +1,56 @@
+[
+  {
+    "dataset": "sift",
+    "trial": 0,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "sift",
+    "trial": 1,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "sift",
+    "trial": 2,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "gist",
+    "trial": 0,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "gist",
+    "trial": 1,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "gist",
+    "trial": 2,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "cohere",
+    "trial": 0,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "cohere",
+    "trial": 1,
+    "queries_identical": true,
+    "neighbors_identical": true
+  },
+  {
+    "dataset": "cohere",
+    "trial": 2,
+    "queries_identical": true,
+    "neighbors_identical": true
+  }
+]
