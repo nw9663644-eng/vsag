@@ -1,0 +1,9 @@
+SUMMARY mode=0 op=0 failures=34 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=0 op=1 failures=54 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=0 op=2 failures=39 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=1 op=0 failures=36 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=1 op=1 failures=56 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=1 op=2 failures=39 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=2 op=0 failures=44 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=2 op=1 failures=65 changed_after_failure=0 invalid_snapshot=0 escaped=0
+SUMMARY mode=2 op=2 failures=38 changed_after_failure=0 invalid_snapshot=0 escaped=0

@@ -1,0 +1,23 @@
+{
+  "release": {
+    "passed": true,
+    "log_sha256": "4b28d18d92f25d9a91660de29f944d2027af9144376c1f0d598a3bd61e93b0e1"
+  },
+  "sanitize": {
+    "passed": true,
+    "log_sha256": "a3a0164dc4dc641cf68618158ade2f96b8a88b9f38a93ffdc11ae66e3e19d455"
+  },
+  "default": {
+    "passed": true,
+    "log_sha256": "db8541eb4e04431b719020f73e35cc37b65ec0e1df146a63f21d974ea1d35d22"
+  },
+  "coverage": {
+    "passed": true,
+    "log_sha256": "4c5aea6c5e3b1916cd5741edf54f30d1c891152f69bba193b0eb54594b4ddc72"
+  },
+  "coverage_percent": 94.97041420118343,
+  "allocation_positions": 4500,
+  "full_kernel_golden_O3": 5844839405316948221,
+  "full_kernel_golden_Ofast": 10119056315112707772,
+  "full_validation": "Modified generic and AVX512 translation units compiled; 840 native kernel cases match original bitwise under O3 and Ofast. Full repository test suite not rerun."
+}

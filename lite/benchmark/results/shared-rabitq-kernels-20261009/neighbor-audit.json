@@ -1,0 +1,191 @@
+[
+  {
+    "dataset": "sift",
+    "storage": "fp32",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp32",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp32",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp16",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp16",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp16",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "sift",
+    "storage": "rabitq8",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 53
+  },
+  {
+    "dataset": "sift",
+    "storage": "rabitq8",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 53
+  },
+  {
+    "dataset": "sift",
+    "storage": "rabitq8",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 53
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp32",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp32",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp32",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp16",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp16",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp16",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "gist",
+    "storage": "rabitq8",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 94
+  },
+  {
+    "dataset": "gist",
+    "storage": "rabitq8",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 94
+  },
+  {
+    "dataset": "gist",
+    "storage": "rabitq8",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 94
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp32",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp32",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp32",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp16",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp16",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp16",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "rabitq8",
+    "trial": 0,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 89
+  },
+  {
+    "dataset": "cohere",
+    "storage": "rabitq8",
+    "trial": 1,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 89
+  },
+  {
+    "dataset": "cohere",
+    "storage": "rabitq8",
+    "trial": 2,
+    "id_rank_changes": 0,
+    "distance_bit_changes": 89
+  }
+]

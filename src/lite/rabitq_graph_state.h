@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 #pragma once
 
+#include <array>
 #include <chrono>
 #include <cstring>
 #include <functional>
@@ -32,13 +33,8 @@ filter_centered_ip(const std::vector<float>& query, const uint8_t* filter) {
 
 inline float
 supplement_ip(const std::vector<float>& query, const uint8_t* supplement) {
-    const uint64_t plane_bytes = (query.size() + 7) / 8;
-    float result = 0.0F;
-    for (uint64_t d = 0; d < query.size(); ++d) {
-        const auto code = read_plane_code(supplement, plane_bytes, d, K_SUPPLEMENT_BITS, false);
-        result += query[d] * static_cast<float>(code);
-    }
-    return result;
+    static const auto compute = select_rabitq_supplement_ip();
+    return compute(query.data(), supplement, query.size());
 }
 
 inline float
@@ -70,8 +66,8 @@ inline float
 full_distance(const std::vector<float>& query,
               float query_norm,
               const EncodedView& code,
-              float centered_filter_ip) {
-    const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
+              float centered_filter_ip,
+              float query_sum) {
     const float filter_ip = centered_filter_ip + 3.5F * query_sum;
     const float code_ip = filter_ip * static_cast<float>(1U << K_SUPPLEMENT_BITS) +
                           supplement_ip(query, code.supplement);
@@ -81,9 +77,23 @@ full_distance(const std::vector<float>& query,
     return l2_distance(code.metadata.norm, query_norm, normalized_ip);
 }
 
+// Keep the standalone distance interface for callers without a query context.
+inline float
+full_distance(const std::vector<float>& query,
+              float query_norm,
+              const EncodedView& code,
+              float centered_filter_ip) {
+    return full_distance(query,
+                         query_norm,
+                         code,
+                         centered_filter_ip,
+                         std::accumulate(query.begin(), query.end(), 0.0F));
+}
+
 struct Candidate {
     uint64_t id;
     float distance;
+    float centered_ip{};
 };
 
 inline bool
@@ -129,6 +139,7 @@ filtered_search(const std::vector<float>& query,
                 float query_norm,
                 const EncodedRecords& codes,
                 uint64_t k) {
+    const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> heap(&better);
     uint64_t reordered = 0;
     for (uint64_t id = 0; id < codes.Size(); ++id) {
@@ -138,7 +149,8 @@ filtered_search(const std::vector<float>& query,
             continue;
         }
         ++reordered;
-        const Candidate next{id, full_distance(query, query_norm, code, coarse.centered_ip)};
+        const Candidate next{id,
+                             full_distance(query, query_norm, code, coarse.centered_ip, query_sum)};
         if (heap.size() < k) {
             heap.push(next);
         } else if (better(next, heap.top())) {
@@ -187,6 +199,7 @@ graph_search_impl(const std::vector<float>& query,
     if (k == 0) {
         return {};
     }
+    const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
     const uint64_t ef = std::min(codes.Size(), std::max(k, ef_search));
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> best(&better);
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(&farther);
@@ -214,7 +227,8 @@ graph_search_impl(const std::vector<float>& query,
         if (filter and filter((*external_ids)[slot])) {
             ++filtered_reorders;
             const Candidate value{
-                slot, full_distance(query, query_norm, codes.At(slot), estimate.centered_ip)};
+                slot,
+                full_distance(query, query_norm, codes.At(slot), estimate.centered_ip, query_sum)};
             if (accepted.size() < k) {
                 accepted.push(value);
             } else if (rank(value, accepted.top())) {
@@ -222,7 +236,7 @@ graph_search_impl(const std::vector<float>& query,
                 accepted.push(value);
             }
         }
-        const Candidate next{slot, estimate.distance};
+        const Candidate next{slot, estimate.distance, estimate.centered_ip};
         candidates.push(next);
         best.push(next);
         if (best.size() > ef) {
@@ -270,11 +284,12 @@ graph_search_impl(const std::vector<float>& query,
     const uint64_t reorder_count = best.size();
     std::priority_queue<Candidate, std::vector<Candidate>, decltype(rank)> reordered(rank);
     while (not best.empty()) {
-        const uint64_t slot = best.top().id;
+        const Candidate coarse = best.top();
         best.pop();
+        const uint64_t slot = coarse.id;
         const auto code = codes.At(slot);
-        const auto estimate = filter_estimate(query, query_norm, code);
-        const Candidate next{slot, full_distance(query, query_norm, code, estimate.centered_ip)};
+        const Candidate next{slot,
+                             full_distance(query, query_norm, code, coarse.centered_ip, query_sum)};
         if (reordered.size() < k) {
             reordered.push(next);
         } else if (rank(next, reordered.top())) {
@@ -476,10 +491,14 @@ public:
                                        code.filter_norm,
                                        code.filter_error,
                                        code.lower_bound_error};
-        static_assert(sizeof(EncodedMetadata) == 6 * sizeof(float));
+        static_assert(sizeof(EncodedMetadata) == 6 * sizeof(uint32_t));
+        std::array<uint32_t, 6> metadata_bits{};
+        std::array<uint32_t, 6> stored_bits{};
+        std::memcpy(metadata_bits.data(), &metadata, sizeof(metadata));
+        std::memcpy(stored_bits.data(), &stored.metadata, sizeof(stored.metadata));
         return std::equal(code.filter.begin(), code.filter.end(), stored.filter) and
                std::equal(code.supplement.begin(), code.supplement.end(), stored.supplement) and
-               std::memcmp(&metadata, &stored.metadata, sizeof(metadata)) == 0;
+               metadata_bits == stored_bits;
     }
 
     [[nodiscard]] bool
@@ -1181,6 +1200,7 @@ private:
                        float query_norm,
                        uint64_t excluded,
                        uint64_t count) const {
+        const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
         std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> heap(&better);
         for (uint64_t slot = 0; slot < Size(); ++slot) {
             if (slot == excluded) {
@@ -1188,8 +1208,8 @@ private:
             }
             const auto code = codes_.At(slot);
             const auto coarse = filter_estimate(query, query_norm, code);
-            const Candidate candidate{slot,
-                                      full_distance(query, query_norm, code, coarse.centered_ip)};
+            const Candidate candidate{
+                slot, full_distance(query, query_norm, code, coarse.centered_ip, query_sum)};
             if (heap.size() < count) {
                 heap.push(candidate);
             } else if (better(candidate, heap.top())) {
@@ -1250,6 +1270,7 @@ private:
             const auto old_neighbors = repaired;
             const auto query = decode_query(source);
             const float query_norm = codes_.At(source).metadata.norm;
+            const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
             std::vector<Candidate> ranked;
             ranked.reserve(additional_candidates.size());
             for (const uint64_t candidate : additional_candidates) {
@@ -1258,7 +1279,8 @@ private:
                     const auto code = codes_.At(candidate);
                     const auto coarse = filter_estimate(query, query_norm, code);
                     ranked.push_back(
-                        {candidate, full_distance(query, query_norm, code, coarse.centered_ip)});
+                        {candidate,
+                         full_distance(query, query_norm, code, coarse.centered_ip, query_sum)});
                 }
             }
             std::sort(ranked.begin(), ranked.end(), better);
@@ -1285,13 +1307,15 @@ private:
         if (neighbors.size() > max_degree_) {
             const auto query = decode_query(source);
             const float query_norm = codes_.At(source).metadata.norm;
+            const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
             std::vector<Candidate> ranked;
             ranked.reserve(neighbors.size());
             for (uint64_t neighbor : neighbors) {
                 const auto code = codes_.At(neighbor);
                 const auto coarse = filter_estimate(query, query_norm, code);
                 ranked.push_back(
-                    {neighbor, full_distance(query, query_norm, code, coarse.centered_ip)});
+                    {neighbor,
+                     full_distance(query, query_norm, code, coarse.centered_ip, query_sum)});
             }
             std::sort(ranked.begin(), ranked.end(), better);
             neighbors.resize(max_degree_);

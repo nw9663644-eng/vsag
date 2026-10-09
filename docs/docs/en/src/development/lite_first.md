@@ -64,7 +64,7 @@ be externally serialized. Results own their memory; internal slots are not expos
   FP32 positive and negative zero have distinct byte representations. Same-value Update is
   not a graph repair request. BuildGraph only converts BruteForce to Graph; it does not
   rebuild an index that is already a graph.
-- Remove returns false for absent IDs. A removed external ID can be inserted again.
+- Remove returns false for absent IDs or failed graph repair allocation without changing contents. A removed external ID can be inserted again.
 - Add failure leaves logical records unchanged, though reserved capacity may grow.
 - Search returns up to `min(k, Size())` entries sorted by squared-L2 then ascending ID.
   BruteForce checks the external ID before computing distance. Graph search may score and
@@ -335,3 +335,21 @@ The integrated100k pilot records lower loaded RaBitQ RSS but quality failures at
 
 
 [RaBitQ architecture, snapshot layout and remaining acceptance](lite_rabitq_design.md).
+
+## Mutation failure and RaBitQ distance computation
+
+Published FP32 and FP16 graphs use a local mutation journal. Allocation failure
+in Add or Update preserves logical records and adjacency; Remove returns false
+and preserves contents if its graph repair cannot allocate. Reserved capacity
+may grow. Only affected rows and the overwritten records are backed up, rather
+than copying the entire graph. Private BuildGraph construction is discarded on
+failure and enables journaling before publishing the completed graph.
+
+RaBitQ computes the query sum once per search or maintenance query. Its 5-bit
+supplement calls Full's shared scalar and SIMD kernels with runtime
+AVX2/AVX512 selection and a scalar fallback. SIMD uses the native fused multiply-add
+and vector reduction, so distance rounding can differ from the former scalar
+dimension-order accumulation. Tests cover independent scalar estimates, unaligned
+inputs, plane tails, query quality and mutation rollback. Encoding, persistence
+and search budgets are unchanged. A speed improvement over the previous Lite implementation does not
+establish parity with Full VSAG or with FP32/FP16.

@@ -17,14 +17,9 @@
 // follow quantization/rabitq_quantization/rabitq_quantizer.cpp and the official
 // FHT/Kac transformer; no Full allocator, IO or graph dependencies are imported.
 // This module does not expose a public RaBitQ backend or a snapshot format.
-namespace vsag::lite::detail::rabitq {
+#include "lite/rabitq_constants.h"
 
-constexpr uint32_t K_TOTAL_BITS = 8;
-constexpr uint32_t K_FILTER_BITS = 3;
-constexpr uint32_t K_SUPPLEMENT_BITS = 5;
-constexpr uint32_t K_ROUNDS = 4;
-constexpr uint32_t K_ENCODE_ROUNDS = 6;
-constexpr float K_ERROR_RATE = 1.9F;
+namespace vsag::lite::detail::rabitq {
 
 inline void
 codec_require(bool value, const char* message) {

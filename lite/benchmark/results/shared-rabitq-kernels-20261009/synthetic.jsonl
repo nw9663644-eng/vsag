@@ -1,0 +1,90 @@
+{"action": "build", "dim": 128, "mode": 0, "version": "baseline", "output": "build_us=63180.6", "snapshot_sha256": "dac5ffe90863b942e40d3769aa7483dd7fe46661e84ae3796ab1f33f8a6f247e"}
+{"action": "build", "dim": 128, "mode": 0, "version": "candidate", "output": "build_us=61892.3", "snapshot_sha256": "dac5ffe90863b942e40d3769aa7483dd7fe46661e84ae3796ab1f33f8a6f247e"}
+{"action": "search", "dim": 128, "mode": 0, "version": "baseline", "trial": 0, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.629 p99_us=32.598 total_us=28605.7"}
+{"action": "search", "dim": 128, "mode": 0, "version": "candidate", "trial": 0, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.569 p99_us=32.309 total_us=28527.8"}
+{"action": "search", "dim": 128, "mode": 0, "version": "candidate", "trial": 1, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.749 p99_us=32.86 total_us=28663.8"}
+{"action": "search", "dim": 128, "mode": 0, "version": "baseline", "trial": 1, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.599 p99_us=32.879 total_us=28614.1"}
+{"action": "search", "dim": 128, "mode": 0, "version": "baseline", "trial": 2, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.618 p99_us=32.82 total_us=28584"}
+{"action": "search", "dim": 128, "mode": 0, "version": "candidate", "trial": 2, "output": "dim=128 mode=0 id_hash=6524119202095386563 hash=7427166182870959715 p50_us=27.75 p99_us=32.789 total_us=28713.7"}
+{"action": "crud", "dim": 128, "mode": 0, "version": "baseline", "output": "crud_384_us=12021.8", "snapshot_sha256": "75ed2641949580ebff5de5d30eb44564755c25a18ef9136de740a93672b4cad3"}
+{"action": "crud", "dim": 128, "mode": 0, "version": "candidate", "output": "crud_384_us=13522.1", "snapshot_sha256": "75ed2641949580ebff5de5d30eb44564755c25a18ef9136de740a93672b4cad3"}
+{"action": "build", "dim": 128, "mode": 1, "version": "baseline", "output": "build_us=67963", "snapshot_sha256": "d0a3332699b76d8e03a2db3d46c36a9e0f7eeba7f2e21600e7db41457cf25281"}
+{"action": "build", "dim": 128, "mode": 1, "version": "candidate", "output": "build_us=67268.8", "snapshot_sha256": "d0a3332699b76d8e03a2db3d46c36a9e0f7eeba7f2e21600e7db41457cf25281"}
+{"action": "search", "dim": 128, "mode": 1, "version": "baseline", "trial": 0, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=28.969 p99_us=34.14 total_us=30052.1"}
+{"action": "search", "dim": 128, "mode": 1, "version": "candidate", "trial": 0, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=29.028 p99_us=34.039 total_us=30082"}
+{"action": "search", "dim": 128, "mode": 1, "version": "candidate", "trial": 1, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=29.12 p99_us=37.759 total_us=30351.3"}
+{"action": "search", "dim": 128, "mode": 1, "version": "baseline", "trial": 1, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=29.029 p99_us=34.079 total_us=30038.3"}
+{"action": "search", "dim": 128, "mode": 1, "version": "baseline", "trial": 2, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=29.01 p99_us=34.309 total_us=30122.6"}
+{"action": "search", "dim": 128, "mode": 1, "version": "candidate", "trial": 2, "output": "dim=128 mode=1 id_hash=11298452555175726323 hash=2713453096240604675 p50_us=29.04 p99_us=37.759 total_us=30224.8"}
+{"action": "crud", "dim": 128, "mode": 1, "version": "baseline", "output": "crud_384_us=12367.4", "snapshot_sha256": "57448239022fea5a1014bf4c45d3077e31cbcee6981112d032fe98e08152d90e"}
+{"action": "crud", "dim": 128, "mode": 1, "version": "candidate", "output": "crud_384_us=13617.3", "snapshot_sha256": "57448239022fea5a1014bf4c45d3077e31cbcee6981112d032fe98e08152d90e"}
+{"action": "build", "dim": 128, "mode": 2, "version": "baseline", "output": "build_us=72728.3", "snapshot_sha256": "4c0eb828142448a4c1f724e5f1d055f12d498b8c903fd46ada8ccf72cf57d88b"}
+{"action": "build", "dim": 128, "mode": 2, "version": "candidate", "output": "build_us=72200.8", "snapshot_sha256": "4c0eb828142448a4c1f724e5f1d055f12d498b8c903fd46ada8ccf72cf57d88b"}
+{"action": "search", "dim": 128, "mode": 2, "version": "baseline", "trial": 0, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1018279218961088459 p50_us=77.698 p99_us=83.769 total_us=79820.8"}
+{"action": "search", "dim": 128, "mode": 2, "version": "candidate", "trial": 0, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1602259226336288411 p50_us=47.749 p99_us=53.59 total_us=49034.3"}
+{"action": "search", "dim": 128, "mode": 2, "version": "candidate", "trial": 1, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1602259226336288411 p50_us=48.228 p99_us=66.319 total_us=50764.6"}
+{"action": "search", "dim": 128, "mode": 2, "version": "baseline", "trial": 1, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1018279218961088459 p50_us=78.648 p99_us=84.818 total_us=80794.4"}
+{"action": "search", "dim": 128, "mode": 2, "version": "baseline", "trial": 2, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1018279218961088459 p50_us=78.309 p99_us=106.868 total_us=81611.1"}
+{"action": "search", "dim": 128, "mode": 2, "version": "candidate", "trial": 2, "output": "dim=128 mode=2 id_hash=10048666093262512963 hash=1602259226336288411 p50_us=47.638 p99_us=53.4 total_us=49026.1"}
+{"action": "crud", "dim": 128, "mode": 2, "version": "baseline", "output": "crud_384_us=59915.4", "snapshot_sha256": "3be9486e44ddafb7d1a04b0704601cb764c4ccc61a9af7fa2b4be23573c0e1ac"}
+{"action": "crud", "dim": 128, "mode": 2, "version": "candidate", "output": "crud_384_us=30003.8", "snapshot_sha256": "3be9486e44ddafb7d1a04b0704601cb764c4ccc61a9af7fa2b4be23573c0e1ac"}
+{"action": "build", "dim": 768, "mode": 0, "version": "baseline", "output": "build_us=107524", "snapshot_sha256": "1dd87cfdf9555d0a01dec64c2031234b49ec8d23b06315eb33e58d637745d798"}
+{"action": "build", "dim": 768, "mode": 0, "version": "candidate", "output": "build_us=104302", "snapshot_sha256": "1dd87cfdf9555d0a01dec64c2031234b49ec8d23b06315eb33e58d637745d798"}
+{"action": "search", "dim": 768, "mode": 0, "version": "baseline", "trial": 0, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=38.57 p99_us=81.198 total_us=43208.9"}
+{"action": "search", "dim": 768, "mode": 0, "version": "candidate", "trial": 0, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=38.759 p99_us=80.828 total_us=43424.3"}
+{"action": "search", "dim": 768, "mode": 0, "version": "candidate", "trial": 1, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=38.959 p99_us=80.919 total_us=43587.5"}
+{"action": "search", "dim": 768, "mode": 0, "version": "baseline", "trial": 1, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=39.128 p99_us=81.938 total_us=43790.5"}
+{"action": "search", "dim": 768, "mode": 0, "version": "baseline", "trial": 2, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=39.04 p99_us=81.619 total_us=43638.6"}
+{"action": "search", "dim": 768, "mode": 0, "version": "candidate", "trial": 2, "output": "dim=768 mode=0 id_hash=9052654546266373203 hash=411823617065873723 p50_us=38.97 p99_us=81.229 total_us=43575"}
+{"action": "crud", "dim": 768, "mode": 0, "version": "baseline", "output": "crud_384_us=21516.6", "snapshot_sha256": "178b96b955ccdefe5af20f579991e6d7c48fccb04143be150dc8a604e4ec7968"}
+{"action": "crud", "dim": 768, "mode": 0, "version": "candidate", "output": "crud_384_us=23275", "snapshot_sha256": "178b96b955ccdefe5af20f579991e6d7c48fccb04143be150dc8a604e4ec7968"}
+{"action": "build", "dim": 768, "mode": 1, "version": "baseline", "output": "build_us=130776", "snapshot_sha256": "3b0c27864dd29946ce5a7257002209a26906b2e534736dade9257a10a4d7bc39"}
+{"action": "build", "dim": 768, "mode": 1, "version": "candidate", "output": "build_us=130372", "snapshot_sha256": "3b0c27864dd29946ce5a7257002209a26906b2e534736dade9257a10a4d7bc39"}
+{"action": "search", "dim": 768, "mode": 1, "version": "baseline", "trial": 0, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=46.959 p99_us=90.558 total_us=51888.9"}
+{"action": "search", "dim": 768, "mode": 1, "version": "candidate", "trial": 0, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=47.039 p99_us=90.438 total_us=51867.4"}
+{"action": "search", "dim": 768, "mode": 1, "version": "candidate", "trial": 1, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=46.89 p99_us=90.598 total_us=51795.3"}
+{"action": "search", "dim": 768, "mode": 1, "version": "baseline", "trial": 1, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=47.2 p99_us=90.619 total_us=52007.1"}
+{"action": "search", "dim": 768, "mode": 1, "version": "baseline", "trial": 2, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=47.048 p99_us=90.678 total_us=51995"}
+{"action": "search", "dim": 768, "mode": 1, "version": "candidate", "trial": 2, "output": "dim=768 mode=1 id_hash=11665858571532901123 hash=12400346654889469715 p50_us=47.048 p99_us=90.568 total_us=52007.4"}
+{"action": "crud", "dim": 768, "mode": 1, "version": "baseline", "output": "crud_384_us=22707.8", "snapshot_sha256": "d98d4705132a2cab840c5f0b91d620f7c6c11a1e894a428161c3b6b830240378"}
+{"action": "crud", "dim": 768, "mode": 1, "version": "candidate", "output": "crud_384_us=24411.3", "snapshot_sha256": "d98d4705132a2cab840c5f0b91d620f7c6c11a1e894a428161c3b6b830240378"}
+{"action": "build", "dim": 768, "mode": 2, "version": "baseline", "output": "build_us=158883", "snapshot_sha256": "78440554b544d93e637631edf9c66af6d52ebd41f11309d75c08e82c33ed7b45"}
+{"action": "build", "dim": 768, "mode": 2, "version": "candidate", "output": "build_us=155365", "snapshot_sha256": "78440554b544d93e637631edf9c66af6d52ebd41f11309d75c08e82c33ed7b45"}
+{"action": "search", "dim": 768, "mode": 2, "version": "baseline", "trial": 0, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=13573282813375871891 p50_us=267.063 p99_us=322.112 total_us=278501"}
+{"action": "search", "dim": 768, "mode": 2, "version": "candidate", "trial": 0, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=6835383111226059867 p50_us=75.518 p99_us=129.557 total_us=82083.3"}
+{"action": "search", "dim": 768, "mode": 2, "version": "candidate", "trial": 1, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=6835383111226059867 p50_us=75.188 p99_us=127.988 total_us=81768.8"}
+{"action": "search", "dim": 768, "mode": 2, "version": "baseline", "trial": 1, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=13573282813375871891 p50_us=266.354 p99_us=319.584 total_us=277139"}
+{"action": "search", "dim": 768, "mode": 2, "version": "baseline", "trial": 2, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=13573282813375871891 p50_us=266.214 p99_us=321.594 total_us=277580"}
+{"action": "search", "dim": 768, "mode": 2, "version": "candidate", "trial": 2, "output": "dim=768 mode=2 id_hash=15726775015970449347 hash=6835383111226059867 p50_us=75.107 p99_us=128.207 total_us=81599.6"}
+{"action": "crud", "dim": 768, "mode": 2, "version": "baseline", "output": "crud_384_us=252922", "snapshot_sha256": "8d4e340b5e6eddad685f412227edd31c8dec0d43bc3267ce9c6aa3b121119dbf"}
+{"action": "crud", "dim": 768, "mode": 2, "version": "candidate", "output": "crud_384_us=73805", "snapshot_sha256": "8d4e340b5e6eddad685f412227edd31c8dec0d43bc3267ce9c6aa3b121119dbf"}
+{"action": "build", "dim": 960, "mode": 0, "version": "baseline", "output": "build_us=121473", "snapshot_sha256": "33b5046a5e2270b7733d2c9a811e6129b791a17ebada08f4801c024f549adab6"}
+{"action": "build", "dim": 960, "mode": 0, "version": "candidate", "output": "build_us=118415", "snapshot_sha256": "33b5046a5e2270b7733d2c9a811e6129b791a17ebada08f4801c024f549adab6"}
+{"action": "search", "dim": 960, "mode": 0, "version": "baseline", "trial": 0, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=42.44 p99_us=72.898 total_us=45439.4"}
+{"action": "search", "dim": 960, "mode": 0, "version": "candidate", "trial": 0, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=42.74 p99_us=74.039 total_us=45395.7"}
+{"action": "search", "dim": 960, "mode": 0, "version": "candidate", "trial": 1, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=43 p99_us=74.518 total_us=45645.2"}
+{"action": "search", "dim": 960, "mode": 0, "version": "baseline", "trial": 1, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=42.45 p99_us=72.119 total_us=45404.9"}
+{"action": "search", "dim": 960, "mode": 0, "version": "baseline", "trial": 2, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=42.018 p99_us=70.959 total_us=44994.6"}
+{"action": "search", "dim": 960, "mode": 0, "version": "candidate", "trial": 2, "output": "dim=960 mode=0 id_hash=5925354141884853691 hash=16801618441090397987 p50_us=42.05 p99_us=72.939 total_us=44635"}
+{"action": "crud", "dim": 960, "mode": 0, "version": "baseline", "output": "crud_384_us=23599", "snapshot_sha256": "6fe269ba1c42bd7023d0b807ae979d5467c7c5a773c6f11faf428fc088533d00"}
+{"action": "crud", "dim": 960, "mode": 0, "version": "candidate", "output": "crud_384_us=25415.7", "snapshot_sha256": "6fe269ba1c42bd7023d0b807ae979d5467c7c5a773c6f11faf428fc088533d00"}
+{"action": "build", "dim": 960, "mode": 1, "version": "baseline", "output": "build_us=147378", "snapshot_sha256": "a5496725e8c71e3f0e756d1a222aab2837d5bafaf78307a9a0d7d998ff3ce5ea"}
+{"action": "build", "dim": 960, "mode": 1, "version": "candidate", "output": "build_us=147378", "snapshot_sha256": "a5496725e8c71e3f0e756d1a222aab2837d5bafaf78307a9a0d7d998ff3ce5ea"}
+{"action": "search", "dim": 960, "mode": 1, "version": "baseline", "trial": 0, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=51.959 p99_us=82.907 total_us=55059.3"}
+{"action": "search", "dim": 960, "mode": 1, "version": "candidate", "trial": 0, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=52.439 p99_us=83.799 total_us=55500.6"}
+{"action": "search", "dim": 960, "mode": 1, "version": "candidate", "trial": 1, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=52.308 p99_us=84.559 total_us=55370.5"}
+{"action": "search", "dim": 960, "mode": 1, "version": "baseline", "trial": 1, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=51.818 p99_us=83.138 total_us=54686.5"}
+{"action": "search", "dim": 960, "mode": 1, "version": "baseline", "trial": 2, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=51.72 p99_us=83.509 total_us=54751.3"}
+{"action": "search", "dim": 960, "mode": 1, "version": "candidate", "trial": 2, "output": "dim=960 mode=1 id_hash=553701580133908907 hash=9427425877918212507 p50_us=52.468 p99_us=84.038 total_us=55554.2"}
+{"action": "crud", "dim": 960, "mode": 1, "version": "baseline", "output": "crud_384_us=26003", "snapshot_sha256": "d929e57ed5fa2ece9e06b1e8c40f2e7240ee7b128f807e6252d7d4b23ed8b231"}
+{"action": "crud", "dim": 960, "mode": 1, "version": "candidate", "output": "crud_384_us=27534.9", "snapshot_sha256": "d929e57ed5fa2ece9e06b1e8c40f2e7240ee7b128f807e6252d7d4b23ed8b231"}
+{"action": "build", "dim": 960, "mode": 2, "version": "baseline", "output": "build_us=176423", "snapshot_sha256": "196bf7c0eade70d06efe0b312aea6a3b8829ca349a4509726748c237f2654016"}
+{"action": "build", "dim": 960, "mode": 2, "version": "candidate", "output": "build_us=172644", "snapshot_sha256": "196bf7c0eade70d06efe0b312aea6a3b8829ca349a4509726748c237f2654016"}
+{"action": "search", "dim": 960, "mode": 2, "version": "baseline", "trial": 0, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=8564808467669951107 p50_us=315.664 p99_us=354.093 total_us=325707"}
+{"action": "search", "dim": 960, "mode": 2, "version": "candidate", "trial": 0, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=16676799967748891523 p50_us=81.389 p99_us=117.238 total_us=85469.2"}
+{"action": "search", "dim": 960, "mode": 2, "version": "candidate", "trial": 1, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=16676799967748891523 p50_us=81.778 p99_us=118.707 total_us=85887.4"}
+{"action": "search", "dim": 960, "mode": 2, "version": "baseline", "trial": 1, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=8564808467669951107 p50_us=315.092 p99_us=350.312 total_us=324613"}
+{"action": "search", "dim": 960, "mode": 2, "version": "baseline", "trial": 2, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=8564808467669951107 p50_us=314.892 p99_us=351.032 total_us=324743"}
+{"action": "search", "dim": 960, "mode": 2, "version": "candidate", "trial": 2, "output": "dim=960 mode=2 id_hash=13187541954017660091 hash=16676799967748891523 p50_us=81.108 p99_us=116.648 total_us=85140.6"}
+{"action": "crud", "dim": 960, "mode": 2, "version": "baseline", "output": "crud_384_us=307687", "snapshot_sha256": "a6fbf5419600ff3bb9714460b89f47ac97a19b6b7a745b1c3900196af325ffdc"}
+{"action": "crud", "dim": 960, "mode": 2, "version": "candidate", "output": "crud_384_us=86242", "snapshot_sha256": "a6fbf5419600ff3bb9714460b89f47ac97a19b6b7a745b1c3900196af325ffdc"}

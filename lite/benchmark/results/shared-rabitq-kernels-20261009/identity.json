@@ -1,0 +1,66 @@
+{
+  "benchmark_sha256": "239ec8905a202f608fec2575997d3ed34ccfa96a1e3a0184fec102bb1a01985b",
+  "binary_sha256": "bb9edbdc13d504901421a04a5061fa2ab65cf2da998e67924bd7948a8c9d9de7",
+  "libraries": {
+    "baseline": {
+      "path": "/home/ubuntu/project/vsag-opt-baseline-build-20261009",
+      "sha256": "2f967a32b5153bc2813d9732fa27b46ab1a7a65fc9192128ec57aa999cbb445d"
+    },
+    "candidate": {
+      "path": "/home/ubuntu/project/vsag-opt-build-20261009",
+      "sha256": "d95edc5c69e13fdeff1d15247f314bbbf7559f3b822c47e33749bee43fb72d02"
+    }
+  },
+  "inputs": {
+    "sift": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/base.fvecs",
+        "sha256": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+        "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+        "sha256": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8"
+      }
+    },
+    "gist": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/base.fvecs",
+        "sha256": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+        "sha256": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+        "sha256": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038"
+      }
+    },
+    "cohere": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/base.fvecs",
+        "sha256": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+        "sha256": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+        "sha256": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+      }
+    }
+  },
+  "plan": {
+    "cpu": 0,
+    "repeats": 3,
+    "degree": 16,
+    "ef": 128,
+    "crud_rounds": 0,
+    "cold_io": false
+  }
+}

@@ -146,7 +146,7 @@ load_snapshot_payload(std::istream& input, uint64_t expected_version) {
     codec_require(position != std::streampos(-1) and end >= position,
                   "seekable encoded input required");
     input.seekg(position);
-    const uint64_t remaining = static_cast<uint64_t>(end - position);
+    const auto remaining = static_cast<uint64_t>(end - position);
     const uint64_t model_bytes = dim * sizeof(float) + flips_size;
     const uint64_t record_bytes = plane_bytes * K_TOTAL_BITS + 24 + 16;
     codec_require(

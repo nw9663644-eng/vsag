@@ -1,0 +1,552 @@
+{
+  "scope": "Instrumented production Lite plus instantiated shared RaBitQ kernel lines; excludes test sources and uninstantiated Full code",
+  "covered": 2568,
+  "total": 2704,
+  "percent": 94.97041420118343,
+  "uncovered": [
+    {
+      "file": "src/lite/index.cpp",
+      "line": 35
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 63
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 64
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 65
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 66
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 70
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 71
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 75
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 76
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 77
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 107
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 108
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 208
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 214
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 221
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 322
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 339
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 340
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 341
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 342
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 343
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 353
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 364
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 365
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 366
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 367
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 386
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 387
+    },
+    {
+      "file": "src/lite/index.cpp",
+      "line": 394
+    },
+    {
+      "file": "src/lite/fp16_codec.h",
+      "line": 17
+    },
+    {
+      "file": "src/simd/kernels/rabitq_compute.h",
+      "line": 244
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 43
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 47
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 68
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 138
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 139
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 154
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 155
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 158
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 159
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 188
+    },
+    {
+      "file": "src/lite/rabitq_backend.cpp",
+      "line": 206
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 234
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 235
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 236
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 358
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 370
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 508
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 606
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1199
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1203
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1204
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1205
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1206
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1207
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1209
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1210
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1211
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1212
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1213
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1214
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1215
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1216
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1217
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1220
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1221
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1222
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1223
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1225
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1226
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1249
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1250
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1302
+    },
+    {
+      "file": "src/lite/rabitq_codec.h",
+      "line": 176
+    },
+    {
+      "file": "src/lite/rabitq_codec.h",
+      "line": 222
+    },
+    {
+      "file": "src/lite/rabitq_codec.h",
+      "line": 251
+    },
+    {
+      "file": "src/lite/rabitq_codec.h",
+      "line": 309
+    },
+    {
+      "file": "src/lite/rabitq_codec.h",
+      "line": 381
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip_avx2.cpp",
+      "line": 11
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip_avx2.cpp",
+      "line": 12
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip_avx2.cpp",
+      "line": 13
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 42
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 43
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 46
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 60
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 61
+    },
+    {
+      "file": "src/lite/rabitq_filter_ip.cpp",
+      "line": 64
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 220
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 264
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 265
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 331
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 332
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 410
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 411
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 557
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 577
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 763
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 771
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 773
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 942
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1011
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1017
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1018
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1019
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1020
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1043
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1044
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1045
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1046
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1082
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1083
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1084
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1085
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1121
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1122
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1123
+    },
+    {
+      "file": "src/lite/graph_backend.cpp",
+      "line": 1124
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 45
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 63
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 64
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 65
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 66
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 67
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 207
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 208
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 209
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 225
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 226
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 227
+    },
+    {
+      "file": "src/lite/bruteforce_backend.cpp",
+      "line": 228
+    },
+    {
+      "file": "src/lite/fp32_distance.cpp",
+      "line": 26
+    },
+    {
+      "file": "src/lite/fp32_distance.cpp",
+      "line": 27
+    },
+    {
+      "file": "src/lite/fp32_distance.cpp",
+      "line": 29
+    },
+    {
+      "file": "src/lite/fp32_distance.cpp",
+      "line": 30
+    },
+    {
+      "file": "src/lite/fp32_distance.cpp",
+      "line": 33
+    },
+    {
+      "file": "src/lite/rabitq_graph_state.h",
+      "line": 1013
+    }
+  ]
+}

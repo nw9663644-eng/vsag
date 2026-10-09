@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 #include "rabitq_filter_ip.h"
 
+#include "rabitq_constants.h"
+#include "simd/kernels/rabitq_compute.h"
+
 namespace vsag::lite::detail::rabitq {
 
 float
@@ -20,6 +23,29 @@ rabitq_filter_ip_generic(const float* query, const uint8_t* filter, uint64_t dim
         result += query[d] * weight;
     }
     return result;
+}
+
+float
+rabitq_supplement_ip_generic(const float* query, const uint8_t* supplement, uint64_t dim) {
+    return simd::RaBitQFloatSupplementCodeIPScalarImpl(query, supplement, dim, K_SUPPLEMENT_BITS);
+}
+
+RaBitQFilterIP
+select_rabitq_supplement_ip() {
+    static const RaBitQFilterIP selected = []() -> RaBitQFilterIP {
+#ifdef VSAG_LITE_RABITQ_X86_SIMD
+        __builtin_cpu_init();
+        if (__builtin_cpu_supports("avx512f") and __builtin_cpu_supports("avx512dq") and
+            __builtin_cpu_supports("avx512bw") and __builtin_cpu_supports("avx512vl")) {
+            return rabitq_supplement_ip_avx512;
+        }
+        if (__builtin_cpu_supports("avx2") and __builtin_cpu_supports("fma")) {
+            return rabitq_supplement_ip_avx2;
+        }
+#endif
+        return rabitq_supplement_ip_generic;
+    }();
+    return selected;
 }
 
 RaBitQFilterIP

@@ -490,3 +490,91 @@ TEST_CASE("RaBitQ journaled Remove matches copied hole compaction down to empty"
         REQUIRE_FALSE(journaled.RemoveTransactional(0));
     }
 }
+
+TEST_CASE("RaBitQ cached query sums preserve complete distance bits", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (const uint64_t dim : {1, 7, 17, 128, 768, 960}) {
+        constexpr uint64_t count = 8;
+        std::vector<float> base(count * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i) * 0.17F);
+        }
+        const auto model = codec::train(base, count, dim, 42);
+        std::vector<float> query(dim);
+        for (uint64_t d = 0; d < dim; ++d) {
+            query[d] = std::cos(static_cast<float>(d) * 0.13F);
+        }
+        float query_norm = 0.0F;
+        query = codec::normalize(model, query.data(), query_norm);
+        const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t slot = 0; slot < count; ++slot) {
+            codes.Append(codec::encode(model, base.data() + slot * dim));
+            const auto code = codes.At(slot);
+            const auto coarse = codec::filter_estimate(query, query_norm, code);
+            const float uncached =
+                codec::full_distance(query, query_norm, code, coarse.centered_ip);
+            const float cached =
+                codec::full_distance(query, query_norm, code, coarse.centered_ip, query_sum);
+            uint32_t uncached_bits = 0;
+            uint32_t cached_bits = 0;
+            std::memcpy(&uncached_bits, &uncached, sizeof(uncached));
+            std::memcpy(&cached_bits, &cached, sizeof(cached));
+            REQUIRE(uncached_bits == cached_bits);
+        }
+    }
+}
+
+TEST_CASE("RaBitQ supplement SIMD matches scalar estimates and plane tails", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    std::vector<codec::RaBitQFilterIP> kernels{codec::rabitq_supplement_ip_generic,
+                                               codec::select_rabitq_supplement_ip()};
+#ifdef VSAG_LITE_RABITQ_X86_SIMD
+    __builtin_cpu_init();
+    if (__builtin_cpu_supports("avx2") and __builtin_cpu_supports("fma")) {
+        kernels.push_back(codec::rabitq_supplement_ip_avx2);
+    }
+    if (__builtin_cpu_supports("avx512f") and __builtin_cpu_supports("avx512dq") and
+        __builtin_cpu_supports("avx512bw") and __builtin_cpu_supports("avx512vl")) {
+        kernels.push_back(codec::rabitq_supplement_ip_avx512);
+    }
+#endif
+    for (const uint64_t dim :
+         {0, 1, 7, 8, 9, 15, 16, 17, 31, 33, 127, 128, 129, 767, 768, 769, 959, 960, 961}) {
+        const uint64_t plane_bytes = (dim + 7) / 8;
+        std::vector<float> query(dim + 1);
+        std::vector<uint8_t> planes(5 * plane_bytes + 1);
+        for (uint64_t pattern = 0; pattern < 32; ++pattern) {
+            for (uint64_t d = 0; d < dim; ++d) {
+                query[d + 1] = std::sin(static_cast<float>(d * 7 + pattern) * 0.11F);
+            }
+            for (uint64_t byte = 0; byte < 5 * plane_bytes; ++byte) {
+                planes[byte + 1] = static_cast<uint8_t>((byte * 37 + pattern * 29) & 255U);
+            }
+            float expected = 0.0F;
+            float absolute_sum = 0.0F;
+            for (uint64_t d = 0; d < dim; ++d) {
+                const auto code = codec::read_plane_code(
+                    planes.data() + 1, plane_bytes, d, codec::K_SUPPLEMENT_BITS, false);
+                const float product = query[d + 1] * static_cast<float>(code);
+                expected += product;
+                absolute_sum += std::fabs(product);
+            }
+            uint32_t expected_bits = 0;
+            std::memcpy(&expected_bits, &expected, sizeof(expected));
+            for (const auto kernel : kernels) {
+                const float actual = kernel(query.data() + 1, planes.data() + 1, dim);
+                uint32_t actual_bits = 0;
+                std::memcpy(&actual_bits, &actual, sizeof(actual));
+                if (kernel == codec::rabitq_supplement_ip_generic) {
+                    REQUIRE(actual_bits == expected_bits);
+                } else {
+                    // SIMD FMA and lane reduction change rounding, not decoded values.
+                    const float tolerance = 32.0F * std::numeric_limits<float>::epsilon() *
+                                            std::max(1.0F, absolute_sum);
+                    REQUIRE(std::fabs(actual - expected) <= tolerance);
+                }
+            }
+        }
+    }
+}
