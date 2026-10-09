@@ -72,6 +72,24 @@ public:
     }
 
     void
+    ReserveBuild(uint64_t count) {
+        if (count > ids_.max_size() or count > extras_.max_size() or count > incoming_.max_size() or
+            (fp16_ ? count > fp16_vectors_.max_size() / Dim()
+                   : count > vectors_.max_size() / Dim())) {
+            throw std::length_error("graph build capacity exceeded");
+        }
+        if (fp16_) {
+            fp16_vectors_.reserve(count * Dim());
+        } else {
+            vectors_.reserve(count * Dim());
+        }
+        ids_.reserve(count);
+        extras_.reserve(count);
+        incoming_.reserve(count);
+        slots_.reserve(count);
+    }
+
+    void
     EnableMutationJournal() {
         journal_mutations_ = true;
     }
@@ -1010,6 +1028,7 @@ make_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_searc
     try {
         auto graph =
             std::make_unique<GraphBackend>(source.Dim(), max_degree, ef_search, false, false);
+        graph->ReserveBuild(source.Size());
         std::vector<float> scratch;
         for (uint64_t slot = 0; slot < source.Size(); ++slot) {
             auto added =
@@ -1036,6 +1055,7 @@ make_fp16_graph_backend(const Backend& source, uint64_t max_degree, uint64_t ef_
     try {
         auto graph =
             std::make_unique<GraphBackend>(source.Dim(), max_degree, ef_search, true, false);
+        graph->ReserveBuild(source.Size());
         std::vector<float> scratch;
         for (uint64_t slot = 0; slot < source.Size(); ++slot) {
             auto added =
