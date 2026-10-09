@@ -19,9 +19,11 @@ def main():
     parser.add_argument("build",type=Path)
     parser.add_argument("output",type=Path)
     parser.add_argument("--archive",type=Path,required=True)
-    parser.add_argument("--inputs",type=Path,required=True,help="Prior pilot identity.json")
+    parser.add_argument("--inputs",type=Path,required=True,help="Prepared dataset identity.json")
+    parser.add_argument("--count",type=int,default=10000)
     args=parser.parse_args()
     if args.archive.exists():parser.error("Archive must be new")
+    if args.count not in (10000,100000):parser.error("Supported study counts are10k/100k")
     args.output.mkdir(parents=True,exist_ok=False)
     root=Path(__file__).resolve().parents[2]
     build=args.build.resolve();builder=build/"lite_graph_crud_quality";loader=build/"lite_load_memory"
@@ -29,8 +31,8 @@ def main():
     identity=dict(revision=subprocess.check_output(["git","-C",str(root),"rev-parse","HEAD"],text=True).strip(),
                   builder_sha256=digest(builder),loader_sha256=digest(loader),library_sha256=digest(build/"libvsag-lite.so"),
                   loader_source_sha256=digest(root/"lite/benchmark/load_memory.cpp"),inputs=prior["inputs"],
-                  scope="10k loaded-only RSS before query; fresh processes; RAM page cache uncontrolled",
-                  plan=dict(cpu=0,degree=16,ef=128,repeats=7,count=10000),snapshots={})
+                  scope=f"{args.count} loaded-only RSS before query; fresh processes; RAM page cache uncontrolled",
+                  plan=dict(cpu=0,degree=16,ef=128,repeats=7,count=args.count),snapshots={})
     for dataset,files in prior["inputs"].items():
         for filename,record in files.items():
             assert digest(Path(record["path"]))==record["sha256"], (dataset,filename)
@@ -46,20 +48,23 @@ def main():
             (args.output/(stem+".builder.stdout.csv")).write_text(result.stdout)
             (args.output/(stem+".builder.stderr.txt")).write_text(result.stderr)
             assert result.returncode==0,result.stderr
+            build_row=list(csv.DictReader(io.StringIO(result.stdout)))[0]
+            assert int(build_row["base_count"])==args.count
+            print(json.dumps(dict(stage="built",dataset=dataset,storage=storage,recall=build_row["recall_at_k"],build_ms=build_row["build_ms"])),flush=True)
             identity["snapshots"][stem]=dict(sha256=digest(args.output/(stem+".snapshot")),bytes=(args.output/(stem+".snapshot")).stat().st_size)
         for repeat in range(7):
             modes=["fp32","fp16","rabitq8"];offset=repeat%3;modes=modes[offset:]+modes[:offset]
             for storage in modes:
                 stem=dataset+"-"+storage;name=f"{stem}-r{repeat}"
                 env=environment.copy();env.update(VSAG_LOAD_QUERY=str(directory/"queries.fvecs"),VSAG_LOAD_QUERY_RESULTS=str(args.output/(name+".first.csv")))
-                command=["taskset","-c","0",str(loader),str(args.output/(stem+".snapshot")),str(dim),"10000"]
+                command=["taskset","-c","0",str(loader),str(args.output/(stem+".snapshot")),str(dim),str(args.count)]
                 result=subprocess.run(command,env=env,capture_output=True,text=True)
                 (args.output/(name+".stdout.csv")).write_text(result.stdout)
                 (args.output/(name+".stderr.txt")).write_text(result.stderr)
                 (args.output/(name+".command.json")).write_text(json.dumps(dict(command=command,exit_code=result.returncode),indent=2)+"\n")
                 assert result.returncode==0 and not result.stderr,result.stderr
                 row=list(csv.DictReader(io.StringIO(result.stdout)))[0]
-                assert int(row["count"])==10000 and int(row["dim"])==dim
+                assert int(row["count"])==args.count and int(row["dim"])==dim
                 assert int(row["first_query_count"])==10
                 expected=list(csv.DictReader(io.StringIO((args.output/(stem+".builder.queries.csv.neighbors.csv")).read_text())))[:10]
                 actual=list(csv.DictReader(io.StringIO((args.output/(name+".first.csv")).read_text())))

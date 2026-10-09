@@ -1,0 +1,2 @@
+dim,count,snapshot_bytes,load_ms,before_create_rss_kib,before_load_rss_kib,loaded_rss_kib,process_peak_rss_kib,page_cache_control,first_query_us,first_query_count,load_vm_hwm_kib,quality_queries,quality_ef,recall_at_k,search_p50_us,search_p99_us,query_loop_cpu_ms
+128,100000,29600672,87.153697,3484,3680,40488,58172,warm_uncontrolled,455.210000,10,58172,100,128,0.946000,308.594000,423.720000,30.969000

@@ -36,7 +36,16 @@ with tempfile.TemporaryDirectory() as temporary:
         assert [int(v["rank"]) for v in values]==list(range(8))
         assert len({int(v["id"]) for v in values})==8 and int(values[0]["id"])==0
         assert subprocess.run([loader,str(snapshot),"17","8"],env=environment,capture_output=True).returncode!=0
+        environment.pop("VSAG_LOAD_QUERY_RESULTS")
+        environment.update(VSAG_LOAD_QUALITY_TRUTH=str(directory/"groundtruth.ivecs"),VSAG_LOAD_QUALITY_EF="2")
+        quality=subprocess.run([loader,str(snapshot),"17","8"],env=environment,capture_output=True,text=True)
+        assert quality.returncode==0,quality.stderr
+        row=list(csv.DictReader(io.StringIO(quality.stdout)))[0]
+        assert int(row["quality_queries"])==8 and int(row["quality_ef"])==2
+        assert float(row["recall_at_k"])==1
+        environment.pop("VSAG_LOAD_QUALITY_TRUTH")
+        environment.pop("VSAG_LOAD_QUALITY_EF")
         bad=directory/"bad.fvecs";bad.write_bytes(struct.pack("<i",16))
-        environment["VSAG_LOAD_QUERY"]=str(bad);environment.pop("VSAG_LOAD_QUERY_RESULTS")
+        environment["VSAG_LOAD_QUERY"]=str(bad);environment.pop("VSAG_LOAD_QUERY_RESULTS",None)
         assert subprocess.run([loader,str(snapshot),"17","8"],env=environment,capture_output=True).returncode!=0
 print("PASS: all storage first-query/rank checks, legacy schema, invalid query and overwrite rejection")

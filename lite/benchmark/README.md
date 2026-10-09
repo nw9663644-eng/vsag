@@ -13,6 +13,12 @@ See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independ
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\
 
+## Integrated100k baseline and per-call budget selection
+
+The [100k baseline](results/integrated-100k-pilot-20261009/README.md) retains fixed-budget quality failures and63 fresh load-only measurements. The [frozen budget grid](results/integrated-100k-budget-grid-20261009/README.md) tests128/512/2048/8192 on the same snapshots without changing model or defaults. Lowest tested RaBitQ floor-passing budgets are SIFT512/GIST2048/Cohere2048 on observed queries; timings are one sample per cell, not blind or exactly equal-recall acceptance.
+
+Optional `VSAG_LOAD_QUALITY_TRUTH` and `VSAG_LOAD_QUALITY_EF` extend `lite_load_memory` after the memory checkpoint. With `VSAG_LOAD_QUERY`, it streams all query/truth records and reports Recall/P50/P99 plus loop CPU (including reads/checks). One default-budget first query is warmed before this loop. Default CLI/CSV remains unchanged without these environments. `run_loaded_storage_pilot.py --count100000` supports an explicitly hashed100k input identity; invalid counts are rejected. Long changed/mixed CRUD and quality-matched Full comparisons remain pending.
+
 ## Fresh loaded-only storage pilot
 
 The [current-image loader study](results/integrated-load-final-20261009/README.md) measures seven fresh processes per10k configuration. RaBitQ current loaded RSS is lower than FP32, while first-query costs remain higher. Optional `VSAG_LOAD_QUERY` reads one fvec after the RSS checkpoint; `VSAG_LOAD_QUERY_RESULTS` writes ordered first-query results to a new path. Default CLI/CSV is unchanged. `load_vm_hwm_kib` refers to the current image before query; the older getrusage metric may retain a launch-related floor. Cache is uncontrolled and RAM filesystem is not cold-I/O evidence.

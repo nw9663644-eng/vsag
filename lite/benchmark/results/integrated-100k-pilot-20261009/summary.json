@@ -1,0 +1,110 @@
+[
+  {
+    "dataset": "sift",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 46.018221,
+    "loaded_rss_kib": 91016.0,
+    "process_peak_rss_kib": 91676.0,
+    "first_query_us": 406.802,
+    "snapshot_bytes": 65600064.0,
+    "before_load_rss_kib": 3604.0,
+    "load_vm_hwm_kib": 91676.0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 38.55944,
+    "loaded_rss_kib": 65936.0,
+    "process_peak_rss_kib": 66516.0,
+    "first_query_us": 373.933,
+    "snapshot_bytes": 40000064.0,
+    "before_load_rss_kib": 3524.0,
+    "load_vm_hwm_kib": 66516.0
+  },
+  {
+    "dataset": "sift",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 86.154439,
+    "loaded_rss_kib": 40320.0,
+    "process_peak_rss_kib": 58000.0,
+    "first_query_us": 475.411,
+    "snapshot_bytes": 29600672.0,
+    "before_load_rss_kib": 3608.0,
+    "load_vm_hwm_kib": 58000.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 169.882232,
+    "loaded_rss_kib": 416500.0,
+    "process_peak_rss_kib": 417216.0,
+    "first_query_us": 578.438,
+    "snapshot_bytes": 398400064.0,
+    "before_load_rss_kib": 3620.0,
+    "load_vm_hwm_kib": 417216.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 112.71764,
+    "loaded_rss_kib": 228940.0,
+    "process_peak_rss_kib": 229712.0,
+    "first_query_us": 572.048,
+    "snapshot_bytes": 206400064.0,
+    "before_load_rss_kib": 3564.0,
+    "load_vm_hwm_kib": 229712.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 115.715894,
+    "loaded_rss_kib": 121636.0,
+    "process_peak_rss_kib": 139320.0,
+    "first_query_us": 918.89,
+    "snapshot_bytes": 112804416.0,
+    "before_load_rss_kib": 3572.0,
+    "load_vm_hwm_kib": 139320.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 141.06433,
+    "loaded_rss_kib": 341348.0,
+    "process_peak_rss_kib": 341996.0,
+    "first_query_us": 619.276,
+    "snapshot_bytes": 321600064.0,
+    "before_load_rss_kib": 3644.0,
+    "load_vm_hwm_kib": 341996.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 95.797439,
+    "loaded_rss_kib": 191272.0,
+    "process_peak_rss_kib": 191972.0,
+    "first_query_us": 646.297,
+    "snapshot_bytes": 168000064.0,
+    "before_load_rss_kib": 3604.0,
+    "load_vm_hwm_kib": 191972.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 111.766884,
+    "loaded_rss_kib": 102948.0,
+    "process_peak_rss_kib": 120632.0,
+    "first_query_us": 898.231,
+    "snapshot_bytes": 93603552.0,
+    "before_load_rss_kib": 3664.0,
+    "load_vm_hwm_kib": 120632.0
+  }
+]

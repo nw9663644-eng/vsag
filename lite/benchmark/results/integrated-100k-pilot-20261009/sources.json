@@ -1,0 +1,6 @@
+{
+  "parent": "7d7c175565b924d6ed327c4a18fb864d3bb6a6e6",
+  "sources": {
+    "lite/benchmark/run_loaded_storage_pilot.py": "5d58598bb95d48c95b720f868cfceb70159f3a7a1d5986ef508a9d8803275bd3"
+  }
+}

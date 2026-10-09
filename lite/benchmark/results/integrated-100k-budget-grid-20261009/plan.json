@@ -1,0 +1,115 @@
+{
+  "budgets": [
+    128,
+    512,
+    2048,
+    8192
+  ],
+  "cpu": 0,
+  "repeats": 1,
+  "floors": {
+    "sift": 0.95,
+    "gist": 0.9,
+    "cohere": 0.95
+  },
+  "query_history": "Observed historical100-query cohort; not blind final acceptance",
+  "identity": {
+    "revision": "7d7c175565b924d6ed327c4a18fb864d3bb6a6e6",
+    "builder_sha256": "94c54a8273a18a03ce249806e546d4c000f4736dc6ce8fc9f00470b7d971d015",
+    "loader_sha256": "08f028002eed7fe06db4fadc2d05cb4b4c8c4d5d3d9802bd2e750b52052904fb",
+    "library_sha256": "2f967a32b5153bc2813d9732fa27b46ab1a7a65fc9192128ec57aa999cbb445d",
+    "loader_source_sha256": "4ed41507a0646172ba2758f6c6968ce383c58d28521340ee5039120eb98a6c59",
+    "inputs": {
+      "sift": {
+        "base.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/base.fvecs",
+          "sha256": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba"
+        },
+        "queries.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+          "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+        },
+        "groundtruth.ivecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+          "sha256": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54"
+        }
+      },
+      "gist": {
+        "base.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/base.fvecs",
+          "sha256": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97"
+        },
+        "queries.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+          "sha256": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278"
+        },
+        "groundtruth.ivecs": {
+          "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+          "sha256": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+        }
+      },
+      "cohere": {
+        "base.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/base.fvecs",
+          "sha256": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193"
+        },
+        "queries.fvecs": {
+          "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+          "sha256": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17"
+        },
+        "groundtruth.ivecs": {
+          "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+          "sha256": "258d70c586da932a1e55e1587ea3509087e8b8510c723d31538634e9a534160e"
+        }
+      }
+    },
+    "scope": "100000 loaded-only RSS before query; fresh processes; RAM page cache uncontrolled",
+    "plan": {
+      "cpu": 0,
+      "degree": 16,
+      "ef": 128,
+      "repeats": 7,
+      "count": 100000
+    },
+    "snapshots": {
+      "sift-fp32": {
+        "sha256": "ebb1a3554e0a4abcdbf788cad1bfb8a03503246e5c75c7775a628234bbcdf0e7",
+        "bytes": 65600064
+      },
+      "sift-fp16": {
+        "sha256": "f1c5d45318f3ab28801bbc3d98c9307314eb3f6850869e01f40608e1ed2af353",
+        "bytes": 40000064
+      },
+      "sift-rabitq8": {
+        "sha256": "40cf0d83af89cdc3dd0e04145925e09429a2dc573cc5fd6841fceca5d599d565",
+        "bytes": 29600672
+      },
+      "gist-fp32": {
+        "sha256": "92e5fe645fa704d3e659f6995228c150c897b933456344707b412b41f42eae9c",
+        "bytes": 398400064
+      },
+      "gist-fp16": {
+        "sha256": "5c7cf804c065e9c247bd48bbb3ebcbd8ef4ddb509ba9aea1f51c6ed4443ba5c0",
+        "bytes": 206400064
+      },
+      "gist-rabitq8": {
+        "sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+        "bytes": 112804416
+      },
+      "cohere-fp32": {
+        "sha256": "4124feb3d7e82f2ab52caadfb8cfc2bb63fca34acb29684f6c38ad83291579ce",
+        "bytes": 321600064
+      },
+      "cohere-fp16": {
+        "sha256": "e790cb7300d1cf776b054db2304953b5d51283cab19c84459b709513556601bc",
+        "bytes": 168000064
+      },
+      "cohere-rabitq8": {
+        "sha256": "35ee729f8ebe6bd9ee54811b47fe48c618b9cdba3c822be69bc498c63690434b",
+        "bytes": 93603552
+      }
+    }
+  },
+  "loader_sha256": "0fc9a63c4f3b939d5fd172fb8d358f8383cda943b20a4e1267b1f438adf35d1c",
+  "library_sha256": "2f967a32b5153bc2813d9732fa27b46ab1a7a65fc9192128ec57aa999cbb445d"
+}

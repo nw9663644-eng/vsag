@@ -1,0 +1,8 @@
+{
+  "parent": "7d7c175565b924d6ed327c4a18fb864d3bb6a6e6",
+  "sources": {
+    "lite/benchmark/load_memory.cpp": "079b83813eac56b332d83d0669f5ad43ff5c5a63a04b8550d0af8570bc472dfa",
+    "lite/benchmark/run_quality_budget_sweep.py": "502cd3d160727cb0922fc8a5ac51d7948103f6c4f4b9a4e679c9d04e9caf485e",
+    "lite/benchmark/test_load_first_query.py": "0d6f7ecee406237e74d685a972f157b1e06c1dfba6b6d27c3533c2b9519b83f1"
+  }
+}
