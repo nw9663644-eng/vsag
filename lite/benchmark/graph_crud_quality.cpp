@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -68,6 +69,22 @@ percentile(std::vector<double> values, double fraction) {
     return values[rank];
 }
 
+uint64_t
+environment_number(const char* name, uint64_t fallback) {
+    const char* text = std::getenv(name);
+    if (text == nullptr) {
+        return fallback;
+    }
+    const std::string value(text);
+    require(
+        not value.empty() and
+            std::all_of(value.begin(), value.end(), [](char c) { return c >= '0' and c <= '9'; }),
+        "invalid graph environment number");
+    const auto result = std::stoull(value);
+    require(result > 0, "graph environment number must be positive");
+    return result;
+}
+
 int
 run(const std::string& directory,
     const std::string& snapshot,
@@ -101,6 +118,9 @@ run(const std::string& directory,
     require(not base.empty() and not queries.empty() and static_cast<uint64_t>(k) <= base.size(),
             "invalid dataset shape");
     for (const auto& expected : truth) {
+        require(
+            std::unordered_set<int32_t>(expected.begin(), expected.end()).size() == expected.size(),
+            "duplicate groundtruth ID");
         for (const int32_t id : expected) {
             require(id >= 0 and static_cast<uint64_t>(id) < base.size(),
                     "groundtruth ID outside base");
@@ -114,8 +134,18 @@ run(const std::string& directory,
         auto added = index->Add(static_cast<int64_t>(i), base[i].data(), dim);
         require(static_cast<bool>(added), "index add failed");
     }
-    require(static_cast<bool>(index->BuildGraph(16, 128)), "graph build failed");
+    const char* selected = std::getenv("VSAG_GRAPH_STORAGE");
+    const std::string storage = selected == nullptr ? "fp32" : selected;
+    require(storage == "fp32" or storage == "fp16" or storage == "rabitq8",
+            "invalid graph storage selection");
+    const auto representation = storage == "fp16"      ? vsag::lite::VectorStorage::FP16
+                                : storage == "rabitq8" ? vsag::lite::VectorStorage::RABITQ8
+                                                       : vsag::lite::VectorStorage::FP32;
+    const uint64_t degree = environment_number("VSAG_GRAPH_DEGREE", 16);
+    const uint64_t ef = environment_number("VSAG_GRAPH_EF", 128);
+    require(static_cast<bool>(index->BuildGraph(representation, degree, ef)), "graph build failed");
     const auto build_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+    const auto crud_start = Clock::now();
     for (uint64_t round = 0; round < rounds; ++round) {
         for (uint64_t operation = 0; operation < crud_ops; ++operation) {
             const uint64_t id = (round * 65537ULL + operation * 8191ULL) % base.size();
@@ -127,6 +157,8 @@ run(const std::string& directory,
                     "re-add failed");
         }
     }
+    const auto crud_ms =
+        std::chrono::duration<double, std::milli>(Clock::now() - crud_start).count();
     require(index->Size() == base.size(), "live count changed");
     uint64_t hits = 0;
     std::vector<double> latencies;
@@ -190,14 +222,16 @@ run(const std::string& directory,
                 "post-load result changed");
         }
     }
-    std::cout << "base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,"
-                 "search_p99_us,save_ms,load_ms,snapshot_bytes\n";
+    std::cout
+        << "base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,"
+           "search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_ms\n";
     std::cout << base.size() << ',' << queries.size() << ',' << dim << ',' << k << ',' << rounds
               << ',' << crud_ops << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
               << build_ms << ',' << percentile(latencies, 0.50) << ','
               << percentile(latencies, 0.99) << ',' << save_ms << ',' << load_ms << ','
-              << std::filesystem::file_size(snapshot) << '\n';
+              << std::filesystem::file_size(snapshot) << ',' << storage << ',' << degree << ','
+              << ef << ',' << crud_ms << '\n';
     return 0;
 }
 }  // namespace

@@ -13,6 +13,12 @@ See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independ
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\
 
+## Integrated 10k storage pilot
+
+The [three-distribution pilot](results/integrated-storage-pilot-20261009/README.md) records actual public-API FP32/FP16/RaBitQ measurements and negative findings. RaBitQ snapshots are smaller, while queries and whole-process peak memory are worse in this equal-budget pilot. Existing historical queries are not blind validation;100k, isolated loaded RSS and long mixed CRUD remain pending.
+
+The existing `lite_graph_crud_quality` positional CLI is unchanged. Optional `VSAG_GRAPH_STORAGE=fp32|fp16|rabitq8`, `VSAG_GRAPH_DEGREE` and `VSAG_GRAPH_EF` select explicitly recorded configurations. Defaults remain FP32/16/128. `crud_ms` is the wall time for the serial maintenance loop, not a single-operation latency or throughput. Use a new RAM snapshot path and archive small raw evidence before the SSH session ends. `run_integrated_pilot.py` provides the frozen10k protocol and same-session archive; `test_graph_crud_storage.py BUILD/lite_graph_crud_quality` checks mode selection, roundtrip and invalid environment values.
+
 ## Integrated RaBitQ backend candidate
 
 The opt-in public API lifecycle is now connected; see [functional integration evidence](results/rabitq-backend-integration-20261008/README.md) and the canonical [English](../../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate) / [Chinese](../../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端) pages. Integrated large-scale performance remains pending; mutations currently copy the whole state for failure atomicity. Do not relabel old standalone probe measurements as this candidate's performance.

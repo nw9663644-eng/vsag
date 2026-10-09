@@ -326,3 +326,5 @@ quantized RSS. Three-distribution quality/performance and long-CRUD acceptance
 remain pending. Do not infer those results from older standalone probe numbers.
 
 Use the opt-in `lite_rabitq_example` build target for the public API lifecycle.
+
+The integrated 10k SIFT/GIST/Cohere pilot is recorded in `lite/benchmark/results/integrated-storage-pilot-20261009`. It establishes a snapshot-size reduction at the measured settings, but queries and whole-process peak memory are worse than FP32. Historical queries and short churn do not replace100k, fresh-process isolated RSS or long changed-vector acceptance. Read the experiment report for raw evidence and measured-version boundaries.

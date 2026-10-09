@@ -252,3 +252,5 @@ auto result = index->SearchWithOptions(query, dim, 10, options);
 两者均保留状态；构造错误本身仍可能分配内存。构建阶段保留临时FP32数据与FP32图，
 构建峰值不能当量化稳态内存。三个数据分布的质量、性能及长期CRUD验收仍待执行，
 不得直接套用旧独立探针成绩。可构建 `lite_rabitq_example` 查看公共接口生命周期示例。
+
+正式接口10k SIFT/GIST/Cohere先导结果见 `lite/benchmark/results/integrated-storage-pilot-20261009`。测得快照更小，但查询和整进程峰值内存劣于FP32；历史查询及短维护不能替代100k、独立加载RSS和长期真实改值验收。数据和版本边界以该实验报告为准。

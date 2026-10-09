@@ -1,0 +1,8 @@
+{
+  "parent": "d279ddf96f268c92ec12176fac1aa4e04c12f1da",
+  "sources": {
+    "lite/benchmark/graph_crud_quality.cpp": "239ec8905a202f608fec2575997d3ed34ccfa96a1e3a0184fec102bb1a01985b",
+    "lite/benchmark/run_integrated_pilot.py": "c19b7caafedb251aacfb4f5163b36bd21ab59f984bb9ee5fe694adaef08891ad",
+    "lite/benchmark/test_graph_crud_storage.py": "ea5ef94883d8ca94c2097e09ceea1dfe5ebed2d23c57c581a3ae5b3f4df2cf36"
+  }
+}

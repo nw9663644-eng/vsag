@@ -1,0 +1,6 @@
+{
+  "snapshots": "RAM-only, ephemeral after session; hashes recorded; not archived",
+  "base_vectors": "Cached host datasets, hashes and paths recorded",
+  "raw_queries_truth": "Included in raw.tar.gz",
+  "scope": "Same-process RAM-filesystem save/load; not cold I/O or isolated RSS"
+}
