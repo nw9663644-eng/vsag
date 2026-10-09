@@ -77,12 +77,7 @@ public:
             return false;
         }
         try {
-            auto next = state_;
-            if (not next.Remove(id)) {
-                return false;
-            }
-            state_ = std::move(next);
-            return true;
+            return state_.RemoveTransactional(id);
         } catch (...) {
             // The existing bool API cannot distinguish missing IDs from an
             // allocation failure. The original state remains intact.

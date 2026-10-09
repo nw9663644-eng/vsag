@@ -1,0 +1,1 @@
+PASS: 141 multi-row Remove failures retained exact snapshots; rollback allocations=0

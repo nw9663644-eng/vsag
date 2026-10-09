@@ -303,7 +303,11 @@ This still performs encoding and can fail on allocation or internal arithmetic.
 For a real change, the prepared normalized query and full code are moved into
 the transaction; the mutation path does not normalize or encode that input again.
 
-**Remove still uses a full-state transaction copy.** Public Add prepares codes
+**Default public CRUD uses local rollback transactions.** Remove backs up the
+hole/last code and ID, retains the removed map node, and journals affected rows.
+On failure it restores lengths within retained capacity and reinserts the node
+without exceeding the map's old load; no rollback allocation is required.
+Public Add prepares codes
 and neighbors, reserves geometric container growth, then journals touched rows.
 Failure erases the inserted ID, truncates appended lengths and restores old rows;
 capacity/bucket growth can remain, but logical contents are preserved. Normal
@@ -312,7 +316,7 @@ journals the replaced code and each adjacency row before its first write. Failur
 restores codes and swaps saved rows without allocating; IDs/model/container sizes
 are unchanged by Update. It still scans directed adjacency for inbound references
 and can journal many rows in a high-indegree case. The experimental inbound-index
-state uses the full-copy Add/Update fallback. This reduces mutation copying but does not make
+state uses the full-copy Add/Update/Remove fallback. This reduces mutation copying but does not make
 all CRUD constant-time or remove temporary mutation memory. This is a correctness candidate, not a validated
 performance improvement. Remove's bool result cannot distinguish a missing ID
 from allocation failure; either failure retains the state. Error construction

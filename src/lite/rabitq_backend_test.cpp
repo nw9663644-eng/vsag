@@ -457,3 +457,36 @@ TEST_CASE("RaBitQ journaled Add matches copied state across repeated growth", "[
         REQUIRE_FALSE(journaled.AddTransactional(0, &vector));
     }
 }
+
+TEST_CASE("RaBitQ journaled Remove matches copied hole compaction down to empty", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (bool incoming : {false, true}) {
+        std::vector<float> training{0, 1, 2, 3};
+        auto model = codec::train(training, 4, 1, 47);
+        codec::MutableGraphState reference(
+            model, codec::EncodedRecords(1), {{0}, {}}, {}, 4, 16, false, incoming);
+        for (int64_t id = 0; id < 100; ++id) {
+            const float vector = static_cast<float>(id) * 0.125F;
+            REQUIRE(reference.Add(id - 50, &vector));
+        }
+        auto journaled = reference;
+        uint64_t step = 0;
+        while (reference.Size() != 0) {
+            const uint64_t slot = step % 2 == 0 ? 0 : reference.Size() - 1;
+            const auto id = reference.IdAt(slot);
+            auto copy = reference;
+            REQUIRE(copy.Remove(id));
+            reference = std::move(copy);
+            REQUIRE(journaled.RemoveTransactional(id));
+            journaled.Validate();
+            reference.Validate();
+            std::stringstream first;
+            std::stringstream second;
+            codec::save_mutable_snapshot(first, reference);
+            codec::save_mutable_snapshot(second, journaled);
+            REQUIRE(first.str() == second.str());
+            ++step;
+        }
+        REQUIRE_FALSE(journaled.RemoveTransactional(0));
+    }
+}

@@ -420,3 +420,23 @@ is removed. Experimental incoming adjacency uses the copy fallback; Remove is
 unchanged. See [bounded Add evidence](results/rabitq-add-journal-20261009/README.md).
 
 中文：公开新增已移除每次整状态复制，失败可恢复原逻辑内容与快照，但容器扩容和失败后保留容量仍存在。通过连续增长逐字节对照及复杂分配失败测试；删除仍全复制，incoming实验模式仍回退复制。标准三分布验收尚未完成。
+
+## Journaled public Remove (2026-10-09)
+
+The default public backend now journals physical deletion and hole compaction.
+It backs up hole/last codes and rows, captures every inbound erase/last-slot
+rewrite, and retains the removed ID map node through repair. Failure restores
+container lengths within their retained capacities, both codes/IDs, old rows and
+map entries without allocation. Only the default no-incoming-index state uses
+this journal; the experimental incoming-index path keeps its copy fallback.
+Public Add/Update/Remove therefore avoid unconditional whole-state clones, but
+normal growth, directed adjacency scans, many touched rows and temporary journal
+memory remain. Formats, model and bool Remove contract are unchanged.
+
+See [Remove evidence](results/rabitq-remove-journal-20261009/README.md) for 200
+continuous copied/journaled comparisons down to empty, 141 complex failure points
+with observed zero rollback allocations, and exact paired final snapshots.
+Next work is standard-dataset quality/CPU/memory and long mixed CRUD acceptance,
+not an unqualified claim that the project is complete.
+
+中文：默认公开删除已用编码/ID/邻接行及被删映射节点回滚，失败恢复原长度与映射且无回滚分配。默认三种修改均不再每次整索引克隆，扩容/扫描/高入度及日志临时内存仍存在。200次逐状态删除和141复杂失败点通过；下一步标准三数据分布及长期混合CRUD验收。

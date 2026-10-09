@@ -692,6 +692,66 @@ public:
     }
 
     [[nodiscard]] bool
+    RemoveTransactional(int64_t id) {
+        const auto found = slots_.find(id);
+        if (found == slots_.end()) {
+            return false;
+        }
+        codec_require(active_journal_ == nullptr, "nested graph remove transaction");
+        if (use_incoming_adjacency_) {
+            auto next = *this;
+            const bool removed = next.Remove(id);
+            *this = std::move(next);
+            return removed;
+        }
+        const uint64_t count = Size();
+        const uint64_t slot = found->second;
+        const uint64_t last = count - 1;
+        const int64_t last_id = ids_[last];
+        auto saved_slot = backup_code(slot);
+        auto saved_last = backup_code(last);
+        UpdateJournal journal;
+        journal.rows.emplace(slot, adjacency_[slot]);
+        if (slot != last) {
+            journal.rows.emplace(last, adjacency_[last]);
+        }
+        const auto old_fallbacks = mutation_fallbacks_;
+        const auto old_timing = mutation_scan_timing_;
+        active_journal_ = &journal;
+        try {
+            const bool removed = Remove(id);
+            active_journal_ = nullptr;
+            return removed;
+        } catch (...) {
+            active_journal_ = nullptr;
+            // Remove only shrinks these containers; original capacity remains.
+            codes_.Resize(count);
+            codes_.Replace(slot, std::move(saved_slot));
+            if (slot != last) {
+                codes_.Replace(last, std::move(saved_last));
+            }
+            ids_.resize(count);
+            ids_[slot] = id;
+            ids_[last] = last_id;
+            adjacency_.resize(count);
+            for (auto& row : journal.rows) {
+                adjacency_[row.first].swap(row.second);
+            }
+            if (slot != last) {
+                slots_.at(last_id) = last;
+            }
+            if (not journal.removed_node.empty()) {
+                // Same allocator; restored size cannot exceed the old load.
+                // No other map insertion/rehash occurs during Remove.
+                slots_.insert(std::move(journal.removed_node));
+            }
+            mutation_fallbacks_ = old_fallbacks;
+            mutation_scan_timing_ = old_timing;
+            throw;
+        }
+    }
+
+    [[nodiscard]] bool
     Remove(int64_t id) {
         const auto found = slots_.find(id);
         if (found == slots_.end()) {
@@ -726,6 +786,10 @@ public:
         } else {
             for (uint64_t source = 0; source < adjacency_.size(); ++source) {
                 auto& neighbors = adjacency_[source];
+                if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or
+                    std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {
+                    remember_row(source);
+                }
                 const auto old_size = neighbors.size();
                 neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),
                                 neighbors.end());
@@ -755,7 +819,11 @@ public:
                 adjacency_[slot].end());
             slots_.at(ids_[slot]) = slot;
         }
-        slots_.erase(found);
+        if (active_journal_ == nullptr) {
+            slots_.erase(found);
+        } else {
+            active_journal_->removed_node = slots_.extract(found);
+        }
         ids_.pop_back();
         adjacency_.pop_back();
         if (use_incoming_adjacency_) {
@@ -1014,6 +1082,7 @@ private:
         std::vector<uint8_t> supplement;
         std::unordered_map<uint64_t, std::vector<uint64_t>> rows;
         uint64_t row_limit = std::numeric_limits<uint64_t>::max();
+        std::unordered_map<int64_t, uint64_t>::node_type removed_node;
     };
 
     void
@@ -1022,6 +1091,21 @@ private:
             active_journal_->rows.count(source) == 0) {
             active_journal_->rows.emplace(source, adjacency_[source]);
         }
+    }
+
+    [[nodiscard]] Encoded
+    backup_code(uint64_t slot) const {
+        const auto view = codes_.At(slot);
+        Encoded code;
+        code.norm = view.metadata.norm;
+        code.code_norm = view.metadata.code_norm;
+        code.error = view.metadata.error;
+        code.filter_norm = view.metadata.filter_norm;
+        code.filter_error = view.metadata.filter_error;
+        code.lower_bound_error = view.metadata.lower_bound_error;
+        code.filter.assign(view.filter, view.filter + codes_.FilterBytes());
+        code.supplement.assign(view.supplement, view.supplement + codes_.SupplementBytes());
+        return code;
     }
 
     template <typename T>

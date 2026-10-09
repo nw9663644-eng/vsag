@@ -1,0 +1,9 @@
+{
+  "parent": "1833328108d0cde5f684501c32d4864f0fefa411",
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "1e41a6aae6069c819112a40edba2abef1d79095f308f8d03452e11e29f5354b8",
+    "src/lite/rabitq_backend.cpp": "80829b160a3bc9d949fd401880309eb63c0a4d0cee5062baac4d293067d97a7a",
+    "src/lite/rabitq_backend_test.cpp": "5b66afa3f94bcde23377f555feac7834f66d9971356dca8f2ef5227c54d9f420",
+    "lite/benchmark/test_rabitq_candidate.py": "d6ca7700cf6d6eddb2089b55eedc50ae5a277386560636ce2c65b299b8f2db2f"
+  }
+}
