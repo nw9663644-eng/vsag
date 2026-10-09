@@ -80,6 +80,33 @@ def main():
         assert run("mode-without-replacements").returncode != 0
         environment["VSAG_GRAPH_REPLACEMENTS"] = str(source)
         environment.pop("VSAG_GRAPH_CRUD_MODE")
+        environment["VSAG_GRAPH_DIAGNOSTIC_EF"] = "8"
+        for storage in ["fp32", "fp16", "rabitq8"]:
+            environment["VSAG_GRAPH_STORAGE"] = storage
+            tag = "diagnostic-" + storage
+            result = run(tag)
+            assert result.returncode == 0, result.stderr
+            receipt = next(csv.DictReader((root / (tag + ".csv.diagnostic.summary.csv")).open()))
+            assert receipt == {"budget": "8", "initial_recall": "1", "final_recall": "1"}
+            for phase in ["initial", "final"]:
+                evidence = list(csv.DictReader((root / (tag + ".csv.diagnostic." + phase + ".neighbors.csv")).open()))
+                assert len(evidence) == 8
+        for suffix in [".diagnostic.summary.csv", ".diagnostic.initial",
+                       ".diagnostic.initial.latencies.csv", ".diagnostic.initial.neighbors.csv",
+                       ".diagnostic.final", ".diagnostic.final.latencies.csv",
+                       ".diagnostic.final.neighbors.csv"]:
+            tag = "diag-protected-" + str(len(suffix))
+            marker = root / (tag + ".csv" + suffix)
+            marker.write_text("keep")
+            assert run(tag).returncode != 0 and marker.read_text() == "keep"
+        for value in ["0", "7", "9", "8x"]:
+            environment["VSAG_GRAPH_DIAGNOSTIC_EF"] = value
+            assert run("bad-diag-" + value).returncode != 0
+        environment["VSAG_GRAPH_DIAGNOSTIC_EF"] = "8"
+        environment.pop("VSAG_GRAPH_REPLACEMENTS")
+        assert run("diag-without-persistent").returncode != 0
+        environment["VSAG_GRAPH_REPLACEMENTS"] = str(source)
+        environment.pop("VSAG_GRAPH_DIAGNOSTIC_EF")
         for suffix in [".operations.csv", ".initial", ".initial.latencies.csv",
                        ".initial.neighbors.csv"]:
             tag = "protected-" + str(len(suffix))

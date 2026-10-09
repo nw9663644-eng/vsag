@@ -1,0 +1,7 @@
+{
+  "head": "8a1f2d2fab0bc5f478049e205561679b440ad521",
+  "candidate_library_sha256": "f746a005f8416a931dbd232066946c2b39a7c2ff028c2e09b48e9e38c8778892",
+  "candidate_header_sha256": "5f924b794c14454ff3cfe5fca18c8108c1feb1fbc3cac57dd3ee1f6ab717fa05",
+  "source_evidence": "GraphBackend::ensure_incoming, adapted to transient degrees and RaBitQ encoded scoring; Update only",
+  "default_enabled": false
+}

@@ -1,0 +1,13 @@
+{
+  "library_source_changed": false,
+  "library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4",
+  "tests": "Release expanded three-storage diagnostic and mode fixture, ASan/UBSan instrumented-tool fixture, format15/tidy15 passed; non-user warnings suppressed",
+  "no_new_library_scores": true,
+  "diagnostic": "formal ef512 unchanged; separate ef=N results initial/final; connected implicit slot ring and no filtering assure N retained candidates",
+  "not_run": [
+    "100k",
+    "Full fresh comparison",
+    "cold I/O",
+    "new default library coverage"
+  ]
+}

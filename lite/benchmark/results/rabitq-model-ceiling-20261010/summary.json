@@ -1,0 +1,166 @@
+{
+  "rabitq-model-ceiling-20261010": [
+    {
+      "dataset": "gist10k600",
+      "case": "update",
+      "crud_ms": 14092.172808,
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 455.11,
+        "p99_us": 562.798
+      },
+      "final": {
+        "recall": 0.8586666666666667,
+        "p50_us": 516.468,
+        "p99_us": 642.406
+      },
+      "diagnostic.initial": {
+        "recall": 0.9956666666666667,
+        "p50_us": 3907.515,
+        "p99_us": 4921.134
+      },
+      "diagnostic.final": {
+        "recall": 0.9965,
+        "p50_us": 6080.608,
+        "p99_us": 7970.447
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "case": "replace",
+      "crud_ms": 15475.254759,
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 496.958,
+        "p99_us": 662.255
+      },
+      "final": {
+        "recall": 0.8495,
+        "p50_us": 433.681,
+        "p99_us": 502.659
+      },
+      "diagnostic.initial": {
+        "recall": 0.9956666666666667,
+        "p50_us": 4617.471,
+        "p99_us": 7267.363
+      },
+      "diagnostic.final": {
+        "recall": 0.9965,
+        "p50_us": 3919.745,
+        "p99_us": 6901.851
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "case": "replace",
+      "crud_ms": 13846.121751,
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 446.261,
+        "p99_us": 526.169
+      },
+      "final": {
+        "recall": 0.9233333333333333,
+        "p50_us": 445.799,
+        "p99_us": 510.199
+      },
+      "diagnostic.initial": {
+        "recall": 0.9961666666666666,
+        "p50_us": 3565.513,
+        "p99_us": 6209.226
+      },
+      "diagnostic.final": {
+        "recall": 0.9955,
+        "p50_us": 3976.064,
+        "p99_us": 6747.155
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "case": "update",
+      "crud_ms": 12241.67632,
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 458.42,
+        "p99_us": 562.338
+      },
+      "final": {
+        "recall": 0.9355,
+        "p50_us": 448.851,
+        "p99_us": 642.958
+      },
+      "diagnostic.initial": {
+        "recall": 0.9961666666666666,
+        "p50_us": 3793.198,
+        "p99_us": 6559.909
+      },
+      "diagnostic.final": {
+        "recall": 0.9955,
+        "p50_us": 3478.735,
+        "p99_us": 6174.196
+      }
+    }
+  ],
+  "rabitq-update-incoming-candidate-20261010": [
+    {
+      "dataset": "gist10k600",
+      "case": "control",
+      "crud_ms": 14156.705624,
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 451.279,
+        "p99_us": 563.627
+      },
+      "final": {
+        "recall": 0.8586666666666667,
+        "p50_us": 465.339,
+        "p99_us": 571.928
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "case": "candidate",
+      "crud_ms": 18884.981095,
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 456.391,
+        "p99_us": 606.528
+      },
+      "final": {
+        "recall": 0.8976666666666666,
+        "p50_us": 442.79,
+        "p99_us": 530.968
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "case": "candidate",
+      "crud_ms": 15982.726436,
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 440.931,
+        "p99_us": 580.647
+      },
+      "final": {
+        "recall": 0.9515,
+        "p50_us": 424.521,
+        "p99_us": 507.799
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "case": "control",
+      "crud_ms": 11971.429027,
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 435.981,
+        "p99_us": 575.496
+      },
+      "final": {
+        "recall": 0.9355,
+        "p50_us": 437.96,
+        "p99_us": 507.869
+      }
+    }
+  ]
+}

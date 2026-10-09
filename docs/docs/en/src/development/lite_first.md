@@ -383,3 +383,12 @@ evidence and the legacy-scan golden path are recorded in
 not native Full; post-CRUD recall failures remain explicit.
 
 For persistent replay only, VSAG_GRAPH_CRUD_MODE=update runs Update without deletion, replace runs Remove/Add without the redundant preceding Update, and all keeps the combined protocol. Explicit selection appends mutation_mode to the opt-in CSV; default schema is unchanged. The same final data/truth isolation is recorded in lite/benchmark/results/persistent-crud-isolation-20261010. Both isolated RaBitQ paths still fail the study recall floors; this separates workloads but does not establish or repair a sole cause.
+
+VSAG_GRAPH_DIAGNOSTIC_EF can request the full node count during persistent
+benchmark replay, emitting separate initial/final diagnostic evidence without
+changing formal ef. The frozen-model ceiling study in
+lite/benchmark/results/rabitq-model-ceiling-20261010 reaches about99.55--99.65%
+after this workload, while formal maintenance quality remains lower. An isolated
+Update incoming-protection candidate improves recall but adds about33% mutation
+cost and fails the GIST study floor; it is not enabled in production. See the
+adjacent candidate results. Diagnostic full-budget recall is not formal acceptance.

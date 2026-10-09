@@ -1,0 +1,31 @@
+{
+  "head": "8a1f2d2fab0bc5f478049e205561679b440ad521",
+  "library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4",
+  "builder_sha256": "21f1b4e2a3835b1c4b3ea016a182981bf24ef655527ffcb4153ce21690aae75c",
+  "source_sha256": {
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e",
+    "lite/benchmark/test_graph_crud_replacements.py": "89aa291fec1bc1211006e62e5b79ba27cad5ae0e6218642c0ff1afb66e42cef7"
+  },
+  "config": {
+    "degree": 16,
+    "construction_ef": 128,
+    "formal_query_ef": 512,
+    "diagnostic_ef": 10000,
+    "k": 10,
+    "cpu": 0,
+    "rounds": 3,
+    "crud_ops": 10000,
+    "queries": 600,
+    "trials": 1,
+    "storage": "rabitq8"
+  },
+  "limitations": [
+    "diagnostic scans warm query state; no speed comparison",
+    "historical observed queries",
+    "initial/final not interleaved",
+    "no new default or quality gate retuning",
+    "not Full/100k/cold I/O",
+    "full encoded scorer ceiling not exact FP32 metric"
+  ]
+}

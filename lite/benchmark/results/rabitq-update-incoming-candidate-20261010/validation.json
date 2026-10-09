@@ -1,0 +1,17 @@
+{
+  "default_enabled": false,
+  "candidate": "isolated Release library, adapted float ensure_incoming only after Update; degree/budgets/model unchanged",
+  "tests": "isolated Release expanded public tool fixture passed; candidate ASan/UBSan CTest5/5 including allocation rollback passed; candidate format15 and tidy15 Lite header-filter passed; default header restored then default SAN CTest5/5 passed",
+  "coverage": "candidate new coverage not collected; not accepted production feature",
+  "cost": "additional O(N+E) temporary indegree scan on every true Update; protected targets limited to changed slot and old outgoing neighbors",
+  "acceptance": "not enabled: GIST below .90 study floor, only single pair, mutation block +33.4/33.5%; stronger gate/cost design needed",
+  "source_restored": true,
+  "not_run": [
+    "new default Release/library coverage",
+    "candidate OFF build",
+    "100k",
+    "mixed CRUD candidate",
+    "fresh Full",
+    "cold I/O"
+  ]
+}

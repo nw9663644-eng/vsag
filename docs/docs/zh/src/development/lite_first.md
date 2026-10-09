@@ -284,3 +284,5 @@ RaBitQ 每个查询或维护查询只计算一次向量求和。5-bit 补充码�
 RaBitQ 无反向边的删除仍扫描全部邻接行。现在一次检查被删槽位或搬迁末槽位，未受影响的行跳过后续 erase/remap；受影响行的顺序、事务备份、修复候选和持久化结果不变。这不是渐进复杂度改善，也不修维护质量。固定重放证据及旧扫描黄金路径见 `lite/benchmark/results/rabitq-remove-skip-20261009`；对照为旧 Lite，非原生 Full，长期 CRUD 后召回失败仍明确保留。
 
 仅在真实改值重放中，VSAG_GRAPH_CRUD_MODE=update 只调用 Update，replace 只调用 Remove/Add，all 保持组合协议。显式设置时在可选 CSV 末尾追加 mutation_mode，默认列不变。同最终数据/真值的隔离结果见 lite/benchmark/results/persistent-crud-isolation-20261010；两条 RaBitQ 路径仍低于研究召回门槛。这分离了操作协议，尚未确定或修复唯一根因。
+
+VSAG_GRAPH_DIAGNOSTIC_EF 可在持续改值基准中设置为全节点数，输出独立初始/最终诊断证据，不改变正式 ef。lite/benchmark/results/rabitq-model-ceiling-20261010 的固定模型全候选改值后召回约99.55–99.65%，正式维护质量仍较低。隔离 Update 入边保护候选提高召回，但修改成本增加约33%且GIST仍低研究门槛，未进入生产默认实现。参见相邻候选结果；全预算诊断召回不等于正式验收成绩。

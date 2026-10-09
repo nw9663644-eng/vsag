@@ -171,6 +171,21 @@ run(const std::string& directory,
             }
         }
     }
+    const char* diagnostic_text = std::getenv("VSAG_GRAPH_DIAGNOSTIC_EF");
+    const uint64_t diagnostic_budget =
+        diagnostic_text == nullptr ? 0 : environment_number("VSAG_GRAPH_DIAGNOSTIC_EF", 1);
+    if (diagnostic_text != nullptr) {
+        require(persistent and diagnostic_budget == base.size(),
+                "diagnostic requires persistent replay and the full node count");
+        for (const auto& suffix : {".diagnostic.initial", ".diagnostic.final"}) {
+            for (const auto& sidecar : {"", ".latencies.csv", ".neighbors.csv"}) {
+                require(not std::filesystem::exists(query_results + suffix + sidecar),
+                        "diagnostic evidence already exists");
+            }
+        }
+        require(not std::filesystem::exists(query_results + ".diagnostic.summary.csv"),
+                "diagnostic summary already exists");
+    }
     auto created = vsag::lite::Index::Create(dim);
     require(static_cast<bool>(created), "index create failed");
     auto index = std::move(*created);
@@ -191,14 +206,16 @@ run(const std::string& directory,
     const vsag::lite::SearchOptions options{environment_number("VSAG_GRAPH_QUERY_EF", ef)};
     require(static_cast<bool>(index->BuildGraph(representation, degree, ef)), "graph build failed");
     const auto build_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
-    const auto measure = [&](const auto& expected_truth, const std::string& evidence) {
+    const auto measure = [&](const auto& expected_truth,
+                             const std::string& evidence,
+                             const vsag::lite::SearchOptions& search_options) {
         uint64_t hits = 0;
         std::vector<double> latencies;
         std::vector<uint64_t> query_hits;
         std::vector<std::vector<vsag::lite::Neighbor>> before;
         for (uint64_t i = 0; i < queries.size(); ++i) {
             start = Clock::now();
-            auto result = index->SearchWithOptions(queries[i].data(), dim, k, options);
+            auto result = index->SearchWithOptions(queries[i].data(), dim, k, search_options);
             latencies.push_back(
                 std::chrono::duration<double, std::micro>(Clock::now() - start).count());
             require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
@@ -244,9 +261,16 @@ run(const std::string& directory,
     };
     double initial_recall = 0;
     if (persistent) {
-        const auto initial = measure(initial_truth, query_results + ".initial");
+        const auto initial = measure(initial_truth, query_results + ".initial", options);
         initial_recall =
             static_cast<double>(std::get<0>(initial)) / static_cast<double>(queries.size() * k);
+    }
+    uint64_t diagnostic_initial_hits = 0;
+    if (diagnostic_budget != 0) {
+        diagnostic_initial_hits =
+            std::get<0>(measure(initial_truth,
+                                query_results + ".diagnostic.initial",
+                                vsag::lite::SearchOptions{diagnostic_budget}));
     }
     std::vector<std::tuple<uint64_t, uint64_t, uint64_t, double>> operation_samples;
     if (persistent) {
@@ -292,7 +316,7 @@ run(const std::string& directory,
     const auto crud_ms =
         std::chrono::duration<double, std::milli>(Clock::now() - crud_start).count();
     require(index->Size() == base.size(), "live count changed");
-    auto [hits, latencies, before] = measure(truth, query_results);
+    auto [hits, latencies, before] = measure(truth, query_results, options);
     if (persistent) {
         std::ofstream samples(query_results + ".operations.csv");
         samples << "cycle,id,operation,latency_us\n" << std::setprecision(9);
@@ -300,6 +324,21 @@ run(const std::string& directory,
             samples << cycle << ',' << id << ',' << operation << ',' << latency << '\n';
         }
         require(static_cast<bool>(samples), "operation evidence write failed");
+    }
+    if (diagnostic_budget != 0) {
+        const auto full = measure(truth,
+                                  query_results + ".diagnostic.final",
+                                  vsag::lite::SearchOptions{diagnostic_budget});
+        std::ofstream diagnostic(query_results + ".diagnostic.summary.csv");
+        diagnostic << "budget,initial_recall,final_recall\n"
+                   << std::setprecision(9) << diagnostic_budget << ','
+                   << static_cast<double>(diagnostic_initial_hits) /
+                          static_cast<double>(queries.size() * k)
+                   << ','
+                   << static_cast<double>(std::get<0>(full)) /
+                          static_cast<double>(queries.size() * k)
+                   << '\n';
+        require(static_cast<bool>(diagnostic), "diagnostic summary write failed");
     }
     start = Clock::now();
     std::ofstream output(snapshot, std::ios::binary);
