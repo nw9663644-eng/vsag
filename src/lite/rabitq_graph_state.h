@@ -107,11 +107,24 @@ farther(const Candidate& left, const Candidate& right) {
     return left.distance > right.distance or
            (left.distance == right.distance and left.id > right.id);
 }
+struct Better {
+    bool
+    operator()(const Candidate& left, const Candidate& right) const {
+        return better(left, right);
+    }
+};
+
+struct Farther {
+    bool
+    operator()(const Candidate& left, const Candidate& right) const {
+        return farther(left, right);
+    }
+};
 
 template <typename Distance>
 inline std::vector<Candidate>
 top_k(uint64_t count, uint64_t k, Distance distance) {
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> heap(&better);
+    std::priority_queue<Candidate, std::vector<Candidate>, Better> heap;
     for (uint64_t id = 0; id < count; ++id) {
         const Candidate next{id, distance(id)};
         if (heap.size() < k) {
@@ -140,7 +153,7 @@ filtered_search(const std::vector<float>& query,
                 const EncodedRecords& codes,
                 uint64_t k) {
     const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> heap(&better);
+    std::priority_queue<Candidate, std::vector<Candidate>, Better> heap;
     uint64_t reordered = 0;
     for (uint64_t id = 0; id < codes.Size(); ++id) {
         const auto code = codes.At(id);
@@ -201,8 +214,8 @@ graph_search_impl(const std::vector<float>& query,
     }
     const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
     const uint64_t ef = std::min(codes.Size(), std::max(k, ef_search));
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> best(&better);
-    std::priority_queue<Candidate, std::vector<Candidate>, decltype(&farther)> candidates(&farther);
+    std::priority_queue<Candidate, std::vector<Candidate>, Better> best;
+    std::priority_queue<Candidate, std::vector<Candidate>, Farther> candidates;
     std::vector<uint8_t> visited(codes.Size(), 0);
     uint64_t visited_count = 0;
     uint64_t filtered_reorders = 0;
@@ -1201,7 +1214,7 @@ private:
                        uint64_t excluded,
                        uint64_t count) const {
         const float query_sum = std::accumulate(query.begin(), query.end(), 0.0F);
-        std::priority_queue<Candidate, std::vector<Candidate>, decltype(&better)> heap(&better);
+        std::priority_queue<Candidate, std::vector<Candidate>, Better> heap;
         for (uint64_t slot = 0; slot < Size(); ++slot) {
             if (slot == excluded) {
                 continue;

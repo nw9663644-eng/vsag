@@ -1,0 +1,65 @@
+[
+  {
+    "dataset": "sift",
+    "trial": 0,
+    "byte_identical": true,
+    "baseline_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a",
+    "candidate_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a"
+  },
+  {
+    "dataset": "sift",
+    "trial": 1,
+    "byte_identical": true,
+    "baseline_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a",
+    "candidate_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a"
+  },
+  {
+    "dataset": "sift",
+    "trial": 2,
+    "byte_identical": true,
+    "baseline_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a",
+    "candidate_sha256": "fffdde20b420ab3054fd721b190bae1460bf5c58ab705ad58eed2b1e2df9293a"
+  },
+  {
+    "dataset": "gist",
+    "trial": 0,
+    "byte_identical": true,
+    "baseline_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7",
+    "candidate_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7"
+  },
+  {
+    "dataset": "gist",
+    "trial": 1,
+    "byte_identical": true,
+    "baseline_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7",
+    "candidate_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7"
+  },
+  {
+    "dataset": "gist",
+    "trial": 2,
+    "byte_identical": true,
+    "baseline_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7",
+    "candidate_sha256": "00d872e0eb0d4b069731bffdd91dfb21ab26f3cf2c8b9050264b4e257467f8d7"
+  },
+  {
+    "dataset": "cohere",
+    "trial": 0,
+    "byte_identical": true,
+    "baseline_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054",
+    "candidate_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054"
+  },
+  {
+    "dataset": "cohere",
+    "trial": 1,
+    "byte_identical": true,
+    "baseline_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054",
+    "candidate_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054"
+  },
+  {
+    "dataset": "cohere",
+    "trial": 2,
+    "byte_identical": true,
+    "baseline_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054",
+    "candidate_sha256": "e2f2ae9d02dd99a3ccbfbceefb7716baf3faec982da402baf7537691d4af1054"
+  }
+]

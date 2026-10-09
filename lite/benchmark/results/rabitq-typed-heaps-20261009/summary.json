@@ -1,0 +1,155 @@
+{
+  "sift": {
+    "baseline": {
+      "search_p50_us_values": [
+        139.128,
+        141.046,
+        136.767
+      ],
+      "search_p50_us_median": 139.128,
+      "search_p99_us_values": [
+        220.466,
+        217.105,
+        211.115
+      ],
+      "search_p99_us_median": 217.105,
+      "recall_values": [
+        0.978,
+        0.978,
+        0.978
+      ],
+      "snapshot_bytes_values": [
+        2960672,
+        2960672,
+        2960672
+      ]
+    },
+    "candidate": {
+      "search_p50_us_values": [
+        119.727,
+        109.497,
+        113.987
+      ],
+      "search_p50_us_median": 113.987,
+      "search_p99_us_values": [
+        188.376,
+        187.016,
+        186.386
+      ],
+      "search_p99_us_median": 187.016,
+      "recall_values": [
+        0.978,
+        0.978,
+        0.978
+      ],
+      "snapshot_bytes_values": [
+        2960672,
+        2960672,
+        2960672
+      ]
+    },
+    "p50_change_percent": -18.070409982174684
+  },
+  "gist": {
+    "baseline": {
+      "search_p50_us_values": [
+        241.645,
+        249.623,
+        261.594
+      ],
+      "search_p50_us_median": 249.623,
+      "search_p99_us_values": [
+        433.89,
+        418.631,
+        437.2
+      ],
+      "search_p99_us_median": 433.89,
+      "recall_values": [
+        0.914,
+        0.914,
+        0.914
+      ],
+      "snapshot_bytes_values": [
+        11284416,
+        11284416,
+        11284416
+      ]
+    },
+    "candidate": {
+      "search_p50_us_values": [
+        231.075,
+        246.334,
+        229.804
+      ],
+      "search_p50_us_median": 231.075,
+      "search_p99_us_values": [
+        401.251,
+        406.182,
+        385.242
+      ],
+      "search_p99_us_median": 401.251,
+      "recall_values": [
+        0.914,
+        0.914,
+        0.914
+      ],
+      "snapshot_bytes_values": [
+        11284416,
+        11284416,
+        11284416
+      ]
+    },
+    "p50_change_percent": -7.430405050816635
+  },
+  "cohere": {
+    "baseline": {
+      "search_p50_us_values": [
+        257.824,
+        258.304,
+        260.625
+      ],
+      "search_p50_us_median": 258.304,
+      "search_p99_us_values": [
+        385.851,
+        368.702,
+        398.521
+      ],
+      "search_p99_us_median": 385.851,
+      "recall_values": [
+        0.961,
+        0.961,
+        0.961
+      ],
+      "snapshot_bytes_values": [
+        9363552,
+        9363552,
+        9363552
+      ]
+    },
+    "candidate": {
+      "search_p50_us_values": [
+        219.254,
+        228.555,
+        231.365
+      ],
+      "search_p50_us_median": 228.555,
+      "search_p99_us_values": [
+        348.292,
+        344.662,
+        360.523
+      ],
+      "search_p99_us_median": 348.292,
+      "recall_values": [
+        0.961,
+        0.961,
+        0.961
+      ],
+      "snapshot_bytes_values": [
+        9363552,
+        9363552,
+        9363552
+      ]
+    },
+    "p50_change_percent": -11.517049677898894
+  }
+}
