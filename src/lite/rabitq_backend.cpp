@@ -43,13 +43,9 @@ public:
             return failure(ErrorType::INVALID_ARGUMENT, "RaBitQ record limit exceeded");
         }
         return guarded([&]() -> tl::expected<void, Error> {
-            // Initial integration prioritizes failure atomicity. Optimize this
-            // full-state transaction only with allocation-failure regressions.
-            auto next = state_;
-            if (not next.Add(id, vector)) {
+            if (not state_.AddTransactional(id, vector)) {
                 return failure(ErrorType::INVALID_ARGUMENT, "duplicate ID");
             }
-            state_ = std::move(next);
             return {};
         });
     }

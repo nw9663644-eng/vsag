@@ -508,6 +508,69 @@ public:
     }
 
     [[nodiscard]] bool
+    AddTransactional(int64_t id, const float* vector) {
+        codec_require(vector != nullptr, "null mutable graph vector");
+        if (Contains(id)) {
+            return false;
+        }
+        codec_require(active_journal_ == nullptr, "nested graph add transaction");
+        if (use_incoming_adjacency_) {
+            auto next = *this;
+            const bool added = next.Add(id, vector);
+            *this = std::move(next);
+            return added;
+        }
+        const uint64_t count = Size();
+        const auto old_fallbacks = mutation_fallbacks_;
+        UpdateJournal journal;
+        journal.row_limit = count;
+        bool inserted = false;
+        try {
+            auto prepared = prepare_encoding(model_, vector);
+            const auto neighbors = nearest(prepared.query,
+                                           prepared.code.norm,
+                                           std::numeric_limits<uint64_t>::max(),
+                                           max_degree_);
+            codec_require(count < std::numeric_limits<uint64_t>::max() and
+                              count + 1 <= codes_.filters.max_size() / codes_.FilterBytes() and
+                              count + 1 <= codes_.supplements.max_size() / codes_.SupplementBytes(),
+                          "encoded add capacity exceeded");
+            grow(codes_.metadata, count + 1);
+            grow(codes_.filters, (count + 1) * codes_.FilterBytes());
+            grow(codes_.supplements, (count + 1) * codes_.SupplementBytes());
+            grow(ids_, count + 1);
+            grow(adjacency_, count + 1);
+            inserted = slots_.emplace(id, count).second;
+            codec_require(inserted, "duplicate add transaction ID");
+            active_journal_ = &journal;
+            codes_.Append(std::move(prepared.code));
+            ids_.push_back(id);
+            adjacency_.emplace_back();
+            replace_neighbors(count, neighbors);
+            for (uint64_t neighbor : neighbors) {
+                link(neighbor, count);
+            }
+            active_journal_ = nullptr;
+            return true;
+        } catch (...) {
+            active_journal_ = nullptr;
+            for (auto& row : journal.rows) {
+                adjacency_[row.first].swap(row.second);
+            }
+            adjacency_.resize(count);
+            ids_.resize(count);
+            codes_.metadata.resize(count);
+            codes_.filters.resize(count * codes_.FilterBytes());
+            codes_.supplements.resize(count * codes_.SupplementBytes());
+            if (inserted) {
+                slots_.erase(id);
+            }
+            mutation_fallbacks_ = old_fallbacks;
+            throw;
+        }
+    }
+
+    [[nodiscard]] bool
     Update(int64_t id, const float* vector) {
         codec_require(vector != nullptr, "null mutable graph vector");
         if (not Contains(id)) {
@@ -950,12 +1013,26 @@ private:
         std::vector<uint8_t> filter;
         std::vector<uint8_t> supplement;
         std::unordered_map<uint64_t, std::vector<uint64_t>> rows;
+        uint64_t row_limit = std::numeric_limits<uint64_t>::max();
     };
 
     void
     remember_row(uint64_t source) {
-        if (active_journal_ != nullptr and active_journal_->rows.count(source) == 0) {
+        if (active_journal_ != nullptr and source < active_journal_->row_limit and
+            active_journal_->rows.count(source) == 0) {
             active_journal_->rows.emplace(source, adjacency_[source]);
+        }
+    }
+
+    template <typename T>
+    static void
+    grow(std::vector<T>& values, uint64_t required) {
+        if (required > values.capacity()) {
+            const uint64_t maximum = values.max_size();
+            const uint64_t capacity = values.capacity();
+            const uint64_t doubled =
+                capacity == 0 ? 1 : (capacity > maximum / 2 ? maximum : capacity * 2);
+            values.reserve(std::max(required, doubled));
         }
     }
 

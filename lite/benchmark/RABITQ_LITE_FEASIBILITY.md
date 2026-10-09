@@ -407,3 +407,16 @@ SIFT/GIST/Cohere acceptance or a promise of allocator/CPU improvements in every
 workload.
 
 中文：默认公开Update已改为旧编码与受影响邻接行的回滚日志，异常时无分配恢复，ID/模型/容器尺寸不变。新增/删除和实验incoming模式仍全复制；Update仍扫描全部入边，高入度成本未解决。通过200次逐状态对照和180复杂失败点；后续优先新增/删除事务及三数据分布验证。
+
+## Journaled public Add (2026-10-09)
+
+Public Add no longer clones the complete state on every call. It prepares code
+and neighbors, pre-reserves geometric growth, inserts the ID, then appends records
+and journals old rows before linking. Failure restores old rows, truncates each
+record/ID/adjacency length and erases the new ID without allocating. Reserved
+capacity and hash buckets may remain larger after failure. Normal container
+expansion still moves buffers; only unconditional whole-state transaction copying
+is removed. Experimental incoming adjacency uses the copy fallback; Remove is
+unchanged. See [bounded Add evidence](results/rabitq-add-journal-20261009/README.md).
+
+中文：公开新增已移除每次整状态复制，失败可恢复原逻辑内容与快照，但容器扩容和失败后保留容量仍存在。通过连续增长逐字节对照及复杂分配失败测试；删除仍全复制，incoming实验模式仍回退复制。标准三分布验收尚未完成。

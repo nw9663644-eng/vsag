@@ -1,0 +1,1 @@
+PASS: 159 multi-row Add allocation failures retained exact snapshots

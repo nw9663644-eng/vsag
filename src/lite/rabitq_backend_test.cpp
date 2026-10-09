@@ -428,3 +428,32 @@ TEST_CASE("RaBitQ journaled Update matches copied transactions through repeated 
         }
     }
 }
+
+TEST_CASE("RaBitQ journaled Add matches copied state across repeated growth", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (bool incoming : {false, true}) {
+        std::vector<float> training{0, 1, 2, 3};
+        auto model = codec::train(training, 4, 1, 47);
+        codec::MutableGraphState reference(
+            model, codec::EncodedRecords(1), {{0}, {}}, {}, 4, 16, false, incoming);
+        auto journaled = reference;
+        for (int64_t id = 0; id < 100; ++id) {
+            const float vector = static_cast<float>(id) * 0.125F;
+            auto copy = reference;
+            const bool expected = copy.Add(id - 50, &vector);
+            REQUIRE(expected);
+            reference = std::move(copy);
+            const bool added = journaled.AddTransactional(id - 50, &vector);
+            REQUIRE(added);
+            journaled.Validate();
+            reference.Validate();
+            std::stringstream first;
+            std::stringstream second;
+            codec::save_mutable_snapshot(first, reference);
+            codec::save_mutable_snapshot(second, journaled);
+            REQUIRE(first.str() == second.str());
+        }
+        const float vector = 0.25F;
+        REQUIRE_FALSE(journaled.AddTransactional(0, &vector));
+    }
+}
