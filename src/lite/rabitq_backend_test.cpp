@@ -652,3 +652,84 @@ TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors"
     check(std::vector<int64_t>{});
     check(std::vector<uint64_t>{});
 }
+
+TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    constexpr uint64_t count = 96;
+    for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}}) {
+        std::vector<float> base(count * dim);
+        std::vector<int64_t> ids(count);
+        codec::GraphTopology graph;
+        graph.offsets.push_back(0);
+        for (uint64_t row = 0; row < count; ++row) {
+            ids[row] = 4000 - static_cast<int64_t>(row * 77);
+            for (uint64_t d = 0; d < dim; ++d) {
+                // Repeated vectors exercise equal-distance and non-monotonic ID ties.
+                base[row * dim + d] = std::sin(static_cast<float>((row % 16) * 7 + d) * .17F);
+            }
+            for (uint64_t step : {uint64_t{1}, uint64_t{13}, uint64_t{37}, uint64_t{95}}) {
+                graph.neighbors.push_back((row + step) % count);
+            }
+            graph.offsets.push_back(graph.neighbors.size());
+        }
+        const auto model = codec::train(base, count, dim, 47);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t row = 0; row < count; ++row) {
+            codes.Append(codec::encode(model, base.data() + row * dim));
+        }
+        codec::MutableGraphState state(model, codes, graph, ids, 4, 32);
+        for (uint64_t epoch = 0; epoch < 2; ++epoch) {
+            if (epoch != 0) {
+                std::vector<float> changed(dim, 2.25F);
+                REQUIRE(state.Update(ids[13], changed.data()));
+                REQUIRE(state.Remove(ids[24]));
+                REQUIRE(state.Add(-10000, changed.data()));
+            }
+            const auto topology = state.GetGraph();
+            const auto range = [&topology](uint64_t slot) {
+                return std::make_pair(
+                    topology.neighbors.begin() + static_cast<int64_t>(topology.offsets[slot]),
+                    topology.neighbors.begin() + static_cast<int64_t>(topology.offsets[slot + 1]));
+            };
+            for (uint64_t query_id = 0; query_id < 8; ++query_id) {
+                float norm = 0;
+                const auto query = codec::normalize(model, base.data() + query_id * dim, norm);
+                for (uint64_t ef : {uint64_t{1}, uint64_t{8}, uint64_t{32}, count}) {
+                    for (uint64_t k : {uint64_t{1}, uint64_t{10}}) {
+                        for (uint64_t filter_mode = 0; filter_mode < 3; ++filter_mode) {
+                            std::function<bool(int64_t)> filter;
+                            if (filter_mode != 0) {
+                                filter = [filter_mode](int64_t id) {
+                                    return filter_mode == 1 and id % 3 == 0;
+                                };
+                            }
+                            const auto run = [&](auto prune) {
+                                return codec::graph_search_impl<decltype(range),
+                                                                decltype(prune)::value>(
+                                    query,
+                                    norm,
+                                    state.GetCodes(),
+                                    range,
+                                    k,
+                                    ef,
+                                    &state.GetIds(),
+                                    filter);
+                            };
+                            const auto reference = run(std::false_type{});
+                            const auto candidate = run(std::true_type{});
+                            REQUIRE(candidate.visited == reference.visited);
+                            REQUIRE(candidate.reordered == reference.reordered);
+                            REQUIRE(candidate.neighbors.size() == reference.neighbors.size());
+                            for (uint64_t rank = 0; rank < candidate.neighbors.size(); ++rank) {
+                                REQUIRE(candidate.neighbors[rank].id ==
+                                        reference.neighbors[rank].id);
+                                REQUIRE(candidate.neighbors[rank].distance ==
+                                        reference.neighbors[rank].distance);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

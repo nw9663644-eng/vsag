@@ -230,7 +230,7 @@ struct GraphSearchResult {
     uint64_t reordered{};
 };
 
-template <typename NeighborRange>
+template <typename NeighborRange, bool PruneRejected = true>
 inline GraphSearchResult
 graph_search_impl(const std::vector<float>& query,
                   float query_norm,
@@ -278,6 +278,14 @@ graph_search_impl(const std::vector<float>& query,
             }
         }
         const Candidate next{slot, estimate.distance, estimate.centered_ip};
+        if constexpr (PruneRejected) {
+            // As in native BasicSearcher, bound heap admission before insertion.
+            // The full best-heap boundary only improves: a rejected candidate can
+            // never be expanded later. Preserve the existing distance/slot tie.
+            if (best.size() == ef and not better(next, best.top())) {
+                return;
+            }
+        }
         candidates.push(next);
         best.push(next);
         if (best.size() > ef) {
