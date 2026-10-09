@@ -384,3 +384,47 @@ TEST_CASE("RaBitQ prepared mutation preserves legacy bytes and rejects damaged p
             prepared_state.UpdatePrepared(999, codec::prepare_encoding(model, replacement.data())));
     }
 }
+
+TEST_CASE("RaBitQ journaled Update matches copied transactions through repeated changes",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (bool incoming : {false, true}) {
+        constexpr uint64_t dim = 17;
+        std::vector<float> base(8 * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i) * 0.17F);
+        }
+        auto model = codec::train(base, 8, dim, 47);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t row = 0; row < 8; ++row) {
+            codes.Append(codec::encode(model, base.data() + row * dim));
+        }
+        codec::GraphTopology graph{{0, 2, 4, 6, 8, 10, 12, 14, 16},
+                                   {1, 7, 2, 0, 3, 1, 4, 2, 5, 3, 6, 4, 7, 5, 0, 6}};
+        codec::MutableGraphState reference(
+            model, codes, graph, {-8, 42, 97, 123, 5, 6, 7, 8}, 2, 8, false, incoming);
+        auto journaled = reference;
+        std::vector<float> replacement(dim);
+        for (uint64_t step = 0; step < 100; ++step) {
+            for (uint64_t d = 0; d < dim; ++d) {
+                replacement[d] = std::cos(static_cast<float>(step + d) * 0.13F);
+            }
+            const auto id = reference.IdAt(step % 8);
+            auto copy = reference;
+            const bool expected =
+                copy.UpdatePrepared(id, codec::prepare_encoding(model, replacement.data()));
+            REQUIRE(expected);
+            reference = std::move(copy);
+            const bool updated = journaled.UpdateTransactional(
+                id, codec::prepare_encoding(model, replacement.data()));
+            REQUIRE(updated);
+            journaled.Validate();
+            reference.Validate();
+            std::stringstream first;
+            std::stringstream second;
+            codec::save_mutable_snapshot(first, reference);
+            codec::save_mutable_snapshot(second, journaled);
+            REQUIRE(first.str() == second.str());
+        }
+    }
+}

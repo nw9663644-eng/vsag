@@ -387,3 +387,23 @@ injection checks 86 current failure points; the lower count follows removal of
 redundant allocations, not omission of cases. See [bounded changed-update evidence](results/rabitq-prepared-update-20261008/README.md).
 
 中文：真实更新复用前置检查已生成的归一化查询和完整编码，避免重复变换/编码；格式和公共签名不改，事务全状态复制成本仍未消除。准备结果必须来自固定模型，尺寸/有限查询/元数据在改图前验证；当前86个分配失败点原状态保持。
+
+## Journaled public Update (2026-10-09)
+
+The default public mutable state now updates through a touched-row journal. It
+backs up only the replaced code and adjacency rows before first writes. On any
+exception, code bytes/metadata are restored and rows are swapped back without
+allocation; fallback counters and scan timings are restored too. Model/IDs/slot
+map/container sizes are never changed by this operation. Journaling covers
+inbound erasure, new outgoing rows, reverse-link pruning and repair. Add/Remove
+retain full-state transaction copies; the experimental incoming-index mode uses
+a full-copy Update fallback. Full adjacency scanning and high-indegree costs
+remain. Public API and encoded format are unchanged.
+
+See [journaled Update evidence](results/rabitq-update-journal-20261009/README.md)
+for 200 continuous copied/journaled state comparisons, 180 complex-graph failure
+points, and a bounded same-state synthetic CPU comparison. This is not final
+SIFT/GIST/Cohere acceptance or a promise of allocator/CPU improvements in every
+workload.
+
+中文：默认公开Update已改为旧编码与受影响邻接行的回滚日志，异常时无分配恢复，ID/模型/容器尺寸不变。新增/删除和实验incoming模式仍全复制；Update仍扫描全部入边，高入度成本未解决。通过200次逐状态对照和180复杂失败点；后续优先新增/删除事务及三数据分布验证。

@@ -68,11 +68,9 @@ public:
             if (state_.SameEncoding(id, prepared.code)) {
                 return {};
             }
-            auto next = state_;
-            if (not next.UpdatePrepared(id, std::move(prepared))) {
+            if (not state_.UpdateTransactional(id, std::move(prepared))) {
                 return failure(ErrorType::INVALID_ARGUMENT, "missing ID");
             }
-            state_ = std::move(next);
             return {};
         });
     }

@@ -516,8 +516,53 @@ public:
         return UpdatePrepared(id, prepare_encoding(model_, vector));
     }
 
+    // Update changes no model, IDs, slot mapping or container sizes. Journal
+    // only the replaced code and adjacency rows, then restore without allocation.
+    [[nodiscard]] bool
+    UpdateTransactional(int64_t id, PreparedEncoding prepared) {
+        if (not Contains(id)) {
+            return false;
+        }
+        if (use_incoming_adjacency_) {
+            auto next = *this;
+            const bool updated = next.UpdatePrepared(id, std::move(prepared));
+            *this = std::move(next);
+            return updated;
+        }
+        codec_require(active_journal_ == nullptr, "nested graph update transaction");
+        const uint64_t slot = slots_.at(id);
+        const auto code = codes_.At(slot);
+        UpdateJournal journal;
+        journal.metadata = code.metadata;
+        journal.filter.assign(code.filter, code.filter + codes_.FilterBytes());
+        journal.supplement.assign(code.supplement, code.supplement + codes_.SupplementBytes());
+        const auto old_fallbacks = mutation_fallbacks_;
+        const auto old_timing = mutation_scan_timing_;
+        active_journal_ = &journal;
+        try {
+            const bool updated = UpdatePrepared(id, std::move(prepared));
+            active_journal_ = nullptr;
+            return updated;
+        } catch (...) {
+            active_journal_ = nullptr;
+            codes_.metadata[slot] = journal.metadata;
+            std::copy(journal.filter.begin(),
+                      journal.filter.end(),
+                      codes_.filters.data() + slot * codes_.FilterBytes());
+            std::copy(journal.supplement.begin(),
+                      journal.supplement.end(),
+                      codes_.supplements.data() + slot * codes_.SupplementBytes());
+            for (auto& row : journal.rows) {
+                adjacency_[row.first].swap(row.second);
+            }
+            mutation_fallbacks_ = old_fallbacks;
+            mutation_scan_timing_ = old_timing;
+            throw;
+        }
+    }
+
     // Trusted internal preparation must use this state's unchanged fixed model.
-    // The public adapter keeps failure atomicity by applying this to its clone.
+    // The public adapter uses UpdateTransactional for failure atomicity.
     [[nodiscard]] bool
     UpdatePrepared(int64_t id, PreparedEncoding prepared) {
         const auto found = slots_.find(id);
@@ -562,9 +607,9 @@ public:
                     continue;
                 }
                 auto& reverse = adjacency_[source];
-                const auto old_size = reverse.size();
-                reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
-                if (reverse.size() != old_size) {
+                if (std::find(reverse.begin(), reverse.end(), slot) != reverse.end()) {
+                    remember_row(source);
+                    reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
                     affected_nodes.push_back(source);
                 }
             }
@@ -900,6 +945,20 @@ public:
     }
 
 private:
+    struct UpdateJournal {
+        EncodedMetadata metadata;
+        std::vector<uint8_t> filter;
+        std::vector<uint8_t> supplement;
+        std::unordered_map<uint64_t, std::vector<uint64_t>> rows;
+    };
+
+    void
+    remember_row(uint64_t source) {
+        if (active_journal_ != nullptr and active_journal_->rows.count(source) == 0) {
+            active_journal_->rows.emplace(source, adjacency_[source]);
+        }
+    }
+
     static void
     erase_value(std::vector<uint64_t>& values, uint64_t value) {
         values.erase(std::remove(values.begin(), values.end(), value), values.end());
@@ -935,6 +994,7 @@ private:
 
     void
     replace_neighbors(uint64_t source, const std::vector<uint64_t>& neighbors) {
+        remember_row(source);
         const auto old_neighbors = adjacency_[source];
         adjacency_[source] = neighbors;
         sync_incoming(source, old_neighbors);
@@ -1025,6 +1085,7 @@ private:
             if (repaired.size() >= max_degree_) {
                 continue;
             }
+            remember_row(source);
             const auto old_neighbors = repaired;
             const auto query = decode_query(source);
             const float query_norm = codes_.At(source).metadata.norm;
@@ -1057,6 +1118,7 @@ private:
             std::find(neighbors.begin(), neighbors.end(), target) != neighbors.end()) {
             return;
         }
+        remember_row(source);
         const auto old_neighbors = neighbors;
         neighbors.push_back(target);
         if (neighbors.size() > max_degree_) {
@@ -1079,6 +1141,7 @@ private:
         sync_incoming(source, old_neighbors);
     }
 
+    UpdateJournal* active_journal_{};
     Model model_;
     EncodedRecords codes_;
     std::vector<int64_t> ids_;

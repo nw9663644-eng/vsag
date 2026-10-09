@@ -303,9 +303,13 @@ This still performs encoding and can fail on allocation or internal arithmetic.
 For a real change, the prepared normalized query and full code are moved into
 the transaction; the mutation path does not normalize or encode that input again.
 
-**Mutations that change state still use a full-state transaction copy.** This preserves the original
-state on failed Add/Update/Remove, but introduces O(index state) work and temporary
-memory for every state-changing mutation. This is a correctness candidate, not a validated
+**Add and Remove still use full-state transaction copies.** Public Update instead
+journals the replaced code and each adjacency row before its first write. Failure
+restores codes and swaps saved rows without allocating; IDs/model/container sizes
+are unchanged by Update. It still scans directed adjacency for inbound references
+and can journal many rows in a high-indegree case. The experimental inbound-index
+state uses the full-copy fallback. This reduces Update copying but does not make
+all CRUD constant-time or remove temporary mutation memory. This is a correctness candidate, not a validated
 performance improvement. Remove's bool result cannot distinguish a missing ID
 from allocation failure; either failure retains the state. Error construction
 itself can allocate, as with the existing Lite error contract. Build retains
