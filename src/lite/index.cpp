@@ -120,26 +120,32 @@ Index::BuildGraph(VectorStorage storage, uint64_t max_degree, uint64_t ef_search
     if (impl_->backend->Kind() != BackendKind::BRUTE_FORCE) {
         return failure(ErrorType::INVALID_ARGUMENT, "index is already a graph");
     }
-    tl::expected<std::unique_ptr<detail::Backend>, Error> graph =
-        failure(ErrorType::UNSUPPORTED_INDEX_OPERATION, "unsupported vector storage");
-    switch (storage) {
-        case VectorStorage::FP32:
-            graph = detail::make_graph_backend(*impl_->backend, max_degree, ef_search);
-            break;
-        case VectorStorage::FP16:
-            graph = detail::make_fp16_graph_backend(*impl_->backend, max_degree, ef_search);
-            break;
-        case VectorStorage::RABITQ8:
+    try {
+        tl::expected<std::unique_ptr<detail::Backend>, Error> graph =
+            failure(ErrorType::UNSUPPORTED_INDEX_OPERATION, "unsupported vector storage");
+        switch (storage) {
+            case VectorStorage::FP32:
+                graph = detail::make_graph_backend(*impl_->backend, max_degree, ef_search);
+                break;
+            case VectorStorage::FP16:
+                graph = detail::make_fp16_graph_backend(*impl_->backend, max_degree, ef_search);
+                break;
+            case VectorStorage::RABITQ8:
 #ifdef VSAG_LITE_HAS_RABITQ_BACKEND
-            graph = detail::make_rabitq_graph_backend(*impl_->backend, max_degree, ef_search);
+                graph = detail::make_rabitq_graph_backend(*impl_->backend, max_degree, ef_search);
 #endif
-            break;
+                break;
+        }
+        if (not graph) {
+            return tl::unexpected(graph.error());
+        }
+        impl_->backend = std::move(*graph);
+        return {};
+    } catch (const std::bad_alloc&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "build graph allocation failed");
+    } catch (const std::length_error&) {
+        return failure(ErrorType::NO_ENOUGH_MEMORY, "build graph capacity exceeded");
     }
-    if (not graph) {
-        return tl::unexpected(graph.error());
-    }
-    impl_->backend = std::move(*graph);
-    return {};
 }
 
 BackendKind

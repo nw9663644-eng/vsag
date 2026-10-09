@@ -58,7 +58,7 @@ main() {
         2;
 #endif
     for (int mode = 0; mode < modes; ++mode) {
-        for (int op = 0; op < 3; ++op) {
+        for (int op = 0; op < 4; ++op) {
             int failures = 0;
             int changed = 0;
             int invalid = 0;
@@ -72,11 +72,10 @@ main() {
                         return 2;
                     }
                 }
-                if (!index->BuildGraph(mode == 2 ? vsag::lite::VectorStorage::RABITQ8
-                                                 : (mode != 0 ? vsag::lite::VectorStorage::FP16
-                                                              : vsag::lite::VectorStorage::FP32),
-                                       3,
-                                       16)) {
+                const auto storage = mode == 2 ? vsag::lite::VectorStorage::RABITQ8
+                                               : (mode != 0 ? vsag::lite::VectorStorage::FP16
+                                                            : vsag::lite::VectorStorage::FP32);
+                if (op != 3 and not index->BuildGraph(storage, 3, 16)) {
                     return 3;
                 }
                 const auto before = save(*index);
@@ -88,8 +87,10 @@ main() {
                         failed = !index->Add(20, v, 2);
                     } else if (op == 1) {
                         failed = !index->Update(3, v, 2);
-                    } else {
+                    } else if (op == 2) {
                         failed = !index->Remove(3);
+                    } else {
+                        failed = !index->BuildGraph(storage, 3, 16);
                     }
                 } catch (const std::exception&) {
                     failed = true;
@@ -115,7 +116,8 @@ main() {
                     const bool retried =
                         op == 0   ? static_cast<bool>(index->Add(20, retry_vector, 2))
                         : op == 1 ? static_cast<bool>(index->Update(3, retry_vector, 2))
-                                  : index->Remove(3);
+                        : op == 2 ? index->Remove(3)
+                                  : static_cast<bool>(index->BuildGraph(storage, 3, 16));
                     if (not retried) {
                         ++invalid;
                     }
