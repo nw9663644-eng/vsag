@@ -1,2 +1,0 @@
-base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_ms,query_ef_search
-10000,100,960,10,0,1,0.916000,1288.854399,146.056000,230.644000,15.752005,9.606749,39840064,fp32,16,128,0.000029,128

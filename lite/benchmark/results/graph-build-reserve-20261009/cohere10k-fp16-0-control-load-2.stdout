@@ -1,2 +1,0 @@
-dim,count,snapshot_bytes,load_ms,before_create_rss_kib,before_load_rss_kib,loaded_rss_kib,process_peak_rss_kib,page_cache_control
-768,10000,16800064,9.038803,3440,3636,22600,22604,warm_uncontrolled

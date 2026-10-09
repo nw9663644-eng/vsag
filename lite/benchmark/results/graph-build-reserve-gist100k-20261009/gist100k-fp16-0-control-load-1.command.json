@@ -1,1 +1,0 @@
-["taskset", "-c", "0", "/usr/bin/time", "-f", "%M", "-o", "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/graph-build-reserve-gist100k-20261009/gist100k-fp16-0-control-load-1.peak_kib", "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory", "/dev/shm/vsag-aligned-kfpjs8am/gist100k-fp16-0-control.snapshot", "960", "100000"]
