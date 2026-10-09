@@ -1,0 +1,21 @@
+{
+  "production_changed": false,
+  "production_library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4",
+  "tests": "Release original storage fixture and expanded persistent fixture passed; ASan/UBSan expanded fixture passed against existing instrumented Lite library",
+  "format": "clang-format15 dry-run Werror passed",
+  "tidy": "clang-tidy15 warnings-as-errors passed; non-user warnings suppressed",
+  "library_ctest_coverage": "not rerun; source unchanged, preceding c6d6c0b scores are historical, not new results",
+  "excluded": [
+    "real-data FP16 isolation",
+    "fixed-model final-data rebuild",
+    "per-operation mixed read/write",
+    "100k",
+    "cold I/O",
+    "native Full retest"
+  ],
+  "source_sha256": {
+    "lite/benchmark/graph_crud_quality.cpp": "e5cf52ce9764855cffa07f3f98fcf16857121c279499d427247d5b5faa30dad8",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e",
+    "lite/benchmark/test_graph_crud_replacements.py": "c9d42b5703d2da2b7f0f61da98ea70efc2f25973e31b7db54845efd3a16f06ff"
+  }
+}

@@ -282,3 +282,5 @@ RaBitQ 每个查询或维护查询只计算一次向量求和。5-bit 补充码�
 长期真实改值基准可设置 `VSAG_GRAPH_REPLACEMENTS` 为按操作顺序排列的 fvecs，并传入非空 QUERY_RESULTS；替换行必须有限且相对当前值确实改变，行数必须等于 ROUNDS×CRUD_OPS。使用 `changed-groundtruth.ivecs` 验证最终状态，初始真值仍为 `groundtruth.ivecs`；Update 后 Remove/Add 使用同一新行，不恢复旧值。工具增加 `.initial` 查询证据和 `.operations.csv`（operation 0/1/2 为 Update/Remove/Add）。CLI 及未启用时的 CSV 列不变。准备脚本 `lite/benchmark/prepare_persistent_crud.py` 固定生成三遍全ID改值并以 FP64 直接差分重算真值。结果 `persistent-whole-crud-20261009` 表明维护后质量明显低于同最终数据新建图，尤其 RaBitQ；不能以更短查询时间宣称收益，也不能把新建图重训模型与图维护效应混为一谈。该研究为串行初始/最终查询、暖缓存、每组单次，不是逐操作交错查询、100k或完整终验。
 
 RaBitQ 无反向边的删除仍扫描全部邻接行。现在一次检查被删槽位或搬迁末槽位，未受影响的行跳过后续 erase/remap；受影响行的顺序、事务备份、修复候选和持久化结果不变。这不是渐进复杂度改善，也不修维护质量。固定重放证据及旧扫描黄金路径见 `lite/benchmark/results/rabitq-remove-skip-20261009`；对照为旧 Lite，非原生 Full，长期 CRUD 后召回失败仍明确保留。
+
+仅在真实改值重放中，VSAG_GRAPH_CRUD_MODE=update 只调用 Update，replace 只调用 Remove/Add，all 保持组合协议。显式设置时在可选 CSV 末尾追加 mutation_mode，默认列不变。同最终数据/真值的隔离结果见 lite/benchmark/results/persistent-crud-isolation-20261010；两条 RaBitQ 路径仍低于研究召回门槛。这分离了操作协议，尚未确定或修复唯一根因。

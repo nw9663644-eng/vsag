@@ -1,0 +1,31 @@
+{
+  "head": "c6d6c0b5a2ae939f24e6c280b2285d555ed8e4a8",
+  "library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4",
+  "builder_sha256": "f5ef6d991b0468e41f1b7a4b05fd37fefecabc0a52b9a30a260651bb2aaf2f25",
+  "source_sha256": {
+    "lite/benchmark/graph_crud_quality.cpp": "e5cf52ce9764855cffa07f3f98fcf16857121c279499d427247d5b5faa30dad8",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e",
+    "lite/benchmark/test_graph_crud_replacements.py": "c9d42b5703d2da2b7f0f61da98ea70efc2f25973e31b7db54845efd3a16f06ff"
+  },
+  "config": {
+    "degree": 16,
+    "construction_ef": 128,
+    "query_ef": 512,
+    "k": 10,
+    "cpu": 0,
+    "rounds": 3,
+    "crud_ops": 10000,
+    "trials": 1,
+    "queries": 600,
+    "warmup": 0
+  },
+  "limitations": [
+    "historically observed queries",
+    "single run per case, not stable performance estimate",
+    "queries only before/after, not interleaved reads",
+    "warm uncontrolled RAM/shared VM",
+    "RaBitQ frozen model; no fixed-model rebuild control",
+    "old Full not rerun",
+    "FP16 omitted from real-data isolation; covered by fixture"
+  ]
+}

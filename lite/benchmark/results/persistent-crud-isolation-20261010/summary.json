@@ -1,0 +1,222 @@
+[
+  {
+    "dataset": "gist10k600",
+    "storage": "fp32",
+    "mode": "update",
+    "crud_ms": 6718.740657,
+    "snapshot_bytes": 39840064,
+    "peak_kib": 243916,
+    "operations": {
+      "0": {
+        "p50_us": 214.675,
+        "p99_us": 440.691,
+        "api_ops_s": 4467.992577013539
+      }
+    },
+    "initial": {
+      "recall": 0.9655,
+      "p50_us": 490.119,
+      "p99_us": 653.647
+    },
+    "final": {
+      "recall": 0.9276666666666666,
+      "p50_us": 547.338,
+      "p99_us": 690.545
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "fp32",
+    "mode": "replace",
+    "crud_ms": 6857.192683,
+    "snapshot_bytes": 39840064,
+    "peak_kib": 242920,
+    "operations": {
+      "1": {
+        "p50_us": 28.03,
+        "p99_us": 295.704,
+        "api_ops_s": 21377.24413098176
+      },
+      "2": {
+        "p50_us": 180.747,
+        "p99_us": 248.314,
+        "api_ops_s": 5507.762109979313
+      }
+    },
+    "initial": {
+      "recall": 0.9655,
+      "p50_us": 498.28,
+      "p99_us": 636.217
+    },
+    "final": {
+      "recall": 0.9233333333333333,
+      "p50_us": 509.889,
+      "p99_us": 674.845
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "rabitq8",
+    "mode": "update",
+    "crud_ms": 14585.451868,
+    "snapshot_bytes": 11284416,
+    "peak_kib": 219360,
+    "operations": {
+      "0": {
+        "p50_us": 420.281,
+        "p99_us": 1458.878,
+        "api_ops_s": 2057.3012146944575
+      }
+    },
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 470.19,
+      "p99_us": 636.197
+    },
+    "final": {
+      "recall": 0.8586666666666667,
+      "p50_us": 463.84,
+      "p99_us": 570.297
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "rabitq8",
+    "mode": "replace",
+    "crud_ms": 15608.926025,
+    "snapshot_bytes": 11284416,
+    "peak_kib": 219536,
+    "operations": {
+      "1": {
+        "p50_us": 132.967,
+        "p99_us": 1252.153,
+        "api_ops_s": 4592.053164016701
+      },
+      "2": {
+        "p50_us": 300.994,
+        "p99_us": 372.981,
+        "api_ops_s": 3306.6760350413197
+      }
+    },
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 471.181,
+      "p99_us": 613.236
+    },
+    "final": {
+      "recall": 0.8495,
+      "p50_us": 445.871,
+      "p99_us": 585.857
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp32",
+    "mode": "replace",
+    "crud_ms": 6341.489533,
+    "snapshot_bytes": 32160064,
+    "peak_kib": 197084,
+    "operations": {
+      "1": {
+        "p50_us": 25.41,
+        "p99_us": 302.383,
+        "api_ops_s": 23774.06217309851
+      },
+      "2": {
+        "p50_us": 168.627,
+        "p99_us": 212.245,
+        "api_ops_s": 5914.148189235325
+      }
+    },
+    "initial": {
+      "recall": 0.9873333333333333,
+      "p50_us": 475.051,
+      "p99_us": 576.578
+    },
+    "final": {
+      "recall": 0.9621666666666666,
+      "p50_us": 469.729,
+      "p99_us": 569.738
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp32",
+    "mode": "update",
+    "crud_ms": 5842.273049,
+    "snapshot_bytes": 32160064,
+    "peak_kib": 197852,
+    "operations": {
+      "0": {
+        "p50_us": 185.086,
+        "p99_us": 409.931,
+        "api_ops_s": 5138.916764490831
+      }
+    },
+    "initial": {
+      "recall": 0.9873333333333333,
+      "p50_us": 466.279,
+      "p99_us": 572.927
+    },
+    "final": {
+      "recall": 0.9706666666666667,
+      "p50_us": 472.259,
+      "p99_us": 554.298
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "rabitq8",
+    "mode": "replace",
+    "crud_ms": 14059.427068,
+    "snapshot_bytes": 9363552,
+    "peak_kib": 176680,
+    "operations": {
+      "1": {
+        "p50_us": 131.948,
+        "p99_us": 1159.294,
+        "api_ops_s": 5103.425551000283
+      },
+      "2": {
+        "p50_us": 271.103,
+        "p99_us": 325.433,
+        "api_ops_s": 3668.8030757578126
+      }
+    },
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 448.651,
+      "p99_us": 547.519
+    },
+    "final": {
+      "recall": 0.9233333333333333,
+      "p50_us": 445.88,
+      "p99_us": 512.569
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "rabitq8",
+    "mode": "update",
+    "crud_ms": 12241.048349,
+    "snapshot_bytes": 9363552,
+    "peak_kib": 176748,
+    "operations": {
+      "0": {
+        "p50_us": 361.301,
+        "p99_us": 1274.052,
+        "api_ops_s": 2451.47628114519
+      }
+    },
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 441.45,
+      "p99_us": 511.11
+    },
+    "final": {
+      "recall": 0.9355,
+      "p50_us": 464.37,
+      "p99_us": 582.876
+    }
+  }
+]

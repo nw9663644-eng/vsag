@@ -58,6 +58,28 @@ def main():
                            float(x["latency_us"]) >= 0 for x in chunk)
             neighbors = list(csv.DictReader((root / (storage + ".csv.neighbors.csv")).open()))
             assert [int(x["id"]) for x in neighbors] == [(i - 2) % 8 for i in range(8)]
+        for mode, kinds in [("update", [0]), ("replace", [1, 2]), ("all", [0, 1, 2])]:
+            environment["VSAG_GRAPH_CRUD_MODE"] = mode
+            for storage in ["fp32", "fp16", "rabitq8"]:
+                environment["VSAG_GRAPH_STORAGE"] = storage
+                tag = mode + "-" + storage
+                result = run(tag)
+                assert result.returncode == 0, result.stderr
+                row = next(csv.DictReader(io.StringIO(result.stdout)))
+                assert row["mutation_mode"] == mode
+                assert row["initial_recall_at_k"] == row["recall_at_k"] == "1.000000"
+                operations = list(csv.DictReader((root / (tag + ".csv.operations.csv")).open()))
+                assert len(operations) == 16 * len(kinds)
+                assert [(int(x["cycle"]), int(x["id"]), int(x["operation"])) for x in operations] == [
+                    (cycle, id, kind) for cycle, id in enumerate(schedule) for kind in kinds]
+            environment.pop("VSAG_GRAPH_CRUD_MODE")
+        environment["VSAG_GRAPH_CRUD_MODE"] = "invalid"
+        assert run("invalid-mode").returncode != 0
+        environment["VSAG_GRAPH_CRUD_MODE"] = "update"
+        environment.pop("VSAG_GRAPH_REPLACEMENTS")
+        assert run("mode-without-replacements").returncode != 0
+        environment["VSAG_GRAPH_REPLACEMENTS"] = str(source)
+        environment.pop("VSAG_GRAPH_CRUD_MODE")
         for suffix in [".operations.csv", ".initial", ".initial.latencies.csv",
                        ".initial.neighbors.csv"]:
             tag = "protected-" + str(len(suffix))

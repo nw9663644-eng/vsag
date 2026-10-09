@@ -117,6 +117,11 @@ run(const std::string& directory,
 
     const char* replacement_path = std::getenv("VSAG_GRAPH_REPLACEMENTS");
     const bool persistent = replacement_path != nullptr;
+    const char* selected_mode = std::getenv("VSAG_GRAPH_CRUD_MODE");
+    const std::string mutation_mode = selected_mode == nullptr ? "all" : selected_mode;
+    require(mutation_mode == "all" or mutation_mode == "update" or mutation_mode == "replace",
+            "invalid CRUD replay mode");
+    require(selected_mode == nullptr or persistent, "CRUD mode requires persistent replacements");
     require(not persistent or (rounds > 0 and not query_results.empty()),
             "replacement replay requires rounds and query evidence");
     if (persistent) {
@@ -268,15 +273,20 @@ run(const std::string& directory,
                     operation_samples.emplace_back(cycle, id, kind, latency);
                 }
             };
-            timed(0, [&] {
-                require(static_cast<bool>(index->Update(static_cast<int64_t>(id), vector, dim)),
-                        "update failed");
-            });
-            timed(1, [&] { require(index->Remove(static_cast<int64_t>(id)), "remove failed"); });
-            timed(2, [&] {
-                require(static_cast<bool>(index->Add(static_cast<int64_t>(id), vector, dim)),
-                        "re-add failed");
-            });
+            if (mutation_mode != "replace") {
+                timed(0, [&] {
+                    require(static_cast<bool>(index->Update(static_cast<int64_t>(id), vector, dim)),
+                            "update failed");
+                });
+            }
+            if (mutation_mode != "update") {
+                timed(1,
+                      [&] { require(index->Remove(static_cast<int64_t>(id)), "remove failed"); });
+                timed(2, [&] {
+                    require(static_cast<bool>(index->Add(static_cast<int64_t>(id), vector, dim)),
+                            "re-add failed");
+                });
+            }
         }
     }
     const auto crud_ms =
@@ -317,6 +327,9 @@ run(const std::string& directory,
                  "ms,query_ef_search";
     if (persistent) {
         std::cout << ",persistent_replacements,initial_recall_at_k";
+        if (selected_mode != nullptr) {
+            std::cout << ",mutation_mode";
+        }
     }
     std::cout << '\n';
     std::cout << base.size() << ',' << queries.size() << ',' << dim << ',' << k << ',' << rounds
@@ -328,6 +341,9 @@ run(const std::string& directory,
               << ef << ',' << crud_ms << ',' << options.ef_search;
     if (persistent) {
         std::cout << ',' << replacements.size() << ',' << initial_recall;
+        if (selected_mode != nullptr) {
+            std::cout << ',' << mutation_mode;
+        }
     }
     std::cout << '\n';
     return 0;

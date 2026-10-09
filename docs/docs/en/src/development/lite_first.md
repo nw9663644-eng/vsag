@@ -381,3 +381,5 @@ asymptotic-complexity improvement or a maintenance-quality repair. Fixed replay
 evidence and the legacy-scan golden path are recorded in
 `lite/benchmark/results/rabitq-remove-skip-20261009`. Its control is old Lite,
 not native Full; post-CRUD recall failures remain explicit.
+
+For persistent replay only, VSAG_GRAPH_CRUD_MODE=update runs Update without deletion, replace runs Remove/Add without the redundant preceding Update, and all keeps the combined protocol. Explicit selection appends mutation_mode to the opt-in CSV; default schema is unchanged. The same final data/truth isolation is recorded in lite/benchmark/results/persistent-crud-isolation-20261010. Both isolated RaBitQ paths still fail the study recall floors; this separates workloads but does not establish or repair a sole cause.
