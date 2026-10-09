@@ -1,0 +1,28 @@
+{
+  "load": {
+    "control": {
+      "load_ms": 54.624306,
+      "loaded_rss_kib": 40344.0
+    },
+    "candidate": {
+      "load_ms": 37.928879,
+      "loaded_rss_kib": 40372.0
+    }
+  },
+  "query": {
+    "control": {
+      "load_ms": 38.053907,
+      "loaded_rss_kib": 40368.0,
+      "recall_at_k": 0.975,
+      "search_p50_us": 731.655,
+      "search_p99_us": 949.149
+    },
+    "candidate": {
+      "load_ms": 37.467721,
+      "loaded_rss_kib": 40376.0,
+      "recall_at_k": 0.975,
+      "search_p50_us": 557.188,
+      "search_p99_us": 737.253
+    }
+  }
+}

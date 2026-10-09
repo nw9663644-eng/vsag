@@ -1,0 +1,44 @@
+{
+  "parent": "e8781f160132eae10cfbd1a3db099855117ee953",
+  "integer_arrays_commit": "a95183c",
+  "bounded_heaps_commit": "0ecee16",
+  "host": "VM-0-10-ubuntu",
+  "snapshot_sha256": "40cf0d83af89cdc3dd0e04145925e09429a2dc573cc5fd6841fceca5d599d565",
+  "snapshot_bytes": 29600672,
+  "inputs": {
+    "base": {
+      "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/base.fvecs",
+      "sha256": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba"
+    },
+    "queries": {
+      "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+    },
+    "truth": {
+      "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "sha256": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54"
+    }
+  },
+  "libraries": {
+    "pre_io": {
+      "path": "/home/ubuntu/project/vsag-topology-control-e8781f1/libvsag-lite.so",
+      "sha256": "60f33a215d7c53a2d96347ea345ea2980ee7ac6044375ae09a7452ce0da2a127"
+    },
+    "pre_heap": {
+      "path": "/home/ubuntu/project/vsag-route-control-arrayio/libvsag-lite.so",
+      "sha256": "2cf52287574342357028b5a57e7e8ba4c8dd6889eb8818054e8c155822f249ee"
+    },
+    "candidate": {
+      "path": "build-lite-fp16-simd-release/libvsag-lite.so",
+      "sha256": "8a7bdd2fa9658107e9b9262acc0b5bf157e1c1882deeb3d958dff4bb3b02c021"
+    }
+  },
+  "cpu_affinity": 0,
+  "stored_degree": 16,
+  "stored_ef": 128,
+  "query_ef": 512,
+  "load_pairs": 7,
+  "query_pairs": 7,
+  "cache": "warm_uncontrolled",
+  "perf_event_paranoid": 4
+}
