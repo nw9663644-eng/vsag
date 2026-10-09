@@ -13,6 +13,12 @@ See [native CRUD raw evidence](results/crud-raw-20261007/README.md) for independ
 See [FINAL_REPORT.md](FINAL_REPORT.md) for historical evidence at the recorded revisions.
 See [RABITQ_LITE_FEASIBILITY.md](RABITQ_LITE_FEASIBILITY.md) for the source-based boundary and next experimental gate.\
 
+## Fresh loaded-only storage pilot
+
+The [current-image loader study](results/integrated-load-final-20261009/README.md) measures seven fresh processes per10k configuration. RaBitQ current loaded RSS is lower than FP32, while first-query costs remain higher. Optional `VSAG_LOAD_QUERY` reads one fvec after the RSS checkpoint; `VSAG_LOAD_QUERY_RESULTS` writes ordered first-query results to a new path. Default CLI/CSV is unchanged. `load_vm_hwm_kib` refers to the current image before query; the older getrusage metric may retain a launch-related floor. Cache is uncontrolled and RAM filesystem is not cold-I/O evidence.
+
+`run_loaded_storage_pilot.py` uses prior dataset identities, verifies input hashes, generates RAM snapshots and archives small evidence before logout. `test_load_first_query.py BUILDER LOADER` checks the optional mode and legacy schema. Final100k/long-CRUD acceptance remains pending.
+
 ## Integrated 10k storage pilot
 
 The [three-distribution pilot](results/integrated-storage-pilot-20261009/README.md) records actual public-API FP32/FP16/RaBitQ measurements and negative findings. RaBitQ snapshots are smaller, while queries and whole-process peak memory are worse in this equal-budget pilot. Existing historical queries are not blind validation;100k, isolated loaded RSS and long mixed CRUD remain pending.

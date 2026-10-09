@@ -328,3 +328,5 @@ remain pending. Do not infer those results from older standalone probe numbers.
 Use the opt-in `lite_rabitq_example` build target for the public API lifecycle.
 
 The integrated 10k SIFT/GIST/Cohere pilot is recorded in `lite/benchmark/results/integrated-storage-pilot-20261009`. It establishes a snapshot-size reduction at the measured settings, but queries and whole-process peak memory are worse than FP32. Historical queries and short churn do not replace100k, fresh-process isolated RSS or long changed-vector acceptance. Read the experiment report for raw evidence and measured-version boundaries.
+
+A fresh-process10k loaded-only study is recorded at `lite/benchmark/results/integrated-load-final-20261009`: RaBitQ loaded RSS is about41–66% below FP32 on these three distributions, with no original base matrix resident. Load/first-query regressions remain; these are warm-uncontrolled RAM measurements, not cold I/O or100k/long-CRUD acceptance. The report separates current-image VmHWM from the launcher-affected getrusage high-water metric.

@@ -1,0 +1,97 @@
+{
+  "revision": "3ad0fb9228ba0b1595b6c943a2ed9f97fe002c8d",
+  "builder_sha256": "94c54a8273a18a03ce249806e546d4c000f4736dc6ce8fc9f00470b7d971d015",
+  "loader_sha256": "beca3e566da9b7e4d5075c83deb12e202cac3edc708a02c9486fb9671121c452",
+  "library_sha256": "2f967a32b5153bc2813d9732fa27b46ab1a7a65fc9192128ec57aa999cbb445d",
+  "loader_source_sha256": "3336784f19cdcd4fa291f3753bf8e7f874c5591534a83d3f3487d9890db9d8a7",
+  "inputs": {
+    "sift": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/base.fvecs",
+        "sha256": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+        "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+        "sha256": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8"
+      }
+    },
+    "gist": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/base.fvecs",
+        "sha256": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+        "sha256": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+        "sha256": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038"
+      }
+    },
+    "cohere": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/base.fvecs",
+        "sha256": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+        "sha256": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+        "sha256": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+      }
+    }
+  },
+  "scope": "10k loaded-only RSS before query; fresh processes; RAM page cache uncontrolled",
+  "plan": {
+    "cpu": 0,
+    "degree": 16,
+    "ef": 128,
+    "repeats": 7,
+    "count": 10000
+  },
+  "snapshots": {
+    "sift-fp32": {
+      "sha256": "38e00e3b24bde8eddf60b5868bbc7e2bfcd36d6946c225ec8e16fa895004f256",
+      "bytes": 6560064
+    },
+    "sift-fp16": {
+      "sha256": "b15222f9948c288b15697c38765b0b43b152c3666dcc938e42f3d774f64fbde6",
+      "bytes": 4000064
+    },
+    "sift-rabitq8": {
+      "sha256": "77e5628bba939aed65d8281740483fb196e9ac85c2ed72419c3dc5eca927dd02",
+      "bytes": 2960672
+    },
+    "gist-fp32": {
+      "sha256": "8127578179d43c7475806bc602d72f6344848e75d070b3fc6960c09e427f03c8",
+      "bytes": 39840064
+    },
+    "gist-fp16": {
+      "sha256": "c7835175782db06de9b37a2ebeb3cec7eec61c5a7b083d13aa3a30eede34828f",
+      "bytes": 20640064
+    },
+    "gist-rabitq8": {
+      "sha256": "a8873b70777304ccc32da7a21de50e22e28f457d1bcffbebf47cb853e6479e10",
+      "bytes": 11284416
+    },
+    "cohere-fp32": {
+      "sha256": "13ce8142f0d57230dcd188d1dbc8925c241089ffadc8fd64ef9bebaeb42a1d38",
+      "bytes": 32160064
+    },
+    "cohere-fp16": {
+      "sha256": "8495e0433cded65f3720ed961ed5de9b308162dabe7e98fb1d69aac53c74e145",
+      "bytes": 16800064
+    },
+    "cohere-rabitq8": {
+      "sha256": "ce514f19bf044cc88efd9e70c57b828f9bf12483112005994adbb272d4050233",
+      "bytes": 9363552
+    }
+  }
+}

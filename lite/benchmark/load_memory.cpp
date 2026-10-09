@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -18,6 +19,7 @@
 #include <limits>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace {
 void
@@ -38,11 +40,11 @@ number(const char* argument) {
     return value;
 }
 uint64_t
-rss() {
+rss(bool high_water = false) {
     std::ifstream input("/proc/self/status");
     std::string key;
     while (input >> key) {
-        if (key == "VmRSS:") {
+        if (key == (high_water ? "VmHWM:" : "VmRSS:")) {
             uint64_t value = 0;
             std::string unit;
             input >> value >> unit;
@@ -59,6 +61,14 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count, bool force_remove
     require(dim <= static_cast<uint64_t>(std::numeric_limits<int32_t>::max()) and
                 count <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max()),
             "dimensions or count out of range");
+    const char* query_path = std::getenv("VSAG_LOAD_QUERY");
+    const char* query_results = std::getenv("VSAG_LOAD_QUERY_RESULTS");
+#ifdef VSAG_BENCH_FULL
+    require(query_path == nullptr, "optional first query is only available for Lite");
+#endif
+    require(query_results == nullptr or query_path != nullptr, "query output requires query input");
+    require(query_results == nullptr or not std::filesystem::exists(query_results),
+            "query output already exists");
     const auto bytes = std::filesystem::file_size(snapshot);
     malloc_trim(0);
     const auto before_create = rss();
@@ -100,13 +110,59 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count, bool force_remove
         input.close();
         malloc_trim(0);
         const auto after_load = rss();
+        const auto load_vm_hwm = query_path == nullptr ? 0 : rss(true);
         rusage usage{};
         require(getrusage(RUSAGE_SELF, &usage) == 0, "getrusage failed");
+        double first_query_us = 0.0;
+        uint64_t first_query_count = 0;
+#ifndef VSAG_BENCH_FULL
+        if (query_path != nullptr) {
+            std::ifstream query_input(query_path, std::ios::binary);
+            int32_t query_dim = 0;
+            query_input.read(reinterpret_cast<char*>(&query_dim), sizeof(query_dim));
+            require(static_cast<bool>(query_input) and query_dim > 0 and
+                        static_cast<uint64_t>(query_dim) == dim,
+                    "invalid first query dimension");
+            std::vector<float> query(dim);
+            require(dim <= static_cast<uint64_t>(std::numeric_limits<std::streamsize>::max()) /
+                               sizeof(float),
+                    "first query exceeds stream capacity");
+            query_input.read(reinterpret_cast<char*>(query.data()),
+                             static_cast<std::streamsize>(dim * sizeof(float)));
+            require(static_cast<bool>(query_input), "truncated first query");
+            const auto query_start = std::chrono::steady_clock::now();
+            auto found = index->Search(query.data(), dim, std::min<uint64_t>(10, count));
+            first_query_us = std::chrono::duration<double, std::micro>(
+                                 std::chrono::steady_clock::now() - query_start)
+                                 .count();
+            require(static_cast<bool>(found), "first query failed");
+            first_query_count = found->size();
+            require(first_query_count == std::min<uint64_t>(10, count), "short first query");
+            if (query_results != nullptr) {
+                std::ofstream output(query_results);
+                require(static_cast<bool>(output), "first query output failed");
+                output << "rank,id,distance\n" << std::hexfloat;
+                for (uint64_t rank = 0; rank < found->size(); ++rank) {
+                    output << rank << ',' << (*found)[rank].id << ',' << (*found)[rank].distance
+                           << '\n';
+                }
+                require(static_cast<bool>(output), "first query output write failed");
+            }
+        }
+#endif
         std::cout << "dim,count,snapshot_bytes,load_ms,before_create_rss_kib,"
-                     "before_load_rss_kib,loaded_rss_kib,process_peak_rss_kib,page_cache_control\n";
+                     "before_load_rss_kib,loaded_rss_kib,process_peak_rss_kib,page_cache_control";
+        if (query_path != nullptr) {
+            std::cout << ",first_query_us,first_query_count,load_vm_hwm_kib";
+        }
+        std::cout << '\n';
         std::cout << dim << ',' << count << ',' << bytes << ',' << std::fixed
                   << std::setprecision(6) << load_ms << ',' << before_create << ',' << before_load
-                  << ',' << after_load << ',' << usage.ru_maxrss << ",warm_uncontrolled\n";
+                  << ',' << after_load << ',' << usage.ru_maxrss << ",warm_uncontrolled";
+        if (query_path != nullptr) {
+            std::cout << ',' << first_query_us << ',' << first_query_count << ',' << load_vm_hwm;
+        }
+        std::cout << '\n';
     }
     return 0;
 }

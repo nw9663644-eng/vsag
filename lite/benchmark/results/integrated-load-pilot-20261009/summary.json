@@ -1,0 +1,101 @@
+[
+  {
+    "dataset": "sift",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 4.021864,
+    "loaded_rss_kib": 12552.0,
+    "process_peak_rss_kib": 19688.0,
+    "first_query_us": 107.228,
+    "snapshot_bytes": 6560064.0,
+    "before_load_rss_kib": 3620.0
+  },
+  {
+    "dataset": "sift",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 3.128174,
+    "loaded_rss_kib": 10000.0,
+    "process_peak_rss_kib": 19688.0,
+    "first_query_us": 102.629,
+    "snapshot_bytes": 4000064.0,
+    "before_load_rss_kib": 3560.0
+  },
+  {
+    "dataset": "sift",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 8.504199,
+    "loaded_rss_kib": 7472.0,
+    "process_peak_rss_kib": 19688.0,
+    "first_query_us": 220.394,
+    "snapshot_bytes": 2960672.0,
+    "before_load_rss_kib": 3600.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 16.755154,
+    "loaded_rss_kib": 45008.0,
+    "process_peak_rss_kib": 45012.0,
+    "first_query_us": 313.234,
+    "snapshot_bytes": 39840064.0,
+    "before_load_rss_kib": 3524.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 10.599994,
+    "loaded_rss_kib": 26268.0,
+    "process_peak_rss_kib": 26272.0,
+    "first_query_us": 264.703,
+    "snapshot_bytes": 20640064.0,
+    "before_load_rss_kib": 3604.0
+  },
+  {
+    "dataset": "gist",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 11.319408,
+    "loaded_rss_kib": 15572.0,
+    "process_peak_rss_kib": 20280.0,
+    "first_query_us": 558.658,
+    "snapshot_bytes": 11284416.0,
+    "before_load_rss_kib": 3608.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp32",
+    "repeats": 7,
+    "load_ms": 13.608522,
+    "loaded_rss_kib": 37512.0,
+    "process_peak_rss_kib": 37532.0,
+    "first_query_us": 341.722,
+    "snapshot_bytes": 32160064.0,
+    "before_load_rss_kib": 3568.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "fp16",
+    "repeats": 7,
+    "load_ms": 8.679456,
+    "loaded_rss_kib": 22580.0,
+    "process_peak_rss_kib": 22584.0,
+    "first_query_us": 260.664,
+    "snapshot_bytes": 16800064.0,
+    "before_load_rss_kib": 3640.0
+  },
+  {
+    "dataset": "cohere",
+    "storage": "rabitq8",
+    "repeats": 7,
+    "load_ms": 10.533345,
+    "loaded_rss_kib": 13704.0,
+    "process_peak_rss_kib": 20352.0,
+    "first_query_us": 479.359,
+    "snapshot_bytes": 9363552.0,
+    "before_load_rss_kib": 3664.0
+  }
+]
