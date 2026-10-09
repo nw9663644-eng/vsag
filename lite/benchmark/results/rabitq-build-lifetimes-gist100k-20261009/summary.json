@@ -1,0 +1,36 @@
+[
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "name": "control",
+    "recall_at_k": 0.859,
+    "build_ms": 33919.078429,
+    "search_p50_us": 1235.813,
+    "search_p99_us": 1566.396,
+    "save_ms": 48.717774,
+    "snapshot_bytes": 112804416.0,
+    "external_peak_rss_kib": 1688176.0,
+    "load_ms": 71.810359,
+    "loaded_rss_kib": 121660.0,
+    "process_peak_rss_kib": 139344.0,
+    "before_create_rss_kib": 3468.0,
+    "before_load_rss_kib": 3640.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "name": "lite",
+    "recall_at_k": 0.859,
+    "build_ms": 33340.713387,
+    "search_p50_us": 1077.297,
+    "search_p99_us": 1473.798,
+    "save_ms": 46.379855,
+    "snapshot_bytes": 112804416.0,
+    "external_peak_rss_kib": 1307480.0,
+    "load_ms": 71.697581,
+    "loaded_rss_kib": 121620.0,
+    "process_peak_rss_kib": 139300.0,
+    "before_create_rss_kib": 3460.0,
+    "before_load_rss_kib": 3604.0
+  }
+]
