@@ -1,0 +1,16 @@
+{
+  "base_head": "2fea8f9a7f5a4dd66d987fde34d9e3c362c09770",
+  "control_library_sha256": "e63099bdbe37133b27bddab8a82d69da5cf33bed72c8e3c304e7ab1c4d159558",
+  "candidate_library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4",
+  "diff": "diff --git a/src/lite/rabitq_backend_test.cpp b/src/lite/rabitq_backend_test.cpp\nindex cecb8b5..1a979ea 100644\n--- a/src/lite/rabitq_backend_test.cpp\n+++ b/src/lite/rabitq_backend_test.cpp\n@@ -476,7 +476,7 @@ TEST_CASE(\"RaBitQ journaled Remove matches copied hole compaction down to empty\"\n             const uint64_t slot = step % 2 == 0 ? 0 : reference.Size() - 1;\n             const auto id = reference.IdAt(slot);\n             auto copy = reference;\n-            REQUIRE(copy.Remove(id));\n+            REQUIRE(copy.Remove<false>(id));\n             reference = std::move(copy);\n             REQUIRE(journaled.RemoveTransactional(id));\n             journaled.Validate();\ndiff --git a/src/lite/rabitq_graph_state.h b/src/lite/rabitq_graph_state.h\nindex fd22b8f..dc656c0 100644\n--- a/src/lite/rabitq_graph_state.h\n+++ b/src/lite/rabitq_graph_state.h\n@@ -889,6 +889,7 @@ public:\n         }\n     }\n \n+    template <bool skip_unchanged = true>\n     [[nodiscard]] bool\n     Remove(int64_t id) {\n         const auto found = slots_.find(id);\n@@ -924,9 +925,20 @@ public:\n         } else {\n             for (uint64_t source = 0; source < adjacency_.size(); ++source) {\n                 auto& neighbors = adjacency_[source];\n-                if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or\n-                    std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {\n+                if constexpr (skip_unchanged) {\n+                    const auto changed = std::find_if(\n+                        neighbors.begin(), neighbors.end(), [slot, last](uint64_t neighbor) {\n+                            return neighbor == slot or neighbor == last;\n+                        });\n+                    if (changed == neighbors.end()) {\n+                        continue;\n+                    }\n                     remember_row(source);\n+                } else {\n+                    if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or\n+                        std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {\n+                        remember_row(source);\n+                    }\n                 }\n                 const auto old_size = neighbors.size();\n                 neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),\n",
+  "cpu": 0,
+  "query_ef": 512,
+  "construction_ef": 128,
+  "degree": 16,
+  "trials": 1,
+  "rounds": 3,
+  "crud_ops": 10000,
+  "storage": "rabitq8",
+  "cache": "warm uncontrolled",
+  "scope": "old Lite comparison, no quality fix"
+}

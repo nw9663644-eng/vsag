@@ -1,0 +1,98 @@
+[
+  {
+    "dataset": "gist10k600",
+    "variant": "control",
+    "crud_ms": 29420.428091,
+    "operations": {
+      "update": {
+        "p50_us": 392.751,
+        "p99_us": 1420.86,
+        "api_ops_s": 2173.142495179044
+      },
+      "remove": {
+        "p50_us": 236.844,
+        "p99_us": 315.023,
+        "api_ops_s": 4125.475354339476
+      },
+      "add": {
+        "p50_us": 278.224,
+        "p99_us": 322.273,
+        "api_ops_s": 3597.3618403036685
+      }
+    },
+    "initial_recall": 0.961,
+    "final_recall": 0.8111666666666667
+  },
+  {
+    "dataset": "gist10k600",
+    "variant": "candidate",
+    "crud_ms": 25342.797895,
+    "operations": {
+      "update": {
+        "p50_us": 386.471,
+        "p99_us": 1416.6,
+        "api_ops_s": 2200.482971567337
+      },
+      "remove": {
+        "p50_us": 110.177,
+        "p99_us": 180.577,
+        "api_ops_s": 8596.210971182796
+      },
+      "add": {
+        "p50_us": 274.174,
+        "p99_us": 315.514,
+        "api_ops_s": 3651.6166764657055
+      }
+    },
+    "initial_recall": 0.961,
+    "final_recall": 0.8111666666666667
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "candidate",
+    "crud_ms": 22831.213213,
+    "operations": {
+      "update": {
+        "p50_us": 347.654,
+        "p99_us": 1219.963,
+        "api_ops_s": 2550.5275308633118
+      },
+      "remove": {
+        "p50_us": 118.828,
+        "p99_us": 182.866,
+        "api_ops_s": 8070.020922425026
+      },
+      "add": {
+        "p50_us": 244.605,
+        "p99_us": 280.863,
+        "api_ops_s": 4083.0468882904315
+      }
+    },
+    "initial_recall": 0.9835,
+    "final_recall": 0.9081666666666667
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "control",
+    "crud_ms": 26530.614577,
+    "operations": {
+      "update": {
+        "p50_us": 339.802,
+        "p99_us": 1209.494,
+        "api_ops_s": 2600.793445695065
+      },
+      "remove": {
+        "p50_us": 250.414,
+        "p99_us": 319.303,
+        "api_ops_s": 3922.8913838635476
+      },
+      "add": {
+        "p50_us": 244.524,
+        "p99_us": 279.294,
+        "api_ops_s": 4084.8333250467354
+      }
+    },
+    "initial_recall": 0.9835,
+    "final_recall": 0.9081666666666667
+  }
+]

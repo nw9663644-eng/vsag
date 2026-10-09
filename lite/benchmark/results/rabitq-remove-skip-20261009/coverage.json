@@ -1,0 +1,20 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2682,
+      "total": 2820,
+      "percent": 95.1063829787234
+    },
+    "shared_simd": {
+      "covered": 174,
+      "total": 176,
+      "percent": 98.86363636363636
+    },
+    "combined": {
+      "covered": 2856,
+      "total": 2996,
+      "percent": 95.32710280373831
+    }
+  },
+  "fresh_counters": true
+}

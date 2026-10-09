@@ -370,3 +370,14 @@ DistanceHeap retained-buffer access pattern, without changing ef, topology,
 the public API, or snapshots. The paired regression evidence is in
 `lite/benchmark/results/query-selection-expanded-20261009`; its control is
 old Lite, not Full VSAG.
+
+For persistent whole-row CRUD replay, set `VSAG_GRAPH_REPLACEMENTS` to fvecs in operation order and supply QUERY_RESULTS. Every replacement must be finite and differ from the current row; the row count must equal ROUNDS times CRUD_OPS. Final truth comes from `changed-groundtruth.ivecs`, while initial truth stays in `groundtruth.ivecs`. Remove/re-add retain the new row instead of restoring original values. The tool writes `.initial` query evidence and `.operations.csv` (operation 0/1/2 means Update/Remove/Add); legacy CLI and CSV columns are unchanged without this opt-in. `lite/benchmark/prepare_persistent_crud.py` freezes three full-ID passes and computes direct-difference FP64 truth. `persistent-whole-crud-20261009` records lower maintained quality than fresh construction on the same final data, especially RaBitQ. Shorter queries are not a speed win when quality drops. Fresh RaBitQ also retrains the model, so that comparison does not isolate graph maintenance. These are serialized initial/final queries, warm cache, and one run per case, not per-operation interleaved reads or100k/final acceptance.
+
+RaBitQ removal still scans all adjacency rows without reverse edges. The scan now
+checks for either the removed slot or the relocated last slot once, skipping
+unchanged rows before erase/remap. Affected-row ordering, transactional backups,
+repair candidates and persisted results are unchanged; this is not an
+asymptotic-complexity improvement or a maintenance-quality repair. Fixed replay
+evidence and the legacy-scan golden path are recorded in
+`lite/benchmark/results/rabitq-remove-skip-20261009`. Its control is old Lite,
+not native Full; post-CRUD recall failures remain explicit.

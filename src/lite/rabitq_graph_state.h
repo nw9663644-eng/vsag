@@ -889,6 +889,7 @@ public:
         }
     }
 
+    template <bool skip_unchanged = true>
     [[nodiscard]] bool
     Remove(int64_t id) {
         const auto found = slots_.find(id);
@@ -924,9 +925,20 @@ public:
         } else {
             for (uint64_t source = 0; source < adjacency_.size(); ++source) {
                 auto& neighbors = adjacency_[source];
-                if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or
-                    std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {
+                if constexpr (skip_unchanged) {
+                    const auto changed = std::find_if(
+                        neighbors.begin(), neighbors.end(), [slot, last](uint64_t neighbor) {
+                            return neighbor == slot or neighbor == last;
+                        });
+                    if (changed == neighbors.end()) {
+                        continue;
+                    }
                     remember_row(source);
+                } else {
+                    if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or
+                        std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {
+                        remember_row(source);
+                    }
                 }
                 const auto old_size = neighbors.size();
                 neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),

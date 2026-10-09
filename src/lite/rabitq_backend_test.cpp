@@ -476,7 +476,7 @@ TEST_CASE("RaBitQ journaled Remove matches copied hole compaction down to empty"
             const uint64_t slot = step % 2 == 0 ? 0 : reference.Size() - 1;
             const auto id = reference.IdAt(slot);
             auto copy = reference;
-            REQUIRE(copy.Remove(id));
+            REQUIRE(copy.Remove<false>(id));
             reference = std::move(copy);
             REQUIRE(journaled.RemoveTransactional(id));
             journaled.Validate();
@@ -779,6 +779,63 @@ TEST_CASE("RaBitQ row training supports reusable non-contiguous scratch", "[lite
                 codec::train_rows(
                     count, dim, 47, [&](uint64_t row) { return base.data() + row * dim; }),
                 std::runtime_error);
+        }
+    }
+}
+
+TEST_CASE("RaBitQ skipped removal rows preserve legacy high-dimensional compaction",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    constexpr uint64_t count = 64;
+    for (uint64_t dim : {uint64_t{17}, uint64_t{128}, uint64_t{768}}) {
+        std::vector<float> base(count * dim);
+        std::vector<int64_t> ids(count);
+        codec::GraphTopology graph;
+        graph.offsets.push_back(0);
+        for (uint64_t row = 0; row < count; ++row) {
+            ids[row] = 6000 - static_cast<int64_t>(row * 73);
+            for (uint64_t d = 0; d < dim; ++d) {
+                base[row * dim + d] = std::sin(static_cast<float>(row * 7 + d) * .17F);
+            }
+            for (uint64_t step : {uint64_t{1}, uint64_t{13}, uint64_t{37}}) {
+                graph.neighbors.push_back((row + step) % count);
+            }
+            graph.offsets.push_back(graph.neighbors.size());
+        }
+        const auto model = codec::train(base, count, dim, 47);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t row = 0; row < count; ++row) {
+            codes.Append(codec::encode(model, base.data() + row * dim));
+        }
+        codec::MutableGraphState reference(model, codes, graph, ids, 4, 32);
+        auto candidate = reference;
+        uint64_t step = 0;
+        while (reference.Size() != 0) {
+            const uint64_t slot = step % 3 == 0   ? 0
+                                  : step % 3 == 1 ? reference.Size() - 1
+                                                  : reference.Size() / 2;
+            const auto id = reference.IdAt(slot);
+            REQUIRE(reference.Remove<false>(id));
+            REQUIRE(candidate.RemoveTransactional(id));
+            reference.Validate();
+            candidate.Validate();
+            std::stringstream first;
+            std::stringstream second;
+            codec::save_mutable_snapshot(first, reference);
+            codec::save_mutable_snapshot(second, candidate);
+            REQUIRE(first.str() == second.str());
+            if (reference.Size() != 0) {
+                const auto expected =
+                    reference.Search(base.data(), std::min(uint64_t{10}, reference.Size()));
+                const auto actual =
+                    candidate.Search(base.data(), std::min(uint64_t{10}, candidate.Size()));
+                REQUIRE(expected.neighbors.size() == actual.neighbors.size());
+                for (uint64_t i = 0; i < expected.neighbors.size(); ++i) {
+                    REQUIRE(expected.neighbors[i].id == actual.neighbors[i].id);
+                    REQUIRE(expected.neighbors[i].distance == actual.neighbors[i].distance);
+                }
+            }
+            ++step;
         }
     }
 }

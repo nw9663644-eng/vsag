@@ -11,8 +11,10 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string>
+#include <tuple>
 #include <unordered_set>
 #include <vector>
 
@@ -113,19 +115,55 @@ run(const std::string& directory,
     require(query_results.empty() or not std::filesystem::exists(query_results + ".neighbors.csv"),
             "neighbor results path already exists");
 
+    const char* replacement_path = std::getenv("VSAG_GRAPH_REPLACEMENTS");
+    const bool persistent = replacement_path != nullptr;
+    require(not persistent or (rounds > 0 and not query_results.empty()),
+            "replacement replay requires rounds and query evidence");
+    if (persistent) {
+        for (const auto& suffix :
+             {".operations.csv", ".initial", ".initial.latencies.csv", ".initial.neighbors.csv"}) {
+            require(not std::filesystem::exists(query_results + suffix),
+                    "replacement evidence already exists");
+        }
+    }
     auto base = read_records<float>(base_path, dim);
     auto queries = read_records<float>(query_path, dim);
     auto truth = read_records<int32_t>(truth_path, k);
-    require(queries.size() == truth.size(), "query and groundtruth count differ");
+    auto initial_truth = truth;
+    std::vector<std::vector<float>> replacements;
+    if (persistent) {
+        require(rounds <= std::numeric_limits<uint64_t>::max() / crud_ops,
+                "replacement cycle count overflow");
+        replacements = read_records<float>(replacement_path, dim);
+        require(replacements.size() == rounds * crud_ops, "replacement count mismatch");
+        std::vector<int64_t> previous(base.size(), -1);
+        for (uint64_t cycle = 0; cycle < replacements.size(); ++cycle) {
+            const uint64_t id =
+                ((cycle / crud_ops) * 65537ULL + (cycle % crud_ops) * 8191ULL) % base.size();
+            const auto& prior =
+                previous[id] < 0 ? base[id] : replacements[static_cast<uint64_t>(previous[id])];
+            require(std::all_of(replacements[cycle].begin(),
+                                replacements[cycle].end(),
+                                [](float value) { return std::isfinite(value); }) and
+                        replacements[cycle] != prior,
+                    "replacement must change a finite vector");
+            previous[id] = static_cast<int64_t>(cycle);
+        }
+        truth = read_records<int32_t>(directory + "/changed-groundtruth.ivecs", k);
+    }
+    require(queries.size() == truth.size() and queries.size() == initial_truth.size(),
+            "query and groundtruth count differ");
     require(not base.empty() and not queries.empty() and static_cast<uint64_t>(k) <= base.size(),
             "invalid dataset shape");
-    for (const auto& expected : truth) {
-        require(
-            std::unordered_set<int32_t>(expected.begin(), expected.end()).size() == expected.size(),
-            "duplicate groundtruth ID");
-        for (const int32_t id : expected) {
-            require(id >= 0 and static_cast<uint64_t>(id) < base.size(),
-                    "groundtruth ID outside base");
+    for (const auto* set : {&initial_truth, &truth}) {
+        for (const auto& expected : *set) {
+            require(std::unordered_set<int32_t>(expected.begin(), expected.end()).size() ==
+                        expected.size(),
+                    "duplicate groundtruth ID");
+            for (const int32_t id : expected) {
+                require(id >= 0 and static_cast<uint64_t>(id) < base.size(),
+                        "groundtruth ID outside base");
+            }
         }
     }
     auto created = vsag::lite::Index::Create(dim);
@@ -148,67 +186,110 @@ run(const std::string& directory,
     const vsag::lite::SearchOptions options{environment_number("VSAG_GRAPH_QUERY_EF", ef)};
     require(static_cast<bool>(index->BuildGraph(representation, degree, ef)), "graph build failed");
     const auto build_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
+    const auto measure = [&](const auto& expected_truth, const std::string& evidence) {
+        uint64_t hits = 0;
+        std::vector<double> latencies;
+        std::vector<uint64_t> query_hits;
+        std::vector<std::vector<vsag::lite::Neighbor>> before;
+        for (uint64_t i = 0; i < queries.size(); ++i) {
+            start = Clock::now();
+            auto result = index->SearchWithOptions(queries[i].data(), dim, k, options);
+            latencies.push_back(
+                std::chrono::duration<double, std::micro>(Clock::now() - start).count());
+            require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
+                    "search failed");
+            std::unordered_set<int64_t> expected(expected_truth[i].begin(),
+                                                 expected_truth[i].end());
+            uint64_t current_hits = 0;
+            for (const auto& neighbor : *result) {
+                current_hits += expected.count(neighbor.id);
+            }
+            hits += current_hits;
+            query_hits.push_back(current_hits);
+            before.push_back(std::move(*result));
+        }
+        if (not evidence.empty()) {
+            std::ofstream query_output(evidence);
+            require(static_cast<bool>(query_output), "query results open failed");
+            query_output << "query,hits,k,recall_at_k\n";
+            for (uint64_t i = 0; i < query_hits.size(); ++i) {
+                query_output << i << ',' << query_hits[i] << ',' << k << ','
+                             << static_cast<double>(query_hits[i]) / k << '\n';
+            }
+            require(static_cast<bool>(query_output), "query results write failed");
+            std::ofstream timings(evidence + ".latencies.csv");
+            timings << "query,latency_us\n" << std::fixed << std::setprecision(6);
+            for (uint64_t query = 0; query < latencies.size(); ++query) {
+                timings << query << ',' << latencies[query] << '\n';
+            }
+            require(static_cast<bool>(timings), "latency results write failed");
+            std::ofstream neighbors(evidence + ".neighbors.csv");
+            require(static_cast<bool>(neighbors), "neighbor results open failed");
+            neighbors << "query,rank,id,distance\n" << std::hexfloat;
+            for (uint64_t query = 0; query < before.size(); ++query) {
+                for (uint64_t rank = 0; rank < before[query].size(); ++rank) {
+                    const auto& neighbor = before[query][rank];
+                    neighbors << query << ',' << rank << ',' << neighbor.id << ','
+                              << neighbor.distance << '\n';
+                }
+            }
+            require(static_cast<bool>(neighbors), "neighbor results write failed");
+        }
+        return std::make_tuple(hits, std::move(latencies), std::move(before));
+    };
+    double initial_recall = 0;
+    if (persistent) {
+        const auto initial = measure(initial_truth, query_results + ".initial");
+        initial_recall =
+            static_cast<double>(std::get<0>(initial)) / static_cast<double>(queries.size() * k);
+    }
+    std::vector<std::tuple<uint64_t, uint64_t, uint64_t, double>> operation_samples;
+    if (persistent) {
+        require(replacements.size() <= std::numeric_limits<uint64_t>::max() / 3,
+                "operation sample count overflow");
+        operation_samples.reserve(replacements.size() * 3);
+    }
     const auto crud_start = Clock::now();
     for (uint64_t round = 0; round < rounds; ++round) {
         for (uint64_t operation = 0; operation < crud_ops; ++operation) {
             const uint64_t id = (round * 65537ULL + operation * 8191ULL) % base.size();
-            const float* vector = base[id].data();
-            require(static_cast<bool>(index->Update(static_cast<int64_t>(id), vector, dim)),
-                    "update failed");
-            require(index->Remove(static_cast<int64_t>(id)), "remove failed");
-            require(static_cast<bool>(index->Add(static_cast<int64_t>(id), vector, dim)),
-                    "re-add failed");
+            const uint64_t cycle = round * crud_ops + operation;
+            const float* vector = persistent ? replacements[cycle].data() : base[id].data();
+            const auto timed = [&](uint64_t kind, const auto& action) {
+                if (not persistent) {
+                    action();
+                    return;
+                }
+                const auto begin = Clock::now();
+                action();
+                if (persistent) {
+                    const double latency =
+                        std::chrono::duration<double, std::micro>(Clock::now() - begin).count();
+                    operation_samples.emplace_back(cycle, id, kind, latency);
+                }
+            };
+            timed(0, [&] {
+                require(static_cast<bool>(index->Update(static_cast<int64_t>(id), vector, dim)),
+                        "update failed");
+            });
+            timed(1, [&] { require(index->Remove(static_cast<int64_t>(id)), "remove failed"); });
+            timed(2, [&] {
+                require(static_cast<bool>(index->Add(static_cast<int64_t>(id), vector, dim)),
+                        "re-add failed");
+            });
         }
     }
     const auto crud_ms =
         std::chrono::duration<double, std::milli>(Clock::now() - crud_start).count();
     require(index->Size() == base.size(), "live count changed");
-    uint64_t hits = 0;
-    std::vector<double> latencies;
-    std::vector<uint64_t> query_hits;
-    std::vector<std::vector<vsag::lite::Neighbor>> before;
-    for (uint64_t i = 0; i < queries.size(); ++i) {
-        start = Clock::now();
-        auto result = index->SearchWithOptions(queries[i].data(), dim, k, options);
-        latencies.push_back(
-            std::chrono::duration<double, std::micro>(Clock::now() - start).count());
-        require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
-                "search failed");
-        std::unordered_set<int64_t> expected(truth[i].begin(), truth[i].end());
-        uint64_t current_hits = 0;
-        for (const auto& neighbor : *result) {
-            current_hits += expected.count(neighbor.id);
+    auto [hits, latencies, before] = measure(truth, query_results);
+    if (persistent) {
+        std::ofstream samples(query_results + ".operations.csv");
+        samples << "cycle,id,operation,latency_us\n" << std::setprecision(9);
+        for (const auto& [cycle, id, operation, latency] : operation_samples) {
+            samples << cycle << ',' << id << ',' << operation << ',' << latency << '\n';
         }
-        hits += current_hits;
-        query_hits.push_back(current_hits);
-        before.push_back(std::move(*result));
-    }
-    if (not query_results.empty()) {
-        std::ofstream query_output(query_results);
-        require(static_cast<bool>(query_output), "query results open failed");
-        query_output << "query,hits,k,recall_at_k\n";
-        for (uint64_t i = 0; i < query_hits.size(); ++i) {
-            query_output << i << ',' << query_hits[i] << ',' << k << ','
-                         << static_cast<double>(query_hits[i]) / k << '\n';
-        }
-        require(static_cast<bool>(query_output), "query results write failed");
-        std::ofstream timings(query_results + ".latencies.csv");
-        timings << "query,latency_us\n" << std::fixed << std::setprecision(6);
-        for (uint64_t query = 0; query < latencies.size(); ++query) {
-            timings << query << ',' << latencies[query] << '\n';
-        }
-        require(static_cast<bool>(timings), "latency results write failed");
-        std::ofstream neighbors(query_results + ".neighbors.csv");
-        require(static_cast<bool>(neighbors), "neighbor results open failed");
-        neighbors << "query,rank,id,distance\n" << std::hexfloat;
-        for (uint64_t query = 0; query < before.size(); ++query) {
-            for (uint64_t rank = 0; rank < before[query].size(); ++rank) {
-                const auto& neighbor = before[query][rank];
-                neighbors << query << ',' << rank << ',' << neighbor.id << ',' << neighbor.distance
-                          << '\n';
-            }
-        }
-        require(static_cast<bool>(neighbors), "neighbor results write failed");
+        require(static_cast<bool>(samples), "operation evidence write failed");
     }
     start = Clock::now();
     std::ofstream output(snapshot, std::ios::binary);
@@ -233,14 +314,22 @@ run(const std::string& directory,
     }
     std::cout << "base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,"
                  "search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_"
-                 "ms,query_ef_search\n";
+                 "ms,query_ef_search";
+    if (persistent) {
+        std::cout << ",persistent_replacements,initial_recall_at_k";
+    }
+    std::cout << '\n';
     std::cout << base.size() << ',' << queries.size() << ',' << dim << ',' << k << ',' << rounds
               << ',' << crud_ops << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
               << build_ms << ',' << percentile(latencies, 0.50) << ','
               << percentile(latencies, 0.99) << ',' << save_ms << ',' << load_ms << ','
               << std::filesystem::file_size(snapshot) << ',' << storage << ',' << degree << ','
-              << ef << ',' << crud_ms << ',' << options.ef_search << '\n';
+              << ef << ',' << crud_ms << ',' << options.ef_search;
+    if (persistent) {
+        std::cout << ',' << replacements.size() << ',' << initial_recall;
+    }
+    std::cout << '\n';
     return 0;
 }
 }  // namespace

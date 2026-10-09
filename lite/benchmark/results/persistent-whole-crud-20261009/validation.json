@@ -1,0 +1,26 @@
+{
+  "production_head": "2fea8f9a7f5a4dd66d987fde34d9e3c362c09770",
+  "production_library_sha256": "e63099bdbe37133b27bddab8a82d69da5cf33bed72c8e3c304e7ab1c4d159558",
+  "production_changes": "none; no new library CTest or coverage claimed; preceding 2fea8f9 tests remain historical",
+  "tests": "final Release legacy and persistent three-storage fixtures passed; manual g++ ASan/UBSan persistent fixture passed, instrumented tool links instrumented Lite library",
+  "format": "clang-format-15 dry-run Werror passed",
+  "tidy": "clang-tidy-15 warnings-as-errors passed; non-user warnings suppressed",
+  "early_failures": [
+    "initial compile: const/nonconst truth pointer initializer mismatch, corrected before timings",
+    "sanitizer CMake target unavailable; explicit instrumented g++ build used"
+  ],
+  "post_timing": "added initial-truth row-count guard and failing-shape fixture, then rebuilt and reran Release/SAN/tidy; measured source and builder hashes remain frozen in identity/raw",
+  "final_source_sha256": {
+    "lite/benchmark/graph_crud_quality.cpp": "9809153a8ec8cfc28948825a2516a79c69e2ccab41cf817373679856f8825289",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e",
+    "lite/benchmark/test_graph_crud_replacements.py": "e7a789ff2d4eda3181e6fb1c3a983c2c6a0c4b6c708ef2c8f34968259c75b2b0"
+  },
+  "final_builder_sha256": "86205b36e6dd2f8f55d2d3bbc5d7a8bed4433b9d6127502586c5358ec1048ab0",
+  "not_run": [
+    "native Full fresh comparison",
+    "new library coverage",
+    "100k",
+    "cold I/O",
+    "per-operation mixed read/write"
+  ]
+}

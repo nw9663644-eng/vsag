@@ -1,0 +1,23 @@
+{
+  "tests": {
+    "release": "6/6",
+    "asan_ubsan": "5/5",
+    "coverage": "5/5",
+    "rabitq_off": "4/4"
+  },
+  "format": "clang-format15 dry-run Werror passed",
+  "tidy": "clang-tidy15 warnings-as-errors with Lite header-filter; backend/test/tool passed; non-user warnings suppressed",
+  "coverage": "fresh 19 generated gcda counters cleared within verified exact coverage build; raw JSON gzip archived",
+  "golden": "Remove<false> retains legacy loop; transactional candidate compared after deletion at first/last/middle down to empty, snapshot exact, 17/128/768D queries exact; existing 1D both incoming modes and allocation tests pass",
+  "not_run": [
+    "native Full entire suite",
+    "new 100k",
+    "cold I/O",
+    "upstream Node documentation checker"
+  ],
+  "source_sha256": {
+    "src/lite/rabitq_graph_state.h": "cbb5ff57ceba8a273e71d75303b88df742ba2e2c3682039aedbe23440b1fbff6",
+    "src/lite/rabitq_backend_test.cpp": "dc1c6635ed16b03cbda938d273c1deaae8d3f5416ffc0b2a7ae347fa7fbae701"
+  },
+  "candidate_library_sha256": "e9613ace68d6b81f5ff38e4ff86d7f1dfa18fd2effc2131c37729573391d97c4"
+}

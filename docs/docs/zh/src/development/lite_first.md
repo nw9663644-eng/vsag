@@ -278,3 +278,7 @@ RaBitQ 每个查询或维护查询只计算一次向量求和。5-bit 补充码�
 `python3 lite/benchmark/measure_elf_closure.py --lite LITE_SO --full FULL_SO --output NEW_OUTPUT --scratch /dev/shm` 用于可信共享库的 ELF DT_NEEDED 依赖闭包。递归解析依赖，按真实路径去重（包含共同系统运行库），只对scratch副本使用相同 `strip --strip-unneeded`，不改变原文件。范围不含可执行文件、头文件、Python绑定、容器及动态加载插件，不能称完整wheel/容器/SDK包体。运行 `python3 lite/benchmark/test_measure_elf_closure.py` 可检查依赖解析、去重及仅修改副本的夹具。
 
 查询局部堆保持既有候选准入和图遍历顺序。无过滤 FP32/FP16 查询在遍历结束后接管堆拥有的候选缓冲区，选择前 k 项，仅对这些结果按距离及外部 ID 排序。RaBitQ 直接对同一组保留候选评分，避免逐项弹出粗排堆；评分公式和最终 ID 排序不变，过滤路径仍保持原实现。这借鉴原生 DistanceHeap 直接访问保留缓冲区的方式，不改变 ef、拓扑、公共 API 或持久化格式。配对证据见 `lite/benchmark/results/query-selection-expanded-20261009`；对照是旧 Lite，不是 Full VSAG。
+
+长期真实改值基准可设置 `VSAG_GRAPH_REPLACEMENTS` 为按操作顺序排列的 fvecs，并传入非空 QUERY_RESULTS；替换行必须有限且相对当前值确实改变，行数必须等于 ROUNDS×CRUD_OPS。使用 `changed-groundtruth.ivecs` 验证最终状态，初始真值仍为 `groundtruth.ivecs`；Update 后 Remove/Add 使用同一新行，不恢复旧值。工具增加 `.initial` 查询证据和 `.operations.csv`（operation 0/1/2 为 Update/Remove/Add）。CLI 及未启用时的 CSV 列不变。准备脚本 `lite/benchmark/prepare_persistent_crud.py` 固定生成三遍全ID改值并以 FP64 直接差分重算真值。结果 `persistent-whole-crud-20261009` 表明维护后质量明显低于同最终数据新建图，尤其 RaBitQ；不能以更短查询时间宣称收益，也不能把新建图重训模型与图维护效应混为一谈。该研究为串行初始/最终查询、暖缓存、每组单次，不是逐操作交错查询、100k或完整终验。
+
+RaBitQ 无反向边的删除仍扫描全部邻接行。现在一次检查被删槽位或搬迁末槽位，未受影响的行跳过后续 erase/remap；受影响行的顺序、事务备份、修复候选和持久化结果不变。这不是渐进复杂度改善，也不修维护质量。固定重放证据及旧扫描黄金路径见 `lite/benchmark/results/rabitq-remove-skip-20261009`；对照为旧 Lite，非原生 Full，长期 CRUD 后召回失败仍明确保留。

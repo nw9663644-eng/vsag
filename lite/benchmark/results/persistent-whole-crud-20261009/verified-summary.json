@@ -1,0 +1,344 @@
+[
+  {
+    "dataset": "gist10k600",
+    "storage": "fp32",
+    "kind": "maintained",
+    "external_peak_rss_kib": 243712,
+    "snapshot_bytes": 39840064,
+    "save_ms": 16.933812,
+    "load_ms": 17.205837,
+    "initial": {
+      "recall": 0.9655,
+      "p50_us": 521.548,
+      "p99_us": 684.164,
+      "qps": 1919.2198386709554
+    },
+    "final": {
+      "recall": 0.8981666666666667,
+      "p50_us": 532.118,
+      "p99_us": 668.606,
+      "qps": 1903.9214533904271
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 213.724,
+        "p99_us": 443.602,
+        "api_ops_s": 4486.876553503884
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 12.49,
+        "p99_us": 34.599,
+        "api_ops_s": 69797.24885674933
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 141.867,
+        "p99_us": 187.876,
+        "api_ops_s": 7063.763661448808
+      }
+    },
+    "crud_block_ops_s": 7914.144111090312
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "fp16",
+    "kind": "maintained",
+    "external_peak_rss_kib": 219480,
+    "snapshot_bytes": 20640064,
+    "save_ms": 40.243406,
+    "load_ms": 10.857143,
+    "initial": {
+      "recall": 0.9655,
+      "p50_us": 399.572,
+      "p99_us": 517.878,
+      "qps": 2500.2036832600616
+    },
+    "final": {
+      "recall": 0.8986666666666666,
+      "p50_us": 443.02,
+      "p99_us": 568.308,
+      "qps": 2263.3920835477775
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 199.377,
+        "p99_us": 416.702,
+        "api_ops_s": 4771.259802808493
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 11.698,
+        "p99_us": 33.88,
+        "api_ops_s": 73894.9201279536
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 147.617,
+        "p99_us": 190.945,
+        "api_ops_s": 6794.787211386128
+      }
+    },
+    "crud_block_ops_s": 8095.309756676187
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "rabitq8",
+    "kind": "maintained",
+    "external_peak_rss_kib": 219388,
+    "snapshot_bytes": 11284416,
+    "save_ms": 5.277996,
+    "load_ms": 5.895641,
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 467.359,
+      "p99_us": 606.847,
+      "qps": 2122.030489772632
+    },
+    "final": {
+      "recall": 0.8111666666666667,
+      "p50_us": 431.441,
+      "p99_us": 515.798,
+      "qps": 2349.714244788976
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 403.852,
+        "p99_us": 1458.509,
+        "api_ops_s": 2092.9862798041245
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 250.185,
+        "p99_us": 525.118,
+        "api_ops_s": 3713.096339368372
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 282.463,
+        "p99_us": 390.201,
+        "api_ops_s": 3496.5327296362752
+      }
+    },
+    "crud_block_ops_s": 2903.470747926925
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp32",
+    "kind": "maintained",
+    "external_peak_rss_kib": 197948,
+    "snapshot_bytes": 32160064,
+    "save_ms": 14.460116,
+    "load_ms": 14.182903,
+    "initial": {
+      "recall": 0.9873333333333333,
+      "p50_us": 437.05,
+      "p99_us": 526.179,
+      "qps": 2281.8756753353696
+    },
+    "final": {
+      "recall": 0.9511666666666667,
+      "p50_us": 442.11,
+      "p99_us": 526.679,
+      "qps": 2259.054678012589
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 181.757,
+        "p99_us": 401.491,
+        "api_ops_s": 5234.3567740786975
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 13.57,
+        "p99_us": 33.529,
+        "api_ops_s": 65119.71682543589
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 133.657,
+        "p99_us": 163.445,
+        "api_ops_s": 7492.752977476102
+      }
+    },
+    "crud_block_ops_s": 8819.507792301289
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp16",
+    "kind": "maintained",
+    "external_peak_rss_kib": 177120,
+    "snapshot_bytes": 16800064,
+    "save_ms": 36.073125,
+    "load_ms": 9.421795,
+    "initial": {
+      "recall": 0.987,
+      "p50_us": 365.192,
+      "p99_us": 421.53,
+      "qps": 2740.2309931606887
+    },
+    "final": {
+      "recall": 0.9511666666666667,
+      "p50_us": 370.882,
+      "p99_us": 462.151,
+      "qps": 2677.888877733994
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 167.517,
+        "p99_us": 380.821,
+        "api_ops_s": 5647.9126273850825
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 13.179,
+        "p99_us": 31.66,
+        "api_ops_s": 67132.78045177218
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 134.517,
+        "p99_us": 162.407,
+        "api_ops_s": 7440.053954497572
+      }
+    },
+    "crud_block_ops_s": 9185.086075641953
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "rabitq8",
+    "kind": "maintained",
+    "external_peak_rss_kib": 176708,
+    "snapshot_bytes": 9363552,
+    "save_ms": 4.694588,
+    "load_ms": 5.333525,
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 445.48,
+      "p99_us": 569.068,
+      "qps": 2233.4160039711946
+    },
+    "final": {
+      "recall": 0.9081666666666667,
+      "p50_us": 412.071,
+      "p99_us": 456.39,
+      "qps": 2437.678692513006
+    },
+    "operations": {
+      "update": {
+        "count": 30000,
+        "p50_us": 345.202,
+        "p99_us": 1225.423,
+        "api_ops_s": 2560.499980678582
+      },
+      "remove": {
+        "count": 30000,
+        "p50_us": 257.244,
+        "p99_us": 328.583,
+        "api_ops_s": 3821.026463588929
+      },
+      "add": {
+        "count": 30000,
+        "p50_us": 248.465,
+        "p99_us": 285.105,
+        "api_ops_s": 4020.0428859381605
+      }
+    },
+    "crud_block_ops_s": 3329.0548777481313
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "fp32",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 127708,
+    "snapshot_bytes": 39840064,
+    "save_ms": 15.638279,
+    "load_ms": 16.529981,
+    "final": {
+      "recall": 0.9498333333333333,
+      "p50_us": 498.059,
+      "p99_us": 619.006,
+      "qps": 2047.3957162318964
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "fp16",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 105780,
+    "snapshot_bytes": 20640064,
+    "save_ms": 40.253177,
+    "load_ms": 10.690068,
+    "final": {
+      "recall": 0.9498333333333333,
+      "p50_us": 419.262,
+      "p99_us": 514.118,
+      "qps": 2423.7670623152653
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "storage": "rabitq8",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 105776,
+    "snapshot_bytes": 11284416,
+    "save_ms": 4.059762,
+    "load_ms": 5.707155,
+    "final": {
+      "recall": 0.9485,
+      "p50_us": 466.31,
+      "p99_us": 556.267,
+      "qps": 2186.894313422727
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp32",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 104568,
+    "snapshot_bytes": 32160064,
+    "save_ms": 13.226463,
+    "load_ms": 13.704893,
+    "final": {
+      "recall": 0.965,
+      "p50_us": 453.5,
+      "p99_us": 549.218,
+      "qps": 2198.3277511318865
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "fp16",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 85828,
+    "snapshot_bytes": 16800064,
+    "save_ms": 35.515709,
+    "load_ms": 8.896096,
+    "final": {
+      "recall": 0.9646666666666667,
+      "p50_us": 371.902,
+      "p99_us": 429.39,
+      "qps": 2696.2638182341093
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "storage": "rabitq8",
+    "kind": "rebuild",
+    "external_peak_rss_kib": 85500,
+    "snapshot_bytes": 9363552,
+    "save_ms": 3.406576,
+    "load_ms": 4.727868,
+    "final": {
+      "recall": 0.9618333333333333,
+      "p50_us": 435.071,
+      "p99_us": 523.018,
+      "qps": 2300.5431486518023
+    }
+  }
+]
