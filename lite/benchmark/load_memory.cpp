@@ -153,14 +153,31 @@ run(const std::string& snapshot, uint64_t dim, uint64_t count, bool force_remove
     malloc_trim(0);
     const auto before_create = rss();
 #ifdef VSAG_BENCH_FULL
+    const char* profile = std::getenv("VSAG_FULL_PROFILE");
+    const bool small = profile != nullptr and std::string(profile) == "small";
+    require(profile == nullptr or small or std::string(profile) == "legacy",
+            "invalid Full profile");
+    const char* full_mode = std::getenv("VSAG_LOAD_FULL_MODE");
+    const std::string mode = full_mode == nullptr ? "fp32" : full_mode;
+    require(mode == "fp32" or mode == "fp16" or mode == "rabitq3x5", "invalid Full storage");
+    const std::string quantization =
+        mode == "rabitq3x5"
+            ? R"("base_quantization_type":"rabitq","precise_quantization_type":"rabitq",)"
+              R"("use_reorder":true,"rabitq_use_fht":true,"rabitq_bits_per_dim_query":32,)"
+              R"("rabitq_bits_per_dim_base":3,"rabitq_bits_per_dim_precise":5,"rabitq_error_rate":1.9}})"
+        : mode == "fp16" ? R"("base_quantization_type":"fp16","store_raw_vector":false}})"
+                         : std::string(R"("base_quantization_type":"fp32","store_raw_vector":)") +
+                               (small ? "false}}" : "true}}");
     const auto parameters =
         std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") + std::to_string(dim) +
         R"(,"index_param":{"max_degree":16,"ef_construction":128,)" +
+        (small
+             ? R"("build_thread_count":1,"base_io_type":"memory_io","precise_io_type":"memory_io",)"
+             : "") +
         (force_remove ? R"("graph_storage_type":"flat","support_force_remove":true,)"
                         R"("use_reverse_edges":true,)"
                       : R"("graph_storage_type":"compressed",)") +
-        R"("base_quantization_type":"fp32",)"
-        R"("store_raw_vector":true}})";
+        quantization;
     auto created = vsag::Factory::CreateIndex("hgraph", parameters);
     require(static_cast<bool>(created), "Full index create failed");
     auto index = *created;

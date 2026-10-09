@@ -1,0 +1,14 @@
+{
+  "scope": "shared libraries only; not complete package closure",
+  "strip_command": "strip --strip-unneeded; same operation for both",
+  "lite": {
+    "raw_bytes": 347528,
+    "stripped_bytes": 302576,
+    "stripped_sha256": "aa7d7a2bdb1d6ae9d766390820458e500eafc018c8f0ff5837e53a4264183524"
+  },
+  "native_full": {
+    "raw_bytes": 576730568,
+    "stripped_bytes": 40463344,
+    "stripped_sha256": "362f9dd0ffafec75c444a0efa84621463735601f71063490a2d7a1f104715a14"
+  }
+}

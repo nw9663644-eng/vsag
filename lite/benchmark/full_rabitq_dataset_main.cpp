@@ -10,6 +10,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <cstdlib>
 #include <ctime>
 #include <filesystem>
 #include <fstream>
@@ -113,14 +114,25 @@ current_rss_kib() {
 
 std::string
 create_parameters(int32_t dim, const std::string& mode, bool force_remove = false) {
+    const char* profile = std::getenv("VSAG_FULL_PROFILE");
+    const bool small = profile != nullptr and std::string(profile) == "small";
+    require(profile == nullptr or small or std::string(profile) == "legacy",
+            "invalid Full profile");
     const std::string prefix =
         std::string(R"({"dtype":"float32","metric_type":"l2","dim":)") + std::to_string(dim) +
         R"(,"index_param":{"max_degree":16,"ef_construction":128,)" +
+        (small
+             ? R"("build_thread_count":1,"base_io_type":"memory_io","precise_io_type":"memory_io",)"
+             : "") +
         (force_remove ? R"("support_force_remove":true,"use_reverse_edges":true,)" : "") +
         (force_remove ? R"("graph_storage_type":"flat",)"
                       : R"("graph_storage_type":"compressed",)");
     if (mode == "fp32") {
-        return prefix + R"("base_quantization_type":"fp32","store_raw_vector":true}})";
+        return prefix + R"("base_quantization_type":"fp32","store_raw_vector":)" +
+               (small ? "false}}" : "true}}");
+    }
+    if (mode == "fp16") {
+        return prefix + R"("base_quantization_type":"fp16","store_raw_vector":false}})";
     }
     if (mode == "rabitq1") {
         return prefix + R"("base_quantization_type":"rabitq","precise_quantization_type":"fp32",)"
@@ -134,13 +146,14 @@ create_parameters(int32_t dim, const std::string& mode, bool force_remove = fals
                R"("rabitq_bits_per_dim_base":3,"rabitq_bits_per_dim_precise":5,)"
                R"("rabitq_error_rate":1.9}})";
     }
-    throw std::invalid_argument("mode must be fp32, rabitq1, or rabitq3x5");
+    throw std::invalid_argument("mode must be fp32, fp16, rabitq1, or rabitq3x5");
 }
 
 std::string
 search_parameters(const std::string& mode, uint64_t ef_search) {
     return std::string(R"({"hgraph":{"ef_search":)") + std::to_string(ef_search) +
-           R"(,"rabitq_one_bit_search":)" + (mode == "fp32" ? "false" : "true") + "}}";
+           R"(,"rabitq_one_bit_search":)" +
+           ((mode == "fp32" or mode == "fp16") ? "false" : "true") + "}}";
 }
 
 std::shared_ptr<vsag::Index>
@@ -346,6 +359,11 @@ run(const std::string& directory,
                             ->Ids(ids.data())
                             ->Float32Vectors(base.values.data())
                             ->Owner(false);
+    std::ofstream config_output(snapshot + ".parameters.json");
+    config_output << "{\"build\":" << create_parameters(base.dim, mode, crud_cycles != 0)
+                  << ",\"search\":" << search_parameters(mode, ef_search) << "}\n";
+    config_output.close();
+    require(static_cast<bool>(config_output), "configuration output failed");
     auto index = create_index(base.dim, mode, crud_cycles != 0);
     auto start = Clock::now();
     auto built = index->Build(base_dataset);
@@ -403,6 +421,18 @@ run(const std::string& directory,
     }
     samples.close();
     require(static_cast<bool>(samples), "query samples write failed");
+
+    std::ofstream neighbors_output(snapshot + ".neighbors.csv");
+    neighbors_output << "query,rank,id,distance\n" << std::hexfloat;
+    for (uint64_t row = 0; row < before.size(); ++row) {
+        for (uint64_t rank = 0; rank < before[row].size(); ++rank) {
+            const auto& neighbor = before[row][rank];
+            neighbors_output << row << ',' << rank << ',' << neighbor.id << ',' << neighbor.distance
+                             << '\n';
+        }
+    }
+    neighbors_output.close();
+    require(static_cast<bool>(neighbors_output), "neighbor output failed");
 
     if (crud_cycles != 0) {
         measure_mixed(index,
@@ -480,10 +510,11 @@ run(const std::string& directory,
 int
 main(int argc, char** argv) {
     try {
-        require((argc >= 4 and argc <= 6) or argc == 8 or argc == 9,
-                "usage: full_rabitq_dataset_benchmark DATASET_DIRECTORY SNAPSHOT_PATH "
-                "MODE(fp32|rabitq1|rabitq3x5) [EF_SEARCH [WARMUP_ROUNDS [CRUD_CYCLES QUERY_EVERY "
-                "[diagnose]]]]");
+        require(
+            (argc >= 4 and argc <= 6) or argc == 8 or argc == 9,
+            "usage: full_rabitq_dataset_benchmark DATASET_DIRECTORY SNAPSHOT_PATH "
+            "MODE(fp32|fp16|rabitq1|rabitq3x5) [EF_SEARCH [WARMUP_ROUNDS [CRUD_CYCLES QUERY_EVERY "
+            "[diagnose]]]]");
         const auto ef_search = argc >= 5 ? parse_number(argv[4]) : 128;
         const auto warmup_rounds = argc >= 6 ? parse_number(argv[5]) : 0;
         require(ef_search > 0 and ef_search <= 1000000, "invalid query budget");

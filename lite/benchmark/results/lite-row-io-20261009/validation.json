@@ -1,0 +1,15 @@
+{
+  "release": "6/6",
+  "asan_ubsan_leakdetect": "8/8",
+  "coverage_tests": "6/6",
+  "production_lite_coverage": {
+    "covered": 2569,
+    "total": 2717,
+    "percent": 94.55281560544718,
+    "scope": "src/lite+include/vsag/lite, all instrumented test TUs"
+  },
+  "paired_snapshot_and_neighbors": 18,
+  "clang_format_15": "passed",
+  "clang_tidy_15": "no user diagnostics; dependency warnings emitted",
+  "block_write_and_short_write_regression": "passed"
+}

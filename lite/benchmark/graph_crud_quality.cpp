@@ -108,6 +108,8 @@ run(const std::string& directory,
     require(query_results.empty() or not std::filesystem::exists(query_results),
             "query results path already exists");
 
+    require(query_results.empty() or not std::filesystem::exists(query_results + ".latencies.csv"),
+            "latency results path already exists");
     require(query_results.empty() or not std::filesystem::exists(query_results + ".neighbors.csv"),
             "neighbor results path already exists");
 
@@ -143,6 +145,7 @@ run(const std::string& directory,
                                                        : vsag::lite::VectorStorage::FP32;
     const uint64_t degree = environment_number("VSAG_GRAPH_DEGREE", 16);
     const uint64_t ef = environment_number("VSAG_GRAPH_EF", 128);
+    const vsag::lite::SearchOptions options{environment_number("VSAG_GRAPH_QUERY_EF", ef)};
     require(static_cast<bool>(index->BuildGraph(representation, degree, ef)), "graph build failed");
     const auto build_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
     const auto crud_start = Clock::now();
@@ -166,7 +169,7 @@ run(const std::string& directory,
     std::vector<std::vector<vsag::lite::Neighbor>> before;
     for (uint64_t i = 0; i < queries.size(); ++i) {
         start = Clock::now();
-        auto result = index->Search(queries[i].data(), dim, k);
+        auto result = index->SearchWithOptions(queries[i].data(), dim, k, options);
         latencies.push_back(
             std::chrono::duration<double, std::micro>(Clock::now() - start).count());
         require(static_cast<bool>(result) and result->size() == static_cast<uint64_t>(k),
@@ -189,6 +192,12 @@ run(const std::string& directory,
                          << static_cast<double>(query_hits[i]) / k << '\n';
         }
         require(static_cast<bool>(query_output), "query results write failed");
+        std::ofstream timings(query_results + ".latencies.csv");
+        timings << "query,latency_us\n" << std::fixed << std::setprecision(6);
+        for (uint64_t query = 0; query < latencies.size(); ++query) {
+            timings << query << ',' << latencies[query] << '\n';
+        }
+        require(static_cast<bool>(timings), "latency results write failed");
         std::ofstream neighbors(query_results + ".neighbors.csv");
         require(static_cast<bool>(neighbors), "neighbor results open failed");
         neighbors << "query,rank,id,distance\n" << std::hexfloat;
@@ -213,7 +222,7 @@ run(const std::string& directory,
     require(static_cast<bool>(loaded) and (*loaded)->Size() == base.size(), "load failed");
     const auto load_ms = std::chrono::duration<double, std::milli>(Clock::now() - start).count();
     for (uint64_t i = 0; i < queries.size(); ++i) {
-        auto after = (*loaded)->Search(queries[i].data(), dim, k);
+        auto after = (*loaded)->SearchWithOptions(queries[i].data(), dim, k, options);
         require(static_cast<bool>(after) and after->size() == before[i].size(),
                 "post-load search failed");
         for (uint64_t j = 0; j < before[i].size(); ++j) {
@@ -222,16 +231,16 @@ run(const std::string& directory,
                 "post-load result changed");
         }
     }
-    std::cout
-        << "base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,"
-           "search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_ms\n";
+    std::cout << "base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,"
+                 "search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_"
+                 "ms,query_ef_search\n";
     std::cout << base.size() << ',' << queries.size() << ',' << dim << ',' << k << ',' << rounds
               << ',' << crud_ops << ',' << std::fixed << std::setprecision(6)
               << static_cast<double>(hits) / static_cast<double>(queries.size() * k) << ','
               << build_ms << ',' << percentile(latencies, 0.50) << ','
               << percentile(latencies, 0.99) << ',' << save_ms << ',' << load_ms << ','
               << std::filesystem::file_size(snapshot) << ',' << storage << ',' << degree << ','
-              << ef << ',' << crud_ms << '\n';
+              << ef << ',' << crud_ms << ',' << options.ef_search << '\n';
     return 0;
 }
 }  // namespace
