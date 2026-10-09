@@ -1,0 +1,36 @@
+[
+  {
+    "dataset": "cohere100k",
+    "storage": "rabitq8",
+    "name": "control",
+    "recall_at_k": 0.937,
+    "build_ms": 32653.892251,
+    "search_p50_us": 1170.064,
+    "search_p99_us": 1397.69,
+    "save_ms": 38.885562,
+    "snapshot_bytes": 93603552.0,
+    "external_peak_rss_kib": 1063716.0,
+    "load_ms": 64.215466,
+    "loaded_rss_kib": 102904.0,
+    "process_peak_rss_kib": 120592.0,
+    "before_create_rss_kib": 3468.0,
+    "before_load_rss_kib": 3628.0
+  },
+  {
+    "dataset": "cohere100k",
+    "storage": "rabitq8",
+    "name": "lite",
+    "recall_at_k": 0.937,
+    "build_ms": 33266.948157,
+    "search_p50_us": 1113.045,
+    "search_p99_us": 1327.881,
+    "save_ms": 38.413073,
+    "snapshot_bytes": 93603552.0,
+    "external_peak_rss_kib": 1063712.0,
+    "load_ms": 63.199127,
+    "loaded_rss_kib": 102868.0,
+    "process_peak_rss_kib": 120556.0,
+    "before_create_rss_kib": 3444.0,
+    "before_load_rss_kib": 3596.0
+  }
+]
