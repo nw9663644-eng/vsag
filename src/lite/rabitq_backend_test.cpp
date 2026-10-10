@@ -845,7 +845,9 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t count = 48;
     for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}}) {
-        for (bool incoming : {false, true}) {
+        for (uint64_t configuration = 0; configuration < 8; ++configuration) {
+            const bool incoming = (configuration & 4) != 0;
+            const uint64_t stages = configuration & 3;
             std::vector<float> base(count * dim);
             std::vector<int64_t> ids(count);
             codec::GraphTopology graph;
@@ -867,8 +869,10 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
             }
             codec::MutableGraphState reference(model, codes, graph, ids, 4, 32, false, incoming);
             auto cached = reference;
-            reference.ConfigureIncomingProtection(codec::IncomingProtection::RECOUNT);
-            cached.ConfigureIncomingProtection(codec::IncomingProtection::CACHED);
+            reference.ConfigureIncomingProtection(
+                codec::IncomingProtection::RECOUNT, (stages & 1) != 0, (stages & 2) != 0);
+            cached.ConfigureIncomingProtection(
+                codec::IncomingProtection::CACHED, (stages & 1) != 0, (stages & 2) != 0);
             REQUIRE_THROWS(
                 cached.ConfigureIncomingProtection(static_cast<codec::IncomingProtection>(99)));
             const auto check = [&] {

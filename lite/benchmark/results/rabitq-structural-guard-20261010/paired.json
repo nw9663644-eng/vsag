@@ -1,0 +1,44 @@
+{
+  "gist10k600-add": {
+    "extra_hits": 201,
+    "wins": 171,
+    "losses": 32,
+    "ties": 397,
+    "mean_recall_delta": 0.0335
+  },
+  "gist10k600-remove": {
+    "extra_hits": 18,
+    "wins": 24,
+    "losses": 10,
+    "ties": 566,
+    "mean_recall_delta": 0.003
+  },
+  "gist10k600-both": {
+    "extra_hits": 215,
+    "wins": 175,
+    "losses": 33,
+    "ties": 392,
+    "mean_recall_delta": 0.035833333333333335
+  },
+  "cohere10k600-add": {
+    "extra_hits": 70,
+    "wins": 63,
+    "losses": 3,
+    "ties": 534,
+    "mean_recall_delta": 0.011666666666666667
+  },
+  "cohere10k600-remove": {
+    "extra_hits": 14,
+    "wins": 15,
+    "losses": 2,
+    "ties": 583,
+    "mean_recall_delta": 0.0023333333333333335
+  },
+  "cohere10k600-both": {
+    "extra_hits": 84,
+    "wins": 74,
+    "losses": 5,
+    "ties": 521,
+    "mean_recall_delta": 0.014
+  }
+}

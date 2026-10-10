@@ -1,0 +1,29 @@
+{
+  "tests": {
+    "release": 6,
+    "both_guard_asan_ubsan": 5,
+    "restored_default_asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "default_adapter_restored": true,
+  "default_library_sha256": "8fd79db9ee2b21dc9c1ceb8c8fb5eb9f9441115c755cbdffb7bfb36d3e50cc0e",
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "d5466e977a896f2000d40d025a601c1fce770f33e515ddfa4bd41d49d189adf8",
+    "src/lite/rabitq_backend_test.cpp": "c8236df7f573bd543cd671ed9aa0c2f11bdf53b34ed02228f338776b00ffcb94",
+    "src/lite/graph_allocation_test.cpp": "1d9ec2b3255177b6ee4f293bd9538d09d6a02e5e73fbbdf0c74bca689711013c",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "post_timing_edits": [
+    "One production comment clarified cached vs recounted degree table",
+    "Golden configuration loops flattened with identical24 configurations/order; no production logic change"
+  ],
+  "limits": [
+    "Public API remains NONE; internal stages not default-enabled",
+    "Scoped coverage only, not full native Full suite",
+    "Node document checker not run"
+  ]
+}

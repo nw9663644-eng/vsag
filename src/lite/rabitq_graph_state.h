@@ -626,12 +626,16 @@ public:
 
     // Internal policy only; not persisted or exposed by the public Lite API.
     void
-    ConfigureIncomingProtection(IncomingProtection mode) {
+    ConfigureIncomingProtection(IncomingProtection mode,
+                                bool protect_add = false,
+                                bool protect_remove = false) {
         codec_require(active_journal_ == nullptr and (mode == IncomingProtection::NONE or
                                                       mode == IncomingProtection::RECOUNT or
                                                       mode == IncomingProtection::CACHED),
                       "invalid incoming protection mode");
         incoming_protection_ = mode;
+        protect_added_incoming_ = protect_add;
+        protect_removed_incoming_ = protect_remove;
         incoming_counts_valid_ = false;
     }
 
@@ -670,6 +674,9 @@ public:
             slots_.emplace(id, slot);
             for (uint64_t neighbor : neighbors) {
                 link(neighbor, slot);
+            }
+            if (incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_) {
+                protect_incoming({slot});
             }
             return true;
         } catch (...) {
@@ -726,6 +733,9 @@ public:
             replace_neighbors(count, neighbors);
             for (uint64_t neighbor : neighbors) {
                 link(neighbor, count);
+            }
+            if (incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_) {
+                protect_incoming({count});
             }
             active_journal_ = nullptr;
             return true;
@@ -1065,7 +1075,16 @@ public:
             for (const uint64_t old_candidate : removed_neighbors) {
                 repair_candidates.push_back(remap(old_candidate));
             }
-            repair(std::move(affected_nodes), repair_candidates);
+            if (incoming_protection_ != IncomingProtection::NONE and protect_removed_incoming_) {
+                std::sort(affected_nodes.begin(), affected_nodes.end());
+                affected_nodes.erase(std::unique(affected_nodes.begin(), affected_nodes.end()),
+                                     affected_nodes.end());
+                const auto targets = affected_nodes;
+                repair(std::move(affected_nodes), repair_candidates);
+                protect_incoming(targets);
+            } else {
+                repair(std::move(affected_nodes), repair_candidates);
+            }
             return true;
         } catch (...) {
             incoming_counts_valid_ = false;
@@ -1503,7 +1522,7 @@ private:
     }
 
     // Experimental adaptation of floating GraphBackend::ensure_incoming.
-    // One temporary degree table; no permanent reverse-edge index.
+    // Recount reference or cached degrees; neither adds a reverse-edge index.
     void
     protect_incoming(const std::vector<uint64_t>& targets) {
         if (Size() <= 1) {
@@ -1518,7 +1537,7 @@ private:
         auto& indegrees =
             incoming_protection_ == IncomingProtection::CACHED ? incoming_counts_ : recounted;
         for (const uint64_t target : targets) {
-            if (indegrees[target] != 0) {
+            if (target >= Size() or indegrees[target] != 0) {
                 continue;
             }
             uint64_t selected_source = Size();
@@ -1636,6 +1655,8 @@ private:
     }
 
     IncomingProtection incoming_protection_{IncomingProtection::NONE};
+    bool protect_added_incoming_{};
+    bool protect_removed_incoming_{};
     std::vector<uint64_t> incoming_counts_;
     bool incoming_counts_valid_{};
     uint64_t incoming_count_rebuilds_{};

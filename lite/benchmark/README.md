@@ -1913,3 +1913,7 @@ per-query post/mixed truth evidence.
 ## Incremental counts across mixed structural CRUD (2026-10-10)
 
 [Real structure and fixed mixed replay](results/rabitq-mixed-count-cache-20261010/README.md): successful RaBitQ Add/Remove now maintain runtime counts through append/slot compaction instead of invalidating them. Relative to the prior protected-cache library, mixed mutation blocks decrease10.05%/11.61% with identical paired snapshots/results. Recall .811667/.908000 still fails study targets, public protection remains NONE; this is not Full/default-query/100k acceptance. Includes warmed allocation rollback tests and scoped fresh coverage.
+
+## Structural incoming-guard factorial (2026-10-10)
+
+[Fixed-budget Add/Remove quality isolation](results/rabitq-structural-guard-20261010/README.md) evaluates independent internal stage flags, default off. Both improves mixed GIST/Cohere10k recall .811667/.908000→.847500/.922000 while mutation blocks +6.39%/+3.30% and queries are slower. Most gains come from Add; targets still fail. Includes raw paired hits, warmed rollback tests, fresh scoped coverage and complete source/build provenance. Not native Full, default adoption or100k acceptance.
