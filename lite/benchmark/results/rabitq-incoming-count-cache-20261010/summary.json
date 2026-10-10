@@ -1,0 +1,82 @@
+[
+  {
+    "dataset": "gist10k600",
+    "variant": "recount",
+    "crud_ms": 18326.886468,
+    "update_p50_us": 571.739,
+    "update_p99_us": 1537.606,
+    "update_ops_s": 1636.9392614715027,
+    "snapshot_bytes": 11284416,
+    "external_peak_rss_kib": 219512,
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 454.48,
+      "p99_us": 578.766
+    },
+    "final": {
+      "recall": 0.8976666666666666,
+      "p50_us": 428.681,
+      "p99_us": 497.97
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "variant": "cached",
+    "crud_ms": 15432.329161,
+    "update_p50_us": 472.799,
+    "update_p99_us": 1450.619,
+    "update_ops_s": 1943.9709772271362,
+    "snapshot_bytes": 11284416,
+    "external_peak_rss_kib": 219532,
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 445.39,
+      "p99_us": 594.026
+    },
+    "final": {
+      "recall": 0.8976666666666666,
+      "p50_us": 433.78,
+      "p99_us": 491.368
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "cached",
+    "crud_ms": 12760.902898,
+    "update_p50_us": 385.322,
+    "update_p99_us": 1273.552,
+    "update_ops_s": 2350.930826744388,
+    "snapshot_bytes": 9363552,
+    "external_peak_rss_kib": 176728,
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 430.99,
+      "p99_us": 524.399
+    },
+    "final": {
+      "recall": 0.9515,
+      "p50_us": 412.42,
+      "p99_us": 459.279
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "recount",
+    "crud_ms": 15657.821598,
+    "update_p50_us": 480.248,
+    "update_p99_us": 1361.529,
+    "update_ops_s": 1915.975336175241,
+    "snapshot_bytes": 9363552,
+    "external_peak_rss_kib": 176752,
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 435.88,
+      "p99_us": 562.689
+    },
+    "final": {
+      "recall": 0.9515,
+      "p50_us": 420.91,
+      "p99_us": 465.36
+    }
+  }
+]

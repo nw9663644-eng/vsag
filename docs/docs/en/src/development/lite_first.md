@@ -392,3 +392,7 @@ after this workload, while formal maintenance quality remains lower. An isolated
 Update incoming-protection candidate improves recall but adds about33% mutation
 cost and fails the GIST study floor; it is not enabled in production. See the
 adjacent candidate results. Diagnostic full-budget recall is not formal acceptance.
+
+## Experimental runtime incoming-count maintenance
+
+RaBitQ now contains an internal NONE/RECOUNT/CACHED incoming-protection policy; the public adapter remains NONE. CACHED lazily maintains one uint64_t incoming count per slot through adjacency changes instead of recounting the whole graph on every Update. Add/Remove and failed journal mutations invalidate it; the next Update rebuilds. Reverse-adjacency copy rollback preserves the original cache. Runtime counts consume 8N logical bytes, are included in internal memory accounting, and do not change snapshots/API/model/budgets. Disabling retains capacity. Continuous Update replay at10k reduced the protected prototype's mutation block by15.79% on GIST and18.50% on Cohere, with byte-identical paired snapshots and ordered results. GIST Recall .897667 still fails the study target, so the policy is not default-enabled; mixed churn,100k and native Full benefits are unproven. See lite/benchmark/results/rabitq-incoming-count-cache-20261010 for raw data, golden tests, scoped coverage and limitations.

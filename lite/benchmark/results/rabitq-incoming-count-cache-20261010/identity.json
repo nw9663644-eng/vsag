@@ -1,0 +1,33 @@
+{
+  "base_head": "48db28538e417a760d8dad07a1c93bc46f859242",
+  "default_library_sha256": "4920cbb56ce991aacfd32f9bc577083f7c35698e4dbf8874106bb6f954630e93",
+  "builder_sha256": "21f1b4e2a3835b1c4b3ea016a182981bf24ef655527ffcb4153ce21690aae75c",
+  "source_sha256": {
+    "src/lite/rabitq_graph_state.h": "e0a0fc6c3ee0c37faf54cf951381c6e45b62601007e32865e977c462e74db058",
+    "src/lite/rabitq_backend_test.cpp": "da5a85aacc5a13110fdaf13212195655389780a579d2d81fc9ab14619df8f5f3"
+  },
+  "config": {
+    "degree": 16,
+    "construction_ef": 128,
+    "query_ef": 512,
+    "cpu": 0,
+    "storage": "rabitq8",
+    "mode": "update",
+    "rounds": 3,
+    "cycles_per_round": 10000,
+    "trials": 1,
+    "queries": 600
+  },
+  "variants": {
+    "recount": "d9664c76b6963d6069bb8472b966d73a7a2ae9caa30365b540b08692f57e1d6b",
+    "cached": "1bb489064f2fe9338d65f027383d17693849f1cdd926548a4b6336b22c3d6efb"
+  },
+  "limits": [
+    "same historical600 queries, not blind",
+    "single pair per distribution",
+    "not public/default enabled",
+    "Add/Remove invalidate, mixed churn does not amortize recount",
+    "retains8N bytes after first Update; not in snapshot",
+    "not Full/100k/cold I/O"
+  ]
+}

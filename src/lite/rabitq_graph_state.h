@@ -537,21 +537,25 @@ struct MutableMemoryUsage {
     uint64_t adjacency_edges{};
     uint64_t adjacency_logical_bytes{};
     uint64_t adjacency_capacity_bytes{};
+    uint64_t incoming_count_logical_bytes{};
+    uint64_t incoming_count_capacity_bytes{};
     uint64_t slot_entries{};
     uint64_t slot_buckets{};
 
     [[nodiscard]] uint64_t
     KnownLogicalBytes() const {
         return model_logical_bytes + codes_logical_bytes + ids_logical_bytes +
-               adjacency_logical_bytes;
+               adjacency_logical_bytes + incoming_count_logical_bytes;
     }
 
     [[nodiscard]] uint64_t
     KnownCapacityBytes() const {
         return model_capacity_bytes + codes_capacity_bytes + ids_capacity_bytes +
-               adjacency_capacity_bytes;
+               adjacency_capacity_bytes + incoming_count_capacity_bytes;
     }
 };
+
+enum class IncomingProtection { NONE, RECOUNT, CACHED };
 
 class MutableGraphState {
 public:
@@ -620,12 +624,34 @@ public:
                metadata_bits == stored_bits;
     }
 
+    // Internal policy only; not persisted or exposed by the public Lite API.
+    void
+    ConfigureIncomingProtection(IncomingProtection mode) {
+        codec_require(active_journal_ == nullptr and (mode == IncomingProtection::NONE or
+                                                      mode == IncomingProtection::RECOUNT or
+                                                      mode == IncomingProtection::CACHED),
+                      "invalid incoming protection mode");
+        incoming_protection_ = mode;
+        incoming_counts_valid_ = false;
+    }
+
+    [[nodiscard]] uint64_t
+    IncomingCountRebuilds() const {
+        return incoming_count_rebuilds_;
+    }
+
+    [[nodiscard]] uint64_t
+    IncomingCountBytes() const {
+        return incoming_counts_.capacity() * sizeof(uint64_t);
+    }
+
     [[nodiscard]] bool
     Add(int64_t id, const float* vector) {
         codec_require(vector != nullptr, "null mutable graph vector");
         if (slots_.count(id) != 0) {
             return false;
         }
+        incoming_counts_valid_ = false;
         float query_norm = 0.0F;
         const auto query = normalize(model_, vector, query_norm);
         const auto neighbors =
@@ -651,6 +677,7 @@ public:
         if (Contains(id)) {
             return false;
         }
+        incoming_counts_valid_ = false;
         codec_require(active_journal_ == nullptr, "nested graph add transaction");
         if (use_incoming_adjacency_) {
             auto next = *this;
@@ -714,7 +741,12 @@ public:
         if (not Contains(id)) {
             return false;
         }
-        return UpdatePrepared(id, prepare_encoding(model_, vector));
+        try {
+            return UpdatePrepared(id, prepare_encoding(model_, vector));
+        } catch (...) {
+            incoming_counts_valid_ = false;
+            throw;
+        }
     }
 
     // Update changes no model, IDs, slot mapping or container sizes. Journal
@@ -745,6 +777,7 @@ public:
             active_journal_ = nullptr;
             return updated;
         } catch (...) {
+            incoming_counts_valid_ = false;
             active_journal_ = nullptr;
             codes_.metadata[slot] = journal.metadata;
             std::copy(journal.filter.begin(),
@@ -791,6 +824,9 @@ public:
         const auto& query = prepared.query;
         const auto neighbors = nearest(query, query_norm, slot, max_degree_);
         const auto old_neighbors = adjacency_[slot];
+        if (incoming_protection_ == IncomingProtection::CACHED) {
+            prepare_incoming_counts();
+        }
         std::vector<uint64_t> affected_nodes;
         affected_nodes.reserve(old_neighbors.size());
         const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
@@ -800,6 +836,9 @@ public:
             affected_nodes = incoming_[slot];
             for (const uint64_t source : affected_nodes) {
                 erase_value(adjacency_[source], slot);
+                if (incoming_counts_valid_) {
+                    --incoming_counts_[slot];
+                }
             }
             incoming_[slot].clear();
         } else {
@@ -811,6 +850,9 @@ public:
                 if (std::find(reverse.begin(), reverse.end(), slot) != reverse.end()) {
                     remember_row(source);
                     reverse.erase(std::remove(reverse.begin(), reverse.end(), slot), reverse.end());
+                    if (incoming_counts_valid_) {
+                        --incoming_counts_[slot];
+                    }
                     affected_nodes.push_back(source);
                 }
             }
@@ -826,6 +868,11 @@ public:
             link(neighbor, slot);
         }
         repair(std::move(affected_nodes), old_neighbors);
+        if (incoming_protection_ != IncomingProtection::NONE) {
+            auto targets = old_neighbors;
+            targets.push_back(slot);
+            protect_incoming(targets);
+        }
         return true;
     }
 
@@ -896,6 +943,7 @@ public:
         if (found == slots_.end()) {
             return false;
         }
+        incoming_counts_valid_ = false;
         const uint64_t slot = found->second;
         const uint64_t last = Size() - 1;
         const auto removed_neighbors = adjacency_[slot];
@@ -1018,6 +1066,11 @@ public:
 
     void
     Validate() const {
+        if (incoming_counts_valid_) {
+            std::vector<uint64_t> actual;
+            count_incoming(actual);
+            codec_require(incoming_counts_ == actual, "cached incoming degree mismatch");
+        }
         codec_require(
             ids_.size() == Size() and adjacency_.size() == Size() and slots_.size() == Size(),
             "mutable graph size mismatch");
@@ -1220,6 +1273,8 @@ public:
             result.adjacency_logical_bytes += neighbors.size() * sizeof(uint64_t);
             result.adjacency_capacity_bytes += neighbors.capacity() * sizeof(uint64_t);
         }
+        result.incoming_count_logical_bytes = incoming_counts_.size() * sizeof(uint64_t);
+        result.incoming_count_capacity_bytes = IncomingCountBytes();
         result.slot_entries = slots_.size();
         result.slot_buckets = slots_.bucket_count();
         return result;
@@ -1286,6 +1341,20 @@ private:
 
     void
     sync_incoming(uint64_t source, const std::vector<uint64_t>& old_neighbors) {
+        if (incoming_counts_valid_) {
+            const auto& neighbors = adjacency_[source];
+            for (const uint64_t target : old_neighbors) {
+                if (std::find(neighbors.begin(), neighbors.end(), target) == neighbors.end()) {
+                    --incoming_counts_[target];
+                }
+            }
+            for (const uint64_t target : neighbors) {
+                if (std::find(old_neighbors.begin(), old_neighbors.end(), target) ==
+                    old_neighbors.end()) {
+                    ++incoming_counts_[target];
+                }
+            }
+        }
         if (not use_incoming_adjacency_) {
             return;
         }
@@ -1382,6 +1451,83 @@ private:
     }
 
     void
+    count_incoming(std::vector<uint64_t>& counts) const {
+        counts.assign(Size(), 0);
+        for (const auto& row : adjacency_) {
+            for (const uint64_t target : row) {
+                ++counts[target];
+            }
+        }
+    }
+
+    void
+    prepare_incoming_counts() {
+        if (incoming_counts_valid_) {
+            return;
+        }
+        count_incoming(incoming_counts_);
+        incoming_counts_valid_ = true;
+        ++incoming_count_rebuilds_;
+    }
+
+    // Experimental adaptation of floating GraphBackend::ensure_incoming.
+    // One temporary degree table; no permanent reverse-edge index.
+    void
+    protect_incoming(const std::vector<uint64_t>& targets) {
+        if (Size() <= 1) {
+            return;
+        }
+        std::vector<uint64_t> recounted;
+        if (incoming_protection_ == IncomingProtection::CACHED) {
+            prepare_incoming_counts();
+        } else {
+            count_incoming(recounted);
+        }
+        auto& indegrees =
+            incoming_protection_ == IncomingProtection::CACHED ? incoming_counts_ : recounted;
+        for (const uint64_t target : targets) {
+            if (indegrees[target] != 0) {
+                continue;
+            }
+            uint64_t selected_source = Size();
+            uint64_t selected_edge = 0;
+            float farthest_distance = -1.0F;
+            for (const uint64_t source : adjacency_[target]) {
+                const auto query = decode_query(source);
+                const float norm = codes_.At(source).metadata.norm;
+                const float sum = std::accumulate(query.begin(), query.end(), 0.0F);
+                for (uint64_t edge = 0; edge < adjacency_[source].size(); ++edge) {
+                    const uint64_t displaced = adjacency_[source][edge];
+                    if (indegrees[displaced] <= 1) {
+                        continue;
+                    }
+                    const auto code = codes_.At(displaced);
+                    const auto coarse = filter_estimate(query, norm, code);
+                    const float distance =
+                        full_distance(query, norm, code, coarse.centered_ip, sum);
+                    if (selected_source == Size() or distance > farthest_distance) {
+                        selected_source = source;
+                        selected_edge = edge;
+                        farthest_distance = distance;
+                    }
+                }
+            }
+            if (selected_source == Size()) {
+                continue;
+            }
+            remember_row(selected_source);
+            const auto old_neighbors = adjacency_[selected_source];
+            const uint64_t displaced = adjacency_[selected_source][selected_edge];
+            adjacency_[selected_source][selected_edge] = target;
+            if (incoming_protection_ != IncomingProtection::CACHED) {
+                --indegrees[displaced];
+                ++indegrees[target];
+            }
+            sync_incoming(selected_source, old_neighbors);
+        }
+    }
+
+    void
     repair(std::vector<uint64_t> affected_nodes,
            const std::vector<uint64_t>& additional_candidates) {
         std::sort(affected_nodes.begin(), affected_nodes.end());
@@ -1457,6 +1603,10 @@ private:
         sync_incoming(source, old_neighbors);
     }
 
+    IncomingProtection incoming_protection_{IncomingProtection::NONE};
+    std::vector<uint64_t> incoming_counts_;
+    bool incoming_counts_valid_{};
+    uint64_t incoming_count_rebuilds_{};
     UpdateJournal* active_journal_{};
     Model model_;
     EncodedRecords codes_;

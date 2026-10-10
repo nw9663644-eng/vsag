@@ -1,0 +1,21 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2799,
+      "total": 2943,
+      "percent": 95.10703363914374
+    },
+    "shared_simd": {
+      "covered": 233,
+      "total": 249,
+      "percent": 93.57429718875503
+    },
+    "combined": {
+      "covered": 3032,
+      "total": 3192,
+      "percent": 94.9874686716792
+    }
+  },
+  "fresh_counters": true,
+  "scope_note": "Compiled Lite production/public headers and instantiated shared SIMD; excludes tests. Not whole Full VSAG coverage."
+}

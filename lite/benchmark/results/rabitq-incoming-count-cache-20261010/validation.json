@@ -1,0 +1,22 @@
+{
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "e0a0fc6c3ee0c37faf54cf951381c6e45b62601007e32865e977c462e74db058",
+    "src/lite/rabitq_backend_test.cpp": "5973a2599e7640c447e2367ea561e92b819de68c6ea662a6ad2409632d8ba877"
+  },
+  "default_library_sha256": "4920cbb56ce991aacfd32f9bc577083f7c35698e4dbf8874106bb6f954630e93",
+  "tests": {
+    "release": 6,
+    "cached_asan_ubsan": 5,
+    "default_asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "test_changed_after_timing": true,
+  "limits": [
+    "Scoped Lite/shared SIMD coverage only",
+    "Node document checker and native Full suite not run",
+    "single pair per dataset; public adapter NONE"
+  ]
+}

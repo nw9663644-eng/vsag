@@ -839,3 +839,98 @@ TEST_CASE("RaBitQ skipped removal rows preserve legacy high-dimensional compacti
         }
     }
 }
+
+TEST_CASE("RaBitQ cached incoming counts match recount protection through structural CRUD",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    constexpr uint64_t count = 48;
+    for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}}) {
+        for (bool incoming : {false, true}) {
+            std::vector<float> base(count * dim);
+            std::vector<int64_t> ids(count);
+            codec::GraphTopology graph;
+            graph.offsets.push_back(0);
+            for (uint64_t row = 0; row < count; ++row) {
+                ids[row] = 4000 - static_cast<int64_t>(row * 77);
+                for (uint64_t d = 0; d < dim; ++d) {
+                    base[row * dim + d] = std::sin(static_cast<float>(row * 7 + d) * .17F);
+                }
+                for (uint64_t step : {uint64_t{1}, uint64_t{13}, uint64_t{37}}) {
+                    graph.neighbors.push_back((row + step) % count);
+                }
+                graph.offsets.push_back(graph.neighbors.size());
+            }
+            const auto model = codec::train(base, count, dim, 47);
+            codec::EncodedRecords codes(dim);
+            for (uint64_t row = 0; row < count; ++row) {
+                codes.Append(codec::encode(model, base.data() + row * dim));
+            }
+            codec::MutableGraphState reference(model, codes, graph, ids, 4, 32, false, incoming);
+            auto cached = reference;
+            reference.ConfigureIncomingProtection(codec::IncomingProtection::RECOUNT);
+            cached.ConfigureIncomingProtection(codec::IncomingProtection::CACHED);
+            REQUIRE_THROWS(
+                cached.ConfigureIncomingProtection(static_cast<codec::IncomingProtection>(99)));
+            const auto check = [&] {
+                reference.Validate();
+                cached.Validate();
+                std::stringstream first;
+                std::stringstream second;
+                codec::save_mutable_snapshot(first, reference);
+                codec::save_mutable_snapshot(second, cached);
+                REQUIRE(first.str() == second.str());
+                const auto expected = reference.Search(base.data(), 10);
+                const auto actual = cached.Search(base.data(), 10);
+                REQUIRE(expected.neighbors.size() == actual.neighbors.size());
+                for (uint64_t i = 0; i < expected.neighbors.size(); ++i) {
+                    REQUIRE(expected.neighbors[i].id == actual.neighbors[i].id);
+                    REQUIRE(expected.neighbors[i].distance == actual.neighbors[i].distance);
+                }
+            };
+            for (uint64_t step = 0; step < 120; ++step) {
+                const auto slot = step * 7 % cached.Size();
+                const auto id = cached.IdAt(slot);
+                std::vector<float> changed(dim);
+                for (uint64_t d = 0; d < dim; ++d) {
+                    changed[d] = std::cos(static_cast<float>(step * 11 + d) * .23F);
+                }
+                if (step == 40 or step == 80) {
+                    REQUIRE(reference.RemoveTransactional(id));
+                    REQUIRE(cached.RemoveTransactional(id));
+                    check();
+                    REQUIRE(reference.AddTransactional(id, changed.data()));
+                    REQUIRE(cached.AddTransactional(id, changed.data()));
+                    check();
+                }
+                REQUIRE(reference.UpdateTransactional(
+                    id, codec::prepare_encoding(model, changed.data())));
+                REQUIRE(
+                    cached.UpdateTransactional(id, codec::prepare_encoding(model, changed.data())));
+                check();
+            }
+            REQUIRE(cached.IncomingCountRebuilds() == 3);
+            REQUIRE(cached.IncomingCountBytes() >= count * sizeof(uint64_t));
+            REQUIRE(cached.GetMemoryUsage().incoming_count_capacity_bytes ==
+                    cached.IncomingCountBytes());
+            std::stringstream before_failure;
+            codec::save_mutable_snapshot(before_failure, cached);
+            auto invalid = codec::prepare_encoding(model, base.data());
+            invalid.code.filter.clear();
+            REQUIRE_THROWS(cached.UpdateTransactional(cached.IdAt(0), std::move(invalid)));
+            std::stringstream after_failure;
+            codec::save_mutable_snapshot(after_failure, cached);
+            REQUIRE(before_failure.str() == after_failure.str());
+            cached.Validate();
+            REQUIRE(reference.UpdateTransactional(reference.IdAt(0),
+                                                  codec::prepare_encoding(model, base.data())));
+            REQUIRE(cached.UpdateTransactional(cached.IdAt(0),
+                                               codec::prepare_encoding(model, base.data())));
+            REQUIRE(cached.IncomingCountRebuilds() == (incoming ? 3 : 4));
+            check();
+            cached.ConfigureIncomingProtection(codec::IncomingProtection::NONE);
+            REQUIRE(cached.UpdateTransactional(cached.IdAt(0),
+                                               codec::prepare_encoding(model, base.data())));
+            cached.Validate();
+        }
+    }
+}

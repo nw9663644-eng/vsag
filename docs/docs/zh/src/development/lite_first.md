@@ -286,3 +286,7 @@ RaBitQ 无反向边的删除仍扫描全部邻接行。现在一次检查被删�
 仅在真实改值重放中，VSAG_GRAPH_CRUD_MODE=update 只调用 Update，replace 只调用 Remove/Add，all 保持组合协议。显式设置时在可选 CSV 末尾追加 mutation_mode，默认列不变。同最终数据/真值的隔离结果见 lite/benchmark/results/persistent-crud-isolation-20261010；两条 RaBitQ 路径仍低于研究召回门槛。这分离了操作协议，尚未确定或修复唯一根因。
 
 VSAG_GRAPH_DIAGNOSTIC_EF 可在持续改值基准中设置为全节点数，输出独立初始/最终诊断证据，不改变正式 ef。lite/benchmark/results/rabitq-model-ceiling-20261010 的固定模型全候选改值后召回约99.55–99.65%，正式维护质量仍较低。隔离 Update 入边保护候选提高召回，但修改成本增加约33%且GIST仍低研究门槛，未进入生产默认实现。参见相邻候选结果；全预算诊断召回不等于正式验收成绩。
+
+## 实验性运行时入度计数维护
+
+RaBitQ 内部新增 NONE/RECOUNT/CACHED 入边保护策略，公共适配器仍为 NONE。CACHED 在首次需要时为每槽位建立 uint64_t 入度，并随邻接变化增量维护，避免每次 Update 全图重算。Add/Remove 和失败的日志事务令缓存失效，下次 Update 重建；反向邻接的副本事务失败保留原缓存。计数占 8N 逻辑字节、计入内部内存账目，不改变快照/API/模型/预算；关闭后保留容量。10k 连续 Update 单配对实验中，相对受保护但逐次重算的原型，GIST/Cohere 修改块耗时降低15.79%/18.50%，快照及有序结果逐字节相同。GIST Recall .897667 仍低研究目标，因此不默认启用；混合 CRUD、100k 及原生 Full 收益尚未证实。原始数据、黄金测试、范围明确的覆盖率及限制见 lite/benchmark/results/rabitq-incoming-count-cache-20261010。

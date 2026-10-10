@@ -1905,3 +1905,7 @@ repair candidate and archived initial graphs. Small recall gains after10,000 cyc
 come with mutation CPU increases; default adoption remains unsupported. Raw timing
 samples and aggregate/round-trip checks are archived, with explicit limits on
 per-query post/mixed truth evidence.
+
+## Runtime incoming-count cache (2026-10-10)
+
+[Internal structure and fixed-replay evidence](results/rabitq-incoming-count-cache-20261010/README.md): lazy8N-byte incoming counts avoid repeated full recounts for consecutive RaBitQ Updates. Paired GIST/Cohere mutation blocks decrease15.79%/18.50% with identical protected-policy snapshots/ordered results. Public default remains NONE because quality acceptance is incomplete; mixed/100k/Full benefits are not established. The report includes raw verification, exact commands, rollback tests and fresh scoped coverage.
