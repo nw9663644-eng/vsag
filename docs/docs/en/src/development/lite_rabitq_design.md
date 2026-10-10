@@ -132,3 +132,25 @@ The existing native three-bit centered-IP Batch4 dispatch now scores four eligib
 ### Rejected grouped incoming-row scan (2026-10-10)
 
 A four-at-a-time integer membership gate replaced only Update/Remove's scalar row scan in an isolated production candidate. Three alternating fixed-budget 10k GIST/Cohere pairs regressed CRUD median by11.50%/14.05%; every pair was slower. Header and test were restored byte-exact to194bf86, retaining the prior Batch4 optimization. Initial/final IDs, hex distances, hits and snapshot SHA were identical; recall .811167/.908167 was not repaired. Candidate and restored Release6/SAN5 passed; final restored format/tidy15 passed. No fresh coverage/OFF/Full/Node checker result is claimed. The test-only compile/expectation failures were fixed before timing and their logs retained. An inactive1.30GB old Full static archive was removed only after all219 missing objects' recipes/source/include directories/compiler were verified; shared libraries, data and raw evidence remain. Evidence: `lite/benchmark/results/rabitq-grouped-scan-20261010`. Future structural work should examine reverse-row journaling with explicit memory costs instead of enabling the existing full-copy reverse transaction or retrying this grouped comparator.
+
+### Internal reverse Update transaction journal (2026-10-10)
+
+Reverse-adjacency Update now snapshots only the replaced code and affected outgoing/incoming
+rows instead of copying the whole graph. Rows are saved before cache deltas and incoming edge
+mutations; failure restores vectors by swaps and valid counts from restored incoming cardinality.
+CACHED's first cold rebuild retains full-copy isolation, as do reverse Add/Remove. The public
+constructor still disables reverse adjacency; no new public option, format or scoring change.
+Known memory totals now include the reverse vectors' payload/capacity, not allocator overhead or
+transient transaction storage. Snapshot rollback preserves logical state, not exact vector capacity.
+
+Three alternating fixed-budget 10k/600-query pairs per dataset, degree16/maintenance128/query512,
+CPU0/one thread and three full-ID true changed-vector Update passes observe median Update-block
+reductions of 82.92% (GIST) and 85.15% (Cohere), versus the same reverse-enabled
+NONE-policy full-copy parent. Ordered IDs/hex distances/hits and snapshot SHA stay identical.
+This is not a public-default, mixed CRUD, query or native Full speedup. Update-only final recall
+remains .858667/.935500, below research floors; quality is not repaired. Release6, sanitizer5,
+fresh scoped coverage5, disabled4 and format/tidy15 passed. Internal fault injection covers2000
+positions across NONE/RECOUNT/CACHED cold/warm (347 observed failures, no state/rebuild/retry
+mismatch). See `lite/benchmark/results/rabitq-reverse-update-20261010` for raw data, reproducible
+configuration and independent audit. Reverse Add/Remove journaling, public-path memory/time
+tradeoffs,100k,interleaved CRUD,fresh aligned Full,cold I/O and complete package acceptance remain open.

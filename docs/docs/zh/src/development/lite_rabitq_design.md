@@ -131,3 +131,20 @@ link/repair 合格邻居复用已有原生三位码 centered-IP Batch4 分派，
 ### 撤回入边分组扫描候选（2026-10-10）
 
 隔离的真实生产候选仅把Update/Remove的逐项成员判定改为四项分组整数比较。固定预算10k GIST/Cohere各三组交替配对，CRUD中位耗时退化11.50%/14.05%，六pair均慢；header/test已byteexact恢复194bf86，上一轮Batch4优化保留。初始/最终ID、hex距离、hits和snapshotSHA相同，Recall .811167/.908167未修复。候选及恢复版Release6/SAN5通过，最终恢复源码format/tidy15通过；无freshCov/OFF/Full/Nodechecker声明。新test编译/预期错误在计时前修正，原日志保留。核实219个已缺失对象的编译清单/源码/include/编译器后，才清理闲置旧Full静态归档1.30GB，动态库/data/raw保留。证据：`lite/benchmark/results/rabitq-grouped-scan-20261010`。下一真正结构方向是反向行的局部journal及其内存成本，而非直接开启现有全图copy事务或重复此分组比较候选。
+
+### 内部反向 Update 局部事务日志（2026-10-10）
+
+反向邻接 Update 不再复制整个图，只备份被替换的编码及受影响出边、入边行。在修改入度计数或入边前
+先备份；异常时以 vector swap 恢复，并从恢复的入边长度还原有效计数，无分配回滚。
+CACHED 首次冷重建仍用整图复制隔离，反向 Add/Remove 也仍保留复制回退。公开构造默认关闭反向邻接，
+没有新增公开参数，也不改变评分、预算或快照格式。已知内存账目补入反向向量的有效载荷及容量；
+不是包含分配器开销或临时日志的 RSS。失败恢复保证逻辑状态，不保证 vector 容量完全相同。
+
+固定 10k、600 查询、degree16/维护128/查询512、CPU0 单线程，三遍全 ID 真实整向量改值 Update，
+每数据集三组交替配对：相对同样启用反向邻接、NONE 策略的整图复制对照，GIST/Cohere 的 Update 块
+中位耗时降低 82.92%/85.15%。有序 ID、hex 距离、hits 和快照 SHA 全部配对一致。
+这不是公开默认路径、混合 CRUD、查询或原生 Full 提速；Update-only 最终召回仍为 .858667/.935500，
+研究质量门槛未满足。Release6、Sanitizer5、fresh scoped coverage5、默认关闭4、format/tidy15 通过。
+内部故障注入覆盖四种状态各500位置，共347次实际分配失败，无状态、缓存重建或重试不一致。
+证据目录 `lite/benchmark/results/rabitq-reverse-update-20261010` 保留可复现配置、原始结果和独立审计。
+反向增删局部日志、公开路径内存/时间权衡、100k、交错 CRUD、fresh Full 对齐、cold I/O 和完整包验收仍待完成。

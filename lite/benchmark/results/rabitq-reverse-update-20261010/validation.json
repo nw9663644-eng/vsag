@@ -1,0 +1,26 @@
+{
+  "decision": "Retain reverse Update local journal; internal reverse remains disabled by default",
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "ad16eef6a95d58f7abfbd981acc5065cf1f65545722c6adeb783b13f6171890e",
+    "src/lite/rabitq_backend_test.cpp": "ecd8540bb80e5362381c3a0b8816bb95b6b34019adc89eb6c6722e7b8bd996d2",
+    "src/lite/graph_allocation_test.cpp": "a41b518b2b6cf1329952f46c59bfb5fc7650582007645eb1d32ff6254f9e395c",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "default_library_sha256": "be600b565535f55e4fcff9c65261a349e236dbee1b9ebeb739b2ac2f6cd2a7fe",
+  "tests": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "limits": [
+    "Not public-default speedup",
+    "Add/Remove retain full-copy reverse fallback",
+    "Cold cached Update retains full-copy fallback",
+    "Not Full comparison",
+    "No100k/cold I/O/quality fix/wholeFull/Node checker"
+  ]
+}

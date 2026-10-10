@@ -114,3 +114,14 @@ candidate, not a completed performance acceptance: initial mutations copy the
 entire state for failure atomicity. See the canonical [English documentation](../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
 and [中文说明](../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端)
 for model lifecycle, approximate distances, limits and snapshot compatibility.
+
+## Internal reverse Update experiment / 内部反向 Update 实验
+
+The reverse RaBitQ Update transaction now uses a local rollback journal. Reverse adjacency is
+still disabled by default; Add/Remove and the first cold cached Update retain copy isolation.
+Paired evidence and explicit memory/quality boundaries are in
+[the experiment report](benchmark/results/rabitq-reverse-update-20261010/README.md).
+This is not a public-default or Full comparison gain.
+
+反向 RaBitQ Update 已改为局部回滚日志，但公开默认仍关闭反向邻接；增删及首次冷缓存更新仍保留复制回退。
+配对结果不代表公开默认或 Full 对照提速，项目终验仍未完成。

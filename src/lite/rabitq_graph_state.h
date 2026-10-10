@@ -567,6 +567,8 @@ struct MutableMemoryUsage {
     uint64_t adjacency_edges{};
     uint64_t adjacency_logical_bytes{};
     uint64_t adjacency_capacity_bytes{};
+    uint64_t incoming_adjacency_logical_bytes{};
+    uint64_t incoming_adjacency_capacity_bytes{};
     uint64_t incoming_count_logical_bytes{};
     uint64_t incoming_count_capacity_bytes{};
     uint64_t slot_entries{};
@@ -575,13 +577,15 @@ struct MutableMemoryUsage {
     [[nodiscard]] uint64_t
     KnownLogicalBytes() const {
         return model_logical_bytes + codes_logical_bytes + ids_logical_bytes +
-               adjacency_logical_bytes + incoming_count_logical_bytes;
+               adjacency_logical_bytes + incoming_adjacency_logical_bytes +
+               incoming_count_logical_bytes;
     }
 
     [[nodiscard]] uint64_t
     KnownCapacityBytes() const {
         return model_capacity_bytes + codes_capacity_bytes + ids_capacity_bytes +
-               adjacency_capacity_bytes + incoming_count_capacity_bytes;
+               adjacency_capacity_bytes + incoming_adjacency_capacity_bytes +
+               incoming_count_capacity_bytes;
     }
 };
 
@@ -826,13 +830,16 @@ public:
         if (not Contains(id)) {
             return false;
         }
-        if (use_incoming_adjacency_) {
+        codec_require(active_journal_ == nullptr, "nested graph update transaction");
+        // A cold cached protection rebuild touches the whole count array.
+        // Retain copy isolation for that first update only.
+        if (use_incoming_adjacency_ and incoming_protection_ == IncomingProtection::CACHED and
+            not incoming_counts_valid_) {
             auto next = *this;
             const bool updated = next.UpdatePrepared(id, std::move(prepared));
             *this = std::move(next);
             return updated;
         }
-        codec_require(active_journal_ == nullptr, "nested graph update transaction");
         const uint64_t slot = slots_.at(id);
         const auto code = codes_.At(slot);
         UpdateJournal journal;
@@ -841,13 +848,14 @@ public:
         journal.supplement.assign(code.supplement, code.supplement + codes_.SupplementBytes());
         const auto old_fallbacks = mutation_fallbacks_;
         const auto old_timing = mutation_scan_timing_;
+        const bool old_counts_valid = incoming_counts_valid_;
         active_journal_ = &journal;
         try {
             const bool updated = UpdatePrepared(id, std::move(prepared));
             active_journal_ = nullptr;
             return updated;
         } catch (...) {
-            incoming_counts_valid_ = false;
+            incoming_counts_valid_ = use_incoming_adjacency_ and old_counts_valid;
             active_journal_ = nullptr;
             codes_.metadata[slot] = journal.metadata;
             std::copy(journal.filter.begin(),
@@ -858,6 +866,12 @@ public:
                       codes_.supplements.data() + slot * codes_.SupplementBytes());
             for (auto& row : journal.rows) {
                 adjacency_[row.first].swap(row.second);
+            }
+            for (auto& row : journal.incoming_rows) {
+                incoming_[row.first].swap(row.second);
+                if (incoming_counts_valid_) {
+                    incoming_counts_[row.first] = incoming_[row.first].size();
+                }
             }
             mutation_fallbacks_ = old_fallbacks;
             mutation_scan_timing_ = old_timing;
@@ -904,7 +918,9 @@ public:
             measure_mutation_scans_ ? (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) : 0.0;
         if (use_incoming_adjacency_) {
             affected_nodes = incoming_[slot];
+            remember_incoming_row(slot);
             for (const uint64_t source : affected_nodes) {
+                remember_row(source);
                 erase_value(adjacency_[source], slot);
                 if (incoming_counts_valid_) {
                     --incoming_counts_[slot];
@@ -1371,6 +1387,9 @@ public:
             result.adjacency_logical_bytes += neighbors.size() * sizeof(uint64_t);
             result.adjacency_capacity_bytes += neighbors.capacity() * sizeof(uint64_t);
         }
+        const auto incoming_memory = GetIncomingMemoryUsage();
+        result.incoming_adjacency_logical_bytes = incoming_memory.logical_bytes;
+        result.incoming_adjacency_capacity_bytes = incoming_memory.capacity_bytes;
         result.incoming_count_logical_bytes = incoming_counts_.size() * sizeof(uint64_t);
         result.incoming_count_capacity_bytes = IncomingCountBytes();
         result.slot_entries = slots_.size();
@@ -1384,6 +1403,7 @@ private:
         std::vector<uint8_t> filter;
         std::vector<uint8_t> supplement;
         std::unordered_map<uint64_t, std::vector<uint64_t>> rows;
+        std::unordered_map<uint64_t, std::vector<uint64_t>> incoming_rows;
         uint64_t row_limit = std::numeric_limits<uint64_t>::max();
         std::unordered_map<int64_t, uint64_t>::node_type removed_node;
     };
@@ -1393,6 +1413,14 @@ private:
         if (active_journal_ != nullptr and source < active_journal_->row_limit and
             active_journal_->rows.count(source) == 0) {
             active_journal_->rows.emplace(source, adjacency_[source]);
+        }
+    }
+
+    void
+    remember_incoming_row(uint64_t target) {
+        if (active_journal_ != nullptr and use_incoming_adjacency_ and
+            active_journal_->incoming_rows.count(target) == 0) {
+            active_journal_->incoming_rows.emplace(target, incoming_[target]);
         }
     }
 
@@ -1439,6 +1467,20 @@ private:
 
     void
     sync_incoming(uint64_t source, const std::vector<uint64_t>& old_neighbors) {
+        if (use_incoming_adjacency_ and active_journal_ != nullptr) {
+            const auto& neighbors = adjacency_[source];
+            for (const uint64_t target : old_neighbors) {
+                if (std::find(neighbors.begin(), neighbors.end(), target) == neighbors.end()) {
+                    remember_incoming_row(target);
+                }
+            }
+            for (const uint64_t target : neighbors) {
+                if (std::find(old_neighbors.begin(), old_neighbors.end(), target) ==
+                    old_neighbors.end()) {
+                    remember_incoming_row(target);
+                }
+            }
+        }
         if (incoming_counts_valid_) {
             const auto& neighbors = adjacency_[source];
             for (const uint64_t target : old_neighbors) {
