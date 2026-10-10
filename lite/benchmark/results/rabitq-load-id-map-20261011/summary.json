@@ -1,0 +1,53 @@
+{
+  "fresh_loaders": 60,
+  "exact_round_trips": 60,
+  "summary": {
+    "gist": {
+      "control": {
+        "load_ms": 6.483486,
+        "resident_increment_kib": 13836,
+        "known_capacity_bytes": 11444320
+      },
+      "candidate": {
+        "load_ms": 6.243492,
+        "resident_increment_kib": 13364,
+        "known_capacity_bytes": 11444320
+      },
+      "load_change_percent": -3.701619776768239,
+      "candidate_faster_pairs": 15
+    },
+    "cohere": {
+      "control": {
+        "load_ms": 5.721933,
+        "resident_increment_kib": 11908,
+        "known_capacity_bytes": 9523456
+      },
+      "candidate": {
+        "load_ms": 5.503448,
+        "resident_increment_kib": 11492,
+        "known_capacity_bytes": 9523456
+      },
+      "load_change_percent": -3.8183774609035104,
+      "candidate_faster_pairs": 15
+    }
+  },
+  "coverage_scopes": {
+    "lite": {
+      "covered": 2933,
+      "total": 3074,
+      "percent": 95.41314248536109
+    },
+    "shared_simd": {
+      "covered": 233,
+      "total": 249,
+      "percent": 93.57429718875503
+    },
+    "combined": {
+      "covered": 3166,
+      "total": 3323,
+      "percent": 95.27535359614807
+    }
+  },
+  "raw_members": 163,
+  "raw_uncompressed_bytes": 368643
+}

@@ -1,0 +1,21 @@
+{
+  "tests": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "disabled": 4
+  },
+  "production_change": true,
+  "public_defaults_changed": false,
+  "snapshot_format_changed": false,
+  "format_version": 15,
+  "tidy_version": 15,
+  "decision": "Retain removal of redundant load-only ID set",
+  "limits": [
+    "Warm RAM/page cache, not cold I/O",
+    "Not query or CRUD benchmark",
+    "Not Full or100k acceptance",
+    "Inherited getrusage HWM is not loader peak evidence",
+    "Malformed duplicate IDs rejected later; error text/order not preserved"
+  ]
+}

@@ -1921,3 +1921,7 @@ per-query post/mixed truth evidence.
 Further fixed-budget Add displaced-target incoming-guard evidence: [report](results/rabitq-add-displaced-20261010/README.md). Real structural internal candidate; +46/+15 truth hits and extra CRUD cost,not default-enabled or a Full comparison.
 
 Rejected RaBitQ bounded link-scratch trial: [report](results/rabitq-link-scratch-20261010/README.md). Three pairs per dataset,identical snapshots/results,no stable CRUD speedup; production restored,degree64 boundary regression retained.
+
+## RaBitQ snapshot load-only optimization
+
+See [matched warm loaders](results/rabitq-load-id-map-20261011/README.md):remove the redundant ID set,retain constructor duplicate rejection. GIST/Cohere warm load about3.70/3.82% lower in15 paired10k trials;60 native round-trip hashes exact. No query/CRUD/Full/cold I/O claim;malformed duplicate inputs may be rejected later. Public defaults/PRs unchanged.

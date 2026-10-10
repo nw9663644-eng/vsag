@@ -185,6 +185,27 @@ TEST_CASE("RaBitQ rejects malformed encoded snapshots before large allocations",
     reject(bad);
 }
 
+TEST_CASE("RaBitQ snapshot slot map rejects duplicate external IDs", "[lite-rabitq]") {
+    auto index = make_index();
+    const auto saved = snapshot(*index);
+    constexpr uint64_t ids_offset = 48 + 17 * 4 + 4 * 3 + 12 * (24 + 8 * 3) + 24;
+    for (int64_t id : {INT64_MIN, int64_t{-7}, int64_t{0}, INT64_MAX}) {
+        for (uint64_t duplicate_slot : {uint64_t{1}, uint64_t{11}}) {
+            auto bad = saved;
+            put_u64(bad, ids_offset, static_cast<uint64_t>(id));
+            put_u64(bad, ids_offset + duplicate_slot * 8, static_cast<uint64_t>(id));
+            std::istringstream input(bad, std::ios::binary);
+            auto loaded = Index::Load(input);
+            REQUIRE_FALSE(loaded);
+            REQUIRE(loaded.error().type == vsag::ErrorType::INVALID_BINARY);
+        }
+    }
+    std::istringstream valid(saved, std::ios::binary);
+    auto loaded = Index::Load(valid);
+    REQUIRE(loaded);
+    REQUIRE(snapshot(**loaded) == saved);
+}
+
 TEST_CASE("RaBitQ training failure keeps flat index and old formats compatible", "[lite-rabitq]") {
     auto empty = Index::Create(3);
     REQUIRE(empty);

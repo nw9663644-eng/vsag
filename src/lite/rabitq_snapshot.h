@@ -7,7 +7,6 @@
 #include <limits>
 #include <ostream>
 #include <type_traits>
-#include <unordered_set>
 
 #include "lite/rabitq_graph_state.h"
 
@@ -292,10 +291,7 @@ load_mutable_snapshot(std::istream& input) {
     codec_require(id_count == loaded.codes.Size(), "invalid mutable snapshot ID count");
     std::vector<int64_t> ids(id_count);
     read_integer_array(input, ids);
-    std::unordered_set<int64_t> unique_ids;
-    for (int64_t id : ids) {
-        codec_require(unique_ids.insert(id).second, "duplicate mutable snapshot ID");
-    }
+    // MutableGraphState rejects duplicate IDs while building its required slot map.
     const uint64_t offset_count = read_u64(input);
     const uint64_t neighbor_count = read_u64(input);
     codec_require(
