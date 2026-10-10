@@ -1,0 +1,27 @@
+{
+  "tests": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "disabled": 4
+  },
+  "production_change": true,
+  "public_defaults_changed": false,
+  "snapshot_format_changed": false,
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "364be19dfdaa9ac6a9252a06b727046fb70053048ac95b07d80ea453e71c3b4e",
+    "src/lite/rabitq_backend_test.cpp": "cc63fd114fb954b6acca2aa046c89376d9440e1345a299a6a4f8b21084ed24ac",
+    "src/lite/graph_allocation_test.cpp": "8b417674386f7996a23780eef799f760e147252277610aeeba75af27bb276b2e",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2"
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "decision": "Retain internal opt-in cached safe-link pruning; default remains NONE",
+  "limits": [
+    "Observed10k cohorts,not blind",
+    "Not equal-recall speed comparison",
+    "No100k/interleaved CRUD or Full remeasurement",
+    "No cold I/O/package claim",
+    "Failed non-reverse cache rebuild counters need not roll back"
+  ]
+}

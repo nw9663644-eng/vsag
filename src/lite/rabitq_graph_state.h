@@ -591,6 +591,25 @@ struct MutableMemoryUsage {
 
 enum class IncomingProtection { NONE, RECOUNT, CACHED };
 
+// Rank is distance/slot ordered. Counts describe the graph before inserting the new edge.
+// Match floating GraphBackend::link: avoid dropping a target's last incoming edge when possible.
+inline uint64_t
+safe_incoming_drop(const std::vector<Candidate>& ranked,
+                   const std::vector<uint64_t>& incoming_counts,
+                   uint64_t target) {
+    codec_require(not ranked.empty(), "empty incoming prune candidates");
+    for (uint64_t i = ranked.size(); i > 0; --i) {
+        const uint64_t candidate = ranked[i - 1].id;
+        codec_require(candidate < incoming_counts.size(), "invalid incoming prune slot");
+        const bool safe =
+            candidate == target ? incoming_counts[candidate] > 0 : incoming_counts[candidate] > 1;
+        if (safe) {
+            return i - 1;
+        }
+    }
+    return ranked.size() - 1;
+}
+
 // Native VSAG uses uint32_t InnerIdType (src/basic_types.h).
 // Only the internal reverse index narrows; outgoing slots and persisted IDs stay unchanged.
 using IncomingSlot = uint32_t;
@@ -676,15 +695,19 @@ public:
     ConfigureIncomingProtection(IncomingProtection mode,
                                 bool protect_add = false,
                                 bool protect_remove = false,
-                                bool protect_add_displaced = false) {
+                                bool protect_add_displaced = false,
+                                bool protect_link = false) {
         codec_require(active_journal_ == nullptr and (mode == IncomingProtection::NONE or
                                                       mode == IncomingProtection::RECOUNT or
                                                       mode == IncomingProtection::CACHED),
                       "invalid incoming protection mode");
+        codec_require(not protect_link or mode == IncomingProtection::CACHED,
+                      "safe link pruning requires cached incoming counts");
         incoming_protection_ = mode;
         protect_added_incoming_ = protect_add;
         protect_removed_incoming_ = protect_remove;
         protect_added_displaced_ = protect_add_displaced;
+        protect_link_incoming_ = protect_link;
         incoming_counts_valid_ = false;
     }
 
@@ -1788,6 +1811,9 @@ private:
         }
         remember_row(source);
         const auto old_neighbors = neighbors;
+        if (protect_link_incoming_) {
+            prepare_incoming_counts();
+        }
         neighbors.push_back(target);
         if (neighbors.size() > max_degree_) {
             const auto query = decode_query(source);
@@ -1800,10 +1826,15 @@ private:
             }
             score_mutation_candidates(query, query_norm, query_sum, codes_, ranked);
             std::sort(ranked.begin(), ranked.end(), better);
-            neighbors.resize(max_degree_);
-            for (uint64_t i = 0; i < max_degree_; ++i) {
-                neighbors[i] = ranked[i].id;
+            const uint64_t dropped = protect_link_incoming_
+                                         ? safe_incoming_drop(ranked, incoming_counts_, target)
+                                         : max_degree_;
+            for (uint64_t i = 0, destination = 0; i < ranked.size(); ++i) {
+                if (i != dropped) {
+                    neighbors[destination++] = ranked[i].id;
+                }
             }
+            neighbors.resize(max_degree_);
         }
         sync_incoming(source, old_neighbors);
         if (displaced_targets != nullptr) {
@@ -1819,6 +1850,7 @@ private:
     bool protect_added_incoming_{};
     bool protect_removed_incoming_{};
     bool protect_added_displaced_{};
+    bool protect_link_incoming_{};
     std::vector<uint64_t> incoming_counts_;
     bool incoming_counts_valid_{};
     uint64_t incoming_count_rebuilds_{};

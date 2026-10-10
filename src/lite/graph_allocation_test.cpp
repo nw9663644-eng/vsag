@@ -55,7 +55,7 @@ save(vsag::lite::Index& i) {
 
 #if defined(VSAG_LITE_HAS_RABITQ_BACKEND)
 int
-check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
+check_reverse_mutation_allocation(int operation, uint64_t count = 16, bool reverse = true) {
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t dim = 17;
     std::vector<float> base(count * dim);
@@ -106,18 +106,20 @@ check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
         replacement[d] = std::cos(static_cast<float>(d) * 0.31F);
     }
     int problems = 0;
-    for (int policy = 0; policy < 4; ++policy) {
+    for (int policy = 0; policy < 6; ++policy) {
         codec::MutableGraphState initial(
-            model, codes, graph, ids, operation >= 2 ? 6 : 4, 16, false, true);
+            model, codes, graph, ids, operation >= 2 ? 6 : 4, 16, false, reverse);
         initial.ConfigureIncomingProtection(policy == 0
                                                 ? codec::IncomingProtection::NONE
                                                 : (policy == 1 ? codec::IncomingProtection::RECOUNT
                                                                : codec::IncomingProtection::CACHED),
                                             true,
                                             true,
-                                            true);
-        if (policy == 3 and not initial.UpdateTransactional(
-                                0, codec::prepare_encoding(model, replacement.data()))) {
+                                            true,
+                                            policy >= 4);
+        if ((policy == 3 or policy == 5) and
+            not initial.UpdateTransactional(0,
+                                            codec::prepare_encoding(model, replacement.data()))) {
             return 1;
         }
         std::ostringstream before_stream;
@@ -168,7 +170,9 @@ check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
             codec::save_mutable_snapshot(after_stream, state);
             if (failed) {
                 ++failures;
-                if (after_stream.str() != before or state.IncomingCountRebuilds() != rebuilds) {
+                // Non-reverse rollback invalidates the cache; attempted rebuilds are diagnostic.
+                if (after_stream.str() != before or
+                    (reverse and state.IncomingCountRebuilds() != rebuilds)) {
                     ++problems;
                 }
                 if (not mutate(state)) {
@@ -178,13 +182,13 @@ check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
                 std::ostringstream retry_stream;
                 codec::save_mutable_snapshot(retry_stream, state);
                 if (retry_stream.str() != golden_stream.str() or
-                    state.IncomingCountRebuilds() != golden.IncomingCountRebuilds()) {
+                    (reverse and state.IncomingCountRebuilds() != golden.IncomingCountRebuilds())) {
                     ++problems;
                 }
             } else {
                 ++successes;
                 if (after_stream.str() != golden_stream.str() or
-                    state.IncomingCountRebuilds() != golden.IncomingCountRebuilds()) {
+                    (reverse and state.IncomingCountRebuilds() != golden.IncomingCountRebuilds())) {
                     ++problems;
                 }
             }
@@ -204,7 +208,8 @@ check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
                 codec::save_mutable_snapshot(continued_stream, state);
                 codec::save_mutable_snapshot(continued_golden_stream, continued_golden);
                 if (continued_stream.str() != continued_golden_stream.str() or
-                    state.IncomingCountRebuilds() != continued_golden.IncomingCountRebuilds()) {
+                    (reverse and
+                     state.IncomingCountRebuilds() != continued_golden.IncomingCountRebuilds())) {
                     ++problems;
                 }
             }
@@ -220,8 +225,8 @@ check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
         }
         const char* label = operation == 0 ? "UPDATE" : (operation == 1 ? "ADD" : "REMOVE");
         std::cout << "REVERSE_" << label << " operation=" << operation << " count=" << count
-                  << " policy=" << policy << " failures=" << failures << " successes=" << successes
-                  << " cumulative_problems=" << problems << "\n";
+                  << " reverse=" << reverse << " policy=" << policy << " failures=" << failures
+                  << " successes=" << successes << " cumulative_problems=" << problems << "\n";
     }
     return problems;
 }
@@ -237,6 +242,9 @@ main() {
         problems += check_reverse_mutation_allocation(2);
         problems += check_reverse_mutation_allocation(3);
         problems += check_reverse_mutation_allocation(3, 1);
+        problems += check_reverse_mutation_allocation(0, 16, false);
+        problems += check_reverse_mutation_allocation(1, 16, false);
+        problems += check_reverse_mutation_allocation(2, 16, false);
     } catch (const std::exception& error) {
         remaining = -1;
         std::cerr << "Reverse mutation fixture failed: " << error.what() << "\n";

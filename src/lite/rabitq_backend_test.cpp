@@ -994,6 +994,62 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
     }
 }
 
+TEST_CASE("RaBitQ safe link pruning respects prior incoming counts", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    const std::vector<codec::Candidate> ranked{{0, 0.0F}, {1, 1.0F}, {2, 2.0F}};
+    REQUIRE(codec::safe_incoming_drop(ranked, {2, 1, 0}, 2) == 0);
+    REQUIRE(codec::safe_incoming_drop(ranked, {1, 2, 0}, 2) == 1);
+    REQUIRE(codec::safe_incoming_drop(ranked, {1, 1, 1}, 2) == 2);
+    REQUIRE(codec::safe_incoming_drop(ranked, {1, 1, 0}, 2) == 2);
+    REQUIRE_THROWS(codec::safe_incoming_drop({}, {}, 0));
+    REQUIRE_THROWS(codec::safe_incoming_drop(ranked, {1}, 2));
+}
+
+TEST_CASE("RaBitQ safe link pruning preserves cache and mutable persistence", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (bool reverse : {false, true}) {
+        const std::vector<float> base{0.0F, 100.0F, 1.0F, 2.0F};
+        const auto model = codec::train(base, 4, 1, 47);
+        codec::EncodedRecords codes(1);
+        for (const float value : base) {
+            codes.Append(codec::encode(model, &value));
+        }
+        const codec::GraphTopology graph{{0, 2, 4, 6, 8}, {1, 2, 2, 3, 0, 3, 0, 2}};
+        codec::MutableGraphState state(model, codes, graph, {0, 1, 2, 3}, 2, 8, false, reverse);
+        REQUIRE_THROWS(state.ConfigureIncomingProtection(
+            codec::IncomingProtection::NONE, false, false, false, true));
+        state.ConfigureIncomingProtection(
+            codec::IncomingProtection::CACHED, false, false, false, true);
+        codec::MutableGraphState control(model, codes, graph, {0, 1, 2, 3}, 2, 8, false, reverse);
+        control.ConfigureIncomingProtection(codec::IncomingProtection::CACHED);
+        REQUIRE(control.AddTransactional(4, base.data()));
+        REQUIRE(state.AddTransactional(4, base.data()));
+        const auto control_graph = control.GetGraph();
+        const auto protected_graph = state.GetGraph();
+        REQUIRE(std::count(control_graph.neighbors.begin(), control_graph.neighbors.end(), 1) == 0);
+        REQUIRE(std::count(protected_graph.neighbors.begin(), protected_graph.neighbors.end(), 1) ==
+                1);
+        for (int64_t id = 5; id < 28; ++id) {
+            const float changed = static_cast<float>(id) * .17F;
+            REQUIRE(state.AddTransactional(id, &changed));
+            REQUIRE(state.UpdateTransactional(id - 1, codec::prepare_encoding(model, &changed)));
+            if (id % 3 == 0) {
+                REQUIRE(state.RemoveTransactional(id - 2));
+            }
+            state.Validate();
+            std::stringstream saved;
+            codec::save_mutable_snapshot(saved, state);
+            auto loaded = codec::load_mutable_snapshot(saved);
+            loaded.Validate();
+            REQUIRE(loaded.GetIds() == state.GetIds());
+            REQUIRE(loaded.GetGraph().neighbors == state.GetGraph().neighbors);
+        }
+        state.ConfigureIncomingProtection(codec::IncomingProtection::NONE);
+        REQUIRE(state.AddTransactional(100, base.data()));
+        state.Validate();
+    }
+}
+
 TEST_CASE("RaBitQ Add can protect targets displaced from saturated reverse links",
           "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;

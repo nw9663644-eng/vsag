@@ -1925,3 +1925,7 @@ Rejected RaBitQ bounded link-scratch trial: [report](results/rabitq-link-scratch
 ## RaBitQ snapshot load-only optimization
 
 See [matched warm loaders](results/rabitq-load-id-map-20261011/README.md):remove the redundant ID set,retain constructor duplicate rejection. GIST/Cohere warm load about3.70/3.82% lower in15 paired10k trials;60 native round-trip hashes exact. No query/CRUD/Full/cold I/O claim;malformed duplicate inputs may be rejected later. Public defaults/PRs unchanged.
+
+## RaBitQ cached incoming-safe pruning
+
+See [fixed-budget quality/cost study](results/rabitq-safe-link-20261011/README.md):internal cached-link gate improves observed10k post-CRUD recall by8.75/3.90 percentage points with CRUD median +1.20/+2.29%. Both study floors remain missed;public NONE/default/PRs unchanged. Not equal-quality query speed,Full,100k,interleaved or cold I/O acceptance.
