@@ -182,3 +182,22 @@ Remove P50/P99中位1571.716/2730.809→38.520/1169.654us、1489.659/2506.485→
 Remove6000注入位置覆盖中间/末槽/单节点和四缓存状态，692实际失败，无状态/重建/重试/后续增改不一致。
 测试整数转换lint在计时前修复，失败日志保留。证据lite/benchmark/results/rabitq-reverse-remove-20261010保存199原始成员，
 独立审计720000操作/14400真值状态。下一公开路径内存/时间权衡、质量、100k/交错CRUD、fresh Full对齐、cold I/O/完整包验收。
+
+### 当前反向邻接关闭/开启的验收权衡（2026-10-10）
+
+同06ab591生产状态和当前public adapter、NONE保护，仅隔离overlay改变构造默认反向开关；本轮未改生产代码或默认。
+10k/600查询、degree16/维护128/查询512、CPU0单线程，各三组交替配对、三遍全ID真实Update/Remove/Add，1080000操作：
+混合块中位GIST25007.966→20511.163ms(-17.98%)、Cohere22422.324→17637.928ms(-21.34%)。
+Add P50略涨267.354→270.933us、238.555→240.845us；所有配对初始/最终有序ID/hex距离/hits完全一致，
+召回仍.811167/.908167，未满足质量门槛。
+
+72次新进程内部加载对每份相同快照开关各测三次：10000节点/160000边额外入边logical/capacity1520000B。
+已知容量GIST11444320→12964320B、Cohere9523456→11043456B，不含map节点/分配器/临时量。
+减进程基线的resident KiB中位13766→16776、11970→14900；暖内部加载6.122→8.637ms、5.355→7.978ms。
+RAM/page-cache暖数据非cold I/O；probe ru_maxrss可能含launcher继承HWM。完整builder峰值含输入矩阵和双索引，
+微小变化不足证明维护内存更低。因此保留公开reverse=false，不只因提速就启用。
+
+证据lite/benchmark/results/rabitq-reverse-tradeoff-20261010独立审计1080000操作/14400真值/72加载。
+重跑Release6、新probe format/tidy15、语法/错误输入通过；生产SAN/coverage/OFF继承06ab591，未重跑。
+模式拼写在计时前修正；计时后RAM probe不存在，仅重建作错误输入检查，无性能重跑。
+下一调查入边分配/布局并保留journal回滚与快照兼容；quality、100k/交错CRUD、fresh Full对齐、cold I/O/完整包待验收。

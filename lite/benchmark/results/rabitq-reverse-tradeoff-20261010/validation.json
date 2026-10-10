@@ -1,0 +1,38 @@
+{
+  "production_change": false,
+  "public_default_changed": false,
+  "source_head": "06ab591824bf42ebf43f53770a28860f29405382",
+  "source_sha256": {
+    "src/lite/rabitq_graph_state.h": "0890b32691d5cb67d7e0006cbb8822c499c97c683961bfd296cca42bc2a484a9",
+    "src/lite/rabitq_backend_test.cpp": "ecd8540bb80e5362381c3a0b8816bb95b6b34019adc89eb6c6722e7b8bd996d2",
+    "src/lite/graph_allocation_test.cpp": "4861d9999f2c54839856fbc03c6ce9a2b5de931ebd453ee2b74b2f6b195ec5d5",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "release_tests_this_round": 6,
+  "new_harness_format_tidy_version": 15,
+  "inherited_validation": {
+    "commit": "06ab591",
+    "release": 6,
+    "asan_ubsan": 5,
+    "coverage": 5,
+    "disabled": 4,
+    "scoped_lite_covered": 2924,
+    "scoped_lite_total": 3065
+  },
+  "not_repeated": [
+    "ASan/UBSan production suite",
+    "fresh production coverage",
+    "disabled production suite"
+  ],
+  "limits": [
+    "not Full comparison",
+    "not cold I/O",
+    "not100k",
+    "not interleaved queries",
+    "whole builder peak includes inputs and simultaneous native load",
+    "load probe peak may include launcher inherited high-water mark",
+    "known memory excludes hash-map allocation and allocator overhead"
+  ],
+  "decision": "Keep public reverse disabled pending memory/layout and quality work"
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "tag": "release-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fp16-simd-release",
+      "-V"
+    ],
+    "exit": 0,
+    "expected_exit": 0
+  },
+  {
+    "tag": "format-probe",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "lite/benchmark/results/rabitq-reverse-tradeoff-20261010/memory-probe.cpp"
+    ],
+    "exit": 0,
+    "expected_exit": 0
+  },
+  {
+    "tag": "tidy-probe",
+    "command": [
+      "clang-tidy-15",
+      "-warnings-as-errors=*",
+      "lite/benchmark/results/rabitq-reverse-tradeoff-20261010/memory-probe.cpp",
+      "--",
+      "-std=c++17",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include"
+    ],
+    "exit": 0,
+    "expected_exit": 0
+  },
+  {
+    "tag": "python-syntax",
+    "command": [
+      "python3",
+      "-c",
+      "from pathlib import Path; [compile(p.read_text(),str(p),'exec') for p in (Path('lite/benchmark/results/rabitq-reverse-tradeoff-20261010/run-host.py'),Path('lite/benchmark/results/rabitq-reverse-tradeoff-20261010/verify.py'))]"
+    ],
+    "exit": 0,
+    "expected_exit": 0
+  },
+  {
+    "tag": "invalid-probe-control",
+    "command": [
+      "/dev/shm/vsag-reverse-tradeoff-fcfb8faa/control/memory-probe",
+      "/dev/shm/vsag-reverse-tradeoff-invalid-avqu9u6_"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "rebuild_command": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-I/dev/shm/vsag-reverse-tradeoff-fcfb8faa/control",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-reverse-tradeoff-20261010/memory-probe.cpp",
+      "-o",
+      "/dev/shm/vsag-reverse-tradeoff-fcfb8faa/control/memory-probe"
+    ],
+    "rebuild_exit": 0
+  },
+  {
+    "tag": "invalid-probe-candidate",
+    "command": [
+      "/dev/shm/vsag-reverse-tradeoff-fcfb8faa/candidate/memory-probe",
+      "/dev/shm/vsag-reverse-tradeoff-invalid-0bhwx3y7"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "rebuild_command": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-I/dev/shm/vsag-reverse-tradeoff-fcfb8faa/candidate",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-reverse-tradeoff-20261010/memory-probe.cpp",
+      "-o",
+      "/dev/shm/vsag-reverse-tradeoff-fcfb8faa/candidate/memory-probe"
+    ],
+    "rebuild_exit": 0
+  }
+]

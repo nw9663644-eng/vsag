@@ -136,3 +136,9 @@ Public reverse defaults and unresolved acceptance limits remain unchanged.
 The internal reverse Remove local journal and exact paired evidence are in
 [the Remove experiment](benchmark/results/rabitq-reverse-remove-20261010/README.md).
 Reverse adjacency is not enabled publicly; quality and Full acceptance remain open.
+
+The current same-source reverse off/on CRUD,load and memory tradeoff is in
+[the acceptance experiment](benchmark/results/rabitq-reverse-tradeoff-20261010/README.md).
+The speedup has an incoming-memory and warm-load cost;public reverse remains disabled.
+
+当前同源码反向邻接开关对照见上述验收报告：CRUD更快但入边内存和暖加载有代价，公开默认继续关闭。

@@ -203,3 +203,28 @@ Remove6000 fault positions cover middle,last,single-node deletion,NONE/RECOUNT/C
 fixed before timing;failed lint log retained.199 raw members,720000-operation/14400-truth audit:
 lite/benchmark/results/rabitq-reverse-remove-20261010. Next public-path memory/time tradeoff,
 quality,100k/interleaved CRUD,fresh aligned Full,cold I/O/complete package acceptance remain open.
+
+### Current reverse off/on acceptance tradeoff (2026-10-10)
+
+Same06ab591 production state and current public adapter,NONE protection;only the isolated
+constructor-default overlay enables reverse adjacency. No production code/default changed.
+Three alternating10k/600-query pairs,degree16/maintenance128/query512,CPU0/thread1,three
+full-ID true Update/Remove/Add passes (1080000 operations): median block GIST25007.966 to
+20511.163ms(-17.98%),Cohere22422.324 to17637.928ms(-21.34%). Add P50 slightly increases:
+267.354 to270.933us and238.555 to240.845us. Initial/final ordered IDs/hex distances/hits
+are identical for all pairs;recall .811167/.908167 remains below quality floors.
+
+72 fresh internal-load probes load EACH identical snapshot with both flags.10000 nodes and
+160000 edges add1520000B incoming logical/capacity storage. Known capacity goes11444320 to
+12964320B (GIST),9523456 to11043456B (Cohere);excludes map-node/allocator/transient overhead.
+Median baseline-adjusted resident KiB13766 to16776 and11970 to14900;warm internal load
+6.122 to8.637ms and5.355 to7.978ms. RAM/page-cache warm,not cold I/O. Probe ru_maxrss can
+include launcher inherited HWM. Whole builder peak includes matrices and simultaneous old/new
+indexes;its tiny changes do not prove lower mutation memory. Retain public reverse=false.
+
+Evidence:lite/benchmark/results/rabitq-reverse-tradeoff-20261010,independent1080000-operation/
+14400-truth/72-load audit. Release6 repeated;new probe format/tidy15,syntax,malformed-input
+checks pass. Production sanitizer/coverage/OFF inherited from06ab591,not rerun. Setup mode
+spelling fixed before timing;post-run absent RAM probe executables rebuilt only for error checks.
+Next investigate incoming allocations/layout while preserving journal/rollback and snapshot
+compatibility;quality,100k/interleaved CRUD,fresh aligned Full,cold I/O/complete package remain open.
