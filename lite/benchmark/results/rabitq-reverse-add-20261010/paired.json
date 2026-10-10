@@ -1,0 +1,44 @@
+{
+  "gist10k600-r0": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  },
+  "gist10k600-r1": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  },
+  "gist10k600-r2": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  },
+  "cohere10k600-r0": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  },
+  "cohere10k600-r1": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  },
+  "cohere10k600-r2": {
+    "extra_hits": 0,
+    "wins": 0,
+    "losses": 0,
+    "ties": 600,
+    "mean_recall_delta": 0.0
+  }
+}

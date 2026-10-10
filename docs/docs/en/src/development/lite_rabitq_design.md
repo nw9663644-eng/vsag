@@ -154,3 +154,28 @@ positions across NONE/RECOUNT/CACHED cold/warm (347 observed failures, no state/
 mismatch). See `lite/benchmark/results/rabitq-reverse-update-20261010` for raw data, reproducible
 configuration and independent audit. Reverse Add/Remove journaling, public-path memory/time
 tradeoffs,100k,interleaved CRUD,fresh aligned Full,cold I/O and complete package acceptance remain open.
+
+### Internal reverse Add transaction journal (2026-10-10)
+
+Reverse Add now uses the existing append/truncate transaction with snapshots of affected
+outgoing and incoming rows, excluding the appended slot via row_limit. Failure restores old
+reverse rows and valid counts before truncating the new slot. Cold CACHED Add retains copy
+isolation; reverse Remove is not changed. Public reverse default remains false, and scoring,
+model, budget, API and snapshot stay unchanged. Rollback preserves logical state, not capacities.
+
+Three alternating fixed-budget10k/600-query pairs,degree16/maintenance128/query512,CPU0/one thread,
+three full-ID Remove/true-changed-vector Add passes per builder: whole Remove/Add block medians
+GIST156625.917 to65534.431ms (-58.16%),Cohere204033.785 to62390.095ms (-69.42%). Add P50 medians
+2667.221 to560.127us and3437.696 to541.119us. All six pairs improve; absolute control timings vary
+substantially. Remove implementation is identical; its observed timing changes are not claimed
+as a separate algorithmic gain. Paired snapshots/ordered IDs/hex distances/hits remain exact;
+final recall .8495/.923333 is this replace-only workload, not repaired quality or an Update-only
+comparison. This is an internal-path gain, not public-default or native Full advantage.
+
+Release6,sanitizer5,fresh scoped coverage5,disabled4,format/tidy15 passed. Internal allocation
+injection covers4000 positions across Add/Update and four policies (306/363 observed failures,
+zero state/rebuild/retry mismatches); preparation allocations and protection flags are now also
+covered. Lite2906/3047=95.37% is scoped,not whole Full coverage. Evidence and independent720000
+operation/14400 truth-state audit are in `lite/benchmark/results/rabitq-reverse-add-20261010`.
+Next: reverse Remove local journaling,public-path memory/time tradeoffs and fixed-budget quality.
+100k,interleaved CRUD,fresh aligned Full,cold I/O/complete deployment acceptance remain open.

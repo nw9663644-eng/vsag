@@ -55,7 +55,7 @@ save(vsag::lite::Index& i) {
 
 #if defined(VSAG_LITE_HAS_RABITQ_BACKEND)
 int
-check_reverse_update_allocation() {
+check_reverse_mutation_allocation(bool adding) {
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t count = 16;
     constexpr uint64_t dim = 17;
@@ -85,10 +85,13 @@ check_reverse_update_allocation() {
     int problems = 0;
     for (int policy = 0; policy < 4; ++policy) {
         codec::MutableGraphState initial(model, codes, graph, ids, 4, 16, false, true);
-        initial.ConfigureIncomingProtection(
-            policy == 0 ? codec::IncomingProtection::NONE
-                        : (policy == 1 ? codec::IncomingProtection::RECOUNT
-                                       : codec::IncomingProtection::CACHED));
+        initial.ConfigureIncomingProtection(policy == 0
+                                                ? codec::IncomingProtection::NONE
+                                                : (policy == 1 ? codec::IncomingProtection::RECOUNT
+                                                               : codec::IncomingProtection::CACHED),
+                                            true,
+                                            true,
+                                            true);
         if (policy == 3 and not initial.UpdateTransactional(
                                 0, codec::prepare_encoding(model, replacement.data()))) {
             return 1;
@@ -97,8 +100,16 @@ check_reverse_update_allocation() {
         codec::save_mutable_snapshot(before_stream, initial);
         const auto before = before_stream.str();
         const auto rebuilds = initial.IncomingCountRebuilds();
+        const auto mutate = [&](codec::MutableGraphState& state) {
+            return adding ? state.AddTransactional(100, replacement.data())
+                          : state.UpdateTransactional(
+                                3, codec::prepare_encoding(model, replacement.data()));
+        };
         auto golden = initial;
-        if (not golden.UpdatePrepared(3, codec::prepare_encoding(model, replacement.data()))) {
+        const bool expected =
+            adding ? golden.Add(100, replacement.data())
+                   : golden.UpdatePrepared(3, codec::prepare_encoding(model, replacement.data()));
+        if (not expected) {
             return 1;
         }
         std::ostringstream golden_stream;
@@ -107,11 +118,10 @@ check_reverse_update_allocation() {
         int successes = 0;
         for (int limit = 0; limit < 500; ++limit) {
             auto state = initial;
-            auto prepared = codec::prepare_encoding(model, replacement.data());
             bool failed = false;
             remaining = limit;
             try {
-                if (not state.UpdateTransactional(3, std::move(prepared))) {
+                if (not mutate(state)) {
                     ++problems;
                 }
             } catch (const std::bad_alloc&) {
@@ -130,8 +140,7 @@ check_reverse_update_allocation() {
                 if (after_stream.str() != before or state.IncomingCountRebuilds() != rebuilds) {
                     ++problems;
                 }
-                if (not state.UpdateTransactional(
-                        3, codec::prepare_encoding(model, replacement.data()))) {
+                if (not mutate(state)) {
                     ++problems;
                 }
                 state.Validate();
@@ -158,8 +167,9 @@ check_reverse_update_allocation() {
         if (failures == 0 or successes == 0) {
             ++problems;
         }
-        std::cout << "REVERSE_UPDATE policy=" << policy << " failures=" << failures
-                  << " successes=" << successes << " cumulative_problems=" << problems << "\n";
+        std::cout << (adding ? "REVERSE_ADD policy=" : "REVERSE_UPDATE policy=") << policy
+                  << " failures=" << failures << " successes=" << successes
+                  << " cumulative_problems=" << problems << "\n";
     }
     return problems;
 }
@@ -170,10 +180,11 @@ main() {
     int problems = 0;
 #if defined(VSAG_LITE_HAS_RABITQ_BACKEND)
     try {
-        problems += check_reverse_update_allocation();
+        problems += check_reverse_mutation_allocation(false);
+        problems += check_reverse_mutation_allocation(true);
     } catch (const std::exception& error) {
         remaining = -1;
-        std::cerr << "Reverse Update fixture failed: " << error.what() << "\n";
+        std::cerr << "Reverse mutation fixture failed: " << error.what() << "\n";
         return 1;
     } catch (...) {
         remaining = -1;

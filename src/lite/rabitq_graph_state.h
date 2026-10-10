@@ -735,7 +735,8 @@ public:
             return false;
         }
         codec_require(active_journal_ == nullptr, "nested graph add transaction");
-        if (use_incoming_adjacency_) {
+        if (use_incoming_adjacency_ and incoming_protection_ == IncomingProtection::CACHED and
+            not incoming_counts_valid_) {
             auto next = *this;
             const bool added = next.Add(id, vector);
             *this = std::move(next);
@@ -743,6 +744,7 @@ public:
         }
         const uint64_t count = Size();
         const auto old_fallbacks = mutation_fallbacks_;
+        const bool old_counts_valid = incoming_counts_valid_;
         UpdateJournal journal;
         journal.row_limit = count;
         bool inserted = false;
@@ -761,6 +763,9 @@ public:
             grow(codes_.supplements, (count + 1) * codes_.SupplementBytes());
             grow(ids_, count + 1);
             grow(adjacency_, count + 1);
+            if (use_incoming_adjacency_) {
+                grow(incoming_, count + 1);
+            }
             if (incoming_counts_valid_) {
                 grow(incoming_counts_, count + 1);
             }
@@ -773,6 +778,9 @@ public:
             codes_.Append(std::move(prepared.code));
             ids_.push_back(id);
             adjacency_.emplace_back();
+            if (use_incoming_adjacency_) {
+                incoming_.emplace_back();
+            }
             replace_neighbors(count, neighbors);
             std::vector<uint64_t> targets;
             const bool protect_add =
@@ -791,10 +799,22 @@ public:
             active_journal_ = nullptr;
             return true;
         } catch (...) {
-            incoming_counts_valid_ = false;
+            incoming_counts_valid_ = use_incoming_adjacency_ and old_counts_valid;
             active_journal_ = nullptr;
             for (auto& row : journal.rows) {
                 adjacency_[row.first].swap(row.second);
+            }
+            for (auto& row : journal.incoming_rows) {
+                incoming_[row.first].swap(row.second);
+                if (incoming_counts_valid_) {
+                    incoming_counts_[row.first] = incoming_[row.first].size();
+                }
+            }
+            if (use_incoming_adjacency_) {
+                incoming_.resize(count);
+                if (incoming_counts_valid_) {
+                    incoming_counts_.resize(count);
+                }
             }
             adjacency_.resize(count);
             ids_.resize(count);
@@ -1419,6 +1439,7 @@ private:
     void
     remember_incoming_row(uint64_t target) {
         if (active_journal_ != nullptr and use_incoming_adjacency_ and
+            target < active_journal_->row_limit and
             active_journal_->incoming_rows.count(target) == 0) {
             active_journal_->incoming_rows.emplace(target, incoming_[target]);
         }
