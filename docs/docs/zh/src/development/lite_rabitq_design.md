@@ -201,3 +201,20 @@ RAM/page-cache暖数据非cold I/O；probe ru_maxrss可能含launcher继承HWM�
 重跑Release6、新probe format/tidy15、语法/错误输入通过；生产SAN/coverage/OFF继承06ab591，未重跑。
 模式拼写在计时前修正；计时后RAM probe不存在，仅重建作错误输入检查，无性能重跑。
 下一调查入边分配/布局并保留journal回滚与快照兼容；quality、100k/交错CRUD、fresh Full对齐、cold I/O/完整包待验收。
+
+### 内部入边槽位改为有检查的32位（2026-10-11）
+
+参考官方src/basic_types.h的uint32_t InnerIdType，入边源槽位与回滚备份改uint32_t；外部ID/出边/计数/
+评分/模型/预算/API/持久化格式不变。新增反向槽前检查溢出，max/max+1单测不需海量分配。公开reverse仍false。
+对照5d633c9为64位、候选32位，两边reverse/NONE；10k/600查询、degree16/维护128/查询512、CPU0单线程，
+各三组交替配对、三遍全ID真实UpdateRemoveAdd：GIST中位20327.354→20116.230ms(-1.04%)，
+Cohere17470.224→17346.610ms(-0.71%)。六对均快，但小幅变化不作普遍/显著结论。有序ID/hex距离/hits/
+snapshotSHA全pair exact，mixed召回仍.811167/.908167，质量未达标，非Full优势。
+72次新进程同snapshot暖加载：160000边载荷1280000→640000B(-50%)，vector头240000B不变，
+总incoming1520000→880000B(-42.11%)；knowncapacity GIST12964320→12324320B、Cohere11043456→10403456B，
+不含map节点/分配器/临时量。减基线resident16808→15532KiB、14880→13662KiB，暖load8.949→8.434ms、
+8.341→7.805ms；非coldIO，probeHWM可能继承launcher，builderpeak含输入矩阵及双索引，不算维护峰值改善。
+快照大小不变。Release6/SAN5/freshCov5/OFF4/format-tidy15通过，Lite2936/3077=95.42%限定覆盖率非WholeFull。
+已有故障注入/重试/继续增改及48混合缓存配置仍通过。证据lite/benchmark/results/rabitq-incoming32-20261011
+独立审计1080000操作/14400真值/72加载/fresh覆盖及hash。下一入边分配/布局及固定预算quality；公开默认继续关闭。
+100k/交错CRUD、fresh原生Full配置SIMD质量对齐、coldIO/完整包终验待完成，PR冻结。

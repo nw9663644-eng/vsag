@@ -228,3 +228,31 @@ checks pass. Production sanitizer/coverage/OFF inherited from06ab591,not rerun. 
 spelling fixed before timing;post-run absent RAM probe executables rebuilt only for error checks.
 Next investigate incoming allocations/layout while preserving journal/rollback and snapshot
 compatibility;quality,100k/interleaved CRUD,fresh aligned Full,cold I/O/complete package remain open.
+
+### Checked 32-bit internal incoming slots (2026-10-11)
+
+Following native src/basic_types.h uint32_t InnerIdType,reverse source slots and their
+rollback backups now use uint32_t. External IDs,outgoing slots,counts,scoring,model,budgets,
+API and persisted snapshot keep their types/semantics. Checked conversion rejects overflow
+before adding a reverse slot;max/max+1 regression needs no huge allocation. Public reverse=false.
+
+Both overlays enable reverse/NONE. Control5d633c9 uses64-bit slots,candidate32-bit. Three
+alternating10k/600-query pairs per dataset,degree16/maintenance128/query512,CPU0/thread1,
+three full-ID true Update/Remove/Add passes: block medians20327.354 to20116.230ms(-1.04%)
+GIST,17470.224 to17346.610ms(-0.71%)Cohere. Six pairs faster,small changes,no universal or
+statistical speedup claim. Ordered IDs/hex distances/hits and snapshot SHA exact across pairs;
+mixed recall .811167/.908167 remains below quality floors,no quality fix or Full advantage.
+
+72 fresh same-snapshot warm loaders:160000 edge payload1280000 to640000B(-50%);unchanged
+240000B vector headers,total1520000 to880000B(-42.11%). Known capacity12964320 to12324320B
+GIST,11043456 to10403456B Cohere(excludes map/allocator/transients). Baseline-adjusted
+resident16808 to15532KiB and14880 to13662KiB;warm load8.949 to8.434ms and8.341 to7.805ms.
+Not cold I/O;probe HWM may include launcher inheritance,builder peak includes input matrices
+and two indexes. Snapshot size unchanged,no package or mutation-only peak improvement claim.
+
+Release6,sanitizer5,fresh coverage5,disabled4,format/tidy15 pass;scoped Lite2936/3077=95.42%,
+not whole Full. Existing allocation-failure journal/retry/continued-CRUD and48 mixed-cache
+configurations remain passing. Evidence:lite/benchmark/results/rabitq-incoming32-20261011,
+independent1080000 operations/14400 truth states/72 load probes/fresh coverage/hash audit.
+Next incoming allocation/layout overhead and fixed-budget quality;public reverse remains off.
+100k/interleaved CRUD,fresh aligned native Full,cold I/O and complete package acceptance stay open.

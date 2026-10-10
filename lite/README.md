@@ -142,3 +142,9 @@ The current same-source reverse off/on CRUD,load and memory tradeoff is in
 The speedup has an incoming-memory and warm-load cost;public reverse remains disabled.
 
 当前同源码反向邻接开关对照见上述验收报告：CRUD更快但入边内存和暖加载有代价，公开默认继续关闭。
+
+The checked32-bit reverse slot implementation and paired memory/performance evidence are in
+[the incoming-width experiment](benchmark/results/rabitq-incoming32-20261011/README.md).
+Public reverse defaults and snapshot format remain unchanged.
+
+有检查的32位入边槽实现及配对内存/性能证据见上述报告；公开默认及快照格式不变。

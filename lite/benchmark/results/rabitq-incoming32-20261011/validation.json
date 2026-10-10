@@ -1,0 +1,30 @@
+{
+  "production_change": true,
+  "public_default_changed": false,
+  "source_head": "5d633c9514c039a8134539a881b064afa62a90a0",
+  "source_sha256": {
+    "src/lite/rabitq_graph_state.h": "f8e7f303335f5eeb9fba735b5b0137afa6fb982f52b0686d3905ddd7f6243c6c",
+    "src/lite/rabitq_backend_test.cpp": "ca90cff4e9951ec9c22b91555861c1d83cd27903c9b265da373ad640f044d0c2",
+    "src/lite/graph_allocation_test.cpp": "4861d9999f2c54839856fbc03c6ce9a2b5de931ebd453ee2b74b2f6b195ec5d5",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "tests": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "limits": [
+    "Internal reverse only",
+    "Not Full comparison",
+    "Not cold I/O",
+    "Not100k",
+    "Not interleaved queries",
+    "Known memory excludes map/allocator/transient",
+    "Probe HWM may be inherited"
+  ],
+  "decision": "Retain incoming32;public reverse remains disabled"
+}

@@ -1,0 +1,1043 @@
+{
+  "summary": [
+    {
+      "dataset": "gist10k600",
+      "variant": "control",
+      "repeat": 0,
+      "crud_ms": 21102.102914,
+      "mutation_ops_s": 4264.977778128942,
+      "external_peak_rss_kib": 219412,
+      "build_ms": 1538.325052,
+      "warm_public_load_ms": 8.52578,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 335.073,
+          "p99_us": 1383.92
+        },
+        "remove": {
+          "p50_us": 19.19,
+          "p99_us": 90.328
+        },
+        "add": {
+          "p50_us": 273.814,
+          "p99_us": 319.703
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 448.55,
+        "p99_us": 549.728
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 423.111,
+        "p99_us": 529.778
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1952,
+          "resident_rss_kib": 18800,
+          "peak_rss_kib": 28580,
+          "load_ms": 9.197504,
+          "increment_rss_kib": 16824
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1984,
+          "resident_rss_kib": 17440,
+          "peak_rss_kib": 28580,
+          "load_ms": 9.001879,
+          "increment_rss_kib": 15508
+        }
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "variant": "candidate",
+      "repeat": 0,
+      "crud_ms": 20454.0796,
+      "mutation_ops_s": 4400.100212771245,
+      "external_peak_rss_kib": 219572,
+      "build_ms": 1590.50537,
+      "warm_public_load_ms": 7.905203,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 323.712,
+          "p99_us": 1352.259
+        },
+        "remove": {
+          "p50_us": 17.4,
+          "p99_us": 86.567
+        },
+        "add": {
+          "p50_us": 268.405,
+          "p99_us": 307.933
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 460.55,
+        "p99_us": 553.748
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 408.441,
+        "p99_us": 458.14
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1952,
+          "resident_rss_kib": 18700,
+          "peak_rss_kib": 28580,
+          "load_ms": 8.672137,
+          "increment_rss_kib": 16792
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 17472,
+          "peak_rss_kib": 28580,
+          "load_ms": 8.262835,
+          "increment_rss_kib": 15532
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "candidate",
+      "repeat": 0,
+      "crud_ms": 17373.861434,
+      "mutation_ops_s": 5180.195568031489,
+      "external_peak_rss_kib": 176728,
+      "build_ms": 1533.221402,
+      "warm_public_load_ms": 8.255315,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 263.694,
+          "p99_us": 1128.055
+        },
+        "remove": {
+          "p50_us": 25.158,
+          "p99_us": 85.367
+        },
+        "add": {
+          "p50_us": 240.055,
+          "p99_us": 271.215
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 444.849,
+        "p99_us": 652.845
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 404.431,
+        "p99_us": 463.571
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1952,
+          "resident_rss_kib": 16808,
+          "peak_rss_kib": 28600,
+          "load_ms": 8.192018,
+          "increment_rss_kib": 14820
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 15592,
+          "peak_rss_kib": 28600,
+          "load_ms": 7.887984,
+          "increment_rss_kib": 13652
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "control",
+      "repeat": 0,
+      "crud_ms": 17570.696574,
+      "mutation_ops_s": 5122.164600644021,
+      "external_peak_rss_kib": 176652,
+      "build_ms": 1480.632478,
+      "warm_public_load_ms": 7.841196,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 267.134,
+          "p99_us": 1143.194
+        },
+        "remove": {
+          "p50_us": 26.811,
+          "p99_us": 88.217
+        },
+        "add": {
+          "p50_us": 240.784,
+          "p99_us": 272.613
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 430.191,
+        "p99_us": 537.029
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 403.05,
+        "p99_us": 449.56
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1932,
+          "resident_rss_kib": 16788,
+          "peak_rss_kib": 28600,
+          "load_ms": 8.859482,
+          "increment_rss_kib": 14808
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1984,
+          "resident_rss_kib": 15596,
+          "peak_rss_kib": 28600,
+          "load_ms": 8.094259,
+          "increment_rss_kib": 13612
+        }
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "variant": "candidate",
+      "repeat": 1,
+      "crud_ms": 20116.230169,
+      "mutation_ops_s": 4473.999315174569,
+      "external_peak_rss_kib": 219580,
+      "build_ms": 1582.885819,
+      "warm_public_load_ms": 7.864755,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 310.154,
+          "p99_us": 1328.23
+        },
+        "remove": {
+          "p50_us": 17.4,
+          "p99_us": 86.418
+        },
+        "add": {
+          "p50_us": 268.524,
+          "p99_us": 308.083
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 439.91,
+        "p99_us": 533.808
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 409.071,
+        "p99_us": 465.849
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 18632,
+          "peak_rss_kib": 28864,
+          "load_ms": 8.854153,
+          "increment_rss_kib": 16680
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1936,
+          "resident_rss_kib": 17484,
+          "peak_rss_kib": 28864,
+          "load_ms": 8.375422,
+          "increment_rss_kib": 15588
+        }
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "variant": "control",
+      "repeat": 1,
+      "crud_ms": 20202.379482,
+      "mutation_ops_s": 4454.920772089673,
+      "external_peak_rss_kib": 219440,
+      "build_ms": 1574.147209,
+      "warm_public_load_ms": 8.378562,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 309.153,
+          "p99_us": 1339.23
+        },
+        "remove": {
+          "p50_us": 17.98,
+          "p99_us": 88.367
+        },
+        "add": {
+          "p50_us": 270.093,
+          "p99_us": 308.393
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 440.651,
+        "p99_us": 544.788
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 413.47,
+        "p99_us": 487.46
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 18688,
+          "peak_rss_kib": 29128,
+          "load_ms": 8.877393,
+          "increment_rss_kib": 16748
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 17436,
+          "peak_rss_kib": 29128,
+          "load_ms": 8.448982,
+          "increment_rss_kib": 15512
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "control",
+      "repeat": 1,
+      "crud_ms": 17470.224133,
+      "mutation_ops_s": 5151.622515820874,
+      "external_peak_rss_kib": 176748,
+      "build_ms": 1480.012303,
+      "warm_public_load_ms": 7.865375,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 264.424,
+          "p99_us": 1136.215
+        },
+        "remove": {
+          "p50_us": 26.43,
+          "p99_us": 87.858
+        },
+        "add": {
+          "p50_us": 240.665,
+          "p99_us": 271.975
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 425.299,
+        "p99_us": 534.118
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 399.471,
+        "p99_us": 447.19
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1908,
+          "resident_rss_kib": 16880,
+          "peak_rss_kib": 29452,
+          "load_ms": 8.195537,
+          "increment_rss_kib": 14972
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1980,
+          "resident_rss_kib": 15596,
+          "peak_rss_kib": 29452,
+          "load_ms": 7.815816,
+          "increment_rss_kib": 13612
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "candidate",
+      "repeat": 1,
+      "crud_ms": 17346.609576,
+      "mutation_ops_s": 5188.333755117197,
+      "external_peak_rss_kib": 176740,
+      "build_ms": 1479.798732,
+      "warm_public_load_ms": 7.407276,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 262.985,
+          "p99_us": 1121.915
+        },
+        "remove": {
+          "p50_us": 25.238,
+          "p99_us": 85.418
+        },
+        "add": {
+          "p50_us": 240.114,
+          "p99_us": 271.064
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 431.411,
+        "p99_us": 570.667
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 403.542,
+        "p99_us": 450.251
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1932,
+          "resident_rss_kib": 16948,
+          "peak_rss_kib": 29716,
+          "load_ms": 8.308195,
+          "increment_rss_kib": 15028
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1944,
+          "resident_rss_kib": 15724,
+          "peak_rss_kib": 29716,
+          "load_ms": 7.689928,
+          "increment_rss_kib": 13768
+        }
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "variant": "control",
+      "repeat": 2,
+      "crud_ms": 20327.353534,
+      "mutation_ops_s": 4427.531594285696,
+      "external_peak_rss_kib": 219492,
+      "build_ms": 1528.647495,
+      "warm_public_load_ms": 8.702616,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 313.013,
+          "p99_us": 1347.83
+        },
+        "remove": {
+          "p50_us": 18.16,
+          "p99_us": 88.377
+        },
+        "add": {
+          "p50_us": 271.075,
+          "p99_us": 310.653
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 444.929,
+        "p99_us": 534.709
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 405.021,
+        "p99_us": 460.13
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1948,
+          "resident_rss_kib": 18780,
+          "peak_rss_kib": 29716,
+          "load_ms": 9.085408,
+          "increment_rss_kib": 16836
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1936,
+          "resident_rss_kib": 17488,
+          "peak_rss_kib": 29716,
+          "load_ms": 8.419292,
+          "increment_rss_kib": 15588
+        }
+      }
+    },
+    {
+      "dataset": "gist10k600",
+      "variant": "candidate",
+      "repeat": 2,
+      "crud_ms": 19993.510679,
+      "mutation_ops_s": 4501.460571130746,
+      "external_peak_rss_kib": 219460,
+      "build_ms": 1510.514581,
+      "warm_public_load_ms": 8.121239,
+      "snapshot_bytes": 11284416,
+      "operations": {
+        "update": {
+          "p50_us": 305.824,
+          "p99_us": 1327.85
+        },
+        "remove": {
+          "p50_us": 17.15,
+          "p99_us": 86.328
+        },
+        "add": {
+          "p50_us": 268.734,
+          "p99_us": 307.144
+        }
+      },
+      "initial": {
+        "recall": 0.961,
+        "p50_us": 438.91,
+        "p99_us": 542.948
+      },
+      "final": {
+        "recall": 0.8111666666666667,
+        "p50_us": 411.661,
+        "p99_us": 461.38
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 12964320,
+          "known_capacity_bytes": 12964320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1948,
+          "resident_rss_kib": 18780,
+          "peak_rss_kib": 29716,
+          "load_ms": 9.020109,
+          "increment_rss_kib": 16856
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 960,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 12324320,
+          "known_capacity_bytes": 12324320,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1940,
+          "resident_rss_kib": 17472,
+          "peak_rss_kib": 29716,
+          "load_ms": 8.672387,
+          "increment_rss_kib": 15532
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "candidate",
+      "repeat": 2,
+      "crud_ms": 17288.265125,
+      "mutation_ops_s": 5205.8433480322965,
+      "external_peak_rss_kib": 176624,
+      "build_ms": 1494.273749,
+      "warm_public_load_ms": 7.514103,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 261.303,
+          "p99_us": 1116.025
+        },
+        "remove": {
+          "p50_us": 25.169,
+          "p99_us": 85.557
+        },
+        "add": {
+          "p50_us": 239.936,
+          "p99_us": 271.584
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 430.221,
+        "p99_us": 515.447
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 402.48,
+        "p99_us": 450.411
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1928,
+          "resident_rss_kib": 16820,
+          "peak_rss_kib": 29716,
+          "load_ms": 8.372823,
+          "increment_rss_kib": 14900
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1920,
+          "resident_rss_kib": 15592,
+          "peak_rss_kib": 29716,
+          "load_ms": 7.642449,
+          "increment_rss_kib": 13672
+        }
+      }
+    },
+    {
+      "dataset": "cohere10k600",
+      "variant": "control",
+      "repeat": 2,
+      "crud_ms": 17424.013495,
+      "mutation_ops_s": 5165.285255651715,
+      "external_peak_rss_kib": 176728,
+      "build_ms": 1467.458179,
+      "warm_public_load_ms": 8.205857,
+      "snapshot_bytes": 9363552,
+      "operations": {
+        "update": {
+          "p50_us": 263.474,
+          "p99_us": 1137.634
+        },
+        "remove": {
+          "p50_us": 26.529,
+          "p99_us": 87.878
+        },
+        "add": {
+          "p50_us": 240.135,
+          "p99_us": 270.854
+        }
+      },
+      "initial": {
+        "recall": 0.9835,
+        "p50_us": 427.03,
+        "p99_us": 525.777
+      },
+      "final": {
+        "recall": 0.9081666666666667,
+        "p50_us": 395.841,
+        "p99_us": 435.01
+      },
+      "same_snapshot_load_probes": {
+        "control": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 1520000,
+          "incoming_capacity_bytes": 1520000,
+          "known_logical_bytes": 11043456,
+          "known_capacity_bytes": 11043456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1976,
+          "resident_rss_kib": 16796,
+          "peak_rss_kib": 29716,
+          "load_ms": 8.470202,
+          "increment_rss_kib": 14860
+        },
+        "candidate": {
+          "count": 10000,
+          "dim": 768,
+          "edges": 160000,
+          "incoming_edges": 160000,
+          "incoming_logical_bytes": 880000,
+          "incoming_capacity_bytes": 880000,
+          "known_logical_bytes": 10403456,
+          "known_capacity_bytes": 10403456,
+          "slot_entries": 10000,
+          "slot_buckets": 10273,
+          "baseline_rss_kib": 1952,
+          "resident_rss_kib": 15632,
+          "peak_rss_kib": 29716,
+          "load_ms": 7.793876,
+          "increment_rss_kib": 13692
+        }
+      }
+    }
+  ],
+  "paired": {
+    "gist10k600-r0": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    },
+    "gist10k600-r1": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    },
+    "gist10k600-r2": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    },
+    "cohere10k600-r0": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    },
+    "cohere10k600-r1": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    },
+    "cohere10k600-r2": {
+      "extra_hits": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 600,
+      "mean_recall_delta": 0.0,
+      "initial_results_identical": true,
+      "final_results_identical": true
+    }
+  },
+  "comparison": {
+    "gist10k600": {
+      "crud_ms": {
+        "control": 20327.353534,
+        "candidate": 20116.230169
+      },
+      "mutation_ops_s": {
+        "control": 4427.531594285696,
+        "candidate": 4473.999315174569
+      },
+      "external_peak_rss_kib": {
+        "control": 219440,
+        "candidate": 219572
+      },
+      "build_ms": {
+        "control": 1538.325052,
+        "candidate": 1582.885819
+      },
+      "warm_public_load_ms": {
+        "control": 8.52578,
+        "candidate": 7.905203
+      },
+      "snapshot_bytes": {
+        "control": 11284416,
+        "candidate": 11284416
+      },
+      "final_recall": {
+        "control": 0.8111666666666667,
+        "candidate": 0.8111666666666667
+      },
+      "operations": {
+        "update": {
+          "control": {
+            "p50_us": 313.013,
+            "p99_us": 1347.83
+          },
+          "candidate": {
+            "p50_us": 310.154,
+            "p99_us": 1328.23
+          }
+        },
+        "remove": {
+          "control": {
+            "p50_us": 18.16,
+            "p99_us": 88.377
+          },
+          "candidate": {
+            "p50_us": 17.4,
+            "p99_us": 86.418
+          }
+        },
+        "add": {
+          "control": {
+            "p50_us": 271.075,
+            "p99_us": 310.653
+          },
+          "candidate": {
+            "p50_us": 268.524,
+            "p99_us": 307.933
+          }
+        }
+      },
+      "crud_change_percent": -1.038617076477133
+    },
+    "cohere10k600": {
+      "crud_ms": {
+        "control": 17470.224133,
+        "candidate": 17346.609576
+      },
+      "mutation_ops_s": {
+        "control": 5151.622515820874,
+        "candidate": 5188.333755117197
+      },
+      "external_peak_rss_kib": {
+        "control": 176728,
+        "candidate": 176728
+      },
+      "build_ms": {
+        "control": 1480.012303,
+        "candidate": 1494.273749
+      },
+      "warm_public_load_ms": {
+        "control": 7.865375,
+        "candidate": 7.514103
+      },
+      "snapshot_bytes": {
+        "control": 9363552,
+        "candidate": 9363552
+      },
+      "final_recall": {
+        "control": 0.9081666666666667,
+        "candidate": 0.9081666666666667
+      },
+      "operations": {
+        "update": {
+          "control": {
+            "p50_us": 264.424,
+            "p99_us": 1137.634
+          },
+          "candidate": {
+            "p50_us": 262.985,
+            "p99_us": 1121.915
+          }
+        },
+        "remove": {
+          "control": {
+            "p50_us": 26.529,
+            "p99_us": 87.878
+          },
+          "candidate": {
+            "p50_us": 25.169,
+            "p99_us": 85.418
+          }
+        },
+        "add": {
+          "control": {
+            "p50_us": 240.665,
+            "p99_us": 271.975
+          },
+          "candidate": {
+            "p50_us": 240.055,
+            "p99_us": 271.215
+          }
+        }
+      },
+      "crud_change_percent": -0.7075728168049134
+    }
+  },
+  "audited_operations": 1080000,
+  "audited_truth_states": 14400,
+  "audited_load_probes": 72
+}

@@ -267,9 +267,16 @@ TEST_CASE("RaBitQ incoming adjacency survives directed CRUD repair", "[lite-rabi
         REQUIRE(state.GetMutationScanTiming().remove_wall_us >= 0);
         if (incoming) {
             const auto before = state.GetIncomingMemoryUsage();
+            REQUIRE(before.logical_bytes ==
+                    state.Size() * sizeof(std::vector<codec::IncomingSlot>) +
+                        before.edges * sizeof(codec::IncomingSlot));
             state.CompactIncoming();
             REQUIRE(state.GetIncomingMemoryUsage().logical_bytes == before.logical_bytes);
-            REQUIRE(state.GetIncomingDistribution().nodes == 8);
+            const auto distribution = state.GetIncomingDistribution();
+            REQUIRE(distribution.nodes == 8);
+            REQUIRE(distribution.edge_logical_bytes == before.edges * sizeof(codec::IncomingSlot));
+            REQUIRE(distribution.outer_vector_bytes + distribution.edge_capacity_bytes ==
+                    state.GetIncomingMemoryUsage().capacity_bytes);
         }
         std::stringstream stream;
         codec::save_mutable_snapshot(stream, state);
@@ -1092,4 +1099,12 @@ TEST_CASE("RaBitQ maintenance Batch4 preserves scalar candidate order and distan
             }
         }
     }
+}
+
+TEST_CASE("RaBitQ incoming slot narrowing is checked", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    static_assert(sizeof(codec::IncomingSlot) == sizeof(uint32_t));
+    const auto maximum = std::numeric_limits<uint32_t>::max();
+    REQUIRE(codec::checked_incoming_slot(maximum) == maximum);
+    REQUIRE_THROWS(codec::checked_incoming_slot(static_cast<uint64_t>(maximum) + 1));
 }

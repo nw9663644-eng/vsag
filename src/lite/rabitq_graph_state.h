@@ -591,6 +591,16 @@ struct MutableMemoryUsage {
 
 enum class IncomingProtection { NONE, RECOUNT, CACHED };
 
+// Native VSAG uses uint32_t InnerIdType (src/basic_types.h).
+// Only the internal reverse index narrows; outgoing slots and persisted IDs stay unchanged.
+using IncomingSlot = uint32_t;
+
+inline IncomingSlot
+checked_incoming_slot(uint64_t slot) {
+    codec_require(slot <= std::numeric_limits<IncomingSlot>::max(), "incoming slot overflow");
+    return static_cast<IncomingSlot>(slot);
+}
+
 class MutableGraphState {
 public:
     MutableGraphState(Model input_model,
@@ -619,6 +629,9 @@ public:
             codec_require(slots_.emplace(ids_[slot], slot).second, "duplicate mutable graph ID");
         }
         if (use_incoming_adjacency_) {
+            if (Size() > 0) {
+                (void)checked_incoming_slot(Size() - 1);
+            }
             incoming_ = BuildIncomingAdjacency();
         }
         Validate();
@@ -697,6 +710,9 @@ public:
             const auto neighbors =
                 nearest(query, query_norm, std::numeric_limits<uint64_t>::max(), max_degree_);
             const uint64_t slot = Size();
+            if (use_incoming_adjacency_) {
+                (void)checked_incoming_slot(slot);
+            }
             if (incoming_counts_valid_) {
                 incoming_counts_.push_back(0);
             }
@@ -743,6 +759,9 @@ public:
             return added;
         }
         const uint64_t count = Size();
+        if (use_incoming_adjacency_) {
+            (void)checked_incoming_slot(count);
+        }
         const auto old_fallbacks = mutation_fallbacks_;
         const bool old_counts_valid = incoming_counts_valid_;
         UpdateJournal journal;
@@ -937,7 +956,7 @@ public:
         const double scan_cpu_start_us =
             measure_mutation_scans_ ? (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) : 0.0;
         if (use_incoming_adjacency_) {
-            affected_nodes = incoming_[slot];
+            affected_nodes.assign(incoming_[slot].begin(), incoming_[slot].end());
             remember_incoming_row(slot);
             for (const uint64_t source : affected_nodes) {
                 remember_row(source);
@@ -1283,7 +1302,7 @@ public:
         return ids_;
     }
 
-    [[nodiscard]] std::vector<std::vector<uint64_t>>
+    [[nodiscard]] std::vector<std::vector<IncomingSlot>>
     BuildIncomingAdjacency() const {
         std::vector<uint64_t> counts(Size());
         for (const auto& neighbors : adjacency_) {
@@ -1291,13 +1310,16 @@ public:
                 ++counts[target];
             }
         }
-        std::vector<std::vector<uint64_t>> incoming(Size());
+        if (Size() > 0) {
+            (void)checked_incoming_slot(Size() - 1);
+        }
+        std::vector<std::vector<IncomingSlot>> incoming(Size());
         for (uint64_t target = 0; target < Size(); ++target) {
             incoming[target].reserve(counts[target]);
         }
         for (uint64_t source = 0; source < Size(); ++source) {
             for (const uint64_t target : adjacency_[source]) {
-                incoming[target].push_back(source);
+                incoming[target].push_back(checked_incoming_slot(source));
             }
         }
         return incoming;
@@ -1306,12 +1328,12 @@ public:
     [[nodiscard]] IncomingMemoryUsage
     GetIncomingMemoryUsage() const {
         IncomingMemoryUsage result;
-        result.logical_bytes = incoming_.size() * sizeof(std::vector<uint64_t>);
-        result.capacity_bytes = incoming_.capacity() * sizeof(std::vector<uint64_t>);
+        result.logical_bytes = incoming_.size() * sizeof(std::vector<IncomingSlot>);
+        result.capacity_bytes = incoming_.capacity() * sizeof(std::vector<IncomingSlot>);
         for (const auto& sources : incoming_) {
             result.edges += sources.size();
-            result.logical_bytes += sources.size() * sizeof(uint64_t);
-            result.capacity_bytes += sources.capacity() * sizeof(uint64_t);
+            result.logical_bytes += sources.size() * sizeof(IncomingSlot);
+            result.capacity_bytes += sources.capacity() * sizeof(IncomingSlot);
         }
         return result;
     }
@@ -1330,7 +1352,7 @@ public:
         codec_require(use_incoming_adjacency_, "incoming adjacency is not enabled");
         IncomingDistribution result;
         result.nodes = incoming_.size();
-        result.outer_vector_bytes = incoming_.capacity() * sizeof(std::vector<uint64_t>);
+        result.outer_vector_bytes = incoming_.capacity() * sizeof(std::vector<IncomingSlot>);
         std::vector<uint64_t> degrees;
         std::vector<uint64_t> capacities;
         degrees.reserve(incoming_.size());
@@ -1349,8 +1371,8 @@ public:
             result.degree_gt_64 += degree > 64 ? 1 : 0;
             result.slack_nodes += capacity > degree ? 1 : 0;
             result.slack_entries += capacity - degree;
-            result.edge_logical_bytes += degree * sizeof(uint64_t);
-            result.edge_capacity_bytes += capacity * sizeof(uint64_t);
+            result.edge_logical_bytes += degree * sizeof(IncomingSlot);
+            result.edge_capacity_bytes += capacity * sizeof(IncomingSlot);
         }
         if (degrees.empty()) {
             return result;
@@ -1448,7 +1470,7 @@ private:
         std::vector<uint8_t> filter;
         std::vector<uint8_t> supplement;
         std::unordered_map<uint64_t, std::vector<uint64_t>> rows;
-        std::unordered_map<uint64_t, std::vector<uint64_t>> incoming_rows;
+        std::unordered_map<uint64_t, std::vector<IncomingSlot>> incoming_rows;
         uint64_t row_limit = std::numeric_limits<uint64_t>::max();
         std::unordered_map<int64_t, uint64_t>::node_type removed_node;
     };
@@ -1497,16 +1519,19 @@ private:
         }
     }
 
+    template <typename T>
     static void
-    erase_value(std::vector<uint64_t>& values, uint64_t value) {
+    erase_value(std::vector<T>& values, uint64_t value) {
         values.erase(std::remove(values.begin(), values.end(), value), values.end());
     }
 
+    template <typename T>
     static void
-    replace_value(std::vector<uint64_t>& values, uint64_t old_value, uint64_t new_value) {
-        for (uint64_t& value : values) {
+    replace_value(std::vector<T>& values, uint64_t old_value, uint64_t new_value) {
+        codec_require(new_value <= std::numeric_limits<T>::max(), "neighbor slot overflow");
+        for (T& value : values) {
             if (value == old_value) {
-                value = new_value;
+                value = static_cast<T>(new_value);
             }
         }
     }
@@ -1553,7 +1578,7 @@ private:
         for (const uint64_t target : neighbors) {
             if (std::find(old_neighbors.begin(), old_neighbors.end(), target) ==
                 old_neighbors.end()) {
-                incoming_[target].push_back(source);
+                incoming_[target].push_back(checked_incoming_slot(source));
             }
         }
     }
@@ -1803,7 +1828,7 @@ private:
     std::vector<int64_t> ids_;
     std::unordered_map<int64_t, uint64_t> slots_;
     std::vector<std::vector<uint64_t>> adjacency_;
-    std::vector<std::vector<uint64_t>> incoming_;
+    std::vector<std::vector<IncomingSlot>> incoming_;
     uint64_t max_degree_;
     uint64_t ef_search_;
     uint64_t mutation_fallbacks_{};
