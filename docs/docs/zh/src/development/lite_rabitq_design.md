@@ -117,3 +117,7 @@ SIFT/Cohere .95、GIST .90是实验预声明floor，不是社区统一最终要�
 ### 2026-10-10 CRUD 独占阶段诊断
 
 基于bc3e9bd在单线程RAM隔离副本插桩，生产不变。固定10k/600历史查询、degree16/维护128/查询512、三遍全ID真实UpdateRemoveAdd，GIST/Cohere CPU独占占比：nearest（含路由/评分）29.20/30.91%，入边扫描19.08/22.21%，邻居评分排序20.15/17.90%，变换后码重建13.77/11.93%，编码6.28/5.97%。时钟有开销，仅诊断，非生产收益或Full对照。有序结果/快照SHA与历史NONE control一致，Recall仍.811167/.908167。证据`lite/benchmark/results/rabitq-mutation-profile-20261010`含源码、绑定、校准/作用域夹具、180000操作/2400真值独立审计。生产测试覆盖率继承，非新跑。下一固定质量预算优先路由/扫描；100k/交错CRUD/freshFull对齐/coldIO未验收。
+
+### 2026-10-10 拒绝批量变换码解码候选
+
+真实生产候选复用原生RecoverOrderSQ移位掩码恢复思路，每字节批量重建8维；原浮点除法、图政策、预算、API/model/snapshot不变。256编码/尾维/未对齐/四norm逐位回归和candidate Release6/SAN5通过。固定10k GIST/Cohere600查询、NONE/NONE、三交替pair、三遍全ID真实UpdateRemoveAdd，CRUD中位+0.18484%/+1.57367%，样本内全部pair变慢，无收益，不推断普遍回退或具体CPU原因。header/test撤回为675aed7逐字节一致，restoredRelease6/SAN5、最终format/tidy15通过，默认库SHA1a18379a不变。无fresh coverage/OFF/Full全套/Node成绩。证据`lite/benchmark/results/rabitq-block-decode-20261010`独立审计1080000操作/14400真值、paired有序结果/快照SHA、183raw成员30852726B及10验证退出码。默认Recall.811167/.908167未修复。下一检索已有原生Batch4内积评分在图维护中的复用，尚未实现/测量。终验未完成，PR2904/2926未改。

@@ -1,0 +1,44 @@
+{
+  "gist10k600": {
+    "control_crud_ms": [
+      25347.969472,
+      25352.048256,
+      25352.116143
+    ],
+    "candidate_crud_ms": [
+      25389.373244,
+      25398.909808,
+      25404.482732
+    ],
+    "control_median_ms": 25352.048256,
+    "candidate_median_ms": 25398.909808,
+    "median_change_percent": 0.1848432581336379,
+    "paired_changes_percent": [
+      0.16334157276673977,
+      0.1848432581336379,
+      0.20655707280854418
+    ],
+    "snapshot_and_ordered_results_identical": true
+  },
+  "cohere10k600": {
+    "control_crud_ms": [
+      22407.592686,
+      22439.224088,
+      22299.395504
+    ],
+    "candidate_crud_ms": [
+      22774.978847,
+      22470.758145,
+      22760.214861
+    ],
+    "control_median_ms": 22407.592686,
+    "candidate_median_ms": 22760.214861,
+    "median_change_percent": 1.573672727549691,
+    "paired_changes_percent": [
+      1.6395610458839638,
+      0.14053095987782704,
+      2.0665105335135214
+    ],
+    "snapshot_and_ordered_results_identical": true
+  }
+}

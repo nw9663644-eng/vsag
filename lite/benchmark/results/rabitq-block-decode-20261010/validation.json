@@ -1,0 +1,26 @@
+{
+  "decision": "Rejected blocked decoder; production restored byte-exact to parent675aed7",
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "533b3717342c5f05e4fdb7243b3d5c1f44cdfc90f98ad13515b344235bce6ba2",
+    "src/lite/rabitq_backend_test.cpp": "f8d7c23b02dff5c299f2c77e7b44d5309c713700a42a8e55f8d4ff6b07d3c532",
+    "src/lite/graph_allocation_test.cpp": "1d9ec2b3255177b6ee4f293bd9538d09d6a02e5e73fbbdf0c74bca689711013c",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "default_library_sha256": "1a18379a28b8e7d276b054b3a1a323cc28ecfae2a8d7b5ba965539ddd67be22f",
+  "tests": {
+    "candidate_release": 6,
+    "candidate_asan_ubsan": 5,
+    "restored_release": 6,
+    "restored_asan_ubsan": 5
+  },
+  "coverage": "Inherited unchanged parent, no fresh coverage/disabled-backend suite",
+  "format_version": 15,
+  "tidy_version": 15,
+  "candidate_lint": "Formatted15 before timing; no separate candidate tidy claim",
+  "limitations": [
+    "Not Full comparison",
+    "No100k/cold I/O/quality fix",
+    "No new coverage/OFF/wholeFull/Node checker"
+  ]
+}
