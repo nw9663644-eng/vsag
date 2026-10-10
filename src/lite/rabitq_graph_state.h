@@ -628,7 +628,8 @@ public:
     void
     ConfigureIncomingProtection(IncomingProtection mode,
                                 bool protect_add = false,
-                                bool protect_remove = false) {
+                                bool protect_remove = false,
+                                bool protect_add_displaced = false) {
         codec_require(active_journal_ == nullptr and (mode == IncomingProtection::NONE or
                                                       mode == IncomingProtection::RECOUNT or
                                                       mode == IncomingProtection::CACHED),
@@ -636,6 +637,7 @@ public:
         incoming_protection_ = mode;
         protect_added_incoming_ = protect_add;
         protect_removed_incoming_ = protect_remove;
+        protect_added_displaced_ = protect_add_displaced;
         incoming_counts_valid_ = false;
     }
 
@@ -672,11 +674,18 @@ public:
             }
             replace_neighbors(slot, neighbors);
             slots_.emplace(id, slot);
-            for (uint64_t neighbor : neighbors) {
-                link(neighbor, slot);
+            std::vector<uint64_t> targets;
+            const bool protect_add =
+                incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_;
+            if (protect_add) {
+                targets.reserve(1 + neighbors.size());
+                targets.push_back(slot);
             }
-            if (incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_) {
-                protect_incoming({slot});
+            for (uint64_t neighbor : neighbors) {
+                link(neighbor, slot, protect_add and protect_added_displaced_ ? &targets : nullptr);
+            }
+            if (protect_add) {
+                protect_incoming(targets);
             }
             return true;
         } catch (...) {
@@ -731,11 +740,19 @@ public:
             ids_.push_back(id);
             adjacency_.emplace_back();
             replace_neighbors(count, neighbors);
-            for (uint64_t neighbor : neighbors) {
-                link(neighbor, count);
+            std::vector<uint64_t> targets;
+            const bool protect_add =
+                incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_;
+            if (protect_add) {
+                targets.reserve(1 + neighbors.size());
+                targets.push_back(count);
             }
-            if (incoming_protection_ != IncomingProtection::NONE and protect_added_incoming_) {
-                protect_incoming({count});
+            for (uint64_t neighbor : neighbors) {
+                link(
+                    neighbor, count, protect_add and protect_added_displaced_ ? &targets : nullptr);
+            }
+            if (protect_add) {
+                protect_incoming(targets);
             }
             active_journal_ = nullptr;
             return true;
@@ -1623,7 +1640,7 @@ private:
     }
 
     void
-    link(uint64_t source, uint64_t target) {
+    link(uint64_t source, uint64_t target, std::vector<uint64_t>* displaced_targets = nullptr) {
         auto& neighbors = adjacency_[source];
         if (source == target or
             std::find(neighbors.begin(), neighbors.end(), target) != neighbors.end()) {
@@ -1652,11 +1669,19 @@ private:
             }
         }
         sync_incoming(source, old_neighbors);
+        if (displaced_targets != nullptr) {
+            for (const uint64_t old_target : old_neighbors) {
+                if (std::find(neighbors.begin(), neighbors.end(), old_target) == neighbors.end()) {
+                    displaced_targets->push_back(old_target);
+                }
+            }
+        }
     }
 
     IncomingProtection incoming_protection_{IncomingProtection::NONE};
     bool protect_added_incoming_{};
     bool protect_removed_incoming_{};
+    bool protect_added_displaced_{};
     std::vector<uint64_t> incoming_counts_;
     bool incoming_counts_valid_{};
     uint64_t incoming_count_rebuilds_{};

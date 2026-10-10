@@ -845,9 +845,9 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t count = 48;
     for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}}) {
-        for (uint64_t configuration = 0; configuration < 8; ++configuration) {
-            const bool incoming = (configuration & 4) != 0;
-            const uint64_t stages = configuration & 3;
+        for (uint64_t configuration = 0; configuration < 16; ++configuration) {
+            const bool incoming = (configuration & 8) != 0;
+            const uint64_t stages = configuration & 7;
             std::vector<float> base(count * dim);
             std::vector<int64_t> ids(count);
             codec::GraphTopology graph;
@@ -869,10 +869,14 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
             }
             codec::MutableGraphState reference(model, codes, graph, ids, 4, 32, false, incoming);
             auto cached = reference;
-            reference.ConfigureIncomingProtection(
-                codec::IncomingProtection::RECOUNT, (stages & 1) != 0, (stages & 2) != 0);
-            cached.ConfigureIncomingProtection(
-                codec::IncomingProtection::CACHED, (stages & 1) != 0, (stages & 2) != 0);
+            reference.ConfigureIncomingProtection(codec::IncomingProtection::RECOUNT,
+                                                  (stages & 1) != 0,
+                                                  (stages & 2) != 0,
+                                                  (stages & 4) != 0);
+            cached.ConfigureIncomingProtection(codec::IncomingProtection::CACHED,
+                                               (stages & 1) != 0,
+                                               (stages & 2) != 0,
+                                               (stages & 4) != 0);
             REQUIRE_THROWS(
                 cached.ConfigureIncomingProtection(static_cast<codec::IncomingProtection>(99)));
             const auto check = [&] {
@@ -958,6 +962,42 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
             REQUIRE(cached.UpdateTransactional(cached.IdAt(0),
                                                codec::prepare_encoding(model, base.data())));
             cached.Validate();
+        }
+    }
+}
+
+TEST_CASE("RaBitQ Add can protect targets displaced from saturated reverse links",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    const std::vector<float> base{0.0F, 100.0F, 1.0F, 2.0F};
+    const auto model = codec::train(base, 4, 1, 47);
+    codec::EncodedRecords codes(1);
+    for (const float value : base) {
+        codes.Append(codec::encode(model, &value));
+    }
+    const codec::GraphTopology graph{{0, 2, 4, 6, 8}, {1, 2, 2, 3, 0, 3, 0, 2}};
+    const auto incoming = [](const codec::MutableGraphState& state, uint64_t target) {
+        const auto current = state.GetGraph();
+        return std::count(current.neighbors.begin(), current.neighbors.end(), target);
+    };
+    for (bool reverse : {false, true}) {
+        for (bool transactional : {false, true}) {
+            codec::MutableGraphState control(
+                model, codes, graph, {0, 1, 2, 3}, 2, 32, false, reverse);
+            auto candidate = control;
+            control.ConfigureIncomingProtection(codec::IncomingProtection::CACHED, true, true);
+            candidate.ConfigureIncomingProtection(
+                codec::IncomingProtection::CACHED, true, true, true);
+            const float added = .5F;
+            REQUIRE(incoming(control, 1) == 1);
+            REQUIRE((transactional ? control.AddTransactional(4, &added) : control.Add(4, &added)));
+            REQUIRE(
+                (transactional ? candidate.AddTransactional(4, &added) : candidate.Add(4, &added)));
+            control.Validate();
+            candidate.Validate();
+            REQUIRE(incoming(control, 1) == 0);
+            REQUIRE(incoming(candidate, 1) == 1);
+            REQUIRE(incoming(candidate, 4) > 0);
         }
     }
 }

@@ -294,3 +294,5 @@ RaBitQ 内部新增 NONE/RECOUNT/CACHED 入边保护策略，公共适配器仍�
 结构混合重放见 lite/benchmark/results/rabitq-mixed-count-cache-20261010：三遍真实改值 Update/Remove/Add 后，相同保护策略的快照及有序结果不变。相对每次成功增删都会失效的旧缓存，GIST/Cohere10k 修改块耗时降低10.05%/11.61%，但最终召回 .811667/.908000 仍低研究目标。这只是内部维护账目降成本，不是图维护质量修复、公共默认提速或原生 Full 对照；各操作并非统一变快，证据为单配对串行重放。
 
 内部 ConfigureIncomingProtection 增加可选 Add/Remove 阶段开关，默认均false：Add 在 link 后保护新槽位，Remove 在搬槽及修复后保护排序后的受影响孤点；继续复用不增加度数的局部保护及事务日志，公共adapter仍NONE。固定因子实验 lite/benchmark/results/rabitq-structural-guard-20261010 中，同时启用将混合GIST/Cohere召回 .811667/.908000 提高到 .847500/.922000，修改块代价 +6.39%/+3.30%，查询延迟也增加，Add阶段贡献更大。仍未达研究目标；这是内部实验开关，不是公共配置/默认验收，借鉴现有Lite浮点GraphBackend而非原生Full HGraph。
+
+进一步的内部 Add 被淘汰目标保护会记录反向连边裁剪丢弃的旧目标，并在现有事务中修复局部入边。固定预算10k真实改值混合CRUD中，GIST召回 .847500→.855167、Cohere .922000→.924500，修改块成本+2.86%/+1.52%；查询单pair点估计改善，但不能据此宣称稳定延迟收益。仍未达研究目标，public策略保持NONE；回归证明旧目标遗漏，不保证全局连通性。证据：`lite/benchmark/results/rabitq-add-displaced-20261010`。

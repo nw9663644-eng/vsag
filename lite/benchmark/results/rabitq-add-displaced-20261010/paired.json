@@ -1,0 +1,16 @@
+{
+  "gist10k600-candidate": {
+    "extra_hits": 46,
+    "wins": 61,
+    "losses": 24,
+    "ties": 515,
+    "mean_recall_delta": 0.007666666666666666
+  },
+  "cohere10k600-candidate": {
+    "extra_hits": 15,
+    "wins": 28,
+    "losses": 13,
+    "ties": 559,
+    "mean_recall_delta": 0.0025
+  }
+}
