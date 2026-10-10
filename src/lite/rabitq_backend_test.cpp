@@ -1053,3 +1053,43 @@ TEST_CASE("RaBitQ saturated link scratch covers the maximum degree and tied code
         state.Validate();
     }
 }
+
+TEST_CASE("RaBitQ maintenance Batch4 preserves scalar candidate order and distance bits",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (const uint64_t dim : {1, 7, 8, 9, 15, 16, 17, 33, 128, 129, 768, 960, 961}) {
+        constexpr uint64_t count = 65;
+        std::vector<float> base(count * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i % (11 * dim)) * 0.19F);
+        }
+        const auto model = codec::train(base, count, dim, 91);
+        codec::EncodedRecords records(dim);
+        for (uint64_t slot = 0; slot < count; ++slot) {
+            records.Append(codec::encode(model, base.data() + slot * dim));
+        }
+        float norm = 0.0F;
+        const auto query = codec::normalize(model, base.data(), norm);
+        const float sum = std::accumulate(query.begin(), query.end(), 0.0F);
+        for (uint64_t length = 0; length <= count; ++length) {
+            std::vector<codec::Candidate> batch;
+            for (uint64_t i = 0; i < length; ++i) {
+                batch.push_back({count - 1 - i, -1.0F});
+            }
+            auto scalar = batch;
+            codec::score_mutation_candidates(query, norm, sum, records, batch);
+            codec::score_mutation_candidates<false>(query, norm, sum, records, scalar);
+            for (uint64_t i = 0; i < length; ++i) {
+                REQUIRE(batch[i].id == scalar[i].id);
+                REQUIRE(std::memcmp(reinterpret_cast<const unsigned char*>(&batch[i].distance),
+                                    reinterpret_cast<const unsigned char*>(&scalar[i].distance),
+                                    sizeof(float)) == 0);
+            }
+            std::sort(batch.begin(), batch.end(), codec::better);
+            std::sort(scalar.begin(), scalar.end(), codec::better);
+            for (uint64_t i = 0; i < length; ++i) {
+                REQUIRE(batch[i].id == scalar[i].id);
+            }
+        }
+    }
+}

@@ -184,6 +184,36 @@ struct SearchResult {
     uint64_t reordered{};
 };
 
+template <bool batch4 = true>
+inline void
+score_mutation_candidates(const std::vector<float>& query,
+                          float query_norm,
+                          float query_sum,
+                          const EncodedRecords& records,
+                          std::vector<Candidate>& ranked) {
+    uint64_t offset = 0;
+    if constexpr (batch4) {
+        for (; offset + 4 <= ranked.size(); offset += 4) {
+            std::array<EncodedView, 4> codes;
+            for (uint64_t lane = 0; lane < 4; ++lane) {
+                codes[lane] = records.At(ranked[offset + lane].id);
+            }
+            float centered_ips[4];
+            filter_centered_ip_batch4(query, codes, centered_ips);
+            for (uint64_t lane = 0; lane < 4; ++lane) {
+                ranked[offset + lane].distance =
+                    full_distance(query, query_norm, codes[lane], centered_ips[lane], query_sum);
+            }
+        }
+    }
+    for (; offset < ranked.size(); ++offset) {
+        const auto code = records.At(ranked[offset].id);
+        const auto coarse = filter_estimate(query, query_norm, code);
+        ranked[offset].distance =
+            full_distance(query, query_norm, code, coarse.centered_ip, query_sum);
+    }
+}
+
 inline SearchResult
 filtered_search(const std::vector<float>& query,
                 float query_norm,
@@ -1621,13 +1651,10 @@ private:
             for (const uint64_t candidate : additional_candidates) {
                 if (candidate < Size() and candidate != source and
                     std::find(repaired.begin(), repaired.end(), candidate) == repaired.end()) {
-                    const auto code = codes_.At(candidate);
-                    const auto coarse = filter_estimate(query, query_norm, code);
-                    ranked.push_back(
-                        {candidate,
-                         full_distance(query, query_norm, code, coarse.centered_ip, query_sum)});
+                    ranked.push_back({candidate, 0.0F});
                 }
             }
+            score_mutation_candidates(query, query_norm, query_sum, codes_, ranked);
             std::sort(ranked.begin(), ranked.end(), better);
             const uint64_t needed = max_degree_ - repaired.size();
             const uint64_t retained = std::min(needed, ranked.size());
@@ -1656,12 +1683,9 @@ private:
             std::vector<Candidate> ranked;
             ranked.reserve(neighbors.size());
             for (uint64_t neighbor : neighbors) {
-                const auto code = codes_.At(neighbor);
-                const auto coarse = filter_estimate(query, query_norm, code);
-                ranked.push_back(
-                    {neighbor,
-                     full_distance(query, query_norm, code, coarse.centered_ip, query_sum)});
+                ranked.push_back({neighbor, 0.0F});
             }
+            score_mutation_candidates(query, query_norm, query_sum, codes_, ranked);
             std::sort(ranked.begin(), ranked.end(), better);
             neighbors.resize(max_degree_);
             for (uint64_t i = 0; i < max_degree_; ++i) {

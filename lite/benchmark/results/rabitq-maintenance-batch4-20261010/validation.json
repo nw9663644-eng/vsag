@@ -1,0 +1,24 @@
+{
+  "decision": "Retain official Batch4 reuse in maintenance link/repair after paired validation",
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "13be85fda5c4fd70d49eb92118180a422f3b9bfd7ee91ec7a0b945cd9b4cdcb9",
+    "src/lite/rabitq_backend_test.cpp": "ecd8540bb80e5362381c3a0b8816bb95b6b34019adc89eb6c6722e7b8bd996d2",
+    "src/lite/graph_allocation_test.cpp": "1d9ec2b3255177b6ee4f293bd9538d09d6a02e5e73fbbdf0c74bca689711013c",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud.py": "51bd78dfbccf3f3202f65b5a0f8b7b8756363c8c9e0015c9a3f984935bee344e"
+  },
+  "default_library_sha256": "a2d6d97feec56d7b05c68319566d659111d6413543ec8314796a575dff8c24b7",
+  "tests": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "limits": [
+    "Not Full comparison",
+    "Not universal/statistical gain",
+    "No100k/cold I/O/quality fix/wholeFull/Node checker"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2862,
+      "total": 3007,
+      "percent": 95.17791819088792
+    },
+    "shared_simd": {
+      "covered": 233,
+      "total": 249,
+      "percent": 93.57429718875503
+    },
+    "combined": {
+      "covered": 3095,
+      "total": 3256,
+      "percent": 95.05528255528256
+    }
+  },
+  "fresh_counters": true,
+  "scope_note": "Compiled Lite production/public headers and instantiated shared SIMD, not whole Full coverage."
+}
