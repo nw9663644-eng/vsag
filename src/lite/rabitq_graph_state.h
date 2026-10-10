@@ -989,7 +989,8 @@ public:
             return false;
         }
         codec_require(active_journal_ == nullptr, "nested graph remove transaction");
-        if (use_incoming_adjacency_) {
+        if (use_incoming_adjacency_ and incoming_protection_ == IncomingProtection::CACHED and
+            not incoming_counts_valid_) {
             auto next = *this;
             const bool removed = next.Remove(id);
             *this = std::move(next);
@@ -1006,6 +1007,7 @@ public:
         if (slot != last) {
             journal.rows.emplace(last, adjacency_[last]);
         }
+        const bool old_counts_valid = incoming_counts_valid_;
         const auto old_fallbacks = mutation_fallbacks_;
         const auto old_timing = mutation_scan_timing_;
         active_journal_ = &journal;
@@ -1014,7 +1016,7 @@ public:
             active_journal_ = nullptr;
             return removed;
         } catch (...) {
-            incoming_counts_valid_ = false;
+            incoming_counts_valid_ = use_incoming_adjacency_ and old_counts_valid;
             active_journal_ = nullptr;
             // Remove only shrinks these containers; original capacity remains.
             codes_.Resize(count);
@@ -1028,6 +1030,18 @@ public:
             adjacency_.resize(count);
             for (auto& row : journal.rows) {
                 adjacency_[row.first].swap(row.second);
+            }
+            if (use_incoming_adjacency_) {
+                incoming_.resize(count);
+                if (old_counts_valid) {
+                    incoming_counts_.resize(count);
+                }
+                for (auto& row : journal.incoming_rows) {
+                    incoming_[row.first].swap(row.second);
+                    if (old_counts_valid) {
+                        incoming_counts_[row.first] = incoming_[row.first].size();
+                    }
+                }
             }
             if (slot != last) {
                 slots_.at(last_id) = last;
@@ -1055,6 +1069,14 @@ public:
             const uint64_t last = Size() - 1;
             const auto removed_neighbors = adjacency_[slot];
             std::vector<uint64_t> affected_nodes = removed_neighbors;
+            // Snapshot reverse rows before any count delta can throw later.
+            if (use_incoming_adjacency_) {
+                remember_incoming_row(slot);
+                remember_incoming_row(last);
+                for (const uint64_t target : removed_neighbors) {
+                    remember_incoming_row(target);
+                }
+            }
             if (incoming_counts_valid_) {
                 for (const uint64_t target : removed_neighbors) {
                     --incoming_counts_[target];
@@ -1072,14 +1094,17 @@ public:
                     erase_value(incoming_[target], slot);
                 }
                 for (const uint64_t source : removed_incoming) {
+                    remember_row(source);
                     erase_value(adjacency_[source], slot);
                 }
                 incoming_[slot].clear();
                 if (slot != last) {
                     for (const uint64_t target : adjacency_[last]) {
+                        remember_incoming_row(target);
                         replace_value(incoming_[target], last, slot);
                     }
                     for (const uint64_t source : incoming_[last]) {
+                        remember_row(source);
                         replace_value(adjacency_[source], last, slot);
                     }
                 }

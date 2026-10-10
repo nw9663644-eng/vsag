@@ -179,3 +179,27 @@ covered. Lite2906/3047=95.37% is scoped,not whole Full coverage. Evidence and in
 operation/14400 truth-state audit are in `lite/benchmark/results/rabitq-reverse-add-20261010`.
 Next: reverse Remove local journaling,public-path memory/time tradeoffs and fixed-budget quality.
 100k,interleaved CRUD,fresh aligned Full,cold I/O/complete deployment acceptance remain open.
+
+### Internal reverse Remove transaction journal (2026-10-10)
+
+Reverse Remove journals affected outgoing/incoming rows instead of copying the whole state.
+Snapshot deleted/last/removed-target incoming rows before count deltas; snapshot affected rows
+before erase/renumber. Rollback restores sizes,rows,valid counts using retained capacity,and
+returns the extracted map node without allocation. Cold CACHED Remove retains copy isolation.
+Public reverse=false/NONE,scoring,model,order,degree/ef,API,snapshot remain unchanged.
+Official HGraph forward/reverse neighborhood logic is source evidence,not transplanted removal:
+its label/tombstone/code-slot semantics differ. Logical state,not exact capacities,is preserved.
+
+Three alternating10k/600-query pairs,degree16/maintenance128/query512,CPU0/thread1,three full-ID
+Remove/true-vector Add passes: block medians GIST65928.356 to12563.964ms(-80.94%),Cohere62249.974
+to10340.707ms(-83.39%). Remove P50/P99:1571.716/2730.809 to38.520/1169.654us and1489.659/2506.485
+to30.089/1042.167us. Six pairs improve. Add unchanged; its timing is not an independent gain.
+Paired snapshots,ordered IDs/hex distances/hits stay exact;replace-only recall .8495/.923333
+is unchanged,below quality floors. Internal-path evidence,not public-default or Full gain.
+
+Release6,sanitizer5,fresh coverage5,disabled4,format/tidy15 pass;scoped Lite2924/3065=95.40%.
+Remove6000 fault positions cover middle,last,single-node deletion,NONE/RECOUNT/CACHED cold/warm:
+692 actual failures,no state/cache/retry/continued-CRUD mismatch. Test-only narrowing warnings
+fixed before timing;failed lint log retained.199 raw members,720000-operation/14400-truth audit:
+lite/benchmark/results/rabitq-reverse-remove-20261010. Next public-path memory/time tradeoff,
+quality,100k/interleaved CRUD,fresh aligned Full,cold I/O/complete package acceptance remain open.

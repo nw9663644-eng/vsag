@@ -112,19 +112,19 @@ Configure `-DENABLE_RABITQ_LITE_BACKEND=ON` and select
 `BuildGraph(VectorStorage::RABITQ8, degree, ef_search)`. This is a functional
 candidate, not a completed performance acceptance. Default graph mutations use
 rollback journals; internal reverse-adjacency experiments retain cold-CACHED
-and Remove copy fallbacks. See the canonical [English documentation](../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
+copy fallbacks for Add/Update/Remove. See the canonical [English documentation](../docs/docs/en/src/development/lite_first.md#opt-in-8-bit-rabitq-candidate)
 and [中文说明](../docs/docs/zh/src/development/lite_first.md#可选8bit-rabitq候选后端)
 for model lifecycle, approximate distances, limits and snapshot compatibility.
 
 ## Internal reverse Update experiment / 内部反向 Update 实验
 
 The reverse RaBitQ Update transaction now uses a local rollback journal. Reverse adjacency is
-still disabled by default; Remove and cold cached Add/Update retain copy isolation.
+still disabled by default; cold cached Add/Update/Remove retain copy isolation.
 Paired evidence and explicit memory/quality boundaries are in
 [the experiment report](benchmark/results/rabitq-reverse-update-20261010/README.md).
 This is not a public-default or Full comparison gain.
 
-反向 RaBitQ Update 已改为局部回滚日志，但公开默认仍关闭反向邻接；删除及冷缓存的新增/更新仍保留复制回退。
+反向 RaBitQ Update 已改为局部回滚日志，但公开默认仍关闭反向邻接；冷缓存的增/删/改仍保留复制回退。
 配对结果不代表公开默认或 Full 对照提速，项目终验仍未完成。
 
 The internal reverse Add journal and its same-configuration Remove/Add paired results are in
@@ -132,3 +132,7 @@ The internal reverse Add journal and its same-configuration Remove/Add paired re
 Public reverse defaults and unresolved acceptance limits remain unchanged.
 
 内部反向 Add 的局部日志及同配置增删配对结果见上述 Add 报告；公开默认与终验缺口仍不变。
+
+The internal reverse Remove local journal and exact paired evidence are in
+[the Remove experiment](benchmark/results/rabitq-reverse-remove-20261010/README.md).
+Reverse adjacency is not enabled publicly; quality and Full acceptance remain open.

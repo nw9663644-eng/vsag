@@ -1,0 +1,106 @@
+[
+  {
+    "tag": "release-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fp16-simd-release",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "release-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fp16-simd-release",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sanitize-final-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sanitize-final-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "coverage-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "coverage-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "default-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "default-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "format-final",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "src/lite/rabitq_graph_state.h",
+      "src/lite/graph_allocation_test.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "tidy-final",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fp16-simd-release",
+      "-header-filter=.*/src/lite/.*",
+      "-warnings-as-errors=*",
+      "src/lite/rabitq_backend.cpp",
+      "src/lite/graph_allocation_test.cpp"
+    ],
+    "exit": 0
+  }
+]

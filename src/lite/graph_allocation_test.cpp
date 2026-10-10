@@ -55,9 +55,8 @@ save(vsag::lite::Index& i) {
 
 #if defined(VSAG_LITE_HAS_RABITQ_BACKEND)
 int
-check_reverse_mutation_allocation(bool adding) {
+check_reverse_mutation_allocation(int operation, uint64_t count = 16) {
     namespace codec = vsag::lite::detail::rabitq;
-    constexpr uint64_t count = 16;
     constexpr uint64_t dim = 17;
     std::vector<float> base(count * dim);
     std::vector<int64_t> ids(count);
@@ -69,7 +68,31 @@ check_reverse_mutation_allocation(bool adding) {
             base[row * dim + d] = std::sin(static_cast<float>(row * 7 + d) * 0.17F);
         }
         for (uint64_t step : {uint64_t{1}, uint64_t{3}, uint64_t{7}}) {
-            graph.neighbors.push_back((row + step) % count);
+            const auto neighbor = (row + step) % count;
+            if (neighbor != row and std::find(graph.neighbors.begin() +
+                                                  static_cast<std::ptrdiff_t>(graph.offsets.back()),
+                                              graph.neighbors.end(),
+                                              neighbor) == graph.neighbors.end()) {
+                graph.neighbors.push_back(neighbor);
+            }
+        }
+        if (operation >= 2 and count > 1) {
+            // Cover mutual deleted/moved edges and a source referencing both slots.
+            const auto append_unique = [&](uint64_t target) {
+                if (target != row and
+                    std::find(
+                        graph.neighbors.begin() + static_cast<std::ptrdiff_t>(graph.offsets.back()),
+                        graph.neighbors.end(),
+                        target) == graph.neighbors.end()) {
+                    graph.neighbors.push_back(target);
+                }
+            };
+            if (row == 0 or row == count / 2) {
+                append_unique(count - 1);
+            }
+            if (row == 0 or row == count - 1) {
+                append_unique(count / 2);
+            }
         }
         graph.offsets.push_back(graph.neighbors.size());
     }
@@ -84,7 +107,8 @@ check_reverse_mutation_allocation(bool adding) {
     }
     int problems = 0;
     for (int policy = 0; policy < 4; ++policy) {
-        codec::MutableGraphState initial(model, codes, graph, ids, 4, 16, false, true);
+        codec::MutableGraphState initial(
+            model, codes, graph, ids, operation >= 2 ? 6 : 4, 16, false, true);
         initial.ConfigureIncomingProtection(policy == 0
                                                 ? codec::IncomingProtection::NONE
                                                 : (policy == 1 ? codec::IncomingProtection::RECOUNT
@@ -101,14 +125,21 @@ check_reverse_mutation_allocation(bool adding) {
         const auto before = before_stream.str();
         const auto rebuilds = initial.IncomingCountRebuilds();
         const auto mutate = [&](codec::MutableGraphState& state) {
-            return adding ? state.AddTransactional(100, replacement.data())
-                          : state.UpdateTransactional(
-                                3, codec::prepare_encoding(model, replacement.data()));
+            if (operation >= 2) {
+                return state.RemoveTransactional(
+                    static_cast<int64_t>(operation == 2 ? count / 2 : count - 1));
+            }
+            return operation == 1 ? state.AddTransactional(100, replacement.data())
+                                  : state.UpdateTransactional(
+                                        3, codec::prepare_encoding(model, replacement.data()));
         };
         auto golden = initial;
         const bool expected =
-            adding ? golden.Add(100, replacement.data())
-                   : golden.UpdatePrepared(3, codec::prepare_encoding(model, replacement.data()));
+            operation >= 2
+                ? golden.Remove(static_cast<int64_t>(operation == 2 ? count / 2 : count - 1))
+                : (operation == 1 ? golden.Add(100, replacement.data())
+                                  : golden.UpdatePrepared(
+                                        3, codec::prepare_encoding(model, replacement.data())));
         if (not expected) {
             return 1;
         }
@@ -157,6 +188,26 @@ check_reverse_mutation_allocation(bool adding) {
                     ++problems;
                 }
             }
+            if (operation >= 2) {
+                auto continued_golden = golden;
+                if (not state.AddTransactional(100, replacement.data()) or
+                    not continued_golden.Add(100, replacement.data()) or
+                    not state.UpdateTransactional(100,
+                                                  codec::prepare_encoding(model, base.data())) or
+                    not continued_golden.UpdatePrepared(
+                        100, codec::prepare_encoding(model, base.data()))) {
+                    ++problems;
+                }
+                state.Validate();
+                std::ostringstream continued_stream;
+                std::ostringstream continued_golden_stream;
+                codec::save_mutable_snapshot(continued_stream, state);
+                codec::save_mutable_snapshot(continued_golden_stream, continued_golden);
+                if (continued_stream.str() != continued_golden_stream.str() or
+                    state.IncomingCountRebuilds() != continued_golden.IncomingCountRebuilds()) {
+                    ++problems;
+                }
+            }
             const auto memory = state.GetMemoryUsage();
             const auto incoming = state.GetIncomingMemoryUsage();
             if (memory.incoming_adjacency_logical_bytes != incoming.logical_bytes or
@@ -167,8 +218,9 @@ check_reverse_mutation_allocation(bool adding) {
         if (failures == 0 or successes == 0) {
             ++problems;
         }
-        std::cout << (adding ? "REVERSE_ADD policy=" : "REVERSE_UPDATE policy=") << policy
-                  << " failures=" << failures << " successes=" << successes
+        const char* label = operation == 0 ? "UPDATE" : (operation == 1 ? "ADD" : "REMOVE");
+        std::cout << "REVERSE_" << label << " operation=" << operation << " count=" << count
+                  << " policy=" << policy << " failures=" << failures << " successes=" << successes
                   << " cumulative_problems=" << problems << "\n";
     }
     return problems;
@@ -180,8 +232,11 @@ main() {
     int problems = 0;
 #if defined(VSAG_LITE_HAS_RABITQ_BACKEND)
     try {
-        problems += check_reverse_mutation_allocation(false);
-        problems += check_reverse_mutation_allocation(true);
+        problems += check_reverse_mutation_allocation(0);
+        problems += check_reverse_mutation_allocation(1);
+        problems += check_reverse_mutation_allocation(2);
+        problems += check_reverse_mutation_allocation(3);
+        problems += check_reverse_mutation_allocation(3, 1);
     } catch (const std::exception& error) {
         remaining = -1;
         std::cerr << "Reverse mutation fixture failed: " << error.what() << "\n";
