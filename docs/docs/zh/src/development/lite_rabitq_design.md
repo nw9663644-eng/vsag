@@ -113,3 +113,7 @@ SIFT/Cohere .95、GIST .90是实验预声明floor，不是社区统一最终要�
 - 独立候选格式及default-OFF是否适合上游，还是需要正式维护格式决策后再提交？
 
 已有CRUD正确性、单核证据和query context优化可继续执行，不必为等待指标新增无关功能。暂不加入IP/cosine、PCA/MRQ、磁盘补充、mmap/零拷贝、在线重训、原向量精确重排、融合多簇和ARM SIMD。不在验收完成前宣称完成日期或全局最优。
+
+### 2026-10-10 CRUD 独占阶段诊断
+
+基于bc3e9bd在单线程RAM隔离副本插桩，生产不变。固定10k/600历史查询、degree16/维护128/查询512、三遍全ID真实UpdateRemoveAdd，GIST/Cohere CPU独占占比：nearest（含路由/评分）29.20/30.91%，入边扫描19.08/22.21%，邻居评分排序20.15/17.90%，变换后码重建13.77/11.93%，编码6.28/5.97%。时钟有开销，仅诊断，非生产收益或Full对照。有序结果/快照SHA与历史NONE control一致，Recall仍.811167/.908167。证据`lite/benchmark/results/rabitq-mutation-profile-20261010`含源码、绑定、校准/作用域夹具、180000操作/2400真值独立审计。生产测试覆盖率继承，非新跑。下一固定质量预算优先路由/扫描；100k/交错CRUD/freshFull对齐/coldIO未验收。

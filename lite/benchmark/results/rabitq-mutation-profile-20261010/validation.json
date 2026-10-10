@@ -1,0 +1,51 @@
+{
+  "commands": [
+    {
+      "label": "release-compile",
+      "argv": [
+        "c++",
+        "-std=c++17",
+        "-O3",
+        "-I/dev/shm/vsag-profile-validation-net1p7jn",
+        "/dev/shm/vsag-profile-validation-net1p7jn/fixture.cpp",
+        "-o",
+        "/dev/shm/vsag-profile-validation-net1p7jn/release-fixture"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "release-run",
+      "argv": [
+        "/dev/shm/vsag-profile-validation-net1p7jn/release-fixture"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "san-compile",
+      "argv": [
+        "c++",
+        "-std=c++17",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-I/dev/shm/vsag-profile-validation-net1p7jn",
+        "/dev/shm/vsag-profile-validation-net1p7jn/fixture.cpp",
+        "-o",
+        "/dev/shm/vsag-profile-validation-net1p7jn/san-fixture"
+      ],
+      "exit": 0
+    },
+    {
+      "label": "san-run",
+      "argv": [
+        "/dev/shm/vsag-profile-validation-net1p7jn/san-fixture"
+      ],
+      "exit": 0
+    }
+  ],
+  "production_header_sha256": "533b3717342c5f05e4fdb7243b3d5c1f44cdfc90f98ad13515b344235bce6ba2",
+  "default_library_sha256": "1a18379a28b8e7d276b054b3a1a323cc28ecfae2a8d7b5ba965539ddd67be22f",
+  "no_production_change": true,
+  "inherited_tests": "bc3e9bd; no fresh production suite or coverage"
+}

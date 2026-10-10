@@ -1,0 +1,390 @@
+{
+  "gist10k600": [
+    {
+      "op": "add",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "155778.270000",
+      "wall_exclusive_us": "61658.084518",
+      "cpu_inclusive_us": "8750983.927000"
+    },
+    {
+      "op": "add",
+      "stage": "nearest",
+      "calls": "30000",
+      "cpu_exclusive_us": "3823010.229000",
+      "wall_exclusive_us": "3830777.544739",
+      "cpu_inclusive_us": "3823010.229000"
+    },
+    {
+      "op": "add",
+      "stage": "decode",
+      "calls": "479998",
+      "cpu_exclusive_us": "1187935.054001",
+      "wall_exclusive_us": "1275658.269867",
+      "cpu_inclusive_us": "1187935.054001"
+    },
+    {
+      "op": "add",
+      "stage": "link_other",
+      "calls": "480000",
+      "cpu_exclusive_us": "902669.553999",
+      "wall_exclusive_us": "812260.156250",
+      "cpu_inclusive_us": "3928478.749000"
+    },
+    {
+      "op": "add",
+      "stage": "repair_other",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "add",
+      "stage": "score_and_sort",
+      "calls": "479998",
+      "cpu_exclusive_us": "1837874.141000",
+      "wall_exclusive_us": "1927381.927185",
+      "cpu_inclusive_us": "1837874.141000"
+    },
+    {
+      "op": "add",
+      "stage": "incoming_scan",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "add",
+      "stage": "prepare_encoding",
+      "calls": "30000",
+      "cpu_exclusive_us": "843716.679000",
+      "wall_exclusive_us": "849347.584747",
+      "cpu_inclusive_us": "843716.679000"
+    },
+    {
+      "op": "update",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "217946.372999",
+      "wall_exclusive_us": "109256.134583",
+      "cpu_inclusive_us": "14380095.358000"
+    },
+    {
+      "op": "update",
+      "stage": "nearest",
+      "calls": "30000",
+      "cpu_exclusive_us": "3957200.266000",
+      "wall_exclusive_us": "3964714.891647",
+      "cpu_inclusive_us": "3957200.266000"
+    },
+    {
+      "op": "update",
+      "stage": "decode",
+      "calls": "892835",
+      "cpu_exclusive_us": "2264365.176001",
+      "wall_exclusive_us": "2427019.420410",
+      "cpu_inclusive_us": "2264365.176001"
+    },
+    {
+      "op": "update",
+      "stage": "link_other",
+      "calls": "480000",
+      "cpu_exclusive_us": "857516.539002",
+      "wall_exclusive_us": "778930.032120",
+      "cpu_inclusive_us": "3767503.078001"
+    },
+    {
+      "op": "update",
+      "stage": "repair_other",
+      "calls": "30000",
+      "cpu_exclusive_us": "731236.779998",
+      "wall_exclusive_us": "575734.962723",
+      "cpu_inclusive_us": "3378023.892000"
+    },
+    {
+      "op": "update",
+      "stage": "score_and_sort",
+      "calls": "892835",
+      "cpu_exclusive_us": "3292408.475000",
+      "wall_exclusive_us": "3456085.510757",
+      "cpu_inclusive_us": "3292408.475000"
+    },
+    {
+      "op": "update",
+      "stage": "incoming_scan",
+      "calls": "30000",
+      "cpu_exclusive_us": "2231308.642000",
+      "wall_exclusive_us": "2240626.964539",
+      "cpu_inclusive_us": "2231308.642000"
+    },
+    {
+      "op": "update",
+      "stage": "prepare_encoding",
+      "calls": "30000",
+      "cpu_exclusive_us": "828113.107000",
+      "wall_exclusive_us": "833824.987625",
+      "cpu_inclusive_us": "828113.107000"
+    },
+    {
+      "op": "remove",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "51988.263000",
+      "wall_exclusive_us": "43091.391586",
+      "cpu_inclusive_us": "3510865.960000"
+    },
+    {
+      "op": "remove",
+      "stage": "nearest",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "remove",
+      "stage": "decode",
+      "calls": "81134",
+      "cpu_exclusive_us": "215004.209000",
+      "wall_exclusive_us": "229788.067551",
+      "cpu_inclusive_us": "215004.209000"
+    },
+    {
+      "op": "remove",
+      "stage": "link_other",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "remove",
+      "stage": "repair_other",
+      "calls": "30000",
+      "cpu_exclusive_us": "153452.620000",
+      "wall_exclusive_us": "129299.154602",
+      "cpu_inclusive_us": "606151.095000"
+    },
+    {
+      "op": "remove",
+      "stage": "score_and_sort",
+      "calls": "81134",
+      "cpu_exclusive_us": "237694.266000",
+      "wall_exclusive_us": "252542.560822",
+      "cpu_inclusive_us": "237694.266000"
+    },
+    {
+      "op": "remove",
+      "stage": "incoming_scan",
+      "calls": "30000",
+      "cpu_exclusive_us": "2852726.602000",
+      "wall_exclusive_us": "2862042.720245",
+      "cpu_inclusive_us": "2852726.602000"
+    },
+    {
+      "op": "remove",
+      "stage": "prepare_encoding",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    }
+  ],
+  "cohere10k600": [
+    {
+      "op": "add",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "154706.509000",
+      "wall_exclusive_us": "59582.332550",
+      "cpu_inclusive_us": "7841707.330000"
+    },
+    {
+      "op": "add",
+      "stage": "nearest",
+      "calls": "30000",
+      "cpu_exclusive_us": "3650388.013000",
+      "wall_exclusive_us": "3658340.782227",
+      "cpu_inclusive_us": "3650388.013000"
+    },
+    {
+      "op": "add",
+      "stage": "decode",
+      "calls": "480000",
+      "cpu_exclusive_us": "966809.373000",
+      "wall_exclusive_us": "1055740.749664",
+      "cpu_inclusive_us": "966809.373000"
+    },
+    {
+      "op": "add",
+      "stage": "link_other",
+      "calls": "480000",
+      "cpu_exclusive_us": "795822.385000",
+      "wall_exclusive_us": "703978.302322",
+      "cpu_inclusive_us": "3314539.996000"
+    },
+    {
+      "op": "add",
+      "stage": "repair_other",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "add",
+      "stage": "score_and_sort",
+      "calls": "480000",
+      "cpu_exclusive_us": "1551908.238000",
+      "wall_exclusive_us": "1641994.135361",
+      "cpu_inclusive_us": "1551908.238000"
+    },
+    {
+      "op": "add",
+      "stage": "incoming_scan",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "add",
+      "stage": "prepare_encoding",
+      "calls": "30000",
+      "cpu_exclusive_us": "722072.812000",
+      "wall_exclusive_us": "727739.110931",
+      "cpu_inclusive_us": "722072.812000"
+    },
+    {
+      "op": "update",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "210601.976999",
+      "wall_exclusive_us": "101314.493607",
+      "cpu_inclusive_us": "12292285.935000"
+    },
+    {
+      "op": "update",
+      "stage": "nearest",
+      "calls": "30000",
+      "cpu_exclusive_us": "3766520.814000",
+      "wall_exclusive_us": "3774172.944824",
+      "cpu_inclusive_us": "3766520.814000"
+    },
+    {
+      "op": "update",
+      "stage": "decode",
+      "calls": "777734",
+      "cpu_exclusive_us": "1604342.381001",
+      "wall_exclusive_us": "1747626.748672",
+      "cpu_inclusive_us": "1604342.381001"
+    },
+    {
+      "op": "update",
+      "stage": "link_other",
+      "calls": "480000",
+      "cpu_exclusive_us": "697172.534000",
+      "wall_exclusive_us": "632182.531906",
+      "cpu_inclusive_us": "2899489.286000"
+    },
+    {
+      "op": "update",
+      "stage": "repair_other",
+      "calls": "30000",
+      "cpu_exclusive_us": "527002.850001",
+      "wall_exclusive_us": "397946.906738",
+      "cpu_inclusive_us": "2341473.155000"
+    },
+    {
+      "op": "update",
+      "stage": "score_and_sort",
+      "calls": "777734",
+      "cpu_exclusive_us": "2412444.675998",
+      "wall_exclusive_us": "2555771.697342",
+      "cpu_inclusive_us": "2412444.675998"
+    },
+    {
+      "op": "update",
+      "stage": "incoming_scan",
+      "calls": "30000",
+      "cpu_exclusive_us": "2363278.037000",
+      "wall_exclusive_us": "2372563.492035",
+      "cpu_inclusive_us": "2363278.037000"
+    },
+    {
+      "op": "update",
+      "stage": "prepare_encoding",
+      "calls": "30000",
+      "cpu_exclusive_us": "710922.666000",
+      "wall_exclusive_us": "716621.454437",
+      "cpu_inclusive_us": "710922.666000"
+    },
+    {
+      "op": "remove",
+      "stage": "adapter",
+      "calls": "30000",
+      "cpu_exclusive_us": "53319.810000",
+      "wall_exclusive_us": "44483.415237",
+      "cpu_inclusive_us": "3857473.097000"
+    },
+    {
+      "op": "remove",
+      "stage": "nearest",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "remove",
+      "stage": "decode",
+      "calls": "138880",
+      "cpu_exclusive_us": "291384.209000",
+      "wall_exclusive_us": "316935.974060",
+      "cpu_inclusive_us": "291384.209000"
+    },
+    {
+      "op": "remove",
+      "stage": "link_other",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    },
+    {
+      "op": "remove",
+      "stage": "repair_other",
+      "calls": "30000",
+      "cpu_exclusive_us": "217931.711000",
+      "wall_exclusive_us": "172540.112732",
+      "cpu_inclusive_us": "839247.383000"
+    },
+    {
+      "op": "remove",
+      "stage": "score_and_sort",
+      "calls": "138880",
+      "cpu_exclusive_us": "329931.463000",
+      "wall_exclusive_us": "355310.593918",
+      "cpu_inclusive_us": "329931.463000"
+    },
+    {
+      "op": "remove",
+      "stage": "incoming_scan",
+      "calls": "30000",
+      "cpu_exclusive_us": "2964905.904000",
+      "wall_exclusive_us": "2974049.543091",
+      "cpu_inclusive_us": "2964905.904000"
+    },
+    {
+      "op": "remove",
+      "stage": "prepare_encoding",
+      "calls": "0",
+      "cpu_exclusive_us": "0.000000",
+      "wall_exclusive_us": "0.000000",
+      "cpu_inclusive_us": "0.000000"
+    }
+  ]
+}

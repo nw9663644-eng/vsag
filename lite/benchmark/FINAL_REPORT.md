@@ -159,3 +159,7 @@ a bounded Lite-specific 3+5 layout and dependency audit; it does not support
 copying the Full quantizer or adding RaBitQ to the public Lite feature PR yet.
 Raw artifacts are retained at
 `/home/ubuntu/project/vsag-lite-rabitq-reference-20260921-8447906`.
+
+### 2026-10-10 exclusive mutation-stage diagnosis
+
+An isolated single-thread RAM profiler at source bc3e9bd measures changed-vector CRUD without changing production. Fixed 10k/600-query,degree16/maintenance128/query512,three full-ID Update/Remove/Add passes: GIST/Cohere exclusive CPU shares are nearest (including route/scoring)29.20/30.91%, incoming scans19.08/22.21%, neighbor score/sort20.15/17.90%, transformed-code reconstruction13.77/11.93%, encoding6.28/5.97%. Clocks perturb costs; these are diagnostic shares,not production improvements or a Full comparison. Ordered results/snapshot SHA match prior NONE controls; Recall remains.811167/.908167. See `lite/benchmark/results/rabitq-mutation-profile-20261010` for compiled sources,receipts,scope/calibration fixtures and audit180000operations/2400truthstates. Production tests/coverage are inherited,not rerun. Prioritize measured route/scan costs at fixed quality/budget;100k/interleaved CRUD,fresh Full alignment,cold I/O remain open.
