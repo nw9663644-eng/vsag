@@ -1001,3 +1001,55 @@ TEST_CASE("RaBitQ Add can protect targets displaced from saturated reverse links
         }
     }
 }
+
+TEST_CASE("RaBitQ saturated link scratch covers the maximum degree and tied codes",
+          "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    constexpr uint64_t count = 65;
+    constexpr uint64_t dim = 17;
+    std::vector<float> base(count * dim);
+    codec::GraphTopology graph;
+    graph.offsets.push_back(0);
+    std::vector<int64_t> ids(count);
+    for (uint64_t row = 0; row < count; ++row) {
+        ids[row] = static_cast<int64_t>(row);
+        for (uint64_t d = 0; d < dim; ++d) {
+            base[row * dim + d] = static_cast<float>((row % 5 + d) % 7) * .25F;
+        }
+        for (uint64_t target = 0; target < count; ++target) {
+            if (target != row) {
+                graph.neighbors.push_back(target);
+            }
+        }
+        graph.offsets.push_back(graph.neighbors.size());
+    }
+    const auto model = codec::train(base, count, dim, 47);
+    codec::EncodedRecords codes(dim);
+    for (uint64_t row = 0; row < count; ++row) {
+        codes.Append(codec::encode(model, base.data() + row * dim));
+    }
+    for (bool reverse : {false, true}) {
+        codec::MutableGraphState state(model, codes, graph, ids, 64, 128, false, reverse);
+        state.ConfigureIncomingProtection(codec::IncomingProtection::CACHED, true, true, true);
+        REQUIRE(state.AddTransactional(65, base.data()));
+        REQUIRE(state.UpdateTransactional(0, codec::prepare_encoding(model, base.data() + dim)));
+        state.Validate();
+        const auto current = state.GetGraph();
+        for (uint64_t row = 0; row < state.Size(); ++row) {
+            REQUIRE(current.offsets[row + 1] - current.offsets[row] <= 64);
+        }
+        std::stringstream output;
+        codec::save_mutable_snapshot(output, state);
+        auto restored = codec::load_mutable_snapshot(output);
+        const auto expected = state.Search(base.data(), state.Size());
+        const auto actual = restored.Search(base.data(), restored.Size());
+        REQUIRE(expected.neighbors.size() == 66);
+        REQUIRE(actual.neighbors.size() == expected.neighbors.size());
+        for (uint64_t i = 0; i < expected.neighbors.size(); ++i) {
+            REQUIRE(actual.neighbors[i].id == expected.neighbors[i].id);
+            REQUIRE(actual.neighbors[i].distance == expected.neighbors[i].distance);
+        }
+        REQUIRE(state.RemoveTransactional(3));
+        state.Validate();
+    }
+}

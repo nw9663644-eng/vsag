@@ -1,0 +1,21 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2850,
+      "total": 2995,
+      "percent": 95.15859766277129
+    },
+    "shared_simd": {
+      "covered": 233,
+      "total": 249,
+      "percent": 93.57429718875503
+    },
+    "combined": {
+      "covered": 3083,
+      "total": 3244,
+      "percent": 95.03699136868065
+    }
+  },
+  "fresh_counters": true,
+  "scope_note": "Restored production header with new boundary test; compiled Lite production/public headers and instantiated shared SIMD, not whole Full coverage."
+}

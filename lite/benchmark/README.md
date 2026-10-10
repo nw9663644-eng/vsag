@@ -1919,3 +1919,5 @@ per-query post/mixed truth evidence.
 [Fixed-budget Add/Remove quality isolation](results/rabitq-structural-guard-20261010/README.md) evaluates independent internal stage flags, default off. Both improves mixed GIST/Cohere10k recall .811667/.908000→.847500/.922000 while mutation blocks +6.39%/+3.30% and queries are slower. Most gains come from Add; targets still fail. Includes raw paired hits, warmed rollback tests, fresh scoped coverage and complete source/build provenance. Not native Full, default adoption or100k acceptance.
 
 Further fixed-budget Add displaced-target incoming-guard evidence: [report](results/rabitq-add-displaced-20261010/README.md). Real structural internal candidate; +46/+15 truth hits and extra CRUD cost,not default-enabled or a Full comparison.
+
+Rejected RaBitQ bounded link-scratch trial: [report](results/rabitq-link-scratch-20261010/README.md). Three pairs per dataset,identical snapshots/results,no stable CRUD speedup; production restored,degree64 boundary regression retained.

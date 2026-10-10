@@ -1,0 +1,128 @@
+[
+  {
+    "tag": "cached-sanitize-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cached-sanitize-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "final-release-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fp16-simd-release",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "final-release-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fp16-simd-release",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sanitize-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sanitize-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "coverage-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "coverage-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "default-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-j2"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "default-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-V"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "format",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "src/lite/rabitq_graph_state.h",
+      "src/lite/rabitq_backend_test.cpp",
+      "src/lite/graph_allocation_test.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "tidy",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fp16-simd-release",
+      "-header-filter=.*/src/lite/.*",
+      "-warnings-as-errors=*",
+      "src/lite/rabitq_backend.cpp",
+      "src/lite/rabitq_backend_test.cpp",
+      "src/lite/graph_allocation_test.cpp"
+    ],
+    "exit": 0
+  }
+]
