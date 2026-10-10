@@ -126,3 +126,8 @@ SIFT/Cohere .95、GIST .90是实验预声明floor，不是社区统一最终要�
 ### 图维护 Batch4 复用（2026-10-10）
 
 link/repair 合格邻居复用已有原生三位码 centered-IP Batch4 分派，每四个粗排内积合并，尾部仍标量；补充码距离公式、候选顺序、tie breaking、图预算/政策、API、快照及事务回滚不变。新增标量黄金对照覆盖0..65候选和维度尾部。固定预算10k GIST/Cohere各三组交替配对，CRUD中位耗时下降1.17%/1.95%，六pair均改善，快照SHA/有序ID/hex距离/hits完全相同。这只是小幅工作负载内观察，不是普遍或统计显著收益：GIST Update/Remove P50略升，最终Recall .811167/.908167仍低研究质量floor；不宣称查询或Full优势。Release6、ASan/UBSan5、fresh scoped coverage5、默认关闭4及format/tidy15通过，Lite行覆盖2862/3007=95.18%，不是整个Full覆盖率。首次仅测试float memcmp的lint失败改为显式字节表示后，全部验证重跑；生产不变、未重复计时。证据：`lite/benchmark/results/rabitq-maintenance-batch4-20261010`。100k、真实改值交错CRUD、fresh原生Full配置/SIMD/质量对齐及cold-I/O/完整包体终验仍未完成。
+
+
+### 撤回入边分组扫描候选（2026-10-10）
+
+隔离的真实生产候选仅把Update/Remove的逐项成员判定改为四项分组整数比较。固定预算10k GIST/Cohere各三组交替配对，CRUD中位耗时退化11.50%/14.05%，六pair均慢；header/test已byteexact恢复194bf86，上一轮Batch4优化保留。初始/最终ID、hex距离、hits和snapshotSHA相同，Recall .811167/.908167未修复。候选及恢复版Release6/SAN5通过，最终恢复源码format/tidy15通过；无freshCov/OFF/Full/Nodechecker声明。新test编译/预期错误在计时前修正，原日志保留。核实219个已缺失对象的编译清单/源码/include/编译器后，才清理闲置旧Full静态归档1.30GB，动态库/data/raw保留。证据：`lite/benchmark/results/rabitq-grouped-scan-20261010`。下一真正结构方向是反向行的局部journal及其内存成本，而非直接开启现有全图copy事务或重复此分组比较候选。
