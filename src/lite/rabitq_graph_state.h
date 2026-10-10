@@ -651,24 +651,31 @@ public:
         if (slots_.count(id) != 0) {
             return false;
         }
-        incoming_counts_valid_ = false;
-        float query_norm = 0.0F;
-        const auto query = normalize(model_, vector, query_norm);
-        const auto neighbors =
-            nearest(query, query_norm, std::numeric_limits<uint64_t>::max(), max_degree_);
-        const uint64_t slot = Size();
-        codes_.Append(encode(model_, vector));
-        ids_.push_back(id);
-        adjacency_.emplace_back();
-        if (use_incoming_adjacency_) {
-            incoming_.emplace_back();
+        try {
+            float query_norm = 0.0F;
+            const auto query = normalize(model_, vector, query_norm);
+            const auto neighbors =
+                nearest(query, query_norm, std::numeric_limits<uint64_t>::max(), max_degree_);
+            const uint64_t slot = Size();
+            if (incoming_counts_valid_) {
+                incoming_counts_.push_back(0);
+            }
+            codes_.Append(encode(model_, vector));
+            ids_.push_back(id);
+            adjacency_.emplace_back();
+            if (use_incoming_adjacency_) {
+                incoming_.emplace_back();
+            }
+            replace_neighbors(slot, neighbors);
+            slots_.emplace(id, slot);
+            for (uint64_t neighbor : neighbors) {
+                link(neighbor, slot);
+            }
+            return true;
+        } catch (...) {
+            incoming_counts_valid_ = false;
+            throw;
         }
-        replace_neighbors(slot, neighbors);
-        slots_.emplace(id, slot);
-        for (uint64_t neighbor : neighbors) {
-            link(neighbor, slot);
-        }
-        return true;
     }
 
     [[nodiscard]] bool
@@ -677,7 +684,6 @@ public:
         if (Contains(id)) {
             return false;
         }
-        incoming_counts_valid_ = false;
         codec_require(active_journal_ == nullptr, "nested graph add transaction");
         if (use_incoming_adjacency_) {
             auto next = *this;
@@ -705,9 +711,15 @@ public:
             grow(codes_.supplements, (count + 1) * codes_.SupplementBytes());
             grow(ids_, count + 1);
             grow(adjacency_, count + 1);
+            if (incoming_counts_valid_) {
+                grow(incoming_counts_, count + 1);
+            }
             inserted = slots_.emplace(id, count).second;
             codec_require(inserted, "duplicate add transaction ID");
             active_journal_ = &journal;
+            if (incoming_counts_valid_) {
+                incoming_counts_.push_back(0);
+            }
             codes_.Append(std::move(prepared.code));
             ids_.push_back(id);
             adjacency_.emplace_back();
@@ -718,6 +730,7 @@ public:
             active_journal_ = nullptr;
             return true;
         } catch (...) {
+            incoming_counts_valid_ = false;
             active_journal_ = nullptr;
             for (auto& row : journal.rows) {
                 adjacency_[row.first].swap(row.second);
@@ -908,6 +921,7 @@ public:
             active_journal_ = nullptr;
             return removed;
         } catch (...) {
+            incoming_counts_valid_ = false;
             active_journal_ = nullptr;
             // Remove only shrinks these containers; original capacity remains.
             codes_.Resize(count);
@@ -943,102 +957,120 @@ public:
         if (found == slots_.end()) {
             return false;
         }
-        incoming_counts_valid_ = false;
-        const uint64_t slot = found->second;
-        const uint64_t last = Size() - 1;
-        const auto removed_neighbors = adjacency_[slot];
-        std::vector<uint64_t> affected_nodes = removed_neighbors;
-        const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
-        const double scan_cpu_start_us =
-            measure_mutation_scans_ ? (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) : 0.0;
-        if (use_incoming_adjacency_) {
-            const auto removed_incoming = incoming_[slot];
-            affected_nodes.insert(
-                affected_nodes.end(), removed_incoming.begin(), removed_incoming.end());
-            for (const uint64_t target : removed_neighbors) {
-                erase_value(incoming_[target], slot);
+        try {
+            const uint64_t slot = found->second;
+            const uint64_t last = Size() - 1;
+            const auto removed_neighbors = adjacency_[slot];
+            std::vector<uint64_t> affected_nodes = removed_neighbors;
+            if (incoming_counts_valid_) {
+                for (const uint64_t target : removed_neighbors) {
+                    --incoming_counts_[target];
+                }
+                incoming_counts_[slot] = 0;
             }
-            for (const uint64_t source : removed_incoming) {
-                erase_value(adjacency_[source], slot);
-            }
-            incoming_[slot].clear();
-            if (slot != last) {
-                for (const uint64_t target : adjacency_[last]) {
-                    replace_value(incoming_[target], last, slot);
-                }
-                for (const uint64_t source : incoming_[last]) {
-                    replace_value(adjacency_[source], last, slot);
-                }
-            }
-        } else {
-            for (uint64_t source = 0; source < adjacency_.size(); ++source) {
-                auto& neighbors = adjacency_[source];
-                if constexpr (skip_unchanged) {
-                    const auto changed = std::find_if(
-                        neighbors.begin(), neighbors.end(), [slot, last](uint64_t neighbor) {
-                            return neighbor == slot or neighbor == last;
-                        });
-                    if (changed == neighbors.end()) {
-                        continue;
-                    }
-                    remember_row(source);
-                } else {
-                    if (std::find(neighbors.begin(), neighbors.end(), slot) != neighbors.end() or
-                        std::find(neighbors.begin(), neighbors.end(), last) != neighbors.end()) {
-                        remember_row(source);
-                    }
-                }
-                const auto old_size = neighbors.size();
-                neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),
-                                neighbors.end());
-                if (neighbors.size() != old_size) {
-                    affected_nodes.push_back(source);
-                }
-                for (uint64_t& neighbor : neighbors) {
-                    if (neighbor == last) {
-                        neighbor = slot;
-                    }
-                }
-            }
-        }
-        if (measure_mutation_scans_) {
-            mutation_scan_timing_.remove_wall_us = microseconds(scan_start, Clock::now());
-            mutation_scan_timing_.remove_cpu_us =
-                (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) - scan_cpu_start_us;
-        }
-        if (slot != last) {
-            ids_[slot] = ids_[last];
-            adjacency_[slot] = std::move(adjacency_[last]);
+            const auto scan_start = measure_mutation_scans_ ? Clock::now() : Clock::time_point{};
+            const double scan_cpu_start_us =
+                measure_mutation_scans_ ? (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) : 0.0;
             if (use_incoming_adjacency_) {
-                incoming_[slot] = std::move(incoming_[last]);
+                const auto removed_incoming = incoming_[slot];
+                affected_nodes.insert(
+                    affected_nodes.end(), removed_incoming.begin(), removed_incoming.end());
+                for (const uint64_t target : removed_neighbors) {
+                    erase_value(incoming_[target], slot);
+                }
+                for (const uint64_t source : removed_incoming) {
+                    erase_value(adjacency_[source], slot);
+                }
+                incoming_[slot].clear();
+                if (slot != last) {
+                    for (const uint64_t target : adjacency_[last]) {
+                        replace_value(incoming_[target], last, slot);
+                    }
+                    for (const uint64_t source : incoming_[last]) {
+                        replace_value(adjacency_[source], last, slot);
+                    }
+                }
+            } else {
+                for (uint64_t source = 0; source < adjacency_.size(); ++source) {
+                    auto& neighbors = adjacency_[source];
+                    if constexpr (skip_unchanged) {
+                        const auto changed = std::find_if(
+                            neighbors.begin(), neighbors.end(), [slot, last](uint64_t neighbor) {
+                                return neighbor == slot or neighbor == last;
+                            });
+                        if (changed == neighbors.end()) {
+                            continue;
+                        }
+                        remember_row(source);
+                    } else {
+                        if (std::find(neighbors.begin(), neighbors.end(), slot) !=
+                                neighbors.end() or
+                            std::find(neighbors.begin(), neighbors.end(), last) !=
+                                neighbors.end()) {
+                            remember_row(source);
+                        }
+                    }
+                    const auto old_size = neighbors.size();
+                    neighbors.erase(std::remove(neighbors.begin(), neighbors.end(), slot),
+                                    neighbors.end());
+                    if (neighbors.size() != old_size) {
+                        affected_nodes.push_back(source);
+                    }
+                    for (uint64_t& neighbor : neighbors) {
+                        if (neighbor == last) {
+                            neighbor = slot;
+                        }
+                    }
+                }
             }
-            adjacency_[slot].erase(
-                std::remove(adjacency_[slot].begin(), adjacency_[slot].end(), slot),
-                adjacency_[slot].end());
-            slots_.at(ids_[slot]) = slot;
+            if (measure_mutation_scans_) {
+                mutation_scan_timing_.remove_wall_us = microseconds(scan_start, Clock::now());
+                mutation_scan_timing_.remove_cpu_us =
+                    (cpu_clock_ == nullptr ? 0.0 : cpu_clock_()) - scan_cpu_start_us;
+            }
+            if (slot != last) {
+                ids_[slot] = ids_[last];
+                adjacency_[slot] = std::move(adjacency_[last]);
+                if (use_incoming_adjacency_) {
+                    incoming_[slot] = std::move(incoming_[last]);
+                }
+                adjacency_[slot].erase(
+                    std::remove(adjacency_[slot].begin(), adjacency_[slot].end(), slot),
+                    adjacency_[slot].end());
+                slots_.at(ids_[slot]) = slot;
+            }
+            if (active_journal_ == nullptr) {
+                slots_.erase(found);
+            } else {
+                active_journal_->removed_node = slots_.extract(found);
+            }
+            ids_.pop_back();
+            adjacency_.pop_back();
+            if (use_incoming_adjacency_) {
+                incoming_.pop_back();
+            }
+            codes_.RemoveSwap(slot);
+            if (incoming_counts_valid_) {
+                if (slot != last) {
+                    incoming_counts_[slot] = incoming_counts_[last];
+                }
+                incoming_counts_.pop_back();
+            }
+            auto remap = [slot, last](uint64_t node) { return node == last ? slot : node; };
+            for (auto& node : affected_nodes) {
+                node = remap(node);
+            }
+            std::vector<uint64_t> repair_candidates;
+            repair_candidates.reserve(removed_neighbors.size());
+            for (const uint64_t old_candidate : removed_neighbors) {
+                repair_candidates.push_back(remap(old_candidate));
+            }
+            repair(std::move(affected_nodes), repair_candidates);
+            return true;
+        } catch (...) {
+            incoming_counts_valid_ = false;
+            throw;
         }
-        if (active_journal_ == nullptr) {
-            slots_.erase(found);
-        } else {
-            active_journal_->removed_node = slots_.extract(found);
-        }
-        ids_.pop_back();
-        adjacency_.pop_back();
-        if (use_incoming_adjacency_) {
-            incoming_.pop_back();
-        }
-        codes_.RemoveSwap(slot);
-        auto remap = [slot, last](uint64_t node) { return node == last ? slot : node; };
-        for (auto& node : affected_nodes) {
-            node = remap(node);
-        }
-        std::vector<uint64_t> repair_candidates;
-        repair_candidates.reserve(removed_neighbors.size());
-        for (const uint64_t old_candidate : removed_neighbors) {
-            repair_candidates.push_back(remap(old_candidate));
-        }
-        repair(std::move(affected_nodes), repair_candidates);
-        return true;
     }
 
     [[nodiscard]] GraphSearchResult

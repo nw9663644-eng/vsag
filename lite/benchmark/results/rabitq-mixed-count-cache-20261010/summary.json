@@ -1,0 +1,130 @@
+[
+  {
+    "dataset": "gist10k600",
+    "variant": "control",
+    "crud_ms": 29915.096948,
+    "operations": {
+      "update": {
+        "p50_us": 567.667,
+        "p99_us": 1538.767
+      },
+      "remove": {
+        "p50_us": 112.858,
+        "p99_us": 183.297
+      },
+      "add": {
+        "p50_us": 271.884,
+        "p99_us": 309.343
+      }
+    },
+    "mutation_ops_s": 3008.5144018233586,
+    "snapshot_bytes": 11284416,
+    "external_peak_rss_kib": 219400,
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 444.331,
+      "p99_us": 571.599
+    },
+    "final": {
+      "recall": 0.8116666666666666,
+      "p50_us": 410.541,
+      "p99_us": 460.11
+    }
+  },
+  {
+    "dataset": "gist10k600",
+    "variant": "candidate",
+    "crud_ms": 26909.484528,
+    "operations": {
+      "update": {
+        "p50_us": 468.371,
+        "p99_us": 1435.129
+      },
+      "remove": {
+        "p50_us": 111.507,
+        "p99_us": 183.385
+      },
+      "add": {
+        "p50_us": 272.644,
+        "p99_us": 310.493
+      }
+    },
+    "mutation_ops_s": 3344.545671484443,
+    "snapshot_bytes": 11284416,
+    "external_peak_rss_kib": 219540,
+    "initial": {
+      "recall": 0.961,
+      "p50_us": 442.529,
+      "p99_us": 538.149
+    },
+    "final": {
+      "recall": 0.8116666666666666,
+      "p50_us": 411.311,
+      "p99_us": 461.279
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "candidate",
+    "crud_ms": 24584.332523,
+    "operations": {
+      "update": {
+        "p50_us": 409.691,
+        "p99_us": 1265.793
+      },
+      "remove": {
+        "p50_us": 123.838,
+        "p99_us": 189.035
+      },
+      "add": {
+        "p50_us": 245.485,
+        "p99_us": 279.955
+      }
+    },
+    "mutation_ops_s": 3660.8681531540474,
+    "snapshot_bytes": 9363552,
+    "external_peak_rss_kib": 176728,
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 433.49,
+      "p99_us": 572.598
+    },
+    "final": {
+      "recall": 0.908,
+      "p50_us": 438.92,
+      "p99_us": 517.738
+    }
+  },
+  {
+    "dataset": "cohere10k600",
+    "variant": "control",
+    "crud_ms": 27813.465568,
+    "operations": {
+      "update": {
+        "p50_us": 515.969,
+        "p99_us": 1382.559
+      },
+      "remove": {
+        "p50_us": 121.917,
+        "p99_us": 186.716
+      },
+      "add": {
+        "p50_us": 247.014,
+        "p99_us": 283.574
+      }
+    },
+    "mutation_ops_s": 3235.8427172609145,
+    "snapshot_bytes": 9363552,
+    "external_peak_rss_kib": 176740,
+    "initial": {
+      "recall": 0.9835,
+      "p50_us": 466.369,
+      "p99_us": 594.706
+    },
+    "final": {
+      "recall": 0.908,
+      "p50_us": 440.851,
+      "p99_us": 510.929
+    }
+  }
+]

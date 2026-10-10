@@ -908,7 +908,7 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
                     cached.UpdateTransactional(id, codec::prepare_encoding(model, changed.data())));
                 check();
             }
-            REQUIRE(cached.IncomingCountRebuilds() == 3);
+            REQUIRE(cached.IncomingCountRebuilds() == 1);
             REQUIRE(cached.IncomingCountBytes() >= count * sizeof(uint64_t));
             REQUIRE(cached.GetMemoryUsage().incoming_count_capacity_bytes ==
                     cached.IncomingCountBytes());
@@ -925,8 +925,31 @@ TEST_CASE("RaBitQ cached incoming counts match recount protection through struct
                                                   codec::prepare_encoding(model, base.data())));
             REQUIRE(cached.UpdateTransactional(cached.IdAt(0),
                                                codec::prepare_encoding(model, base.data())));
-            REQUIRE(cached.IncomingCountRebuilds() == (incoming ? 3 : 4));
+            REQUIRE(cached.IncomingCountRebuilds() == (incoming ? 1 : 2));
             check();
+            const auto rebuilt = cached.IncomingCountRebuilds();
+            while (cached.Size() != 0) {
+                const auto slot = cached.Size() % 2 == 0 ? cached.Size() / 2 : cached.Size() - 1;
+                const auto id = cached.IdAt(slot);
+                REQUIRE(reference.RemoveTransactional(id));
+                REQUIRE(cached.RemoveTransactional(id));
+                check();
+                REQUIRE(cached.IncomingCountRebuilds() == rebuilt);
+            }
+            REQUIRE(cached.GetMemoryUsage().incoming_count_logical_bytes == 0);
+            for (uint64_t row = 0; row < 65; ++row) {
+                std::vector<float> changed(dim, 1.0F + static_cast<float>(row) * .01F);
+                const auto id = static_cast<int64_t>(9000 + row * 13);
+                REQUIRE(reference.AddTransactional(id, changed.data()));
+                REQUIRE(cached.AddTransactional(id, changed.data()));
+                check();
+                REQUIRE(reference.UpdateTransactional(
+                    id, codec::prepare_encoding(model, changed.data())));
+                REQUIRE(
+                    cached.UpdateTransactional(id, codec::prepare_encoding(model, changed.data())));
+                check();
+                REQUIRE(cached.IncomingCountRebuilds() == rebuilt);
+            }
             cached.ConfigureIncomingProtection(codec::IncomingProtection::NONE);
             REQUIRE(cached.UpdateTransactional(cached.IdAt(0),
                                                codec::prepare_encoding(model, base.data())));

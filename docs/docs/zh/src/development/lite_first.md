@@ -289,4 +289,6 @@ VSAG_GRAPH_DIAGNOSTIC_EF 可在持续改值基准中设置为全节点数，输�
 
 ## 实验性运行时入度计数维护
 
-RaBitQ 内部新增 NONE/RECOUNT/CACHED 入边保护策略，公共适配器仍为 NONE。CACHED 在首次需要时为每槽位建立 uint64_t 入度，并随邻接变化增量维护，避免每次 Update 全图重算。Add/Remove 和失败的日志事务令缓存失效，下次 Update 重建；反向邻接的副本事务失败保留原缓存。计数占 8N 逻辑字节、计入内部内存账目，不改变快照/API/模型/预算；关闭后保留容量。10k 连续 Update 单配对实验中，相对受保护但逐次重算的原型，GIST/Cohere 修改块耗时降低15.79%/18.50%，快照及有序结果逐字节相同。GIST Recall .897667 仍低研究目标，因此不默认启用；混合 CRUD、100k 及原生 Full 收益尚未证实。原始数据、黄金测试、范围明确的覆盖率及限制见 lite/benchmark/results/rabitq-incoming-count-cache-20261010。
+RaBitQ 内部新增 NONE/RECOUNT/CACHED 入边保护策略，公共适配器仍为 NONE。CACHED 在首次需要时为每槽位建立 uint64_t 入度，并随邻接变化增量维护，避免每次 Update 全图重算。成功 Add 追加零计数并应用换边差分，Remove 扣除被删出边并随末槽搬迁计数；失败的日志事务令缓存失效，下次 Update 重建；反向邻接的副本事务失败保留原缓存。计数占 8N 逻辑字节、计入内部内存账目，不改变快照/API/模型/预算；关闭后保留容量。10k 连续 Update 单配对实验中，相对受保护但逐次重算的原型，GIST/Cohere 修改块耗时降低15.79%/18.50%，快照及有序结果逐字节相同。GIST Recall .897667 仍低研究目标，因此不默认启用；混合重放的维护质量仍未达标，100k 及原生 Full 收益尚未证实。原始数据、黄金测试、范围明确的覆盖率及限制见 lite/benchmark/results/rabitq-incoming-count-cache-20261010。
+
+结构混合重放见 lite/benchmark/results/rabitq-mixed-count-cache-20261010：三遍真实改值 Update/Remove/Add 后，相同保护策略的快照及有序结果不变。相对每次成功增删都会失效的旧缓存，GIST/Cohere10k 修改块耗时降低10.05%/11.61%，但最终召回 .811667/.908000 仍低研究目标。这只是内部维护账目降成本，不是图维护质量修复、公共默认提速或原生 Full 对照；各操作并非统一变快，证据为单配对串行重放。

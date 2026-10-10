@@ -78,6 +78,14 @@ main() {
                 if (op != 3 and not index->BuildGraph(storage, 3, 16)) {
                     return 3;
                 }
+                // Warm experimental incoming counts before mutation fault injection.
+                // The default adapter keeps the same unprotected public behavior.
+                if (mode == 2 and op != 3) {
+                    const float warm[2] = {-7, 2};
+                    if (not index->Update(0, warm, 2)) {
+                        return 4;
+                    }
+                }
                 const auto before = save(*index);
                 bool failed = false;
                 remaining = limit;
@@ -120,6 +128,16 @@ main() {
                                   : static_cast<bool>(index->BuildGraph(storage, 3, 16));
                     if (not retried) {
                         ++invalid;
+                    }
+                    if (mode == 2 and op != 3 and retried) {
+                        const float continued[2] = {-6, 3};
+                        if (not index->Update(1, continued, 2)) {
+                            ++invalid;
+                        }
+                        std::istringstream retried_snapshot(save(*index));
+                        if (not vsag::lite::Index::Load(retried_snapshot)) {
+                            ++invalid;
+                        }
                     }
                 }
             }

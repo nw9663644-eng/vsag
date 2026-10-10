@@ -1,0 +1,24 @@
+{
+  "tests": {
+    "release": 6,
+    "cached_asan_ubsan": 5,
+    "restored_default_asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4
+  },
+  "format_version": 15,
+  "tidy_version": 15,
+  "default_adapter_restored": true,
+  "default_library_sha256": "b2a06dc26b43defaa0b75067d93768bf51667215fdbab05a4e35fa7bf14be13a",
+  "final_source_sha256": {
+    "src/lite/rabitq_graph_state.h": "ff1dfdee85aefe99d8b7e40423180dba839bbef2149438fe8bde8248e50d5dfb",
+    "src/lite/rabitq_backend_test.cpp": "fd9482fa8ff923e579ba183ca3ef95ec89b523e46b4ad4bbb5ece95fdb03f7df",
+    "src/lite/graph_allocation_test.cpp": "1d9ec2b3255177b6ee4f293bd9538d09d6a02e5e73fbbdf0c74bca689711013c",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2"
+  },
+  "limits": [
+    "Scoped coverage only; not native Full suite",
+    "Node document checker not run"
+  ],
+  "audit_note": "First gcov precheck prematurely expected12 commands while validation was running (9 completed); waited for all10 commands then corrected gate. No test/product failure and no gcov extraction before correction."
+}
