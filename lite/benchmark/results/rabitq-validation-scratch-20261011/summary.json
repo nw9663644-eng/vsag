@@ -1,0 +1,66 @@
+{
+  "gist100k": {
+    "load:load_ms": {
+      "control": 104.206574,
+      "candidate": 93.943013,
+      "change_percent": -9.849245211727242
+    },
+    "load:loaded_rss_kib": {
+      "control": 132992.0,
+      "candidate": 132272.0,
+      "change_percent": -0.5413859480269512
+    },
+    "load:process_peak_rss_kib": {
+      "control": 156952.0,
+      "candidate": 153216.0,
+      "change_percent": -2.380345583363064
+    },
+    "save:save_ms": {
+      "control": 71.492127,
+      "candidate": 62.059767,
+      "change_percent": -13.193564656427126
+    },
+    "save:before_rss_kib": {
+      "control": 141264.0,
+      "candidate": 133736.0,
+      "change_percent": -5.329029335145541
+    },
+    "save:after_hwm_kib": {
+      "control": 156812.0,
+      "candidate": 153112.0,
+      "change_percent": -2.359513302553373
+    }
+  },
+  "cohere100k": {
+    "load:load_ms": {
+      "control": 95.252971,
+      "candidate": 87.439667,
+      "change_percent": -8.202687977050083
+    },
+    "load:loaded_rss_kib": {
+      "control": 113944.0,
+      "candidate": 113300.0,
+      "change_percent": -0.5651899178543807
+    },
+    "load:process_peak_rss_kib": {
+      "control": 137540.0,
+      "candidate": 134244.0,
+      "change_percent": -2.396393776355965
+    },
+    "save:save_ms": {
+      "control": 62.051046,
+      "candidate": 53.992879,
+      "change_percent": -12.986351591881295
+    },
+    "save:before_rss_kib": {
+      "control": 122068.0,
+      "candidate": 114768.0,
+      "change_percent": -5.980273290297211
+    },
+    "save:after_hwm_kib": {
+      "control": 137580.0,
+      "candidate": 134148.0,
+      "change_percent": -2.494548626253812
+    }
+  }
+}

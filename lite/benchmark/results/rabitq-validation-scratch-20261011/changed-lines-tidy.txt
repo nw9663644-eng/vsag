@@ -1,0 +1,4 @@
+33451 warnings generated.
+67257 warnings generated.
+Suppressed 67257 warnings (67255 in non-user code, 2 due to line filter).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.

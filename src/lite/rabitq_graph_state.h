@@ -651,6 +651,44 @@ struct OwnedGraphAdjacency {
     std::vector<std::vector<uint64_t>> rows;
 };
 
+// Compare reverse edges without rebuilding a second row-allocated graph.
+// Outgoing rows are traversed in source order, so each target's expected
+// incoming sequence is already sorted. Scratch is local to this validation.
+inline void
+validate_incoming_adjacency(const std::vector<std::vector<uint64_t>>& adjacency,
+                            const std::vector<std::vector<IncomingSlot>>& incoming) {
+    const uint64_t count = adjacency.size();
+    codec_require(incoming.size() == count, "mutable incoming size mismatch");
+    std::vector<uint64_t> offsets(count + 1);
+    for (uint64_t target = 0; target < count; ++target) {
+        codec_require(
+            incoming[target].size() <= std::numeric_limits<uint64_t>::max() - offsets[target],
+            "incoming validation edge count overflow");
+        offsets[target + 1] = offsets[target] + incoming[target].size();
+    }
+    std::vector<IncomingSlot> sorted(offsets.back());
+    for (uint64_t target = 0; target < count; ++target) {
+        auto begin = sorted.begin() + static_cast<int64_t>(offsets[target]);
+        auto end = sorted.begin() + static_cast<int64_t>(offsets[target + 1]);
+        std::copy(incoming[target].begin(), incoming[target].end(), begin);
+        std::sort(begin, end);
+    }
+    auto cursors = offsets;
+    for (uint64_t source = 0; source < count; ++source) {
+        for (const uint64_t target : adjacency[source]) {
+            codec_require(target < count, "invalid incoming graph neighbor");
+            codec_require(
+                cursors[target] < offsets[target + 1] and sorted[cursors[target]] == source,
+                "mutable incoming adjacency mismatch");
+            ++cursors[target];
+        }
+    }
+    for (uint64_t target = 0; target < count; ++target) {
+        codec_require(cursors[target] == offsets[target + 1],
+                      "mutable incoming adjacency mismatch");
+    }
+}
+
 class MutableGraphState {
 public:
     MutableGraphState(Model input_model,
@@ -1327,15 +1365,7 @@ public:
             ids_.size() == Size() and adjacency_.size() == Size() and slots_.size() == Size(),
             "mutable graph size mismatch");
         if (use_incoming_adjacency_) {
-            codec_require(incoming_.size() == Size(), "mutable incoming size mismatch");
-            auto expected_incoming = BuildIncomingAdjacency();
-            for (uint64_t target = 0; target < Size(); ++target) {
-                auto actual = incoming_[target];
-                std::sort(actual.begin(), actual.end());
-                std::sort(expected_incoming[target].begin(), expected_incoming[target].end());
-                codec_require(actual == expected_incoming[target],
-                              "mutable incoming adjacency mismatch");
-            }
+            validate_incoming_adjacency(adjacency_, incoming_);
         }
         for (uint64_t slot = 0; slot < Size(); ++slot) {
             const auto found = slots_.find(ids_[slot]);

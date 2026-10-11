@@ -1,0 +1,549 @@
+[
+  {
+    "tag": "compile-save-probe",
+    "argv": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_save_probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-validation-scratch-20261011/gist100k-prepare.queries.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-0-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-0-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-1-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-1-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-2-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-2-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-3-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-3-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-4-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "960",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/gist100k-4-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-validation-scratch-20261011/cohere100k-prepare.queries.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-0-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-0-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-1-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-1-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-2-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-2-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-3-candidate-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-3-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-control-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-control-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-4-control-save.snapshot"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-candidate-load",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_load_memory",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "768",
+      "100000"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-candidate-save",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-validation-5mu7nazt/save-probe",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k.snapshot",
+      "/dev/shm/vsag-validation-5mu7nazt/cohere100k-4-candidate-save.snapshot"
+    ],
+    "exit": 0
+  }
+]

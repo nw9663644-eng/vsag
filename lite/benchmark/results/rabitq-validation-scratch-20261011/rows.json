@@ -1,0 +1,662 @@
+[
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "104.991024",
+      "before_create_rss_kib": "3504",
+      "before_load_rss_kib": "3696",
+      "loaded_rss_kib": "133064",
+      "process_peak_rss_kib": "156960",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "72.670057",
+      "before_rss_kib": "141308",
+      "before_hwm_kib": "156856",
+      "after_rss_kib": "143792",
+      "after_hwm_kib": "156856",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "92.541027",
+      "before_create_rss_kib": "3500",
+      "before_load_rss_kib": "3692",
+      "loaded_rss_kib": "132380",
+      "process_peak_rss_kib": "153260",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "61.901049",
+      "before_rss_kib": "133628",
+      "before_hwm_kib": "153004",
+      "after_rss_kib": "139748",
+      "after_hwm_kib": "153004",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "94.057288",
+      "before_create_rss_kib": "3472",
+      "before_load_rss_kib": "3652",
+      "loaded_rss_kib": "132304",
+      "process_peak_rss_kib": "153248",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "62.059767",
+      "before_rss_kib": "133760",
+      "before_hwm_kib": "153136",
+      "after_rss_kib": "139880",
+      "after_hwm_kib": "153136",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "103.379524",
+      "before_create_rss_kib": "3308",
+      "before_load_rss_kib": "3436",
+      "loaded_rss_kib": "132768",
+      "process_peak_rss_kib": "156728",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "71.492127",
+      "before_rss_kib": "141264",
+      "before_hwm_kib": "156812",
+      "after_rss_kib": "143748",
+      "after_hwm_kib": "156812",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "104.206574",
+      "before_create_rss_kib": "3536",
+      "before_load_rss_kib": "3728",
+      "loaded_rss_kib": "133100",
+      "process_peak_rss_kib": "156996",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "70.227571",
+      "before_rss_kib": "141104",
+      "before_hwm_kib": "156652",
+      "after_rss_kib": "143528",
+      "after_hwm_kib": "156652",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "93.943013",
+      "before_create_rss_kib": "3432",
+      "before_load_rss_kib": "3560",
+      "loaded_rss_kib": "132212",
+      "process_peak_rss_kib": "153156",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "63.646336",
+      "before_rss_kib": "133736",
+      "before_hwm_kib": "153112",
+      "after_rss_kib": "139916",
+      "after_hwm_kib": "153112",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "96.087737",
+      "before_create_rss_kib": "3492",
+      "before_load_rss_kib": "3620",
+      "loaded_rss_kib": "132272",
+      "process_peak_rss_kib": "153216",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "62.244851",
+      "before_rss_kib": "133744",
+      "before_hwm_kib": "153120",
+      "after_rss_kib": "139924",
+      "after_hwm_kib": "153120",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "101.876212",
+      "before_create_rss_kib": "3492",
+      "before_load_rss_kib": "3620",
+      "loaded_rss_kib": "132952",
+      "process_peak_rss_kib": "156912",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "68.28186",
+      "before_rss_kib": "141260",
+      "before_hwm_kib": "156808",
+      "after_rss_kib": "143684",
+      "after_hwm_kib": "156808",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "104.910896",
+      "before_create_rss_kib": "3468",
+      "before_load_rss_kib": "3660",
+      "loaded_rss_kib": "132992",
+      "process_peak_rss_kib": "156952",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "71.984406",
+      "before_rss_kib": "141296",
+      "before_hwm_kib": "156844",
+      "after_rss_kib": "143780",
+      "after_hwm_kib": "156844",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "960",
+      "count": "100000",
+      "snapshot_bytes": "112804416",
+      "load_ms": "91.685959",
+      "before_create_rss_kib": "3432",
+      "before_load_rss_kib": "3560",
+      "loaded_rss_kib": "132212",
+      "process_peak_rss_kib": "153156",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "960",
+      "save_ms": "59.650448",
+      "before_rss_kib": "133728",
+      "before_hwm_kib": "153104",
+      "after_rss_kib": "139848",
+      "after_hwm_kib": "153104",
+      "bytes": "112804416"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 0,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "95.252971",
+      "before_create_rss_kib": "3316",
+      "before_load_rss_kib": "3444",
+      "loaded_rss_kib": "113928",
+      "process_peak_rss_kib": "137524",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 0,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "65.309285",
+      "before_rss_kib": "122080",
+      "before_hwm_kib": "137592",
+      "after_rss_kib": "124504",
+      "after_hwm_kib": "137592",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 0,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "87.439667",
+      "before_create_rss_kib": "3496",
+      "before_load_rss_kib": "3624",
+      "loaded_rss_kib": "113300",
+      "process_peak_rss_kib": "134244",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 0,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "51.705957",
+      "before_rss_kib": "114748",
+      "before_hwm_kib": "134128",
+      "after_rss_kib": "120928",
+      "after_hwm_kib": "134128",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 1,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "88.776612",
+      "before_create_rss_kib": "3492",
+      "before_load_rss_kib": "3620",
+      "loaded_rss_kib": "113264",
+      "process_peak_rss_kib": "134208",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 1,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "54.811267",
+      "before_rss_kib": "114768",
+      "before_hwm_kib": "134148",
+      "after_rss_kib": "120888",
+      "after_hwm_kib": "134148",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 1,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "95.420165",
+      "before_create_rss_kib": "3296",
+      "before_load_rss_kib": "3424",
+      "loaded_rss_kib": "113944",
+      "process_peak_rss_kib": "137540",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 1,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "62.051046",
+      "before_rss_kib": "122060",
+      "before_hwm_kib": "137572",
+      "after_rss_kib": "124544",
+      "after_hwm_kib": "137572",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 2,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "93.586161",
+      "before_create_rss_kib": "3268",
+      "before_load_rss_kib": "3396",
+      "loaded_rss_kib": "113856",
+      "process_peak_rss_kib": "137452",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 2,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "62.026826",
+      "before_rss_kib": "122068",
+      "before_hwm_kib": "137580",
+      "after_rss_kib": "124492",
+      "after_hwm_kib": "137580",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 2,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "88.181787",
+      "before_create_rss_kib": "3476",
+      "before_load_rss_kib": "3604",
+      "loaded_rss_kib": "113252",
+      "process_peak_rss_kib": "134196",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 2,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "54.102697",
+      "before_rss_kib": "114684",
+      "before_hwm_kib": "134064",
+      "after_rss_kib": "120864",
+      "after_hwm_kib": "134064",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 3,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "86.642045",
+      "before_create_rss_kib": "3464",
+      "before_load_rss_kib": "3656",
+      "loaded_rss_kib": "113380",
+      "process_peak_rss_kib": "134324",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 3,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "53.546111",
+      "before_rss_kib": "114772",
+      "before_hwm_kib": "134152",
+      "after_rss_kib": "120952",
+      "after_hwm_kib": "134152",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 3,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "93.220680",
+      "before_create_rss_kib": "3416",
+      "before_load_rss_kib": "3608",
+      "loaded_rss_kib": "114064",
+      "process_peak_rss_kib": "137660",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 3,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "63.522389",
+      "before_rss_kib": "121900",
+      "before_hwm_kib": "137412",
+      "after_rss_kib": "124324",
+      "after_hwm_kib": "137412",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 4,
+    "variant": "control",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "97.305408",
+      "before_create_rss_kib": "3416",
+      "before_load_rss_kib": "3596",
+      "loaded_rss_kib": "114056",
+      "process_peak_rss_kib": "137652",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 4,
+    "variant": "control",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "60.525536",
+      "before_rss_kib": "122068",
+      "before_hwm_kib": "137580",
+      "after_rss_kib": "124492",
+      "after_hwm_kib": "137580",
+      "bytes": "93603552"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 4,
+    "variant": "candidate",
+    "operation": "load",
+    "metrics": {
+      "dim": "768",
+      "count": "100000",
+      "snapshot_bytes": "93603552",
+      "load_ms": "86.763433",
+      "before_create_rss_kib": "3496",
+      "before_load_rss_kib": "3624",
+      "loaded_rss_kib": "113300",
+      "process_peak_rss_kib": "134244",
+      "page_cache_control": "warm_uncontrolled"
+    }
+  },
+  {
+    "dataset": "cohere100k",
+    "trial": 4,
+    "variant": "candidate",
+    "operation": "save",
+    "metrics": {
+      "count": "100000",
+      "dim": "768",
+      "save_ms": "53.992879",
+      "before_rss_kib": "114768",
+      "before_hwm_kib": "134148",
+      "after_rss_kib": "120888",
+      "after_hwm_kib": "134148",
+      "bytes": "93603552"
+    }
+  }
+]

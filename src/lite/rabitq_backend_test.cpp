@@ -1346,3 +1346,41 @@ TEST_CASE("RaBitQ incoming slot narrowing is checked", "[lite-rabitq]") {
     REQUIRE(codec::checked_incoming_slot(maximum) == maximum);
     REQUIRE_THROWS(codec::checked_incoming_slot(static_cast<uint64_t>(maximum) + 1));
 }
+
+TEST_CASE("RaBitQ contiguous incoming validation checks exact edge multisets", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    REQUIRE_NOTHROW(codec::validate_incoming_adjacency({}, {}));
+    REQUIRE_NOTHROW(codec::validate_incoming_adjacency({{}}, {{}}));
+    const std::vector<std::vector<uint64_t>> outgoing{{1, 2}, {2}, {0}, {2}};
+    const std::vector<std::vector<codec::IncomingSlot>> incoming{{2}, {0}, {3, 0, 1}, {}};
+    REQUIRE_NOTHROW(codec::validate_incoming_adjacency(outgoing, incoming));
+    auto damaged = incoming;
+    damaged.pop_back();
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    damaged = incoming;
+    damaged[2].pop_back();
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    damaged = incoming;
+    damaged[2].push_back(0);
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    damaged = incoming;
+    damaged[2][0] = 0;
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    damaged = incoming;
+    damaged[2][0] = std::numeric_limits<codec::IncomingSlot>::max();
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    damaged = incoming;
+    damaged[3].push_back(0);
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(outgoing, damaged));
+    auto invalid = outgoing;
+    invalid[0].push_back(outgoing.size());
+    REQUIRE_THROWS(codec::validate_incoming_adjacency(invalid, incoming));
+    std::vector<std::vector<uint64_t>> skewed(257);
+    std::vector<std::vector<codec::IncomingSlot>> reverse(257);
+    for (uint64_t source = 1; source < skewed.size(); ++source) {
+        skewed[source].push_back(0);
+        reverse[0].push_back(codec::checked_incoming_slot(source));
+    }
+    std::reverse(reverse[0].begin(), reverse[0].end());
+    REQUIRE_NOTHROW(codec::validate_incoming_adjacency(skewed, reverse));
+}

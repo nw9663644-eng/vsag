@@ -1,0 +1,424 @@
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_backend_test.cpp'
+Lines executed:100.00% of 1113
+Branches executed:79.57% of 5394
+Taken at least once:42.44% of 5394
+Calls executed:71.20% of 6027
+Creating 'rabitq_backend_test.cpp.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator.h'
+Lines executed:83.02% of 53
+No branches
+Calls executed:0.00% of 6
+Creating 'stl_iterator.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_reusable_string_stream.hpp'
+Lines executed:0.00% of 3
+No branches
+No calls
+Creating 'catch_reusable_string_stream.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/catch_tostring.hpp'
+Lines executed:0.00% of 39
+Branches executed:0.00% of 8
+Taken at least once:0.00% of 8
+Calls executed:0.00% of 6
+Creating 'catch_tostring.hpp.gcov'
+
+File '/usr/include/c++/11/bits/range_access.h'
+Lines executed:0.00% of 4
+No branches
+No calls
+Creating 'range_access.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_decomposer.hpp'
+Lines executed:81.25% of 32
+No branches
+Calls executed:100.00% of 4
+Creating 'catch_decomposer.hpp.gcov'
+
+File '/usr/include/c++/11/bits/stl_algobase.h'
+Lines executed:97.18% of 142
+Branches executed:100.00% of 8
+Taken at least once:75.00% of 8
+No calls
+Creating 'stl_algobase.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_vector.h'
+Lines executed:97.83% of 230
+No branches
+Calls executed:100.00% of 5
+Creating 'stl_vector.h.gcov'
+
+File '/usr/include/c++/11/bits/move.h'
+Lines executed:100.00% of 13
+No branches
+No calls
+Creating 'move.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_uninitialized.h'
+Lines executed:95.16% of 62
+No branches
+No calls
+Creating 'stl_uninitialized.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_construct.h'
+Lines executed:100.00% of 14
+No branches
+No calls
+Creating 'stl_construct.h.gcov'
+
+File '/usr/include/c++/11/bits/cpp_type_traits.h'
+Lines executed:100.00% of 2
+No branches
+No calls
+Creating 'cpp_type_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/predefined_ops.h'
+Lines executed:100.00% of 51
+No branches
+Calls executed:100.00% of 14
+Creating 'predefined_ops.h.gcov'
+
+File '/usr/include/c++/11/ext/new_allocator.h'
+Lines executed:84.21% of 19
+No branches
+No calls
+Creating 'new_allocator.h.gcov'
+
+File '/usr/include/c++/11/bits/alloc_traits.h'
+Lines executed:91.67% of 24
+No branches
+No calls
+Creating 'alloc_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/allocator.h'
+Lines executed:69.23% of 13
+No branches
+No calls
+Creating 'allocator.h.gcov'
+
+File '/usr/include/c++/11/tuple'
+Lines executed:100.00% of 18
+No branches
+Calls executed:100.00% of 2
+Creating 'tuple.gcov'
+
+File '/usr/include/c++/11/bits/stl_heap.h'
+Lines executed:100.00% of 64
+No branches
+No calls
+Creating 'stl_heap.h.gcov'
+
+File '/usr/include/c++/11/bits/hashtable_policy.h'
+Lines executed:88.19% of 127
+Branches executed:100.00% of 4
+Taken at least once:50.00% of 4
+Calls executed:85.71% of 14
+Creating 'hashtable_policy.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_pair.h'
+Lines executed:100.00% of 8
+No branches
+Calls executed:100.00% of 3
+Creating 'stl_pair.h.gcov'
+
+File '/usr/include/c++/11/bits/vector.tcc'
+Lines executed:81.87% of 193
+No branches
+No calls
+Creating 'vector.tcc.gcov'
+
+File '/usr/include/c++/11/ext/alloc_traits.h'
+Lines executed:75.00% of 8
+No branches
+No calls
+Creating 'alloc_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/hashtable.h'
+Lines executed:85.42% of 288
+Branches executed:66.67% of 78
+Taken at least once:50.00% of 78
+Calls executed:69.70% of 99
+Creating 'hashtable.h.gcov'
+
+File '/usr/include/c++/11/ext/aligned_buffer.h'
+Lines executed:100.00% of 8
+No branches
+No calls
+Creating 'aligned_buffer.h.gcov'
+
+File '/usr/include/c++/11/bits/ptr_traits.h'
+Lines executed:100.00% of 4
+No branches
+No calls
+Creating 'ptr_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/node_handle.h'
+Lines executed:73.02% of 63
+Branches executed:66.67% of 12
+Taken at least once:41.67% of 12
+Calls executed:68.29% of 41
+Creating 'node_handle.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator_base_types.h'
+Lines executed:100.00% of 2
+No branches
+No calls
+Creating 'stl_iterator_base_types.h.gcov'
+
+File '/usr/include/c++/11/bits/std_function.h'
+Lines executed:78.48% of 79
+Branches executed:100.00% of 4
+Taken at least once:75.00% of 4
+Calls executed:92.86% of 14
+Creating 'std_function.h.gcov'
+
+File '/usr/include/c++/11/utility'
+Lines executed:100.00% of 8
+No branches
+No calls
+Creating 'utility.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator_base_funcs.h'
+Lines executed:100.00% of 12
+No branches
+No calls
+Creating 'stl_iterator_base_funcs.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_graph_state.h'
+Lines executed:92.08% of 1161
+Branches executed:90.01% of 1422
+Taken at least once:64.49% of 1422
+Calls executed:86.40% of 1353
+Creating 'rabitq_graph_state.h.gcov'
+
+File '/usr/include/c++/11/bits/invoke.h'
+Lines executed:100.00% of 5
+No branches
+No calls
+Creating 'invoke.h.gcov'
+
+File '/usr/include/c++/11/ext/type_traits.h'
+Lines executed:100.00% of 2
+No branches
+No calls
+Creating 'type_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_algo.h'
+Lines executed:97.40% of 154
+Branches executed:100.00% of 18
+Taken at least once:88.89% of 18
+Calls executed:100.00% of 29
+Creating 'stl_algo.h.gcov'
+
+File '/usr/include/c++/11/bits/random.tcc'
+Lines executed:100.00% of 40
+Branches executed:100.00% of 14
+Taken at least once:100.00% of 14
+Calls executed:100.00% of 4
+Creating 'random.tcc.gcov'
+
+File '/usr/include/c++/11/bits/random.h'
+Lines executed:100.00% of 9
+No branches
+Calls executed:100.00% of 1
+Creating 'random.h.gcov'
+
+File '/usr/include/c++/11/bits/unique_ptr.h'
+Lines executed:100.00% of 26
+No branches
+Calls executed:100.00% of 5
+Creating 'unique_ptr.h.gcov'
+
+File '/usr/include/c++/11/bits/basic_string.tcc'
+Lines executed:69.23% of 13
+No branches
+No calls
+Creating 'basic_string.tcc.gcov'
+
+File '/usr/include/c++/11/bits/stl_function.h'
+Lines executed:100.00% of 2
+No branches
+No calls
+Creating 'stl_function.h.gcov'
+
+File '/usr/include/c++/11/chrono'
+Lines executed:100.00% of 23
+No branches
+Calls executed:100.00% of 14
+Creating 'chrono.gcov'
+
+File '/usr/include/c++/11/bits/uniform_int_dist.h'
+Lines executed:71.79% of 39
+Branches executed:28.57% of 14
+Taken at least once:14.29% of 14
+Calls executed:58.33% of 12
+Creating 'uniform_int_dist.h.gcov'
+
+File '/usr/include/c++/11/initializer_list'
+Lines executed:100.00% of 3
+No branches
+No calls
+Creating 'initializer_list.gcov'
+
+File '/usr/include/c++/11/bits/basic_string.h'
+Lines executed:62.50% of 24
+Branches executed:85.71% of 14
+Taken at least once:42.86% of 14
+Calls executed:68.42% of 19
+Creating 'basic_string.h.gcov'
+
+File '/usr/include/c++/11/array'
+Lines executed:100.00% of 18
+No branches
+Calls executed:100.00% of 8
+Creating 'array.gcov'
+
+File '/usr/include/c++/11/bits/stl_queue.h'
+Lines executed:100.00% of 19
+No branches
+No calls
+Creating 'stl_queue.h.gcov'
+
+File '/usr/include/c++/11/bits/unordered_map.h'
+Lines executed:87.50% of 32
+Branches executed:100.00% of 2
+Taken at least once:50.00% of 2
+Calls executed:71.43% of 14
+Creating 'unordered_map.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/query_heap.h'
+Lines executed:100.00% of 2
+No branches
+Calls executed:100.00% of 2
+Creating 'query_heap.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_codec.h'
+Lines executed:98.12% of 266
+Branches executed:100.00% of 152
+Taken at least once:75.00% of 152
+Calls executed:96.08% of 204
+Creating 'rabitq_codec.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_numeric.h'
+Lines executed:100.00% of 4
+No branches
+No calls
+Creating 'stl_numeric.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_assertion_handler.hpp'
+Lines executed:85.71% of 7
+Branches executed:100.00% of 2
+Taken at least once:50.00% of 2
+Calls executed:0.00% of 1
+Creating 'catch_assertion_handler.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/expected.hpp'
+Lines executed:100.00% of 30
+Branches executed:100.00% of 2
+Taken at least once:100.00% of 2
+Calls executed:100.00% of 8
+Creating 'expected.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_unique_ptr.hpp'
+Lines executed:100.00% of 3
+Branches executed:100.00% of 2
+Taken at least once:50.00% of 2
+Calls executed:0.00% of 1
+Creating 'catch_unique_ptr.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_snapshot.h'
+Lines executed:100.00% of 225
+Branches executed:98.65% of 296
+Taken at least once:64.19% of 296
+Calls executed:98.48% of 264
+Creating 'rabitq_snapshot.h.gcov'
+
+File '/usr/include/c++/11/bits/postypes.h'
+Lines executed:100.00% of 7
+No branches
+Calls executed:100.00% of 2
+Creating 'postypes.h.gcov'
+
+File '/usr/include/c++/11/bits/char_traits.h'
+Lines executed:29.27% of 41
+Branches executed:27.27% of 22
+Taken at least once:18.18% of 22
+Calls executed:0.00% of 6
+Creating 'char_traits.h.gcov'
+
+File '/usr/include/c++/11/sstream'
+No executable lines
+No branches
+No calls
+Removing 'sstream.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/rabitq_pack.h'
+Lines executed:100.00% of 18
+Branches executed:100.00% of 8
+Taken at least once:100.00% of 8
+Calls executed:100.00% of 2
+Creating 'rabitq_pack.h.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/errors.h'
+No executable lines
+No branches
+No calls
+Removing 'errors.h.gcov'
+
+File '/usr/include/c++/11/cmath'
+Lines executed:100.00% of 12
+No branches
+No calls
+Creating 'cmath.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_test_registry.hpp'
+Lines executed:100.00% of 3
+No branches
+No calls
+Creating 'catch_test_registry.hpp.gcov'
+
+File '/usr/include/c++/11/limits'
+Lines executed:100.00% of 5
+No branches
+No calls
+Creating 'limits.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_stringref.hpp'
+Lines executed:81.82% of 11
+Branches executed:0.00% of 2
+Taken at least once:0.00% of 2
+Calls executed:33.33% of 6
+Creating 'catch_stringref.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_source_line_info.hpp'
+Lines executed:100.00% of 4
+No branches
+No calls
+Creating 'catch_source_line_info.hpp.gcov'
+
+File '/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fragment-release/_deps/catch2-src/src/catch2/internal/catch_result_type.hpp'
+Lines executed:100.00% of 3
+No branches
+No calls
+Creating 'catch_result_type.hpp.gcov'
+
+File '/usr/include/c++/11/bits/functional_hash.h'
+Lines executed:100.00% of 2
+No branches
+No calls
+Creating 'functional_hash.h.gcov'
+
+File '/usr/include/c++/11/new'
+Lines executed:75.00% of 4
+No branches
+Calls executed:100.00% of 1
+Creating 'new.gcov'
+
+File '/usr/include/c++/11/bits/exception.h'
+Lines executed:100.00% of 1
+No branches
+No calls
+Creating 'exception.h.gcov'
+
+Lines executed:92.43% of 4914
