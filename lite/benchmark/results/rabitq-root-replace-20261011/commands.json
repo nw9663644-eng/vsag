@@ -1,0 +1,1019 @@
+[
+  {
+    "tag": "format-heap",
+    "argv": [
+      "clang-format-15",
+      "-style=file:/home/ubuntu/project/vsag-lite-baseline-v01/.clang-format",
+      "--dry-run",
+      "--Werror",
+      "/dev/shm/vsag-root-replace-di0gx4nx/overlay/lite/query_heap.h"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "format-overlay",
+    "argv": [
+      "clang-format-15",
+      "-style=file:/home/ubuntu/project/vsag-lite-baseline-v01/.clang-format",
+      "--dry-run",
+      "--Werror",
+      "/dev/shm/vsag-root-replace-di0gx4nx/overlay/lite/rabitq_graph_state.h"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-control",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-candidate",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/dev/shm/vsag-root-replace-di0gx4nx/overlay",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-prepare.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-5-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-5-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-6-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/sift10k-6-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-prepare.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-5-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-5-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-6-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist10k-6-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-prepare.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-5-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-5-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-6-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/cohere10k-6-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-prepare.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-5-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-5-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/control",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-6-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-root-replace-di0gx4nx/candidate",
+      "/dev/shm/vsag-root-replace-di0gx4nx/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-root-replace-20261011/gist100k-6-candidate",
+      "0"
+    ],
+    "exit": 0
+  }
+]

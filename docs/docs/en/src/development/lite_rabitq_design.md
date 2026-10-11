@@ -271,3 +271,20 @@ Fixed-budget ordered results remain exact, but final exploratory P50 changes do 
 query speedup. The broader all-storage bitmap and per-node dynamic-policy prototypes were not
 adopted. See `lite/benchmark/results/query-visited-specialized-20261011` for raw comparisons,
 limitations, fresh scoped coverage and threshold-crossing CRUD/filter/SaveLoad sanitizer checks.
+
+### Small-graph query heap replacement
+
+For the byte-visited RaBitQ routing specialization, an admitted candidate replaces the full
+best heap's root with a single sift-down instead of push followed by pop. The existing comparator
+and candidate queue order are retained; the packed-visited and reference specializations keep
+their previous operations. This extends Lite's existing heap, not a native StandardHeap root-
+replacement implementation. FP32/FP16 search, public options and snapshot bytes are unchanged.
+
+Fixed-budget public API measurements on three10k inputs reduce P50 by about3.15%/1.80%/2.40%
+(SIFT/GIST/Cohere), and avoid one16384-byte allocation request per query. These are seven paired
+fresh processes over100 historical queries each, not general tail-latency acceptance. GIST100k
+still regresses about2.20% in P50 despite keeping the prior packed-path heap operations; the
+cause is unverified and must not be dismissed as noise. This change targets small-graph CPU
+and workspace cost, does not fix100k recall and does not establish superiority to native Full.
+See `lite/benchmark/results/rabitq-root-public-20261011` for exact results, negative candidates
+and validation scope.

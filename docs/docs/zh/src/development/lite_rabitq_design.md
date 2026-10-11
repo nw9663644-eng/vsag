@@ -224,3 +224,9 @@ snapshotSHA全pair exact，mixed召回仍.811167/.908167，质量未达标，非
 可变RaBitQ路由在每次查询入口选择visited表示：少于65536槽位保留字节数组，达到阈值使用64位字和官方VisitedList的TestAndSet位掩码逻辑。编译期特化消除逐节点的表示策略分支。临时缓冲只属于本次调用，不引入epoch池或常驻可变workspace；FP32/FP16生产路径、距离、图维护、公开参数和快照不变。
 
 100k的visited载荷由100000降为12504字节；记录的每查询累计普通new申请量由170160降为82664字节（约-51.42%），不等于加载RSS或整进程峰值。固定预算有序结果全等，但最终探索性P50变化不能证明查询提速。全存储位图及逐节点动态策略原型未采用。原始配对结果、限制、fresh限定覆盖率和阈值跨越CRUD/过滤/SaveLoad消毒器回归见`lite/benchmark/results/query-visited-specialized-20261011`。
+
+### 小图查询堆替换
+
+字节visited的RaBitQ路由特化在best堆满时，将获准候选直接替换堆顶并一次下沉，避免先push再pop；保留原比较器与candidate队列入队顺序。位图visited和reference特化保持原操作。这是对Lite既有堆的扩展，不是移植原生StandardHeap的堆顶替换实现；FP32/FP16查询、公开参数及快照字节不变。
+
+三个10k输入的公共API固定预算七交替fresh-process配对，SIFT/GIST/Cohere P50约降低3.15%/1.80%/2.40%，每查询少一次16384字节申请。每进程100历史query，不是通用尾延迟验收。GIST100k虽保持旧位图路径堆操作，P50仍回退约2.20%；原因未验证，不能用噪声否定。此改动针对小图CPU和临时申请成本，未修复100k召回，也不证明优于原生Full。精确数据、否定候选及验证范围见`lite/benchmark/results/rabitq-root-public-20261011`。

@@ -76,6 +76,37 @@ TEST_CASE("query visited byte specialization retains byte-array semantics", "[li
     }
 }
 
+TEST_CASE("bounded query heap root replacement matches priority queue", "[lite-graph]") {
+    using Record = std::pair<int64_t, uint64_t>;
+    using Compare = std::less<Record>;
+    using vsag::lite::detail::QueryHeap;
+    std::mt19937 random(1701);
+    for (uint64_t limit : {uint64_t{1}, uint64_t{2}, uint64_t{3}, uint64_t{16}, uint64_t{512}}) {
+        QueryHeap<Record, Compare> actual;
+        std::priority_queue<Record, std::vector<Record>, Compare> expected;
+        for (uint64_t id = 0; id < 4096; ++id) {
+            const Record value{static_cast<int64_t>(random() % 31), id};
+            if (expected.size() < limit) {
+                actual.push(value);
+                expected.push(value);
+            } else if (Compare{}(value, expected.top())) {
+                actual.ReplaceTop(value);
+                expected.push(value);
+                expected.pop();
+            }
+            REQUIRE(actual.size() == expected.size());
+            REQUIRE(actual.top() == expected.top());
+            REQUIRE(std::is_heap(actual.GetData().begin(), actual.GetData().end(), Compare{}));
+        }
+        while (not expected.empty()) {
+            REQUIRE(actual.top() == expected.top());
+            actual.pop();
+            expected.pop();
+        }
+        REQUIRE(actual.empty());
+    }
+}
+
 namespace {
 void
 require_incoming_matches(const vsag::lite::detail::Backend& graph) {

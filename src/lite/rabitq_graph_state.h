@@ -353,9 +353,17 @@ graph_search_impl(const std::vector<float>& query,
             }
         }
         candidates.push(next);
-        best.push(next);
-        if (best.size() > ef) {
-            best.pop();
+        if constexpr (prune_rejected and select_without_pop and not packed_visited) {
+            if (best.size() == ef) {
+                best.ReplaceTop(next);
+            } else {
+                best.push(next);
+            }
+        } else {
+            best.push(next);
+            if (best.size() > ef) {
+                best.pop();
+            }
         }
     };
     auto visit = [&](uint64_t slot) {
