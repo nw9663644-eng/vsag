@@ -1,0 +1,90 @@
+[
+  {
+    "dataset": "sift10k",
+    "storage": "fp16",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 25.0,
+    "median_bytes": 75920.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 31.0,
+    "median_bytes": 76832.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "fp16",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 25.0,
+    "median_bytes": 77584.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 31.0,
+    "median_bytes": 80160.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "fp16",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 25.0,
+    "median_bytes": 77200.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "count": 10000,
+    "queries": 100,
+    "median_requests": 31.0,
+    "median_bytes": 79392.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "fp16",
+    "count": 100000,
+    "queries": 100,
+    "median_requests": 25.0,
+    "median_bytes": 167584.0,
+    "count_sized_requests": [
+      1
+    ]
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "count": 100000,
+    "queries": 100,
+    "median_requests": 31.0,
+    "median_bytes": 170160.0,
+    "count_sized_requests": [
+      1
+    ]
+  }
+]

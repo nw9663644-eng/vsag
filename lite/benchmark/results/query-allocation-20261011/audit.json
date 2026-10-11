@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "cells": 8,
+  "queries": 800,
+  "neighbors": 8000,
+  "ordinary_new_only": true
+}
