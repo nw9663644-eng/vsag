@@ -949,7 +949,7 @@ TEST_CASE("RaBitQ row training supports reusable non-contiguous scratch", "[lite
             std::copy_n(base.data() + row * dim, dim, scratch.data());
             return scratch.data();
         });
-        REQUIRE(calls == count * 2);
+        REQUIRE(calls == count);
         REQUIRE(model.dim == expected.dim);
         REQUIRE(model.flips == expected.flips);
         REQUIRE(std::memcmp(model.centroid.data(), expected.centroid.data(), dim * sizeof(float)) ==

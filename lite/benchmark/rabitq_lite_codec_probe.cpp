@@ -147,8 +147,9 @@ struct ChunkLayoutEstimate {
     }
 };
 
+template <typename Id>
 [[nodiscard]] ChunkLayoutEstimate
-estimate_chunk_layout(const std::vector<std::vector<uint64_t>>& incoming, uint64_t block_size) {
+estimate_chunk_layout(const std::vector<std::vector<Id>>& incoming, uint64_t block_size) {
     require(block_size > 0, "incoming chunk size must be positive");
     ChunkLayoutEstimate result;
     result.nodes = incoming.size();

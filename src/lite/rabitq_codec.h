@@ -155,9 +155,7 @@ train_rows(uint64_t count, uint64_t dim, uint32_t seed, RowAt row_at) {
         for (uint64_t d = 0; d < dim; ++d) {
             codec_require(std::isfinite(row[d]), "non-finite training value");
         }
-    }
-    for (uint64_t i = 0; i < count; ++i) {
-        const float* row = row_at(i);
+        // Accumulate while this validated row is still resident, preserving row order.
         for (uint64_t d = 0; d < dim; ++d) {
             model.centroid[d] += row[d];
         }

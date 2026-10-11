@@ -1,0 +1,4 @@
+69a9e8f1ee1d458e07dfc113c3daf3cd4c5f250a148f819b78a4fd0b28181795  src/lite/rabitq_codec.h
+525af5628065138919e72af5217376d5db433275bce104987e8750db1c07fc80  src/lite/rabitq_backend_test.cpp
+574c9c0788facba875ac1e92a3f7ac0a478979354289017583e28122ae3bd15e  lite/benchmark/rabitq_lite_codec_probe.cpp
+d288c3ee31a7fe8fd6ac6d23faa63f8c11e3694a6f6aec5b16dab3449fb9f232  build-lite-fp16-simd-release/libvsag-lite.so
