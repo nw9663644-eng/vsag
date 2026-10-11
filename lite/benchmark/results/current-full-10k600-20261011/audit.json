@@ -1,0 +1,225 @@
+{
+  "status": "PASS",
+  "builders": 54,
+  "queries": 32400,
+  "neighbors": 324000,
+  "loads": 162,
+  "rows": [
+    {
+      "tag": "sift10k600-fp32-0-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp32-0-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-fp32-1-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-fp32-1-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp32-2-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp32-2-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-fp16-0-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp16-0-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-fp16-1-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-fp16-1-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp16-2-full",
+      "recall": 0.9758333333333333
+    },
+    {
+      "tag": "sift10k600-fp16-2-lite",
+      "recall": 0.9975
+    },
+    {
+      "tag": "sift10k600-rabitq8-0-full",
+      "recall": 0.9658333333333333
+    },
+    {
+      "tag": "sift10k600-rabitq8-0-lite",
+      "recall": 0.9921666666666666
+    },
+    {
+      "tag": "sift10k600-rabitq8-1-lite",
+      "recall": 0.9921666666666666
+    },
+    {
+      "tag": "sift10k600-rabitq8-1-full",
+      "recall": 0.9903333333333333
+    },
+    {
+      "tag": "sift10k600-rabitq8-2-full",
+      "recall": 0.9603333333333334
+    },
+    {
+      "tag": "sift10k600-rabitq8-2-lite",
+      "recall": 0.9921666666666666
+    },
+    {
+      "tag": "gist10k600-fp32-0-full",
+      "recall": 0.971
+    },
+    {
+      "tag": "gist10k600-fp32-0-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-fp32-1-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-fp32-1-full",
+      "recall": 0.971
+    },
+    {
+      "tag": "gist10k600-fp32-2-full",
+      "recall": 0.971
+    },
+    {
+      "tag": "gist10k600-fp32-2-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-fp16-0-full",
+      "recall": 0.9706666666666667
+    },
+    {
+      "tag": "gist10k600-fp16-0-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-fp16-1-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-fp16-1-full",
+      "recall": 0.9706666666666667
+    },
+    {
+      "tag": "gist10k600-fp16-2-full",
+      "recall": 0.9706666666666667
+    },
+    {
+      "tag": "gist10k600-fp16-2-lite",
+      "recall": 0.9655
+    },
+    {
+      "tag": "gist10k600-rabitq8-0-full",
+      "recall": 0.967
+    },
+    {
+      "tag": "gist10k600-rabitq8-0-lite",
+      "recall": 0.961
+    },
+    {
+      "tag": "gist10k600-rabitq8-1-lite",
+      "recall": 0.961
+    },
+    {
+      "tag": "gist10k600-rabitq8-1-full",
+      "recall": 0.9683333333333334
+    },
+    {
+      "tag": "gist10k600-rabitq8-2-full",
+      "recall": 0.9666666666666667
+    },
+    {
+      "tag": "gist10k600-rabitq8-2-lite",
+      "recall": 0.961
+    },
+    {
+      "tag": "cohere10k600-fp32-0-full",
+      "recall": 0.9813333333333333
+    },
+    {
+      "tag": "cohere10k600-fp32-0-lite",
+      "recall": 0.9873333333333333
+    },
+    {
+      "tag": "cohere10k600-fp32-1-lite",
+      "recall": 0.9873333333333333
+    },
+    {
+      "tag": "cohere10k600-fp32-1-full",
+      "recall": 0.9813333333333333
+    },
+    {
+      "tag": "cohere10k600-fp32-2-full",
+      "recall": 0.9813333333333333
+    },
+    {
+      "tag": "cohere10k600-fp32-2-lite",
+      "recall": 0.9873333333333333
+    },
+    {
+      "tag": "cohere10k600-fp16-0-full",
+      "recall": 0.9811666666666666
+    },
+    {
+      "tag": "cohere10k600-fp16-0-lite",
+      "recall": 0.987
+    },
+    {
+      "tag": "cohere10k600-fp16-1-lite",
+      "recall": 0.987
+    },
+    {
+      "tag": "cohere10k600-fp16-1-full",
+      "recall": 0.9811666666666666
+    },
+    {
+      "tag": "cohere10k600-fp16-2-full",
+      "recall": 0.9811666666666666
+    },
+    {
+      "tag": "cohere10k600-fp16-2-lite",
+      "recall": 0.987
+    },
+    {
+      "tag": "cohere10k600-rabitq8-0-full",
+      "recall": 0.9798333333333333
+    },
+    {
+      "tag": "cohere10k600-rabitq8-0-lite",
+      "recall": 0.9835
+    },
+    {
+      "tag": "cohere10k600-rabitq8-1-lite",
+      "recall": 0.9835
+    },
+    {
+      "tag": "cohere10k600-rabitq8-1-full",
+      "recall": 0.9785
+    },
+    {
+      "tag": "cohere10k600-rabitq8-2-full",
+      "recall": 0.9783333333333334
+    },
+    {
+      "tag": "cohere10k600-rabitq8-2-lite",
+      "recall": 0.9835
+    }
+  ]
+}
