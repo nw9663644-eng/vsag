@@ -1,0 +1,2 @@
+/usr/bin/ld: cannot open output file /dev/shm/vsag-full-route-hkr7w6wq/candidate: Is a directory
+collect2: error: ld returned 1 exit status

@@ -1,0 +1,47 @@
+[
+  {
+    "tag": "format",
+    "argv": [
+      "clang-format-15",
+      "-i",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-control",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-full-route-hkr7w6wq/control"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-candidate",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-DVSAG_LITE_EXPERIMENT_FULL_ROUTE",
+      "-I/dev/shm/vsag-full-route-hkr7w6wq/candidate",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-full-route-hkr7w6wq/candidate"
+    ],
+    "exit": 1
+  }
+]

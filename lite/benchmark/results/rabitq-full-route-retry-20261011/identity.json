@@ -1,0 +1,48 @@
+{
+  "head": "6c5e01f5ed626046451fa486b66cb46f29623662",
+  "library_sha256": "0f729af8fd98323988f398d65ac75a9d67431889f2e4f87d05ed227aeba9374a",
+  "archive_sha256": "f8b6baab60adc20bcf74995ba48c6d63a5c954cce06646557c38306590da2c9e",
+  "inputs": {
+    "sift100k": {
+      "base.fvecs": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba",
+      "queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+      "groundtruth.ivecs": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54"
+    },
+    "gist100k": {
+      "base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+      "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+      "groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+    },
+    "cohere100k": {
+      "base.fvecs": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193",
+      "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+      "groundtruth.ivecs": "258d70c586da932a1e55e1587ea3509087e8b8510c723d31538634e9a534160e"
+    }
+  },
+  "snapshots": {
+    "sift100k": {
+      "sha256": "40cf0d83af89cdc3dd0e04145925e09429a2dc573cc5fd6841fceca5d599d565",
+      "bytes": 29600672
+    },
+    "gist100k": {
+      "sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+      "bytes": 112804416
+    },
+    "cohere100k": {
+      "sha256": "35ee729f8ebe6bd9ee54811b47fe48c618b9cdba3c822be69bc498c63690434b",
+      "bytes": 93603552
+    }
+  },
+  "executable_sha256": {
+    "control": "8f3ef7c43696bf381f958d76b5198ea4d50a7b167b59f081d1fb63f3b49ea22d",
+    "candidate": "26090770ffb26ab708f1510de89f4bbf3792862a4f7b917840ce5f3b7de14b02"
+  },
+  "trials": 5,
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "9512de2dc183080e438cd6b0201dfe0696ed78fe20e1be444779c98597608111",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d",
+    "lite/benchmark/rabitq_full_route_probe.cpp": "688957c43853118697e87da2201ef6c528297d1b5bbf7cee0e292d904eacb033",
+    "lite/benchmark/run_rabitq_full_route.py": "860f84dd5916014c6030d17220b91e955bec2dbea5d63ea5f12406cdc152899c"
+  },
+  "scope": "initial100k internal SearchWithOptions, one warmup pass, CPU0/thread1/degree16/build128/query512"
+}

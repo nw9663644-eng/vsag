@@ -1,0 +1,587 @@
+[
+  {
+    "tag": "format",
+    "argv": [
+      "clang-format-15",
+      "-i",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-control",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-full-route-godw7kvt/control"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "compile-candidate",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-DVSAG_LITE_EXPERIMENT_FULL_ROUTE",
+      "-I/dev/shm/vsag-full-route-godw7kvt/candidate-headers",
+      "-Isrc",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_full_route_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-prepare.queries.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "sift100k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/sift100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/sift100k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-prepare.queries.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/gist100k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-prepare.queries.csv"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-native-parity",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-native-parity",
+      "1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-0-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-0-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-1-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-1-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-2-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-2-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-3-candidate",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-3-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/control",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-4-control",
+      "0"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-full-route-godw7kvt/candidate",
+      "/dev/shm/vsag-full-route-godw7kvt/cohere100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000/groundtruth.ivecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-full-route-retry-20261011/cohere100k-4-candidate",
+      "0"
+    ],
+    "exit": 0
+  }
+]

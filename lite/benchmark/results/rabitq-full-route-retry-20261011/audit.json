@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "runs": 30,
+  "queries": 3000,
+  "neighbors": 30000,
+  "commands": 39,
+  "summary": {
+    "sift100k": {
+      "control": {
+        "recall": 0.975,
+        "p50_us": 477.448,
+        "p99_us": 635.473,
+        "average_visited": 3487.09
+      },
+      "candidate": {
+        "recall": 0.974,
+        "p50_us": 822.809,
+        "p99_us": 1167.489,
+        "average_visited": 3447.17
+      },
+      "p50_change_percent": 72.33478829108091
+    },
+    "gist100k": {
+      "control": {
+        "recall": 0.859,
+        "p50_us": 1039.344,
+        "p99_us": 1284.658,
+        "average_visited": 3696.15
+      },
+      "candidate": {
+        "recall": 0.859,
+        "p50_us": 2570.895,
+        "p99_us": 3247.317,
+        "average_visited": 3689.9
+      },
+      "p50_change_percent": 147.35746778737357
+    },
+    "cohere100k": {
+      "control": {
+        "recall": 0.937,
+        "p50_us": 1083.992,
+        "p99_us": 1242.948,
+        "average_visited": 3948.6
+      },
+      "candidate": {
+        "recall": 0.936,
+        "p50_us": 2370.879,
+        "p99_us": 2935.785,
+        "average_visited": 3945.92
+      },
+      "p50_change_percent": 118.71738905822183
+    }
+  }
+}

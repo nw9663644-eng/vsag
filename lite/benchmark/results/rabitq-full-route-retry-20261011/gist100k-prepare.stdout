@@ -1,0 +1,2 @@
+base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_ms,query_ef_search
+100000,100,960,10,0,1,0.859000,38202.881198,1099.332000,1325.456000,88.492381,97.434044,112804416,rabitq8,16,128,0.000251,512
