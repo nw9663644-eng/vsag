@@ -28,6 +28,8 @@ guarded(Function function, ErrorType fallback = ErrorType::INTERNAL_ERROR) -> de
 class RaBitQBackend final : public Backend {
 public:
     explicit RaBitQBackend(rabitq::MutableGraphState state) : state_(std::move(state)) {
+        state_.ConfigureIncomingProtection(
+            rabitq::IncomingProtection::CACHED, false, false, false, true);
     }
 
     tl::expected<void, Error>

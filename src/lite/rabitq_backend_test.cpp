@@ -635,6 +635,41 @@ TEST_CASE("RaBitQ cached query sums preserve complete distance bits", "[lite-rab
     }
 }
 
+TEST_CASE("RaBitQ one-bit code distance ignores plane tails", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (const uint64_t dim : {1, 7, 8, 9, 17}) {
+        const uint64_t plane_bytes = (dim + 7) / 8;
+        std::vector<uint8_t> left_filter(plane_bytes * codec::K_FILTER_BITS, 0);
+        std::vector<uint8_t> right_filter(plane_bytes * codec::K_FILTER_BITS, 0);
+        codec::EncodedMetadata left_metadata{};
+        codec::EncodedMetadata right_metadata{};
+        left_metadata.norm = 2.0F;
+        right_metadata.norm = 3.0F;
+        const codec::EncodedView left{left_filter.data(), nullptr, left_metadata};
+        codec::EncodedView right{right_filter.data(), nullptr, right_metadata};
+        REQUIRE(codec::one_bit_code_distance(left, right, dim) == 1.0F);
+
+        for (uint64_t byte = 0; byte < plane_bytes; ++byte) {
+            right_filter[byte] = 0xFFU;
+        }
+        REQUIRE(codec::one_bit_code_distance(left, right, dim) == 25.0F);
+
+        if ((dim & 7U) != 0) {
+            std::fill(right_filter.begin(), right_filter.end(), 0);
+            const uint64_t tail = dim / 8;
+            const auto used_mask = static_cast<uint8_t>((1U << (dim & 7U)) - 1U);
+            right_filter[tail] = static_cast<uint8_t>(~used_mask);
+            REQUIRE(codec::one_bit_code_distance(left, right, dim) == 1.0F);
+        }
+
+        std::fill(right_filter.begin(), right_filter.end(), 0);
+        right_filter[0] = 1U;
+        const float ip = 1.0F - 2.0F / static_cast<float>(dim);
+        const float expected = codec::l2_distance(2.0F, 3.0F, ip);
+        REQUIRE(codec::one_bit_code_distance(left, right, dim) == expected);
+    }
+}
+
 TEST_CASE("RaBitQ filter Batch4 preserves single-estimate bits", "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;
     for (const uint64_t dim : {1, 7, 17, 128, 768, 960}) {

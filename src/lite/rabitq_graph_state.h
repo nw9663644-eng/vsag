@@ -59,6 +59,32 @@ l2_distance(float base_norm, float query_norm, float normalized_ip) {
            2.0F * base_norm * query_norm * normalized_ip;
 }
 
+inline uint32_t
+popcount_byte(uint8_t value) {
+    value = static_cast<uint8_t>(value - ((value >> 1U) & 0x55U));
+    value = static_cast<uint8_t>((value & 0x33U) + ((value >> 2U) & 0x33U));
+    return static_cast<uint32_t>((value + (value >> 4U)) & 0x0FU);
+}
+
+inline float
+one_bit_code_distance(const EncodedView& left, const EncodedView& right, uint64_t dim) {
+    codec_require(dim > 0 and left.filter != nullptr and right.filter != nullptr,
+                  "invalid one-bit code distance input");
+    uint64_t mismatches = 0;
+    const uint64_t full_bytes = dim / 8;
+    for (uint64_t byte = 0; byte < full_bytes; ++byte) {
+        mismatches += popcount_byte(left.filter[byte] ^ right.filter[byte]);
+    }
+    const uint32_t tail_bits = static_cast<uint32_t>(dim & 7U);
+    if (tail_bits != 0) {
+        const auto mask = static_cast<uint8_t>((1U << tail_bits) - 1U);
+        mismatches += popcount_byte((left.filter[full_bytes] ^ right.filter[full_bytes]) & mask);
+    }
+    const float normalized_ip =
+        1.0F - 2.0F * static_cast<float>(mismatches) / static_cast<float>(dim);
+    return l2_distance(left.metadata.norm, right.metadata.norm, normalized_ip);
+}
+
 struct FilterEstimate {
     float distance;
     float lower_bound;
@@ -1826,8 +1852,41 @@ private:
             const uint64_t needed = max_degree_ - repaired.size();
             const uint64_t retained = std::min(needed, ranked.size());
             repaired.reserve(repaired.size() + retained);
-            for (uint64_t i = 0; i < retained; ++i) {
-                repaired.push_back(ranked[i].id);
+            if (ranked.size() > retained and retained > 0) {
+                uint64_t chosen = 0;
+                for (const auto& candidate : ranked) {
+                    if (chosen == retained) {
+                        break;
+                    }
+                    const auto code = codes_.At(candidate.id);
+                    bool diverse = true;
+                    for (const uint64_t selected : repaired) {
+                        if (one_bit_code_distance(codes_.At(selected), code, model_.dim) <
+                            candidate.distance) {
+                            diverse = false;
+                            break;
+                        }
+                    }
+                    if (diverse) {
+                        repaired.push_back(candidate.id);
+                        ++chosen;
+                    }
+                }
+                // Preserve the degree-fill contract if every remaining candidate is occluded.
+                for (const auto& candidate : ranked) {
+                    if (chosen == retained) {
+                        break;
+                    }
+                    if (std::find(repaired.begin(), repaired.end(), candidate.id) ==
+                        repaired.end()) {
+                        repaired.push_back(candidate.id);
+                        ++chosen;
+                    }
+                }
+            } else {
+                for (uint64_t i = 0; i < retained; ++i) {
+                    repaired.push_back(ranked[i].id);
+                }
             }
             sync_incoming(source, old_neighbors);
         }
