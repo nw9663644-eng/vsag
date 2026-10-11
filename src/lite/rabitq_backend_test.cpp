@@ -301,10 +301,12 @@ TEST_CASE("RaBitQ incoming adjacency survives directed CRUD repair", "[lite-rabi
         }
         std::stringstream stream;
         codec::save_mutable_snapshot(stream, state);
-        auto loaded = codec::load_mutable_snapshot(stream);
+        auto loaded = codec::load_mutable_snapshot(stream, incoming);
         loaded.Validate();
         REQUIRE(loaded.GetIds() == state.GetIds());
         REQUIRE(loaded.GetGraph().neighbors == state.GetGraph().neighbors);
+        REQUIRE(loaded.GetIncomingMemoryUsage().edges ==
+                (incoming ? state.GetIncomingMemoryUsage().edges : 0));
     }
     codec::MutableGraphState tiny(model, codec::EncodedRecords(1), {{0}, {}}, {}, 2, 2);
     REQUIRE_FALSE(tiny.Update(9, base.data()));

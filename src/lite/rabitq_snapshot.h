@@ -321,7 +321,7 @@ save_mutable_snapshot(std::ostream& output, const MutableGraphState& state) {
 }
 
 inline MutableGraphState
-load_mutable_snapshot(std::istream& input) {
+load_mutable_snapshot(std::istream& input, bool use_incoming_adjacency = false) {
     auto loaded = load_snapshot_payload(input, 1);
     const uint64_t max_degree = read_u64(input);
     const uint64_t ef_search = read_u64(input);
@@ -355,7 +355,9 @@ load_mutable_snapshot(std::istream& input) {
             graph,
             std::move(ids),
             max_degree,
-            ef_search};
+            ef_search,
+            false,
+            use_incoming_adjacency};
 }
 
 }  // namespace vsag::lite::detail::rabitq

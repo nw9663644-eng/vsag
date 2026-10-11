@@ -215,7 +215,9 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
                                             std::move(codes),
                                             std::move(ids),
                                             max_degree,
-                                            ef_search);
+                                            ef_search,
+                                            false,
+                                            true);
             return std::unique_ptr<Backend>(new RaBitQBackend(std::move(state)));
         },
         ErrorType::INVALID_ARGUMENT);
@@ -226,7 +228,7 @@ load_rabitq_graph_backend(std::istream& input) {
     return guarded(
         [&]() -> tl::expected<std::unique_ptr<Backend>, Error> {
             return std::unique_ptr<Backend>(
-                new RaBitQBackend(rabitq::load_mutable_snapshot(input)));
+                new RaBitQBackend(rabitq::load_mutable_snapshot(input, true)));
         },
         ErrorType::INVALID_BINARY);
 }

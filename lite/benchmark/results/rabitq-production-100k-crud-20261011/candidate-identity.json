@@ -1,0 +1,25 @@
+{
+  "head": "629aa345517500f0ba20187e7874117dc812dc7c",
+  "branch": "experiment/lite-rabitq-next-20260926",
+  "source_sha256": {
+    "src/lite/rabitq_backend.cpp": "6052e313a16ac9744d918e571c03f5e12ddfd72b9c76d7f1816cd2338be85949",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d",
+    "src/lite/rabitq_graph_state.h": "c27ebb29f20c4f15fbefce266bbc8ad0e1fc403d3e1e1117bb2fcd463143bf15",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud_100k.py": "9748c9fb5fdc1cf2e381454665007b92fc649bf4515c8ad9cc48397dbcf6b2b5"
+  },
+  "library_sha256": "094bee5176b582bca7b69d3b34ab41b07174c09facf8a03b4275ce28950dc12d",
+  "builder_sha256": "c7f35c588449316bb9e3ed5f77345ccee1c305c727b2d3e6a7131fa0fcd5e5b1",
+  "configuration": {
+    "base_count": 100000,
+    "query_count": 100,
+    "rounds": 3,
+    "crud_ops_per_round": 10000,
+    "degree": 16,
+    "build_ef": 128,
+    "query_ef": 512,
+    "storage": "rabitq8",
+    "cpu": 0,
+    "reverse_adjacency": true
+  }
+}

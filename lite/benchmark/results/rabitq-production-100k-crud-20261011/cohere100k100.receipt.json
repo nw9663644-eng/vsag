@@ -1,0 +1,36 @@
+{
+  "label": "cohere100k100",
+  "source": "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000",
+  "base_count": 100000,
+  "query_count": 100,
+  "dim": 768,
+  "rounds": 3,
+  "crud_ops_per_round": 10000,
+  "metric": "squared_l2",
+  "schedule": "(round*65537+operation*8191)%N",
+  "recipe": "FP32 .875*current+.125*original donor; donor=(id+7919*(round+1))%N; Cohere FP64 renorm to FP32",
+  "truth": "FP64 direct differences/einsum; distance then ID lexsort top10",
+  "numpy_version": "2.2.6",
+  "files": {
+    "base.fvecs": {
+      "bytes": 307600000,
+      "sha256": "05476c2b98a4b2aff6df185df3357b49b2e50c5e9efc7c14e0dc9dfe4028b193"
+    },
+    "queries.fvecs": {
+      "bytes": 307600,
+      "sha256": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17"
+    },
+    "groundtruth.ivecs": {
+      "bytes": 4400,
+      "sha256": "258d70c586da932a1e55e1587ea3509087e8b8510c723d31538634e9a534160e"
+    },
+    "changed-groundtruth.ivecs": {
+      "bytes": 4400,
+      "sha256": "98b5fbcdff6634dcb877e80677dc32908711e78daf4e3604020f33a52ebf335a"
+    },
+    "replacement.fvecs": {
+      "bytes": 92280000,
+      "sha256": "449698d85d3c84dd59916ae352f97e49dc81ba17a14db4eaa9905875d3c55d91"
+    }
+  }
+}

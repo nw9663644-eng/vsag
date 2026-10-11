@@ -1,0 +1,2 @@
+base_count,query_count,dim,k,rounds,crud_ops,recall_at_k,build_ms,search_p50_us,search_p99_us,save_ms,load_ms,snapshot_bytes,storage,max_degree,ef_search,crud_ms,query_ef_search,persistent_replacements,initial_recall_at_k,mutation_mode
+100000,100,768,10,3,10000,0.953000,35651.326510,1172.902000,1381.276000,71.148170,72.443930,93603552,rabitq8,16,128,337975.451899,512,30000,0.937000,all
