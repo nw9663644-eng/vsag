@@ -1,0 +1,58 @@
+[
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 76832.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 76832.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 80160.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 80160.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 79392.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 79392.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 170160.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 82664.0
+  }
+]

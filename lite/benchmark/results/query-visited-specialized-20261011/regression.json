@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "commands": [
+    {
+      "storage": "fp32",
+      "variant": "control",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "fp32",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/fp32-control.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "7c2c5850745c44664d181586e8f1bc65fdbee45c1db4879ef7d4de3eb5f5bd44",
+      "ledger_sha256": "de3e39c5b17a77f0935a00ff26d08e1d02dbb80edf646d4d3d0cfe52f3db7b61",
+      "ledger_bytes": 1179696
+    },
+    {
+      "storage": "fp32",
+      "variant": "candidate",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "fp32",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/fp32-candidate.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "7c2c5850745c44664d181586e8f1bc65fdbee45c1db4879ef7d4de3eb5f5bd44",
+      "ledger_sha256": "de3e39c5b17a77f0935a00ff26d08e1d02dbb80edf646d4d3d0cfe52f3db7b61",
+      "ledger_bytes": 1179696
+    },
+    {
+      "storage": "fp16",
+      "variant": "control",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "fp16",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/fp16-control.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "463194a599bb4e9e1d69eb092fcb6e97a33043d11c3b5aba532ef0e6b06083f3",
+      "ledger_sha256": "521864e55f8ac8965390a651beedb41a80eea80cba2563a7532077e0a8747b03",
+      "ledger_bytes": 703152
+    },
+    {
+      "storage": "fp16",
+      "variant": "candidate",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "fp16",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/fp16-candidate.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "463194a599bb4e9e1d69eb092fcb6e97a33043d11c3b5aba532ef0e6b06083f3",
+      "ledger_sha256": "521864e55f8ac8965390a651beedb41a80eea80cba2563a7532077e0a8747b03",
+      "ledger_bytes": 703152
+    },
+    {
+      "storage": "rabitq8",
+      "variant": "control",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "rabitq8",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/rabitq8-control.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "071e64562116cff8cb6838a85aeeff826a0e5224cbc74ca714aa33193a3f3b7f",
+      "ledger_sha256": "0ea36630a3f670bf173ebaad6475fc9b64b1be3f251ece6856eb89cb4f27b66f",
+      "ledger_bytes": 619488
+    },
+    {
+      "storage": "rabitq8",
+      "variant": "candidate",
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/regression",
+        "rabitq8",
+        "/dev/shm/vsag-visited-regression-vtwfd9o7/rabitq8-candidate.ledger"
+      ],
+      "exit": 0,
+      "stdout_sha256": "071e64562116cff8cb6838a85aeeff826a0e5224cbc74ca714aa33193a3f3b7f",
+      "ledger_sha256": "0ea36630a3f670bf173ebaad6475fc9b64b1be3f251ece6856eb89cb4f27b66f",
+      "ledger_bytes": 619488
+    }
+  ],
+  "scope": "existing 96-node fixture; 1/17/128 dimensions; repeated true-value CRUD; ties/external IDs/filter/SaveLoad; byte path only"
+}

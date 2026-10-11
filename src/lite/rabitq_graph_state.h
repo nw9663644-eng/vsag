@@ -13,6 +13,7 @@
 #include <utility>
 
 #include "lite/query_heap.h"
+#include "lite/query_visited.h"
 #include "lite/rabitq_codec.h"
 #include "lite/rabitq_filter_ip.h"
 
@@ -291,7 +292,8 @@ struct GraphSearchResult {
 template <typename NeighborRange,
           bool prune_rejected = true,
           bool prefetch_codes = true,
-          bool select_without_pop = true>
+          bool select_without_pop = true,
+          bool packed_visited = false>
 inline GraphSearchResult
 graph_search_impl(const std::vector<float>& query,
                   float query_norm,
@@ -315,7 +317,7 @@ graph_search_impl(const std::vector<float>& query,
                        std::priority_queue<Candidate, std::vector<Candidate>, Better>>
         best;
     std::priority_queue<Candidate, std::vector<Candidate>, Farther> candidates;
-    std::vector<uint8_t> visited(codes.Size(), 0);
+    QueryVisited<packed_visited> visited(codes.Size());
     uint64_t visited_count = 0;
     uint64_t filtered_reorders = 0;
     const auto rank = [external_ids](const Candidate& left, const Candidate& right) {
@@ -357,10 +359,9 @@ graph_search_impl(const std::vector<float>& query,
         }
     };
     auto visit = [&](uint64_t slot) {
-        if (visited[slot] != 0) {
+        if (visited.TestAndSet(slot)) {
             return;
         }
-        visited[slot] = 1;
         ++visited_count;
         const auto code = codes.At(slot);
         process_visited(slot, code, filter_estimate(query, query_norm, code));
@@ -389,10 +390,9 @@ graph_search_impl(const std::vector<float>& query,
         };
         for (auto edge = first; edge != last; ++edge) {
             const uint64_t slot = *edge;
-            if (visited[slot] != 0) {
+            if (visited.TestAndSet(slot)) {
                 continue;
             }
-            visited[slot] = 1;
             ++visited_count;
             if constexpr (prefetch_codes) {
                 // Match native HGraph RaBitQ: bring filter records in before batch scoring.
@@ -509,6 +509,11 @@ graph_search_adjacency(const std::vector<float>& query,
     const auto range = [&adjacency](uint64_t slot) {
         return std::make_pair(adjacency[slot].begin(), adjacency[slot].end());
     };
+    // Select once per query: small graphs retain byte checks without per-slot policy branches.
+    if (codes.Size() >= 65536) {
+        return graph_search_impl<decltype(range), true, true, true, true>(
+            query, query_norm, codes, range, k, ef_search, external_ids, filter);
+    }
     return graph_search_impl(query, query_norm, codes, range, k, ef_search, external_ids, filter);
 }
 

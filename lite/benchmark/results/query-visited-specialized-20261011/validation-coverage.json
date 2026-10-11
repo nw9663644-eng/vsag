@@ -1,0 +1,100 @@
+{
+  "scope": "src/lite + include/vsag/lite non-test line union; fresh counters; not whole native Full",
+  "files": {
+    "src/lite/rabitq_graph_state.h": {
+      "total": 1172,
+      "covered": 1138
+    },
+    "src/lite/query_visited.h": {
+      "total": 16,
+      "covered": 16
+    },
+    "src/lite/query_heap.h": {
+      "total": 4,
+      "covered": 4
+    },
+    "src/lite/rabitq_snapshot.h": {
+      "total": 225,
+      "covered": 225
+    },
+    "src/lite/rabitq_codec.h": {
+      "total": 314,
+      "covered": 311
+    },
+    "src/lite/backend.h": {
+      "total": 28,
+      "covered": 26
+    },
+    "src/lite/fp16_codec.h": {
+      "total": 38,
+      "covered": 37
+    },
+    "src/lite/bruteforce_backend.cpp": {
+      "total": 131,
+      "covered": 118
+    },
+    "src/lite/backend_utils.h": {
+      "total": 11,
+      "covered": 11
+    },
+    "src/lite/fp16_distance.cpp": {
+      "total": 28,
+      "covered": 28
+    },
+    "src/lite/fp16_distance_avx.cpp": {
+      "total": 6,
+      "covered": 6
+    },
+    "src/lite/fp16_distance_avx2.cpp": {
+      "total": 6,
+      "covered": 6
+    },
+    "src/lite/fp16_distance_avx512.cpp": {
+      "total": 6,
+      "covered": 6
+    },
+    "src/lite/fp32_distance.cpp": {
+      "total": 16,
+      "covered": 11
+    },
+    "src/lite/fp32_distance_avx2.cpp": {
+      "total": 3,
+      "covered": 3
+    },
+    "src/lite/fp32_distance_avx512.cpp": {
+      "total": 3,
+      "covered": 3
+    },
+    "src/lite/fp32_distance_sse.cpp": {
+      "total": 3,
+      "covered": 3
+    },
+    "src/lite/graph_backend.cpp": {
+      "total": 721,
+      "covered": 693
+    },
+    "src/lite/index.cpp": {
+      "total": 281,
+      "covered": 233
+    },
+    "src/lite/rabitq_backend.cpp": {
+      "total": 128,
+      "covered": 118
+    },
+    "src/lite/rabitq_filter_ip.cpp": {
+      "total": 54,
+      "covered": 45
+    },
+    "src/lite/rabitq_filter_ip_avx2.cpp": {
+      "total": 9,
+      "covered": 3
+    },
+    "src/lite/rabitq_filter_ip_avx512.cpp": {
+      "total": 9,
+      "covered": 9
+    }
+  },
+  "total": 3212,
+  "covered": 3053,
+  "percent": 95.04981320049814
+}

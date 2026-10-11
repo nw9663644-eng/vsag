@@ -1,0 +1,3110 @@
+[
+  {
+    "tag": "compile-timing",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-Wl,--export-dynamic",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_heap_reserve_probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "compile-allocation",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-Wl,--export-dynamic",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_allocation_probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp32-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp32-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp32-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-fp16-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-fp16-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-fp16-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "sift10k-rabitq8-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "sift10k-rabitq8-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/sift10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/sift10k-rabitq8-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp32-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp32-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp32-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-fp16-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-fp16-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-fp16-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist10k-rabitq8-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist10k-rabitq8-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist10k-rabitq8-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp32-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp32-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp32-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-fp16-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-fp16-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-fp16-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "cohere10k-rabitq8-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "cohere10k-rabitq8-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/cohere10k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/cohere10k-rabitq8-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp32-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp32-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp32.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp32-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-fp16-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-fp16-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-fp16.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-fp16-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-control-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-control-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-control-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-candidate-allocation",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/allocation",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-candidate-allocation.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-candidate-allocation.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "gist100k-rabitq8-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-visited-bitmap-control-636519e"
+  },
+  {
+    "tag": "gist100k-rabitq8-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/timing",
+      "/dev/shm/vsag-visited-bitmap-a5t8q091/gist100k-rabitq8.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/query-visited-bitmap-20261011/gist100k-rabitq8-6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  }
+]

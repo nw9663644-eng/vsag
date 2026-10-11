@@ -218,3 +218,9 @@ snapshotSHA全pair exact，mixed召回仍.811167/.908167，质量未达标，非
 已有故障注入/重试/继续增改及48混合缓存配置仍通过。证据lite/benchmark/results/rabitq-incoming32-20261011
 独立审计1080000操作/14400真值/72加载/fresh覆盖及hash。下一入边分配/布局及固定预算quality；公开默认继续关闭。
 100k/交错CRUD、fresh原生Full配置SIMD质量对齐、coldIO/完整包终验待完成，PR冻结。
+
+### 大规模RaBitQ查询的独立访问标记
+
+可变RaBitQ路由在每次查询入口选择visited表示：少于65536槽位保留字节数组，达到阈值使用64位字和官方VisitedList的TestAndSet位掩码逻辑。编译期特化消除逐节点的表示策略分支。临时缓冲只属于本次调用，不引入epoch池或常驻可变workspace；FP32/FP16生产路径、距离、图维护、公开参数和快照不变。
+
+100k的visited载荷由100000降为12504字节；记录的每查询累计普通new申请量由170160降为82664字节（约-51.42%），不等于加载RSS或整进程峰值。固定预算有序结果全等，但最终探索性P50变化不能证明查询提速。全存储位图及逐节点动态策略原型未采用。原始配对结果、限制、fresh限定覆盖率和阈值跨越CRUD/过滤/SaveLoad消毒器回归见`lite/benchmark/results/query-visited-specialized-20261011`。

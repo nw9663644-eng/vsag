@@ -1,0 +1,170 @@
+[
+  {
+    "dataset": "sift10k",
+    "storage": "fp32",
+    "variant": "control",
+    "median_requests": 24.0,
+    "median_bytes": 75664.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "fp32",
+    "variant": "candidate",
+    "median_requests": 24.0,
+    "median_bytes": 66920.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "fp16",
+    "variant": "control",
+    "median_requests": 25.0,
+    "median_bytes": 75920.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "fp16",
+    "variant": "candidate",
+    "median_requests": 25.0,
+    "median_bytes": 67176.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 76832.0
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 68088.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "fp32",
+    "variant": "control",
+    "median_requests": 24.0,
+    "median_bytes": 75664.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "fp32",
+    "variant": "candidate",
+    "median_requests": 24.0,
+    "median_bytes": 66920.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "fp16",
+    "variant": "control",
+    "median_requests": 25.0,
+    "median_bytes": 77584.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "fp16",
+    "variant": "candidate",
+    "median_requests": 25.0,
+    "median_bytes": 68840.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 80160.0
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 71416.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "fp32",
+    "variant": "control",
+    "median_requests": 24.0,
+    "median_bytes": 75664.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "fp32",
+    "variant": "candidate",
+    "median_requests": 24.0,
+    "median_bytes": 66920.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "fp16",
+    "variant": "control",
+    "median_requests": 25.0,
+    "median_bytes": 77200.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "fp16",
+    "variant": "candidate",
+    "median_requests": 25.0,
+    "median_bytes": 68456.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 79392.0
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 70648.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "fp32",
+    "variant": "control",
+    "median_requests": 24.0,
+    "median_bytes": 165664.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "fp32",
+    "variant": "candidate",
+    "median_requests": 24.0,
+    "median_bytes": 78168.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "fp16",
+    "variant": "control",
+    "median_requests": 25.0,
+    "median_bytes": 167584.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "fp16",
+    "variant": "candidate",
+    "median_requests": 25.0,
+    "median_bytes": 80088.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "variant": "control",
+    "median_requests": 31.0,
+    "median_bytes": 170160.0
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "variant": "candidate",
+    "median_requests": 31.0,
+    "median_bytes": 82664.0
+  }
+]

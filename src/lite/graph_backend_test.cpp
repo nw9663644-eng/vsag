@@ -29,10 +29,52 @@
 #include "lite/backend.h"
 #include "lite/fp16_codec.h"
 #include "lite/query_heap.h"
+#include "lite/query_visited.h"
 
 using vsag::lite::detail::make_brute_force_backend;
 using vsag::lite::detail::make_fp16_graph_backend;
 using vsag::lite::detail::make_graph_backend;
+
+TEST_CASE("query visited bitmap keeps slots independent across word boundaries", "[lite-graph]") {
+    using vsag::lite::detail::QueryVisited;
+    for (uint64_t count : {uint64_t{0},
+                           uint64_t{1},
+                           uint64_t{63},
+                           uint64_t{64},
+                           uint64_t{65},
+                           uint64_t{129},
+                           uint64_t{100000}}) {
+        QueryVisited<true> visited(count);
+        QueryVisited<true> independent(count);
+        REQUIRE(visited.PayloadBytes() ==
+                (count / 64 + static_cast<uint64_t>(count % 64 != 0)) * 8);
+        for (uint64_t slot = count; slot > 0; --slot) {
+            REQUIRE_FALSE(visited.TestAndSet(slot - 1));
+            REQUIRE(visited.TestAndSet(slot - 1));
+        }
+        for (uint64_t slot = 0; slot < count; ++slot) {
+            REQUIRE(visited.TestAndSet(slot));
+            REQUIRE_FALSE(independent.TestAndSet(slot));
+        }
+    }
+}
+
+TEST_CASE("query visited byte specialization retains byte-array semantics", "[lite-graph]") {
+    using vsag::lite::detail::QueryVisited;
+    for (uint64_t count : {uint64_t{0},
+                           uint64_t{1},
+                           uint64_t{65},
+                           uint64_t{65535},
+                           uint64_t{65536},
+                           uint64_t{65537}}) {
+        QueryVisited<false> visited(count);
+        REQUIRE(visited.PayloadBytes() == count);
+        for (uint64_t slot = 0; slot < count; ++slot) {
+            REQUIRE_FALSE(visited.TestAndSet(slot));
+            REQUIRE(visited.TestAndSet(slot));
+        }
+    }
+}
 
 namespace {
 void

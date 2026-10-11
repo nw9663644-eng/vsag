@@ -1,0 +1,166 @@
+{
+  "status": "PASS",
+  "timed_runs": 56,
+  "timed_queries": 5600,
+  "allocation_runs": 8,
+  "allocation_queries": 800,
+  "commands": 70,
+  "summary": {
+    "sift10k-rabitq8": {
+      "recall": 0.987,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 76832.0,
+        "candidate": 76832.0
+      },
+      "control": {
+        "p50_us": 207.805,
+        "p99_us": 247.013
+      },
+      "candidate": {
+        "p50_us": 210.174,
+        "p99_us": 246.314
+      },
+      "p50_us_paired_changes_percent": [
+        1.1400110680686248,
+        0.17527289015257796,
+        4.348792962862302,
+        1.0583283223090767,
+        2.682290167175294,
+        1.3059683843075875,
+        0.4356992269852533
+      ],
+      "p50_us_pair_wins": 0,
+      "p50_us_median_change_percent": 1.1400110680686248,
+      "p99_us_paired_changes_percent": [
+        -2.1332390348176133,
+        -2.1814531958896377,
+        5.583415478255627,
+        3.1412565842353857,
+        4.987996583175791,
+        -0.8952284208852967,
+        2.380227851583827
+      ],
+      "p99_us_pair_wins": 3,
+      "p99_us_median_change_percent": -0.2829810576771341
+    },
+    "gist10k-rabitq8": {
+      "recall": 0.97,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 80160.0,
+        "candidate": 80160.0
+      },
+      "control": {
+        "p50_us": 506.357,
+        "p99_us": 665.293
+      },
+      "candidate": {
+        "p50_us": 509.057,
+        "p99_us": 653.203
+      },
+      "p50_us_paired_changes_percent": [
+        -3.8009931962461496,
+        -6.3526029718332655,
+        1.7665339851645978,
+        5.39307837551346,
+        5.235041680079466,
+        8.394061123743235,
+        -5.340583958381629
+      ],
+      "p50_us_pair_wins": 3,
+      "p50_us_median_change_percent": 0.5332206328736433,
+      "p99_us_paired_changes_percent": [
+        -4.5543843088684195,
+        -5.740089267046655,
+        2.712146585032227,
+        9.50870516442157,
+        -1.322805440539443,
+        17.67639085988155,
+        -8.320480343034763
+      ],
+      "p99_us_pair_wins": 4,
+      "p99_us_median_change_percent": -1.817244432152454
+    },
+    "cohere10k-rabitq8": {
+      "recall": 0.984,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 79392.0,
+        "candidate": 79392.0
+      },
+      "control": {
+        "p50_us": 484.537,
+        "p99_us": 544.837
+      },
+      "candidate": {
+        "p50_us": 476.277,
+        "p99_us": 543.667
+      },
+      "p50_us_paired_changes_percent": [
+        1.036304734295923,
+        -5.043495101757555,
+        -1.7592604051930083,
+        -0.9739194323653333,
+        0.0380461514531083,
+        -0.9601483708580272,
+        1.904990269520379
+      ],
+      "p50_us_pair_wins": 4,
+      "p50_us_median_change_percent": -1.704720176168173,
+      "p99_us_paired_changes_percent": [
+        0.6660707697898616,
+        -6.001278022391654,
+        1.5212013646855427,
+        -4.552006250054863,
+        1.7142956092098816,
+        -0.11822344399565754,
+        0.3271568063689667
+      ],
+      "p99_us_pair_wins": 3,
+      "p99_us_median_change_percent": -0.21474312500802117
+    },
+    "gist100k-rabitq8": {
+      "recall": 0.859,
+      "visited_old_bytes": 100000,
+      "visited_new_bytes": 12504,
+      "query_requested_bytes": {
+        "control": 170160.0,
+        "candidate": 82664.0
+      },
+      "control": {
+        "p50_us": 1108.42,
+        "p99_us": 1278.856
+      },
+      "candidate": {
+        "p50_us": 1121.442,
+        "p99_us": 1299.616
+      },
+      "p50_us_paired_changes_percent": [
+        3.7908716483146865,
+        -2.2030867674640575,
+        5.746243284897101,
+        3.1189705586313066,
+        1.509580795527632,
+        2.969513387647238,
+        0.5314772378701038
+      ],
+      "p50_us_pair_wins": 1,
+      "p50_us_median_change_percent": 1.1748254271846337,
+      "p99_us_paired_changes_percent": [
+        2.0561926623497984,
+        -1.1084102461906498,
+        2.7437463099587722,
+        2.146415920057021,
+        1.0402196561902999,
+        0.871872986481681,
+        -1.4883638399481147
+      ],
+      "p99_us_pair_wins": 2,
+      "p99_us_median_change_percent": 1.6233258474761758
+    }
+  }
+}

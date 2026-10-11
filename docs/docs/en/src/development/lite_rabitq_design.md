@@ -256,3 +256,18 @@ configurations remain passing. Evidence:lite/benchmark/results/rabitq-incoming32
 independent1080000 operations/14400 truth states/72 load probes/fresh coverage/hash audit.
 Next incoming allocation/layout overhead and fixed-budget quality;public reverse remains off.
 100k/interleaved CRUD,fresh aligned native Full,cold I/O and complete package acceptance stay open.
+
+### Query-owned visited state for large RaBitQ graphs
+
+Mutable RaBitQ routing selects its visited representation once per search: below65536 slots it
+retains the byte representation; at or above65536 it uses64-bit words with native VisitedList
+TestAndSet mask semantics. Compile-time specialization avoids a per-node representation branch.
+The buffer belongs to the individual call, with no epoch pool or retained mutable workspace.
+FP32/FP16 production paths, scoring, graph maintenance, public options and snapshots are unchanged.
+
+At100k the visited payload is100000 to12504 bytes; recorded cumulative ordinary-new query
+requests are170160 to82664 bytes (-51.42%), not loaded RSS or whole-process peak memory.
+Fixed-budget ordered results remain exact, but final exploratory P50 changes do not prove a
+query speedup. The broader all-storage bitmap and per-node dynamic-policy prototypes were not
+adopted. See `lite/benchmark/results/query-visited-specialized-20261011` for raw comparisons,
+limitations, fresh scoped coverage and threshold-crossing CRUD/filter/SaveLoad sanitizer checks.
