@@ -1,0 +1,218 @@
+[
+  {
+    "variant": "control",
+    "trial": 0,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503986,
+      "ordinary_new_bytes": 270990795,
+      "matrix_requests": 0,
+      "build_ms": 433.491041,
+      "hwm_kib": 16948
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "candidate",
+    "trial": 0,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503456,
+      "ordinary_new_bytes": 266230611,
+      "matrix_requests": 0,
+      "build_ms": 430.162137,
+      "hwm_kib": 18856
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "candidate",
+    "trial": 1,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503456,
+      "ordinary_new_bytes": 266230611,
+      "matrix_requests": 0,
+      "build_ms": 435.549514,
+      "hwm_kib": 18856
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "control",
+    "trial": 1,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503986,
+      "ordinary_new_bytes": 270990795,
+      "matrix_requests": 0,
+      "build_ms": 431.966105,
+      "hwm_kib": 18856
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "control",
+    "trial": 2,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503986,
+      "ordinary_new_bytes": 270990795,
+      "matrix_requests": 0,
+      "build_ms": 436.379578,
+      "hwm_kib": 18856
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "candidate",
+    "trial": 2,
+    "count": 10000,
+    "metrics": {
+      "count": 10000,
+      "dim": 17,
+      "matrix_bytes": 680000,
+      "ordinary_new_requests": 503456,
+      "ordinary_new_bytes": 266230611,
+      "matrix_requests": 0,
+      "build_ms": 438.053337,
+      "hwm_kib": 18856
+    },
+    "snapshot_sha256": "a1c1917e9d351e51caf552213a91ed83e1aefe830240ac3cbd5821b557969732",
+    "snapshot_bytes": 1920176,
+    "ordered_query_sha256": "10142760776597ab1b8d875a35694a188618c7c86f7d256b772cb516aa07cafc"
+  },
+  {
+    "variant": "control",
+    "trial": 0,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5177964,
+      "ordinary_new_bytes": 11382547147,
+      "matrix_requests": 0,
+      "build_ms": 24425.014626,
+      "hwm_kib": 87604
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  },
+  {
+    "variant": "candidate",
+    "trial": 0,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5173221,
+      "ordinary_new_bytes": 11343893331,
+      "matrix_requests": 0,
+      "build_ms": 23906.000437,
+      "hwm_kib": 65460
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  },
+  {
+    "variant": "candidate",
+    "trial": 1,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5173221,
+      "ordinary_new_bytes": 11343893331,
+      "matrix_requests": 0,
+      "build_ms": 23342.411948,
+      "hwm_kib": 65396
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  },
+  {
+    "variant": "control",
+    "trial": 1,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5177964,
+      "ordinary_new_bytes": 11382547147,
+      "matrix_requests": 0,
+      "build_ms": 23377.445057,
+      "hwm_kib": 87728
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  },
+  {
+    "variant": "control",
+    "trial": 2,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5177964,
+      "ordinary_new_bytes": 11382547147,
+      "matrix_requests": 0,
+      "build_ms": 23432.079524,
+      "hwm_kib": 87628
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  },
+  {
+    "variant": "candidate",
+    "trial": 2,
+    "count": 100000,
+    "metrics": {
+      "count": 100000,
+      "dim": 17,
+      "matrix_bytes": 6800000,
+      "ordinary_new_requests": 5173221,
+      "ordinary_new_bytes": 11343893331,
+      "matrix_requests": 0,
+      "build_ms": 23807.694076,
+      "hwm_kib": 65492
+    },
+    "snapshot_sha256": "b33d157e6941dff8dc5a6a291d1b769101013d27fbebb41e822e7087cc5f5814",
+    "snapshot_bytes": 19200176,
+    "ordered_query_sha256": "2c6d5739a80c40e593b9ed09a8d0e46d39006f8822521edfa2f75b9c29f556ac"
+  }
+]

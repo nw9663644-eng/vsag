@@ -1,0 +1,16 @@
+adapter.o: /dev/shm/vsag-owned-topology-fmjzzfyv/control/adapter.cpp \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/lite/index.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/errors.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/expected.hpp \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/options.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/allocator.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/include/vsag/logger.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/backend_utils.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_snapshot.h \
+ /dev/shm/vsag-owned-topology-fmjzzfyv/control/lite/rabitq_graph_state.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/query_heap.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_codec.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/simd/kernels/rabitq_pack.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_constants.h \
+ /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip.h

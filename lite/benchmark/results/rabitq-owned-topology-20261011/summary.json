@@ -1,0 +1,46 @@
+{
+  "10000": {
+    "build_ms": {
+      "control": 433.491041,
+      "candidate": 435.549514,
+      "change_percent": 0.4748594100702608
+    },
+    "hwm_kib": {
+      "control": 18856,
+      "candidate": 18856,
+      "change_percent": 0.0
+    },
+    "ordinary_new_requests": {
+      "control": 503986,
+      "candidate": 503456,
+      "change_percent": -0.10516165131571054
+    },
+    "ordinary_new_bytes": {
+      "control": 270990795,
+      "candidate": 266230611,
+      "change_percent": -1.756585126812149
+    }
+  },
+  "100000": {
+    "build_ms": {
+      "control": 23432.079524,
+      "candidate": 23807.694076,
+      "change_percent": 1.6029928185216313
+    },
+    "hwm_kib": {
+      "control": 87628,
+      "candidate": 65460,
+      "change_percent": -25.297850002282374
+    },
+    "ordinary_new_requests": {
+      "control": 5177964,
+      "candidate": 5173221,
+      "change_percent": -0.09159970984734533
+    },
+    "ordinary_new_bytes": {
+      "control": 11382547147,
+      "candidate": 11343893331,
+      "change_percent": -0.339588455033879
+    }
+  }
+}

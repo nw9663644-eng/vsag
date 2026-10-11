@@ -1,0 +1,68 @@
+[
+  {
+    "tag": "coverage-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "coverage-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "disabled-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "disabled-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "format",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "src/lite/rabitq_graph_state.h",
+      "src/lite/rabitq_backend.cpp",
+      "src/lite/rabitq_backend_test.cpp",
+      "lite/benchmark/results/rabitq-owned-topology-20261011/probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "tidy",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fp16-simd-release",
+      "-header-filter=.*/src/lite/.*",
+      "-warnings-as-errors=*",
+      "src/lite/rabitq_backend.cpp",
+      "src/lite/rabitq_backend_test.cpp"
+    ],
+    "exit": 0
+  }
+]

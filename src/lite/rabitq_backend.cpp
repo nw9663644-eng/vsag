@@ -203,18 +203,14 @@ make_rabitq_graph_backend(const Backend& source, uint64_t max_degree, uint64_t e
             if (not links) {
                 return tl::unexpected(links.error());
             }
-            rabitq::GraphTopology topology;
-            topology.offsets.push_back(0);
-            for (uint64_t slot = 0; slot < source.Size(); ++slot) {
-                topology.neighbors.insert(
-                    topology.neighbors.end(), (*links)[slot].begin(), (*links)[slot].end());
-                topology.offsets.push_back(topology.neighbors.size());
+            // Construction reserves a spare edge per row; do not retain that build-only slack.
+            // Shrink one row at a time instead of allocating a second whole topology.
+            for (auto& row : *links) {
+                row.shrink_to_fit();
             }
-            // Release temporary adjacency before initializing the encoded state.
-            std::vector<std::vector<uint64_t>>().swap(*links);
-            rabitq::MutableGraphState state(std::move(model),
+            rabitq::MutableGraphState state(rabitq::OwnedGraphAdjacency{std::move(*links)},
+                                            std::move(model),
                                             std::move(codes),
-                                            topology,
                                             std::move(ids),
                                             max_degree,
                                             ef_search);

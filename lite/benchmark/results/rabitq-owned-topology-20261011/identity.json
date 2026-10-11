@@ -1,0 +1,55 @@
+{
+  "parent": "0444bf9426d38a794137e30871957c95e33283f1",
+  "hostname": "VM-0-10-ubuntu",
+  "source_sha256": {
+    "src/lite/rabitq_graph_state.h": "a0cc4899a457a3272db97c095d8c15fc412fec5205a7b24b3331070c7e225b16",
+    "src/lite/rabitq_backend.cpp": "d438f190a9f147a761f6f60bf689d9e25a8c1da0c938f3c22b867b11d4c7a739",
+    "src/lite/rabitq_backend_test.cpp": "a56fb63d7e853942ebc33accf2c05914ec1609bcbb502304d07db1df6d106e12",
+    "lite/benchmark/results/rabitq-owned-topology-20261011/probe.cpp": "bcfdc95e9a4afa08706a4759359a0490175486f25c1e4cb01719c70231c4bfbc"
+  },
+  "libraries": {
+    "control": "b1afe36cc69a75c8e3b0614e1b90de1c5a5db477117d76a75731e07e773660c9",
+    "candidate": "7835b5b7748da3ab5c5c64db2880fb1337b516dc323125358efdde1269dbb7f7"
+  },
+  "shapes": [
+    [
+      10000,
+      17
+    ],
+    [
+      100000,
+      17
+    ]
+  ],
+  "degree": 16,
+  "construction_ef": 128,
+  "query_ef": 512,
+  "cpu": 0,
+  "trials": 3,
+  "policy": "public default NONE, reverse false",
+  "scratch": "/dev/shm/vsag-owned-topology-fmjzzfyv",
+  "shared_object_sha256": {
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp.o": "c96f0e74395113ff9208dfa7e0a3e627c7313c2b98dd91852fb9aba0d45558fb",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp.o": "2b8ed708791cfc975a204f6be388c22e5e5a12608f6eadd3904ecf4d6e0f0f4c",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o": "dad721fce23ab38c8d793a6d5c1b003829d992d913fa2fddc1d30fe38d055742",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance.cpp.o": "fe37cd3403168a25a53efb14d263962887e6c13890c8b69862aece52c1593973",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance.cpp.o": "ab6b9ba5322710e71ad0ce5c95d516fa9335bff7e525b551c1ef0f7abdcfd816",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx.cpp.o": "a7e58a7fe230515cd894326d80fb9c3d5c73f82819aa291065f4522478973ab0",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx2.cpp.o": "c719dd0b395fa87e235c348ef11ca43e53d094d4e35f5a19cf034d07b24b68fa",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx512.cpp.o": "e94292cbf32137e93a7af6fc0b128cbb25c8ba7c0190cbc92ada2264c398bfd9",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_sse.cpp.o": "b51f273664eab23fdd9ec8c48e8fe810696fd439d0135bf7db2e4f0437a5479b",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx2.cpp.o": "19736cea9d2c40417e3ed6569b5ccc22c968211e2430d8983e5423f6404fb26c",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx512.cpp.o": "6edac7c1663d9070d13df12d6a58b05e51c686e710932bf8d647317a99b64ce4",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip.cpp.o": "04d1cc111e62b6cdade6defa1236d1a29f19c7c7e5f43b03ecc43dd700128ed3",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx2.cpp.o": "33f595df933fdf26edd392fab1b02d68350d5b01043e21b17bdbb39aeb897d05",
+    "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx512.cpp.o": "bf5a4619dc15288a6d1bf4ec39694cd8df3dc8b5edd343e7c2312fb5a2ed0a0c"
+  },
+  "validation": {
+    "release": 6,
+    "asan_ubsan": 5,
+    "fresh_coverage": 5,
+    "rabitq_disabled": 4,
+    "clang_format": 15,
+    "clang_tidy": 15
+  }
+}

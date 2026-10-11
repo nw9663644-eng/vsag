@@ -1929,3 +1929,5 @@ See [matched warm loaders](results/rabitq-load-id-map-20261011/README.md):remove
 ## RaBitQ cached incoming-safe pruning
 
 See [fixed-budget quality/cost study](results/rabitq-safe-link-20261011/README.md):internal cached-link gate improves observed10k post-CRUD recall by8.75/3.90 percentage points with CRUD median +1.20/+2.29%. Both study floors remain missed;public NONE/default/PRs unchanged. Not equal-quality query speed,Full,100k,interleaved or cold I/O acceptance.
+
+See [owned RaBitQ build adjacency](results/rabitq-owned-topology-20261011/README.md) for synthetic10k/100k memory/cost evidence. Canonical guide: [English](../../docs/docs/en/src/development/lite_first.md), [Chinese](../../docs/docs/zh/src/development/lite_first.md).

@@ -1,0 +1,274 @@
+[
+  {
+    "tag": "compile-control",
+    "command": [
+      "/usr/bin/c++",
+      "-I/dev/shm/vsag-owned-topology-fmjzzfyv/control",
+      "-DVSAG_LITE_HAS_RABITQ_BACKEND",
+      "-DVSAG_LITE_HAS_X86_SIMD",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-O3",
+      "-DNDEBUG",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-std=c++17",
+      "-o",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/control/adapter.o",
+      "-c",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/control/adapter.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "deps-control",
+    "command": [
+      "/usr/bin/c++",
+      "-I/dev/shm/vsag-owned-topology-fmjzzfyv/control",
+      "-DVSAG_LITE_HAS_RABITQ_BACKEND",
+      "-DVSAG_LITE_HAS_X86_SIMD",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-O3",
+      "-DNDEBUG",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-std=c++17",
+      "-MM",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/control/adapter.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "link-control",
+    "command": [
+      "/usr/bin/c++",
+      "-fPIC",
+      "-O3",
+      "-DNDEBUG",
+      "-shared",
+      "-Wl,-soname,libvsag-lite.so",
+      "-o",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/control/libvsag-lite.so",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx512.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_sse.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx512.cpp.o",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/control/adapter.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx512.cpp.o"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+    "exit": 0
+  },
+  {
+    "tag": "compile-probe",
+    "command": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-owned-topology-20261011/probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "hostname",
+    "command": [
+      "hostname"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t0-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t0-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t0-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t0-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t1-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t1-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t1-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t1-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t2-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t2-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n10000-t2-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "10000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n10000-t2-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t0-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t0-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t0-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t0-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t1-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t1-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t1-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t1-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t2-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t2-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "n100000-t2-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/probe",
+      "100000",
+      "17",
+      "/dev/shm/vsag-owned-topology-fmjzzfyv/n100000-t2-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  }
+]

@@ -316,6 +316,87 @@ TEST_CASE("RaBitQ incoming adjacency survives directed CRUD repair", "[lite-rabi
     REQUIRE(tiny.GetMutationFallbacks() == 0);
 }
 
+TEST_CASE("RaBitQ owned adjacency matches CSR construction", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    const std::vector<float> base{0, 1, 2, 3};
+    const auto model = codec::train(base, 4, 1, 47);
+    codec::EncodedRecords codes(1);
+    for (const float value : base) {
+        codes.Append(codec::encode(model, &value));
+    }
+    const codec::GraphTopology graph{{0, 2, 4, 6, 8}, {1, 3, 0, 2, 1, 3, 0, 2}};
+    const std::vector<int64_t> ids{INT64_MIN, -1, 0, INT64_MAX};
+    const auto bytes = [](const codec::MutableGraphState& state) {
+        std::stringstream stream;
+        codec::save_mutable_snapshot(stream, state);
+        return stream.str();
+    };
+    for (const bool reverse : {false, true}) {
+        codec::MutableGraphState reference(model, codes, graph, ids, 2, 8, false, reverse);
+        codec::MutableGraphState owned(codec::OwnedGraphAdjacency{codec::expand_graph(graph)},
+                                       model,
+                                       codes,
+                                       ids,
+                                       2,
+                                       8,
+                                       false,
+                                       reverse);
+        REQUIRE(bytes(owned) == bytes(reference));
+        float changed = 7.0F;
+        REQUIRE(owned.Update(INT64_MIN, &changed));
+        REQUIRE(reference.Update(INT64_MIN, &changed));
+        REQUIRE(bytes(owned) == bytes(reference));
+        REQUIRE(owned.Remove(0));
+        REQUIRE(reference.Remove(0));
+        REQUIRE(bytes(owned) == bytes(reference));
+        REQUIRE(owned.Add(42, &changed));
+        REQUIRE(reference.Add(42, &changed));
+        REQUIRE(bytes(owned) == bytes(reference));
+        const auto result = owned.Search(&changed, 3).neighbors;
+        const auto expected = reference.Search(&changed, 3).neighbors;
+        REQUIRE(result.size() == expected.size());
+        for (uint64_t i = 0; i < result.size(); ++i) {
+            REQUIRE(result[i].id == expected[i].id);
+            REQUIRE(result[i].distance == expected[i].distance);
+        }
+        for (uint64_t invalid = 0; invalid < 5; ++invalid) {
+            auto rows = codec::expand_graph(graph);
+            if (invalid == 0) {
+                rows.pop_back();
+            } else if (invalid == 1) {
+                rows[0][0] = 4;
+            } else if (invalid == 2) {
+                rows[0][0] = 0;
+            } else if (invalid == 3) {
+                rows[0][1] = rows[0][0];
+            } else {
+                rows[0].push_back(2);
+            }
+            REQUIRE_THROWS(codec::MutableGraphState(codec::OwnedGraphAdjacency{std::move(rows)},
+                                                    model,
+                                                    codes,
+                                                    ids,
+                                                    2,
+                                                    8,
+                                                    false,
+                                                    reverse));
+        }
+        REQUIRE_THROWS(
+            codec::MutableGraphState(codec::OwnedGraphAdjacency{codec::expand_graph(graph)},
+                                     model,
+                                     codes,
+                                     {1, 1, 2, 3},
+                                     2,
+                                     8,
+                                     false,
+                                     reverse));
+    }
+    codec::MutableGraphState empty(
+        codec::OwnedGraphAdjacency{}, model, codec::EncodedRecords(1), {}, 2, 8);
+    empty.Validate();
+    REQUIRE(empty.Search(base.data(), 1).neighbors.empty());
+}
+
 TEST_CASE("RaBitQ unchanged complete encoding preserves exact snapshot", "[lite-rabitq]") {
     for (uint64_t dim : {1, 17, 128, 768, 960}) {
         auto index = make_index(dim);

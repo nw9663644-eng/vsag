@@ -620,6 +620,11 @@ checked_incoming_slot(uint64_t slot) {
     return static_cast<IncomingSlot>(slot);
 }
 
+// Build already owns row adjacency; avoid compacting and expanding it again.
+struct OwnedGraphAdjacency {
+    std::vector<std::vector<uint64_t>> rows;
+};
+
 class MutableGraphState {
 public:
     MutableGraphState(Model input_model,
@@ -631,10 +636,30 @@ public:
                       bool measure_mutation_scans = false,
                       bool use_incoming_adjacency = false,
                       double (*cpu_clock)() = nullptr)
+        : MutableGraphState(OwnedGraphAdjacency{expand_graph(input_graph)},
+                            std::move(input_model),
+                            std::move(input_codes),
+                            std::move(input_ids),
+                            input_max_degree,
+                            input_ef_search,
+                            measure_mutation_scans,
+                            use_incoming_adjacency,
+                            cpu_clock) {
+    }
+
+    MutableGraphState(OwnedGraphAdjacency input_graph,
+                      Model input_model,
+                      EncodedRecords input_codes,
+                      std::vector<int64_t> input_ids,
+                      uint64_t input_max_degree,
+                      uint64_t input_ef_search,
+                      bool measure_mutation_scans = false,
+                      bool use_incoming_adjacency = false,
+                      double (*cpu_clock)() = nullptr)
         : model_(std::move(input_model)),
           codes_(std::move(input_codes)),
           ids_(std::move(input_ids)),
-          adjacency_(expand_graph(input_graph)),
+          adjacency_(std::move(input_graph.rows)),
           max_degree_(input_max_degree),
           ef_search_(input_ef_search),
           measure_mutation_scans_(measure_mutation_scans),
@@ -1330,6 +1355,7 @@ public:
         std::vector<uint64_t> counts(Size());
         for (const auto& neighbors : adjacency_) {
             for (const uint64_t target : neighbors) {
+                codec_require(target < Size(), "invalid incoming graph neighbor");
                 ++counts[target];
             }
         }
