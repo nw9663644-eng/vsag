@@ -1,0 +1,21 @@
+{
+  "scopes": {
+    "lite": {
+      "covered": 2983,
+      "total": 3125,
+      "percent": 95.456
+    },
+    "shared_simd": {
+      "covered": 233,
+      "total": 249,
+      "percent": 93.57429718875503
+    },
+    "combined": {
+      "covered": 3216,
+      "total": 3374,
+      "percent": 95.31713100177831
+    }
+  },
+  "fresh_counters": 19,
+  "note": "Scoped Lite/shared SIMD, not whole Full VSAG"
+}

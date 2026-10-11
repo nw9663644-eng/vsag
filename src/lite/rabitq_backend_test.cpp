@@ -728,6 +728,49 @@ TEST_CASE("RaBitQ supplement SIMD matches scalar estimates and plane tails", "[l
     }
 }
 
+TEST_CASE("RaBitQ streamed graph preserves CSR bytes across blocks", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (uint64_t count : {0, 1, 8191, 8192, 8193, 9000}) {
+        std::vector<std::vector<uint64_t>> rows(count);
+        for (uint64_t slot = 0; slot < count; ++slot) {
+            for (uint64_t edge = 0; edge < slot % 17; ++edge) {
+                rows[slot].push_back((slot + edge + 1) % count);
+            }
+        }
+        const auto graph = codec::compact_graph(rows);
+        std::ostringstream reference(std::ios::binary);
+        codec::write_u64(reference, graph.offsets.size());
+        codec::write_u64(reference, graph.neighbors.size());
+        codec::write_integer_array(reference, graph.offsets);
+        codec::write_integer_array(reference, graph.neighbors);
+        for (bool bulk : {false, true}) {
+            std::ostringstream actual(std::ios::binary);
+            codec::write_graph_adjacency(actual, rows, bulk);
+            REQUIRE(actual.str() == reference.str());
+        }
+        class LimitedBuffer : public std::stringbuf {
+        public:
+            explicit LimitedBuffer(uint64_t limit) : remaining_(limit) {
+            }
+            std::streamsize
+            xsputn(const char* data, std::streamsize count) override {
+                const auto allowed = std::min<uint64_t>(remaining_, static_cast<uint64_t>(count));
+                remaining_ -= allowed;
+                return std::stringbuf::xsputn(data, static_cast<std::streamsize>(allowed));
+            }
+
+        private:
+            uint64_t remaining_;
+        };
+        for (const uint64_t limit :
+             {uint64_t{0}, uint64_t{8}, static_cast<uint64_t>(reference.str().size()) - 1}) {
+            LimitedBuffer buffer(limit);
+            std::ostream output(&buffer);
+            REQUIRE_THROWS(codec::write_graph_adjacency(output, rows));
+        }
+    }
+}
+
 TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors", "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;
     const auto check = [](const auto& values) {

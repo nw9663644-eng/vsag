@@ -265,6 +265,50 @@ validate_graph_topology(const GraphTopology& graph, uint64_t count) {
     codec_require(graph.offsets.back() == graph.neighbors.size(), "graph edge count mismatch");
 }
 
+// Preserve CSR wire order without materializing a second whole graph.
+inline void
+write_graph_adjacency(std::ostream& output,
+                      const std::vector<std::vector<uint64_t>>& adjacency,
+                      bool bulk = snapshot_little_endian()) {
+    codec_require(adjacency.size() < std::numeric_limits<uint64_t>::max(),
+                  "snapshot offset count overflow");
+    uint64_t edges = 0;
+    for (const auto& row : adjacency) {
+        codec_require(row.size() <= std::numeric_limits<uint64_t>::max() - edges,
+                      "snapshot edge count overflow");
+        edges += row.size();
+    }
+    write_u64(output, adjacency.size() + 1);
+    write_u64(output, edges);
+    constexpr uint64_t k_buffer_entries = 8192;
+    std::vector<uint64_t> buffer;
+    buffer.reserve(
+        std::min(k_buffer_entries, std::max(static_cast<uint64_t>(adjacency.size()) + 1, edges)));
+    const auto flush = [&]() {
+        write_integer_array(output, buffer, bulk);
+        buffer.clear();
+    };
+    const auto append = [&](uint64_t value) {
+        buffer.push_back(value);
+        if (buffer.size() == k_buffer_entries) {
+            flush();
+        }
+    };
+    uint64_t offset = 0;
+    append(offset);
+    for (const auto& row : adjacency) {
+        offset += row.size();
+        append(offset);
+    }
+    flush();
+    for (const auto& row : adjacency) {
+        for (const uint64_t neighbor : row) {
+            append(neighbor);
+        }
+    }
+    flush();
+}
+
 inline void
 save_mutable_snapshot(std::ostream& output, const MutableGraphState& state) {
     state.Validate();
@@ -273,11 +317,7 @@ save_mutable_snapshot(std::ostream& output, const MutableGraphState& state) {
     write_u64(output, state.GetEfSearch());
     write_u64(output, state.GetIds().size());
     write_integer_array(output, state.GetIds());
-    const auto graph = state.GetGraph();
-    write_u64(output, graph.offsets.size());
-    write_u64(output, graph.neighbors.size());
-    write_integer_array(output, graph.offsets);
-    write_integer_array(output, graph.neighbors);
+    write_graph_adjacency(output, state.GetAdjacency());
 }
 
 inline MutableGraphState

@@ -1,0 +1,120 @@
+[
+  {
+    "tag": "release-build",
+    "command": [
+      "cmake",
+      "--build",
+      "build-lite-fp16-simd-release",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "release-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "build-lite-fp16-simd-release",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "san-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "san-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-sanitize-20261009",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cov-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "cov-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-coverage-20261009",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "off-build",
+    "command": [
+      "cmake",
+      "--build",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "-j1"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "off-test",
+    "command": [
+      "ctest",
+      "--test-dir",
+      "/home/ubuntu/project/vsag-opt-default-20261009",
+      "--output-on-failure"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "format",
+    "command": [
+      "clang-format-15",
+      "--dry-run",
+      "--Werror",
+      "src/lite/rabitq_graph_state.h",
+      "src/lite/rabitq_snapshot.h",
+      "src/lite/rabitq_backend_test.cpp",
+      "lite/benchmark/rabitq_save_probe.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "tidy",
+    "command": [
+      "clang-tidy-15",
+      "-p",
+      "build-lite-fp16-simd-release",
+      "-header-filter=.*/src/lite/.*",
+      "-warnings-as-errors=*",
+      "src/lite/rabitq_backend.cpp",
+      "src/lite/rabitq_backend_test.cpp"
+    ],
+    "exit": 0
+  },
+  {
+    "tag": "probe-tidy",
+    "command": [
+      "clang-tidy-15",
+      "-warnings-as-errors=*",
+      "lite/benchmark/rabitq_save_probe.cpp",
+      "--",
+      "-std=c++17",
+      "-Iinclude"
+    ],
+    "exit": 0
+  }
+]

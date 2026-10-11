@@ -1345,6 +1345,11 @@ public:
         return compact_graph(adjacency_);
     }
 
+    [[nodiscard]] const std::vector<std::vector<uint64_t>>&
+    GetAdjacency() const {
+        return adjacency_;
+    }
+
     [[nodiscard]] const std::vector<int64_t>&
     GetIds() const {
         return ids_;

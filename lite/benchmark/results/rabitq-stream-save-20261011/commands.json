@@ -1,0 +1,494 @@
+[
+  {
+    "tag": "compile-control",
+    "command": [
+      "/usr/bin/c++",
+      "-I/dev/shm/vsag-stream-save-3m2msiyv/control",
+      "-DVSAG_LITE_HAS_RABITQ_BACKEND",
+      "-DVSAG_LITE_HAS_X86_SIMD",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-O3",
+      "-DNDEBUG",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-std=c++17",
+      "-o",
+      "/dev/shm/vsag-stream-save-3m2msiyv/control/adapter.o",
+      "-c",
+      "/dev/shm/vsag-stream-save-3m2msiyv/control/adapter.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "deps-control",
+    "command": [
+      "/usr/bin/c++",
+      "-I/dev/shm/vsag-stream-save-3m2msiyv/control",
+      "-DVSAG_LITE_HAS_RABITQ_BACKEND",
+      "-DVSAG_LITE_HAS_X86_SIMD",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-O3",
+      "-DNDEBUG",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-std=c++17",
+      "-MM",
+      "/dev/shm/vsag-stream-save-3m2msiyv/control/adapter.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "link-control",
+    "command": [
+      "/usr/bin/c++",
+      "-fPIC",
+      "-O3",
+      "-DNDEBUG",
+      "-shared",
+      "-Wl,-soname,libvsag-lite.so",
+      "-o",
+      "/dev/shm/vsag-stream-save-3m2msiyv/control/libvsag-lite.so",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/index.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/bruteforce_backend.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp16_distance_avx512.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_sse.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/fp32_distance_avx512.cpp.o",
+      "/dev/shm/vsag-stream-save-3m2msiyv/control/adapter.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx2.cpp.o",
+      "CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/rabitq_filter_ip_avx512.cpp.o"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+    "exit": 0
+  },
+  {
+    "tag": "compile-probe",
+    "command": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_save_probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-Wl,-rpath,/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-prepare",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-stream-save-20261011/gist100k-prepare.queries.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t0-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t0-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t0-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t0-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t1-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t1-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t1-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t1-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t2-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t2-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t2-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t2-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t3-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t3-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t3-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t3-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t4-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t4-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t4-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t4-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t5-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t5-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t5-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t5-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t6-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t6-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-t6-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/gist100k-t6-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-prepare",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-stream-save-20261011/cohere100k-prepare.queries.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t0-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t0-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t0-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t0-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t1-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t1-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t1-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t1-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t2-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t2-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t2-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t2-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t3-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t3-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t3-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t3-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t4-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t4-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t4-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t4-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t5-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t5-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t5-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t5-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t6-control",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t6-control.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere100k-t6-candidate",
+    "command": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-stream-save-3m2msiyv/save-probe",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k.snapshot",
+      "/dev/shm/vsag-stream-save-3m2msiyv/cohere100k-t6-candidate.snapshot"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  }
+]
