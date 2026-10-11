@@ -1,0 +1,22 @@
+35814 warnings generated.
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_route_quality_probe.cpp:69:29: error: comparing object representation of type 'float' which does not have a unique object representation; consider comparing the values manually [bugprone-suspicious-memory-comparison,-warnings-as-errors]
+                            std::memcmp(&formal.neighbors[rank].distance,
+                            ^
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_route_quality_probe.cpp:96:13: error: multiple declarations in a single statement reduces readability [readability-isolate-declaration,-warnings-as-errors]
+            uint64_t hits{}, visited_hits{}, traced_hits{}, complete_hits{};
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_route_quality_probe.cpp:102:25: error: implicit conversion bool -> 'unsigned long' [readability-implicit-bool-conversion,-warnings-as-errors]
+                hits += a;
+                        ^
+                        static_cast<unsigned long>( )
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_route_quality_probe.cpp:104:32: error: implicit conversion bool -> 'unsigned long' [readability-implicit-bool-conversion,-warnings-as-errors]
+                traced_hits += b;
+                               ^
+                               static_cast<unsigned long>( )
+/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/rabitq_route_quality_probe.cpp:105:34: error: implicit conversion bool -> 'unsigned long' [readability-implicit-bool-conversion,-warnings-as-errors]
+                complete_hits += c;
+                                 ^
+                                 static_cast<unsigned long>( )
+Suppressed 35809 warnings (35809 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+5 warnings treated as errors

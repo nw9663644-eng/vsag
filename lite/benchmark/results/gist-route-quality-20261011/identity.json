@@ -1,0 +1,59 @@
+{
+  "head": "7173cc0cd923b5770f96fe8ce1a24eedf2c29c2a",
+  "library_sha256": "0f729af8fd98323988f398d65ac75a9d67431889f2e4f87d05ed227aeba9374a",
+  "static_sha256": "f8b6baab60adc20bcf74995ba48c6d63a5c954cce06646557c38306590da2c9e",
+  "probe_sha256": "0615e619e54e4b1e58a8be74fb36fa80fb88c8c2122cd0f7a22692827da57949",
+  "inputs": {
+    "base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+    "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+    "groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+  },
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "9512de2dc183080e438cd6b0201dfe0696ed78fe20e1be444779c98597608111",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d",
+    "lite/benchmark/rabitq_route_quality_probe.cpp": "d8922297a54a2d1d4a9fcb35d67b8a7c693a076392bd5116a32611c829ea430e"
+  },
+  "configuration": {
+    "cpu": 0,
+    "threads": 1,
+    "count": 100000,
+    "queries": 100,
+    "degree": 16,
+    "build_ef": 128,
+    "query_ef": 512,
+    "k": 10,
+    "rounds": 0,
+    "scope": "initial graph diagnostic, not timed speed evidence"
+  },
+  "commands": [
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+        "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+        "/dev/shm/vsag-gist-diagnostic-9pq1w3_6/initial.snapshot",
+        "0",
+        "1",
+        "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/gist-route-quality-20261011/prepare.queries.csv"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/home/ubuntu/project/vsag-gist-route-probe-20261011",
+        "/dev/shm/vsag-gist-diagnostic-9pq1w3_6/initial.snapshot",
+        "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+        "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+        "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/gist-route-quality-20261011/trace"
+      ],
+      "exit": 0
+    }
+  ],
+  "snapshot_sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+  "snapshot_bytes": 112804416
+}

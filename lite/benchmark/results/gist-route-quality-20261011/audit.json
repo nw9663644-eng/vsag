@@ -1,0 +1,14 @@
+{
+  "audit": "pass",
+  "queries": 100,
+  "truth_rows": 1000,
+  "hits": {
+    "formal_hits": 859,
+    "visited_truth": 860,
+    "visited_rerank_hits": 859,
+    "all_codes_hits": 997
+  },
+  "formal_missing_not_visited": 140,
+  "formal_missing_visited": 1,
+  "average_visited": 3696.15
+}
