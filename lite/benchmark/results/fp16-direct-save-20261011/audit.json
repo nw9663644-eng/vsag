@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "summary": {
+    "sift": {
+      "build_then_save_10k_ms": {
+        "control": 12.535699,
+        "lite": 3.50386
+      },
+      "loaded_state_save_100k_ms": {
+        "control": 118.349484,
+        "candidate": 31.799275
+      }
+    },
+    "gist": {
+      "build_then_save_10k_ms": {
+        "control": 41.549504,
+        "lite": 11.573433
+      },
+      "loaded_state_save_100k_ms": {
+        "control": 396.836042,
+        "candidate": 105.334399
+      }
+    },
+    "cohere": {
+      "build_then_save_10k_ms": {
+        "control": 36.719409,
+        "lite": 10.434342
+      },
+      "loaded_state_save_100k_ms": {
+        "control": 355.77398,
+        "candidate": 96.169235
+      }
+    }
+  },
+  "builders10k": 18,
+  "prepares100k": 3,
+  "saves100k": 42,
+  "commands": 49
+}

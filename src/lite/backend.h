@@ -44,6 +44,12 @@ public:
     [[nodiscard]] virtual const float*
     VectorAt(uint64_t slot, std::vector<float>& scratch) const = 0;
 
+    // Borrowed storage row, valid until the next mutation; absent for other backends.
+    [[nodiscard]] virtual const uint16_t*
+    FP16VectorAt([[maybe_unused]] uint64_t slot) const {
+        return nullptr;
+    }
+
     [[nodiscard]] virtual BackendKind
     Kind() const = 0;
     [[nodiscard]] virtual VectorStorage

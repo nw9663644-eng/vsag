@@ -864,6 +864,38 @@ TEST_CASE("Experimental online diversity excludes collinear redundant neighbors"
 }
 #endif
 
+TEST_CASE("Lite FP16 snapshots preserve every finite binary16 encoding", "[lite-graph]") {
+    using vsag::lite::Index;
+    std::vector<uint16_t> bits;
+    std::vector<float> values;
+    for (uint64_t value = 0; value < 65536; ++value) {
+        const auto encoded = static_cast<uint16_t>(value);
+        if (vsag::lite::detail::is_finite_fp16(encoded)) {
+            bits.push_back(encoded);
+            values.push_back(vsag::lite::detail::decode_fp16(encoded));
+            REQUIRE(vsag::lite::detail::encode_fp16(values.back()) == encoded);
+        }
+    }
+    REQUIRE(bits.size() == 63488);
+    auto index = Index::Create(values.size());
+    REQUIRE(index);
+    REQUIRE((*index)->Add(17, values.data(), values.size()));
+    REQUIRE((*index)->BuildGraph(vsag::lite::VectorStorage::FP16, 2, 2));
+    std::stringstream output;
+    REQUIRE((*index)->Save(output));
+    const auto snapshot = output.str();
+    constexpr uint64_t vector_offset = 72;  // v3 header + graph options + one ID.
+    for (uint64_t i = 0; i < bits.size(); ++i) {
+        REQUIRE(static_cast<uint8_t>(snapshot[vector_offset + 2 * i]) == (bits[i] & 255U));
+        REQUIRE(static_cast<uint8_t>(snapshot[vector_offset + 2 * i + 1]) == (bits[i] >> 8U));
+    }
+    auto restored = Index::Load(output);
+    REQUIRE(restored);
+    std::stringstream again;
+    REQUIRE((*restored)->Save(again));
+    REQUIRE(again.str() == snapshot);
+}
+
 TEST_CASE("Lite restore rejects invalid layouts and duplicate FP16 IDs", "[lite-graph]") {
     REQUIRE_FALSE(vsag::lite::detail::restore_brute_force_backend(0, {1}, {1.0F}));
     REQUIRE_FALSE(vsag::lite::detail::restore_brute_force_backend(1, {1}, {}));

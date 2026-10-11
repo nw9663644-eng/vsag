@@ -702,6 +702,11 @@ public:
         return scratch.data();
     }
 
+    [[nodiscard]] const uint16_t*
+    FP16VectorAt(uint64_t slot) const override {
+        return fp16_ ? fp16_vectors_.data() + slot * Dim() : nullptr;
+    }
+
 private:
     static void
     erase_value(std::vector<uint64_t>& values, uint64_t value) {

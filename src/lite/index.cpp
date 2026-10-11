@@ -250,6 +250,23 @@ Index::Save(std::ostream& output) const {
         std::vector<float> scratch;
         std::vector<char> encoded_fp16(fp16 ? Dim() * 2 : 0);
         for (uint64_t slot = 0; slot < Size(); ++slot) {
+            if (fp16) {
+                const auto* encoded = impl_->backend->FP16VectorAt(slot);
+                if (encoded != nullptr) {
+                    if (native_little_endian()) {
+                        output.write(reinterpret_cast<const char*>(encoded),
+                                     static_cast<std::streamsize>(Dim() * sizeof(uint16_t)));
+                    } else {
+                        for (uint64_t i = 0; i < Dim(); ++i) {
+                            encoded_fp16[2 * i] = static_cast<char>(encoded[i] & 255U);
+                            encoded_fp16[2 * i + 1] = static_cast<char>(encoded[i] >> 8U);
+                        }
+                        output.write(encoded_fp16.data(),
+                                     static_cast<std::streamsize>(encoded_fp16.size()));
+                    }
+                    continue;
+                }
+            }
             const auto* vector = impl_->backend->VectorAt(slot, scratch);
             if (not fp16 and native_little_endian()) {
                 output.write(reinterpret_cast<const char*>(vector),
