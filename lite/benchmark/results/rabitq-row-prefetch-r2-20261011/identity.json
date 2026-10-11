@@ -1,0 +1,71 @@
+{
+  "head": "ce201fa497a4b5990c0bdd30773e50949fca728f",
+  "library_sha256": "e8f7808b5638973974ed0704b0bd0e375e18cc1e2a0cf475d346c748f5291135",
+  "archive_sha256": "2577abe3dba96e3d8e8c7f80c2f91d120eb1e695039063342eb1cbdb634f7dee",
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "9512de2dc183080e438cd6b0201dfe0696ed78fe20e1be444779c98597608111",
+    "src/lite/query_heap.h": "11e4dca3b683021a79835d53b8ec3816bc2f717c42e30cd72b5e8f9c893439f6",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d",
+    "lite/benchmark/rabitq_full_route_probe.cpp": "688957c43853118697e87da2201ef6c528297d1b5bbf7cee0e292d904eacb033",
+    "lite/benchmark/run_rabitq_row_prefetch.py": "ac8a05d701a52bfe08143175fa6d11b0d7f8fa8d22afaa4ade159c61e1779ef8",
+    "src/impl/searcher/basic_searcher.cpp": "1245da97c4247ce0f3d64da4a96cab6084458466b9a218e15dabdfa0956dc743"
+  },
+  "inputs": {
+    "sift10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0",
+        "queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+        "groundtruth.ivecs": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8"
+      }
+    },
+    "gist10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444",
+        "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+        "groundtruth.ivecs": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038"
+      }
+    },
+    "cohere10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+        "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+        "groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+      }
+    },
+    "gist100k": {
+      "count": 100000,
+      "hashes": {
+        "base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+        "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+        "groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+      }
+    }
+  },
+  "snapshots": {
+    "sift10k": {
+      "sha256": "77e5628bba939aed65d8281740483fb196e9ac85c2ed72419c3dc5eca927dd02",
+      "bytes": 2960672
+    },
+    "gist10k": {
+      "sha256": "a8873b70777304ccc32da7a21de50e22e28f457d1bcffbebf47cb853e6479e10",
+      "bytes": 11284416
+    },
+    "cohere10k": {
+      "sha256": "ce514f19bf044cc88efd9e70c57b828f9bf12483112005994adbb272d4050233",
+      "bytes": 9363552
+    },
+    "gist100k": {
+      "sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+      "bytes": 112804416
+    }
+  },
+  "executables": {
+    "control": "96b3407a47d1cd2ae9856223479f9e867ca43cd2937e1144311ac36787d6f89d",
+    "candidate": "90982a7190a2f100f26a322a7e475291079d37a72c6bf744461eb2c05b9e9d58"
+  },
+  "trials": 7,
+  "scope": "internal SearchWithOptions; initial snapshot; 100 historical queries; CPU0; one warmup; not Full/CRUD/final P99 acceptance"
+}
