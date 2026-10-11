@@ -1,0 +1,38 @@
+{
+  "arguments": {
+    "lite_build": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+    "control_library": "/dev/shm/vsag-owned-real100k-y1b8mdvi/control/libvsag-lite.so",
+    "full_library": null,
+    "full_builder": null,
+    "full_loader": null,
+    "dataset": [
+      "gist100k=/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "cohere100k=/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000"
+    ],
+    "storage": [
+      "rabitq8"
+    ],
+    "output": "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-owned-real100k-20261011",
+    "scratch": "/dev/shm",
+    "trials": 3,
+    "loads": 3,
+    "ef": 512,
+    "full_ef": null,
+    "cpu": 0
+  },
+  "page_cache": "warm_uncontrolled",
+  "blas_threads": 1,
+  "omp_threads": 1,
+  "query_warmup_rounds": 0,
+  "construction_ef": 128,
+  "degree": 16,
+  "lite_library_sha256": "7835b5b7748da3ab5c5c64db2880fb1337b516dc323125358efdde1269dbb7f7",
+  "reference_library_sha256": "b1afe36cc69a75c8e3b0614e1b90de1c5a5db477117d76a75731e07e773660c9",
+  "native_full_profile": null,
+  "cpu": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           52 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  8\nOn-line CPU(s) list:                     0-7\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9K65 192-Core Processor\nCPU family:                              26\nModel:                                   0\nThread(s) per core:                      2\nCore(s) per socket:                      4\nSocket(s):                               1\nStepping:                                0\nBogoMIPS:                                4500.06\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm rep_good nopl cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext perfctr_core invpcid_single ssbd ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves avx512_bf16 clzero xsaveerptr wbnoinvd arat avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid movdiri movdir64b fsrm\nHypervisor vendor:                       KVM\nVirtualization type:                     full\nL1d cache:                               192 KiB (4 instances)\nL1i cache:                               128 KiB (4 instances)\nL2 cache:                                4 MiB (4 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-7\nVulnerability Gather data sampling:      Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl and seccomp\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n",
+  "git_head": "4f73870f2ba8ce51f377497851ac58ff5c932a24",
+  "git_diff": "",
+  "script_sha256": "6c9cf8b48117ef74559e7f0c636ba89f0299780803e485aad54e792e60719e11",
+  "lite_builder_sha256": "c7f35c588449316bb9e3ed5f77345ccee1c305c727b2d3e6a7131fa0fcd5e5b1",
+  "lite_loader_sha256": "1ab242551e9d95d5056dbecfe008d06ef529f038850ad4802e7f1435a3b6ac38"
+}
