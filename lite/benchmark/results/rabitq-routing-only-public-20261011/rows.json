@@ -1,0 +1,674 @@
+[
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "control",
+    "p50_us": 1145.11,
+    "p99_us": 1291.727
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "candidate",
+    "p50_us": 1061.202,
+    "p99_us": 1264.818
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "reference",
+    "p50_us": 1139.07,
+    "p99_us": 1305.896
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "control",
+    "p50_us": 1142.69,
+    "p99_us": 1320.676
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "reference",
+    "p50_us": 1129.181,
+    "p99_us": 1328.854
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "candidate",
+    "p50_us": 1116.2,
+    "p99_us": 1277.736
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "reference",
+    "p50_us": 1067.473,
+    "p99_us": 1282.486
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "control",
+    "p50_us": 1097.972,
+    "p99_us": 1292.076
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "candidate",
+    "p50_us": 1030.322,
+    "p99_us": 1227.669
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "reference",
+    "p50_us": 1137.921,
+    "p99_us": 1287.366
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "candidate",
+    "p50_us": 1047.103,
+    "p99_us": 1240.566
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "control",
+    "p50_us": 1090.07,
+    "p99_us": 1276.696
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "candidate",
+    "p50_us": 1141.26,
+    "p99_us": 1296.795
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "reference",
+    "p50_us": 1037.693,
+    "p99_us": 1221.277
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "control",
+    "p50_us": 1030.334,
+    "p99_us": 1240.967
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "candidate",
+    "p50_us": 1115.22,
+    "p99_us": 1269.487
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "control",
+    "p50_us": 1138.76,
+    "p99_us": 1332.775
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "reference",
+    "p50_us": 1166.18,
+    "p99_us": 1337.725
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "control",
+    "p50_us": 1117.571,
+    "p99_us": 1312.886
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "candidate",
+    "p50_us": 1137.02,
+    "p99_us": 1290.607
+  },
+  {
+    "dataset": "gist100k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "reference",
+    "p50_us": 1152.98,
+    "p99_us": 1320.396
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "control",
+    "p50_us": 198.725,
+    "p99_us": 231.074
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "candidate",
+    "p50_us": 201.066,
+    "p99_us": 241.854
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "reference",
+    "p50_us": 205.404,
+    "p99_us": 243.834
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "control",
+    "p50_us": 200.984,
+    "p99_us": 236.453
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "reference",
+    "p50_us": 212.594,
+    "p99_us": 256.563
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "candidate",
+    "p50_us": 201.935,
+    "p99_us": 236.805
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "reference",
+    "p50_us": 222.224,
+    "p99_us": 274.372
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "control",
+    "p50_us": 200.005,
+    "p99_us": 235.004
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "candidate",
+    "p50_us": 195.655,
+    "p99_us": 230.085
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "reference",
+    "p50_us": 216.613,
+    "p99_us": 269.104
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "candidate",
+    "p50_us": 204.515,
+    "p99_us": 251.233
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "control",
+    "p50_us": 219.856,
+    "p99_us": 273.162
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "candidate",
+    "p50_us": 203.964,
+    "p99_us": 243.523
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "reference",
+    "p50_us": 211.725,
+    "p99_us": 254.004
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "control",
+    "p50_us": 204.595,
+    "p99_us": 244.794
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "candidate",
+    "p50_us": 208.434,
+    "p99_us": 256.462
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "control",
+    "p50_us": 203.144,
+    "p99_us": 251.973
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "reference",
+    "p50_us": 221.184,
+    "p99_us": 272.203
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "control",
+    "p50_us": 212.763,
+    "p99_us": 265.294
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "candidate",
+    "p50_us": 210.903,
+    "p99_us": 259.443
+  },
+  {
+    "dataset": "sift10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "reference",
+    "p50_us": 207.666,
+    "p99_us": 243.164
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "control",
+    "p50_us": 493.207,
+    "p99_us": 656.793
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "candidate",
+    "p50_us": 494.987,
+    "p99_us": 628.763
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "reference",
+    "p50_us": 517.106,
+    "p99_us": 661.623
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "control",
+    "p50_us": 518.797,
+    "p99_us": 677.013
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "reference",
+    "p50_us": 500.167,
+    "p99_us": 663.953
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "candidate",
+    "p50_us": 481.217,
+    "p99_us": 660.232
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "reference",
+    "p50_us": 562.405,
+    "p99_us": 756.49
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "control",
+    "p50_us": 519.347,
+    "p99_us": 682.372
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "candidate",
+    "p50_us": 496.047,
+    "p99_us": 646.263
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "reference",
+    "p50_us": 542.207,
+    "p99_us": 705.442
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "candidate",
+    "p50_us": 465.057,
+    "p99_us": 593.824
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "control",
+    "p50_us": 494.037,
+    "p99_us": 629.494
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "candidate",
+    "p50_us": 459.757,
+    "p99_us": 558.845
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "reference",
+    "p50_us": 527.787,
+    "p99_us": 695.451
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "control",
+    "p50_us": 469.078,
+    "p99_us": 606.155
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "candidate",
+    "p50_us": 499.467,
+    "p99_us": 649.643
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "control",
+    "p50_us": 504.686,
+    "p99_us": 626.024
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "reference",
+    "p50_us": 567.445,
+    "p99_us": 776.84
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "control",
+    "p50_us": 523.366,
+    "p99_us": 678.882
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "candidate",
+    "p50_us": 511.458,
+    "p99_us": 711.53
+  },
+  {
+    "dataset": "gist10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "reference",
+    "p50_us": 506.797,
+    "p99_us": 640.813
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "control",
+    "p50_us": 443.938,
+    "p99_us": 496.597
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "candidate",
+    "p50_us": 474.818,
+    "p99_us": 522.567
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 0,
+    "variant": "reference",
+    "p50_us": 514.046,
+    "p99_us": 583.215
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "control",
+    "p50_us": 493.328,
+    "p99_us": 567.995
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "reference",
+    "p50_us": 476.397,
+    "p99_us": 531.657
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 1,
+    "variant": "candidate",
+    "p50_us": 468.038,
+    "p99_us": 530.576
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "reference",
+    "p50_us": 461.378,
+    "p99_us": 515.496
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "control",
+    "p50_us": 518.187,
+    "p99_us": 611.395
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 2,
+    "variant": "candidate",
+    "p50_us": 486.757,
+    "p99_us": 555.247
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "reference",
+    "p50_us": 465.179,
+    "p99_us": 515.657
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "candidate",
+    "p50_us": 464.997,
+    "p99_us": 518.956
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 3,
+    "variant": "control",
+    "p50_us": 512.006,
+    "p99_us": 580.775
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "candidate",
+    "p50_us": 488.757,
+    "p99_us": 596.985
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "reference",
+    "p50_us": 493.077,
+    "p99_us": 559.845
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 4,
+    "variant": "control",
+    "p50_us": 487.188,
+    "p99_us": 555.916
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "candidate",
+    "p50_us": 495.328,
+    "p99_us": 548.755
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "control",
+    "p50_us": 488.188,
+    "p99_us": 551.046
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 5,
+    "variant": "reference",
+    "p50_us": 454.088,
+    "p99_us": 499.507
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "control",
+    "p50_us": 447.488,
+    "p99_us": 489.518
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "candidate",
+    "p50_us": 456.599,
+    "p99_us": 514.098
+  },
+  {
+    "dataset": "cohere10k",
+    "storage": "rabitq8",
+    "trial": 6,
+    "variant": "reference",
+    "p50_us": 474.777,
+    "p99_us": 536.377
+  }
+]

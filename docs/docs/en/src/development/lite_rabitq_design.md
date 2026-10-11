@@ -288,3 +288,23 @@ cause is unverified and must not be dismissed as noise. This change targets smal
 and workspace cost, does not fix100k recall and does not establish superiority to native Full.
 See `lite/benchmark/results/rabitq-root-public-20261011` for exact results, negative candidates
 and validation scope.
+
+### Routing-only estimate and large-graph no-filter specialization
+
+RaBitQ graph routing now requests only the coarse distance and centered inner product.
+The error/lower-bound calculation remains enabled by default for callers such as filtered
+full scans that actually consume it. For at least65536 slots, an empty user filter selects
+a compile-time no-filter routing path once per call; nonempty filters retain their prior
+callback/ranking behavior. This does not change the distance formula, graph, search budget,
+snapshot format or FP32/FP16 paths.
+
+On GIST100k, seven rotating triples of current parent9c44640/new library/referencec55466b,
+each repeating100 historical queries ten times, show mean query latency1092.762→1072.303us
+(-1.87%,7/7 paired wins) and P501100.791→1082.083us(-1.70%,6/7 wins). The new P50 is2.38%
+belowc55466b in the same run (7/7 wins). This supports removal of the earlier small regression
+for this workload, not all100k performance acceptance. The original100-query windows give
+only0.21% P50 improvement; repetitions are not1000 unique queries or a new quality cohort.
+Recall remains.859, which is still an open graph-quality issue. Shared-library file size
+increases395648→412512 bytes; no peak/RSS/Full/package gain is claimed here.
+See `lite/benchmark/results/rabitq-routing-only-public-20261011` and
+`lite/benchmark/results/rabitq-routing-repeat-20261011` for all comparisons and limits.

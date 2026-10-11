@@ -845,6 +845,39 @@ TEST_CASE("RaBitQ integer arrays preserve scalar endian bytes and stream errors"
     check(std::vector<uint64_t>{});
 }
 
+TEST_CASE("RaBitQ routing estimate omits only the unused lower bound", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    for (uint64_t dim : {uint64_t{1}, uint64_t{17}, uint64_t{128}, uint64_t{768}, uint64_t{960}}) {
+        std::vector<float> base(4 * dim);
+        for (uint64_t i = 0; i < base.size(); ++i) {
+            base[i] = std::sin(static_cast<float>(i) * .13F);
+        }
+        const auto model = codec::train(base, 4, dim, 47);
+        codec::EncodedRecords codes(dim);
+        std::array<codec::EncodedView, 4> views;
+        for (uint64_t row = 0; row < 4; ++row) {
+            codes.Append(codec::encode(model, base.data() + row * dim));
+        }
+        for (uint64_t row = 0; row < 4; ++row) {
+            views[row] = codes.At(row);
+        }
+        float norm = 0;
+        const auto query = codec::normalize(model, base.data(), norm);
+        const auto full_batch = codec::filter_estimate_batch4(query, norm, views);
+        const auto route_batch = codec::filter_estimate_batch4<false>(query, norm, views);
+        for (uint64_t row = 0; row < 4; ++row) {
+            const auto full = codec::filter_estimate(query, norm, views[row]);
+            const auto route = codec::filter_estimate<false>(query, norm, views[row]);
+            REQUIRE(route.distance == full.distance);
+            REQUIRE(route.centered_ip == full.centered_ip);
+            REQUIRE(route.lower_bound == 0.0F);
+            REQUIRE(route_batch[row].distance == full_batch[row].distance);
+            REQUIRE(route_batch[row].centered_ip == full_batch[row].centered_ip);
+            REQUIRE(route_batch[row].lower_bound == 0.0F);
+        }
+    }
+}
+
 TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[lite-rabitq]") {
     namespace codec = vsag::lite::detail::rabitq;
     constexpr uint64_t count = 96;
@@ -911,6 +944,24 @@ TEST_CASE("RaBitQ bounded heap admission preserves the unpruned reference", "[li
                             };
                             const auto reference =
                                 run(std::false_type{}, std::false_type{}, std::false_type{});
+                            if (not filter) {
+                                const auto fast = codec::graph_search_impl<decltype(range),
+                                                                           true,
+                                                                           true,
+                                                                           true,
+                                                                           true,
+                                                                           false>(
+                                    query, norm, state.GetCodes(), range, k, ef, &state.GetIds());
+                                REQUIRE(fast.visited == reference.visited);
+                                REQUIRE(fast.reordered == reference.reordered);
+                                REQUIRE(fast.neighbors.size() == reference.neighbors.size());
+                                for (uint64_t rank = 0; rank < fast.neighbors.size(); ++rank) {
+                                    REQUIRE(fast.neighbors[rank].id ==
+                                            reference.neighbors[rank].id);
+                                    REQUIRE(fast.neighbors[rank].distance ==
+                                            reference.neighbors[rank].distance);
+                                }
+                            }
                             for (const auto& candidate :
                                  {run(std::true_type{}, std::false_type{}, std::true_type{}),
                                   run(std::true_type{}, std::true_type{}, std::true_type{})}) {

@@ -1,0 +1,350 @@
+[
+  {
+    "tag": "compile",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-Iinclude",
+      "lite/benchmark/query_repeat_window_probe.cpp",
+      "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "-lvsag-lite",
+      "-o",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/native.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "0-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/0-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "1-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/1-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "2-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/2-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "3-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/3-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "4-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/4-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "5-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/5-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  },
+  {
+    "tag": "6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-control.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-nofilter-control-9c44640"
+  },
+  {
+    "tag": "6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-candidate.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release"
+  },
+  {
+    "tag": "6-reference",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/probe",
+      "/dev/shm/vsag-route-repeat-h4tn92a4/snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-reference.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/rabitq-routing-repeat-20261011/6-reference.neighbors.csv"
+    ],
+    "exit": 0,
+    "ld_library_path": "/home/ubuntu/project/vsag-root-control-c55466b"
+  }
+]

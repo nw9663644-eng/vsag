@@ -1,0 +1,82 @@
+{
+  "head": "9c44640fcd7fcf58665d2dbf72c808522eabbe88",
+  "libraries": {
+    "control": {
+      "path": "/home/ubuntu/project/vsag-nofilter-control-9c44640",
+      "sha256": "276f9c49b289392e0eb64e9c641a907735bfcacaa307efb3aa2c5125fb77659f"
+    },
+    "candidate": {
+      "path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "sha256": "cbaeed59235a43af20ad0e0440dbd8b4bf9b7c16e84866273531365145fe360d"
+    },
+    "reference": {
+      "path": "/home/ubuntu/project/vsag-root-control-c55466b",
+      "sha256": "f0dc8ce31c4bf7bc936fb59929fb22348195bd352c1a3e6c46451e19fe47e60d"
+    }
+  },
+  "sources": {
+    "src/lite/query_visited.h": "c9a2e68d50b41c76a7bb9ac9c17c57b4a4de9b142943abdca5513460826062d4",
+    "src/lite/query_heap.h": "e12f5b8dbe78237137f5abfb81df15678b9fe41950420f628de5ecce6daa48ee",
+    "src/lite/graph_backend.cpp": "df1104fff91df1cc466e98c158adac65b28fcd2771718e7f5117d6cc250e38bc",
+    "src/lite/rabitq_graph_state.h": "a893cbe15962167df2cf05681438972b2cf86fa8b631ea9f56f2265e2da545c1",
+    "src/lite/rabitq_backend_test.cpp": "10575ae6d53bd112be32895e76c3a5a9d30800e9dc90f541d8c7c3e2dcce01fb",
+    "lite/benchmark/query_heap_reserve_probe.cpp": "652592cea96d1e02748520f9f6cb4ed90dd8203cb570227680fd8c7c9e88c4d5",
+    "lite/benchmark/query_allocation_probe.cpp": "118004ffecaee8047b4b2b677f27a3d45d59cc4e1b4d82bbdfe5e626b4895260",
+    "lite/benchmark/run_rabitq_no_filter_public.py": "02c673e91db1ad9050b9a367204e014051f7d9762d62ce1ed6dd8074977f9520",
+    "src/impl/searcher/basic_searcher.cpp": "1245da97c4247ce0f3d64da4a96cab6084458466b9a218e15dabdfa0956dc743"
+  },
+  "inputs": {
+    "gist100k": {
+      "count": 100000,
+      "hashes": {
+        "base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+        "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+        "groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+      }
+    },
+    "sift10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "1e90414a3254361aba48a0d58e461f7661fb135dabb3da985290e94de8f60fe0",
+        "queries.fvecs": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10",
+        "groundtruth.ivecs": "99650ac6f6b252b2bb920a42fdf885e7c2f660f3cae94416c50583ad5764a5d8"
+      }
+    },
+    "gist10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "359290ad0de501d683122967de2b353ecd6522b0ffc630c59ca945e228fd5444",
+        "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+        "groundtruth.ivecs": "e6c72130aac176fe1af5fe7741c092669bab2a73f97fade5747b7feb3efa1038"
+      }
+    },
+    "cohere10k": {
+      "count": 10000,
+      "hashes": {
+        "base.fvecs": "4843e53e63084e548d73416f0a364f823c09522b4bb3e400348d5eb81dfdac0d",
+        "queries.fvecs": "ff72a55273ed0a8e2a123ebe57dc13c5950ea42daf0a35a4daebed8ae6d02a17",
+        "groundtruth.ivecs": "13d43f31b83ab8dda0e86bc84fc9997b444d9174a1f312ec7b3f44af48d42b3d"
+      }
+    }
+  },
+  "snapshots": {
+    "gist100k-rabitq8": {
+      "sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+      "bytes": 112804416
+    },
+    "sift10k-rabitq8": {
+      "sha256": "77e5628bba939aed65d8281740483fb196e9ac85c2ed72419c3dc5eca927dd02",
+      "bytes": 2960672
+    },
+    "gist10k-rabitq8": {
+      "sha256": "a8873b70777304ccc32da7a21de50e22e28f457d1bcffbebf47cb853e6479e10",
+      "bytes": 11284416
+    },
+    "cohere10k-rabitq8": {
+      "sha256": "ce514f19bf044cc88efd9e70c57b828f9bf12483112005994adbb272d4050233",
+      "bytes": 9363552
+    }
+  },
+  "trials": 7,
+  "scope": "public SearchWithOptions; CPU0; initial snapshots; 100 historical queries and one warmup; allocation runs separate from timing"
+}

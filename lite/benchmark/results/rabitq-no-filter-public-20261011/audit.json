@@ -1,0 +1,270 @@
+{
+  "status": "PASS",
+  "timed_runs": 84,
+  "timed_queries": 8400,
+  "allocation_runs": 8,
+  "allocation_queries": 800,
+  "commands": 98,
+  "summary": {
+    "gist100k-rabitq8": {
+      "recall": 0.859,
+      "visited_old_bytes": 12504,
+      "visited_new_bytes": 12504,
+      "query_requested_bytes": {
+        "control": 82664.0,
+        "candidate": 82664.0
+      },
+      "control": {
+        "p50_us": 1111.632,
+        "p99_us": 1285.986
+      },
+      "candidate": {
+        "p50_us": 1101.4,
+        "p99_us": 1273.457
+      },
+      "reference": {
+        "p50_us": 1107.78,
+        "p99_us": 1290.376
+      },
+      "p50_us_paired_changes_percent": [
+        -8.737591984134829,
+        2.0404237298180083,
+        1.7881817004188338,
+        0.8383588332471215,
+        6.097371840751831,
+        -12.170164234781033,
+        -2.263311785531863
+      ],
+      "p50_us_pair_wins": 3,
+      "p50_us_median_change_percent": -0.9204484937461288,
+      "p50_us_reference_paired_changes_percent": [
+        -10.1885163584849,
+        1.0318835869938203,
+        1.8267457755547722,
+        -8.543309955369349,
+        3.7851325488984067,
+        -10.309761949694007,
+        1.882945253206092
+      ],
+      "p50_us_reference_pair_wins": 3,
+      "p50_us_reference_median_change_percent": -0.5759266280308206,
+      "p99_us_paired_changes_percent": [
+        -2.9340099586012025,
+        1.7455023071738296,
+        2.4119257407547057,
+        3.408351871183357,
+        5.6806753149660105,
+        -5.871525817543899,
+        -1.2247459175782405
+      ],
+      "p99_us_pair_wins": 3,
+      "p99_us_median_change_percent": -0.9742718816534546,
+      "p99_us_reference_paired_changes_percent": [
+        -3.0670830589899167,
+        -0.6497013061527612,
+        1.1116686076753535,
+        -3.770127000285528,
+        4.557211094718472,
+        -6.1917611610879275,
+        -0.5777381862299924
+      ],
+      "p99_us_reference_pair_wins": 5,
+      "p99_us_reference_median_change_percent": -1.311168217635783
+    },
+    "sift10k-rabitq8": {
+      "recall": 0.987,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 60448.0,
+        "candidate": 60448.0
+      },
+      "control": {
+        "p50_us": 199.794,
+        "p99_us": 233.324
+      },
+      "candidate": {
+        "p50_us": 203.715,
+        "p99_us": 242.323
+      },
+      "reference": {
+        "p50_us": 214.755,
+        "p99_us": 264.484
+      },
+      "p50_us_paired_changes_percent": [
+        3.162792486204835,
+        2.3679389771464665,
+        -0.7620091142266583,
+        4.02258927009671,
+        3.6000528896031225,
+        -1.0537349663466866,
+        1.547127300037543
+      ],
+      "p50_us_pair_wins": 2,
+      "p50_us_median_change_percent": 1.962521397038941,
+      "p50_us_reference_paired_changes_percent": [
+        -7.0581968881402,
+        -8.100955273776256,
+        -7.971734059995839,
+        -3.0783916556075486,
+        -1.5660333597479537,
+        -5.962515610551311,
+        -3.372654768597483
+      ],
+      "p50_us_reference_pair_wins": 7,
+      "p50_us_reference_median_change_percent": -5.140741775511626,
+      "p99_us_paired_changes_percent": [
+        3.7606817578228924,
+        4.053090809158211,
+        -0.2849439043268842,
+        11.4993532470425,
+        29.09461465186858,
+        -2.4172395467247365,
+        2.4930914333773924
+      ],
+      "p99_us_pair_wins": 2,
+      "p99_us_median_change_percent": 3.8568685604567055,
+      "p99_us_reference_paired_changes_percent": [
+        -11.05185095904353,
+        -10.225138280176193,
+        -12.741996710110081,
+        -1.5736301628831884,
+        19.394123166818964,
+        -11.238806610191288,
+        -2.001780637008521
+      ],
+      "p99_us_reference_pair_wins": 6,
+      "p99_us_reference_median_change_percent": -8.378956761089507
+    },
+    "gist10k-rabitq8": {
+      "recall": 0.97,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 63776.0,
+        "candidate": 63776.0
+      },
+      "control": {
+        "p50_us": 504.897,
+        "p99_us": 679.031
+      },
+      "candidate": {
+        "p50_us": 521.147,
+        "p99_us": 702.712
+      },
+      "reference": {
+        "p50_us": 511.408,
+        "p99_us": 695.682
+      },
+      "p50_us_paired_changes_percent": [
+        23.56869193421891,
+        5.046839603196518,
+        -6.641062130377994,
+        6.749891562041355,
+        6.727462998953504,
+        -4.035065627685097,
+        4.0376814356569035
+      ],
+      "p50_us_pair_wins": 2,
+      "p50_us_median_change_percent": 3.2184782242715038,
+      "p50_us_reference_paired_changes_percent": [
+        20.880274354577644,
+        1.344349862992722,
+        -7.662195331817722,
+        7.647492345517248,
+        0.1406569756828846,
+        3.0952897246089517,
+        -1.8069721240184022
+      ],
+      "p50_us_reference_pair_wins": 2,
+      "p50_us_reference_median_change_percent": 1.9043503425836272,
+      "p99_us_paired_changes_percent": [
+        20.976907923763832,
+        5.944687070756882,
+        -7.213009642281043,
+        4.233974590261713,
+        14.795024054758276,
+        -9.729588598585382,
+        3.625626449999486
+      ],
+      "p99_us_pair_wins": 2,
+      "p99_us_median_change_percent": 3.4874696442430464,
+      "p99_us_reference_paired_changes_percent": [
+        22.238059283282286,
+        1.6630734329299957,
+        -13.995537297829818,
+        8.546877468173486,
+        1.0105191739904207,
+        -6.393938870263483,
+        -11.189247580232154
+      ],
+      "p99_us_reference_pair_wins": 3,
+      "p99_us_reference_median_change_percent": 1.0105191739904207
+    },
+    "cohere10k-rabitq8": {
+      "recall": 0.984,
+      "visited_old_bytes": 10000,
+      "visited_new_bytes": 10000,
+      "query_requested_bytes": {
+        "control": 63008.0,
+        "candidate": 63008.0
+      },
+      "control": {
+        "p50_us": 477.747,
+        "p99_us": 533.806
+      },
+      "candidate": {
+        "p50_us": 468.119,
+        "p99_us": 524.376
+      },
+      "reference": {
+        "p50_us": 490.206,
+        "p99_us": 547.466
+      },
+      "p50_us_paired_changes_percent": [
+        1.0521116644630846,
+        4.25305688463582,
+        -5.053489175255588,
+        -11.189675877473249,
+        -1.0375729081003704,
+        -3.345948394449927,
+        9.887660205087624
+      ],
+      "p50_us_pair_wins": 4,
+      "p50_us_median_change_percent": -2.0152926130357685,
+      "p50_us_reference_paired_changes_percent": [
+        -3.8225307818318344,
+        -3.350444268234287,
+        -9.457260989294413,
+        -9.937061997042695,
+        1.0514886194867623,
+        -5.5441997853963425,
+        7.895726590582597
+      ],
+      "p50_us_reference_pair_wins": 5,
+      "p50_us_reference_median_change_percent": -4.505656805506253,
+      "p99_us_paired_changes_percent": [
+        -0.5250531929116953,
+        8.8725259705277,
+        -9.050492621979345,
+        -10.696669731239904,
+        -1.762812707238226,
+        -2.007041463906889,
+        15.272298261054296
+      ],
+      "p99_us_pair_wins": 5,
+      "p99_us_median_change_percent": -1.7665593867435159,
+      "p99_us_reference_paired_changes_percent": [
+        -2.5227589201491374,
+        0.8072831748437759,
+        -9.46837750312497,
+        -10.871691625168145,
+        0.5215891119950244,
+        -3.4129359648557345,
+        11.00853751648505
+      ],
+      "p99_us_reference_pair_wins": 4,
+      "p99_us_reference_median_change_percent": -4.217613513898588
+    }
+  }
+}

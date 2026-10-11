@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "commands": [
+    {
+      "variant": "control",
+      "compile_argv": [
+        "c++",
+        "-O2",
+        "-std=c++17",
+        "-Iinclude",
+        "lite/benchmark/visited_boundary_regression.cpp",
+        "-L/home/ubuntu/project/vsag-nofilter-control-9c44640",
+        "-lvsag-lite",
+        "-o",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/control"
+      ],
+      "compile_exit": 0,
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/control",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/control.ledger"
+      ],
+      "exit": 0,
+      "library_sha256": "276f9c49b289392e0eb64e9c641a907735bfcacaa307efb3aa2c5125fb77659f"
+    },
+    {
+      "variant": "candidate",
+      "compile_argv": [
+        "c++",
+        "-O2",
+        "-std=c++17",
+        "-Iinclude",
+        "lite/benchmark/visited_boundary_regression.cpp",
+        "-L/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+        "-lvsag-lite",
+        "-o",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/candidate"
+      ],
+      "compile_exit": 0,
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/candidate",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/candidate.ledger"
+      ],
+      "exit": 0,
+      "library_sha256": "3171d0d7e86866f02096db130f1937eb13c5115cbe993d4a6feb2e9987774330"
+    },
+    {
+      "variant": "sanitize",
+      "compile_argv": [
+        "c++",
+        "-O1",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-fno-omit-frame-pointer",
+        "-std=c++17",
+        "-Iinclude",
+        "lite/benchmark/visited_boundary_regression.cpp",
+        "-L/home/ubuntu/project/vsag-opt-sanitize-20261009",
+        "-lvsag-lite",
+        "-o",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/sanitize"
+      ],
+      "compile_exit": 0,
+      "argv": [
+        "taskset",
+        "-c",
+        "0",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/sanitize",
+        "/dev/shm/vsag-visited-boundary-qc2jobdi/sanitize.ledger"
+      ],
+      "exit": 0,
+      "library_sha256": "7fb940c172fde616963889911db8d241f24f5bad97517b40c5d821fba77aa86c"
+    }
+  ],
+  "results": {
+    "control": {
+      "output_sha256": "75e0b870fe7a6eff554d9431b51e3669e2fdf0f46c557eebe332821ce05add92",
+      "ledger_sha256": "6bdca1d33817c1f82ea7c85391144c2493716965e2ba1d6e4a8f2f0303a229e2",
+      "ledger_bytes": 26215000
+    },
+    "candidate": {
+      "output_sha256": "75e0b870fe7a6eff554d9431b51e3669e2fdf0f46c557eebe332821ce05add92",
+      "ledger_sha256": "6bdca1d33817c1f82ea7c85391144c2493716965e2ba1d6e4a8f2f0303a229e2",
+      "ledger_bytes": 26215000
+    },
+    "sanitize": {
+      "output_sha256": "75e0b870fe7a6eff554d9431b51e3669e2fdf0f46c557eebe332821ce05add92",
+      "ledger_sha256": "6bdca1d33817c1f82ea7c85391144c2493716965e2ba1d6e4a8f2f0303a229e2",
+      "ledger_bytes": 26215000
+    }
+  },
+  "scope": "synthetic dimension1; 65537/65536/65535/65536/65537 nodes; real changed-value Add/Update/Remove; unfiltered/acceptall/even/rejectall; native SaveLoad; 160 output rows/variant"
+}

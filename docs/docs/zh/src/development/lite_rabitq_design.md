@@ -230,3 +230,9 @@ snapshotSHA全pair exact，mixed召回仍.811167/.908167，质量未达标，非
 字节visited的RaBitQ路由特化在best堆满时，将获准候选直接替换堆顶并一次下沉，避免先push再pop；保留原比较器与candidate队列入队顺序。位图visited和reference特化保持原操作。这是对Lite既有堆的扩展，不是移植原生StandardHeap的堆顶替换实现；FP32/FP16查询、公开参数及快照字节不变。
 
 三个10k输入的公共API固定预算七交替fresh-process配对，SIFT/GIST/Cohere P50约降低3.15%/1.80%/2.40%，每查询少一次16384字节申请。每进程100历史query，不是通用尾延迟验收。GIST100k虽保持旧位图路径堆操作，P50仍回退约2.20%；原因未验证，不能用噪声否定。此改动针对小图CPU和临时申请成本，未修复100k召回，也不证明优于原生Full。精确数据、否定候选及验证范围见`lite/benchmark/results/rabitq-root-public-20261011`。
+
+### 路由专用评分与大图无过滤特化
+
+RaBitQ图路由只请求粗排距离和centered内积，不再计算未使用的误差下界；消费下界的过滤全扫描等调用仍默认保留原计算。达到65536槽位时，空用户过滤器在调用入口选择编译期无过滤路由，非空过滤器继续原回调和排序语义。距离公式、图、搜索预算、快照格式及FP32/FP16路径不变。
+
+GIST100k在当前parent9c44640/新库/referencec55466b三库七轮轮换顺序中，每进程将100历史query重复十遍，平均查询延迟1092.762→1072.303us（-1.87%，7/7配对更快），P501100.791→1082.083us（-1.70%，6/7）。同轮新P50比c55466b低2.38%（7/7）。这支持在该工作负载上消除此前小幅回退，不代表所有100k性能已经验收；原100query短窗口P50仅改善0.21%，重复不是1000独立query或新质量样本。Recall仍为.859，图质量问题未解决。共享库文件395648→412512字节，本轮不声明peak/RSS/Full/完整包收益。全部数据和限制见`lite/benchmark/results/rabitq-routing-only-public-20261011`与`lite/benchmark/results/rabitq-routing-repeat-20261011`。

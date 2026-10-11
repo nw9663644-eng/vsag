@@ -1,0 +1,149 @@
+[
+  {
+    "trial": 0,
+    "variant": "control",
+    "mean_us": 1093.692427,
+    "p50_us": 1105.102,
+    "p99_us": 1281.466
+  },
+  {
+    "trial": 0,
+    "variant": "candidate",
+    "mean_us": 1050.2588250000001,
+    "p50_us": 1064.123,
+    "p99_us": 1266.139
+  },
+  {
+    "trial": 0,
+    "variant": "reference",
+    "mean_us": 1102.492859,
+    "p50_us": 1111.94,
+    "p99_us": 1305.916
+  },
+  {
+    "trial": 1,
+    "variant": "control",
+    "mean_us": 1075.206561,
+    "p50_us": 1084.171,
+    "p99_us": 1272.017
+  },
+  {
+    "trial": 1,
+    "variant": "reference",
+    "mean_us": 1125.052167,
+    "p50_us": 1133.17,
+    "p99_us": 1314.646
+  },
+  {
+    "trial": 1,
+    "variant": "candidate",
+    "mean_us": 1073.548658,
+    "p50_us": 1085.531,
+    "p99_us": 1271.487
+  },
+  {
+    "trial": 2,
+    "variant": "reference",
+    "mean_us": 1111.46596,
+    "p50_us": 1120.481,
+    "p99_us": 1319.455
+  },
+  {
+    "trial": 2,
+    "variant": "control",
+    "mean_us": 1093.065867,
+    "p50_us": 1099.351,
+    "p99_us": 1283.946
+  },
+  {
+    "trial": 2,
+    "variant": "candidate",
+    "mean_us": 1087.280798,
+    "p50_us": 1099.131,
+    "p99_us": 1273.477
+  },
+  {
+    "trial": 3,
+    "variant": "reference",
+    "mean_us": 1090.26466,
+    "p50_us": 1098.872,
+    "p99_us": 1293.468
+  },
+  {
+    "trial": 3,
+    "variant": "candidate",
+    "mean_us": 1015.893597,
+    "p50_us": 1027.793,
+    "p99_us": 1239.337
+  },
+  {
+    "trial": 3,
+    "variant": "control",
+    "mean_us": 1063.391042,
+    "p50_us": 1076.803,
+    "p99_us": 1269.336
+  },
+  {
+    "trial": 4,
+    "variant": "candidate",
+    "mean_us": 1086.337989,
+    "p50_us": 1100.722,
+    "p99_us": 1271.118
+  },
+  {
+    "trial": 4,
+    "variant": "reference",
+    "mean_us": 1102.406495,
+    "p50_us": 1108.5,
+    "p99_us": 1314.745
+  },
+  {
+    "trial": 4,
+    "variant": "control",
+    "mean_us": 1092.761717,
+    "p50_us": 1100.791,
+    "p99_us": 1272.607
+  },
+  {
+    "trial": 5,
+    "variant": "candidate",
+    "mean_us": 1072.303254,
+    "p50_us": 1082.083,
+    "p99_us": 1277.458
+  },
+  {
+    "trial": 5,
+    "variant": "control",
+    "mean_us": 1112.290911,
+    "p50_us": 1124.301,
+    "p99_us": 1305.046
+  },
+  {
+    "trial": 5,
+    "variant": "reference",
+    "mean_us": 1074.069757,
+    "p50_us": 1086.411,
+    "p99_us": 1262.708
+  },
+  {
+    "trial": 6,
+    "variant": "control",
+    "mean_us": 1091.611103,
+    "p50_us": 1102.771,
+    "p99_us": 1287.266
+  },
+  {
+    "trial": 6,
+    "variant": "candidate",
+    "mean_us": 1061.22673,
+    "p50_us": 1066.951,
+    "p99_us": 1256.767
+  },
+  {
+    "trial": 6,
+    "variant": "reference",
+    "mean_us": 1069.568693,
+    "p50_us": 1087.011,
+    "p99_us": 1283.197
+  }
+]

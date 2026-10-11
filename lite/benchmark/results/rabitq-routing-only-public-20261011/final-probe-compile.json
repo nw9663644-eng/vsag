@@ -1,0 +1,19 @@
+{
+  "exit": 0,
+  "argv": [
+    "c++",
+    "-O3",
+    "-DNDEBUG",
+    "-std=c++17",
+    "-Iinclude",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_repeat_window_probe.cpp",
+    "-Lbuild-lite-fp16-simd-release",
+    "-lvsag-lite",
+    "-o",
+    "/dev/shm/vsag-routing-final-compile-exq4u1_v/probe"
+  ],
+  "scope": "fresh compile only after stream bool style fixes; measured source archived separately",
+  "source_sha256": "31816d81608e741c37fceed4ceccef42544ffa046a84225a14ab01e1248cce94",
+  "binary_sha256": "63593c67415f80c79b44142eafde299eb76af359ff4533b4a47be477b0797193",
+  "binary_bytes": 27632
+}

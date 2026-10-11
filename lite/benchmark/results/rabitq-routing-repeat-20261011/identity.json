@@ -1,0 +1,34 @@
+{
+  "head": "9c44640fcd7fcf58665d2dbf72c808522eabbe88",
+  "libraries": {
+    "control": {
+      "path": "/home/ubuntu/project/vsag-nofilter-control-9c44640",
+      "sha256": "276f9c49b289392e0eb64e9c641a907735bfcacaa307efb3aa2c5125fb77659f"
+    },
+    "candidate": {
+      "path": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+      "sha256": "3171d0d7e86866f02096db130f1937eb13c5115cbe993d4a6feb2e9987774330"
+    },
+    "reference": {
+      "path": "/home/ubuntu/project/vsag-root-control-c55466b",
+      "sha256": "f0dc8ce31c4bf7bc936fb59929fb22348195bd352c1a3e6c46451e19fe47e60d"
+    }
+  },
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "cc6fc9e558ca639dd289fb6a43ef2b331cc5996db387630e24fe8ea227c87b8c",
+    "src/lite/query_heap.h": "e12f5b8dbe78237137f5abfb81df15678b9fe41950420f628de5ecce6daa48ee",
+    "src/lite/query_visited.h": "c9a2e68d50b41c76a7bb9ac9c17c57b4a4de9b142943abdca5513460826062d4",
+    "lite/benchmark/query_repeat_window_probe.cpp": "74fc2248381204381d99a13584091af6738dc1aa8ac2d999921a10059c913b7c",
+    "lite/benchmark/run_rabitq_routing_repeat.py": "b076e9457cfa3241f8c1c2ca8c1ac9e656854be3182a5c54a028531bd60d4137"
+  },
+  "inputs": {
+    "base.fvecs": "da0c13acfd48caca82358b330ef75c71fb0cf551ae507d6a4a1d66a4eb3dbf97",
+    "queries.fvecs": "ad146143b14cda7b8a243c4685d52038ead6b628396116c647a3f8494f6aa278",
+    "groundtruth.ivecs": "0a0acb2798f3a281346b1d96e3d17a8a8ce4d539fb427f63264b99a9c9bfed09"
+  },
+  "scope": "public API; CPU0; 7 rotating-order triples; 100 historical queries repeated ten times; not1000 unique queries",
+  "snapshot": {
+    "sha256": "f5fc771b74dedebcb72931e6a9e7113e47332e30319eb67d6da4406e70ffe265",
+    "bytes": 112804416
+  }
+}
