@@ -1,0 +1,5 @@
+{
+  "directory": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+  "command": "/usr/bin/c++ -DVSAG_LITE_HAS_RABITQ_BACKEND -DVSAG_LITE_HAS_X86_SIMD -DVSAG_LITE_RABITQ_X86_SIMD -I/home/ubuntu/project/vsag-lite-baseline-v01/include -I/home/ubuntu/project/vsag-lite-baseline-v01/src -O3 -DNDEBUG -fPIC -Wall -Wextra -Wpedantic -std=c++17 -o CMakeFiles/vsag_lite_objects.dir/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp.o -c /home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp",
+  "file": "/home/ubuntu/project/vsag-lite-baseline-v01/src/lite/graph_backend.cpp"
+}

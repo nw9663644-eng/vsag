@@ -1,0 +1,506 @@
+[
+  {
+    "dataset": "sift10k",
+    "trial": 0,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 203.714,
+    "p99_us": 242.724,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 0,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 203.884,
+    "p99_us": 243.133,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 1,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 207.234,
+    "p99_us": 268.331,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 1,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 206.114,
+    "p99_us": 253.323,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 2,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 202.295,
+    "p99_us": 244.904,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 2,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 209.393,
+    "p99_us": 252.333,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 3,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 204.934,
+    "p99_us": 241.553,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 3,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 206.474,
+    "p99_us": 248.363,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 4,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 206.374,
+    "p99_us": 248.132,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 4,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 202.204,
+    "p99_us": 243.252,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 5,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 201.964,
+    "p99_us": 231.953,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 5,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 200.885,
+    "p99_us": 234.252,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 6,
+    "variant": "control",
+    "recall": 0.987,
+    "p50_us": 228.814,
+    "p99_us": 276.363,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "sift10k",
+    "trial": 6,
+    "variant": "candidate",
+    "recall": 0.987,
+    "p50_us": 213.083,
+    "p99_us": 260.032,
+    "average_visited": 2287.23
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 0,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 480.397,
+    "p99_us": 632.971,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 0,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 453.237,
+    "p99_us": 547.704,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 1,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 496.545,
+    "p99_us": 673.08,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 1,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 474.236,
+    "p99_us": 632.691,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 2,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 450.757,
+    "p99_us": 573.843,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 2,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 494.066,
+    "p99_us": 712.799,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 3,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 517.205,
+    "p99_us": 722.209,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 3,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 540.454,
+    "p99_us": 804.906,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 4,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 504.545,
+    "p99_us": 706.78,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 4,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 486.436,
+    "p99_us": 661.749,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 5,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 535.813,
+    "p99_us": 745.147,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 5,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 496.025,
+    "p99_us": 667.231,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 6,
+    "variant": "control",
+    "recall": 0.97,
+    "p50_us": 510.135,
+    "p99_us": 687.959,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "gist10k",
+    "trial": 6,
+    "variant": "candidate",
+    "recall": 0.97,
+    "p50_us": 559.894,
+    "p99_us": 759.357,
+    "average_visited": 2376.06
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 0,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 489.855,
+    "p99_us": 644.68,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 0,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 442.397,
+    "p99_us": 503.935,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 1,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 522.745,
+    "p99_us": 600.411,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 1,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 460.226,
+    "p99_us": 594.052,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 2,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 481.597,
+    "p99_us": 625.022,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 2,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 526.624,
+    "p99_us": 611.721,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 3,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 442.227,
+    "p99_us": 532.194,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 3,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 464.577,
+    "p99_us": 572.434,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 4,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 488.876,
+    "p99_us": 547.815,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 4,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 660.14,
+    "p99_us": 743.909,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 5,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 463.186,
+    "p99_us": 565.934,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 5,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 442.018,
+    "p99_us": 485.094,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 6,
+    "variant": "control",
+    "recall": 0.984,
+    "p50_us": 554.984,
+    "p99_us": 700.029,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "cohere10k",
+    "trial": 6,
+    "variant": "candidate",
+    "recall": 0.984,
+    "p50_us": 450.327,
+    "p99_us": 537.934,
+    "average_visited": 2912.69
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1190.025,
+    "p99_us": 1404.759,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 0,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1188.254,
+    "p99_us": 1381.059,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1180.806,
+    "p99_us": 1374.061,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 1,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1140.337,
+    "p99_us": 1341.54,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1146.486,
+    "p99_us": 1329.661,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 2,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1172.326,
+    "p99_us": 1363.01,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1154.867,
+    "p99_us": 1355.41,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 3,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1160.227,
+    "p99_us": 1348.731,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1133.877,
+    "p99_us": 1341.29,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 4,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1136.826,
+    "p99_us": 1371.089,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 5,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1163.135,
+    "p99_us": 1337.38,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 5,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1096.817,
+    "p99_us": 1324.131,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 6,
+    "variant": "control",
+    "recall": 0.859,
+    "p50_us": 1128.407,
+    "p99_us": 1339.76,
+    "average_visited": 3696.15
+  },
+  {
+    "dataset": "gist100k",
+    "trial": 6,
+    "variant": "candidate",
+    "recall": 0.859,
+    "p50_us": 1028.129,
+    "p99_us": 1247.133,
+    "average_visited": 3696.15
+  }
+]

@@ -1,0 +1,15 @@
+index.cpp.o
+bruteforce_backend.cpp.o
+graph_backend.cpp.o
+fp16_distance.cpp.o
+fp32_distance.cpp.o
+fp16_distance_avx.cpp.o
+fp16_distance_avx2.cpp.o
+fp16_distance_avx512.cpp.o
+fp32_distance_sse.cpp.o
+fp32_distance_avx2.cpp.o
+fp32_distance_avx512.cpp.o
+rabitq_backend.cpp.o
+rabitq_filter_ip.cpp.o
+rabitq_filter_ip_avx2.cpp.o
+rabitq_filter_ip_avx512.cpp.o

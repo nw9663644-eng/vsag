@@ -1,0 +1,993 @@
+[
+  {
+    "tag": "format",
+    "argv": [
+      "clang-format-15",
+      "-i",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_heap_reserve_probe.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "compile-object",
+    "argv": [
+      "/usr/bin/c++",
+      "-DVSAG_LITE_HAS_RABITQ_BACKEND",
+      "-DVSAG_LITE_HAS_X86_SIMD",
+      "-DVSAG_LITE_RABITQ_X86_SIMD",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/include",
+      "-I/home/ubuntu/project/vsag-lite-baseline-v01/src",
+      "-O3",
+      "-DNDEBUG",
+      "-fPIC",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-std=c++17",
+      "-o",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/graph_backend.cpp.o",
+      "-c",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/graph_backend.cpp"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+    "exit": 0
+  },
+  {
+    "tag": "replace-member",
+    "argv": [
+      "ar",
+      "r",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/libcandidate.a",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/graph_backend.cpp.o"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "archive-members",
+    "argv": [
+      "ar",
+      "t",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/libcandidate.a"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "compile-control",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_heap_reserve_probe.cpp",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/libvsag-lite.a",
+      "-o",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "compile-candidate",
+    "argv": [
+      "c++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++17",
+      "-Iinclude",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/query_heap_reserve_probe.cpp",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/libcandidate.a",
+      "-o",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-prepare.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-0-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-0-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-1-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-1-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-2-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-2-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-3-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-3-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-4-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-4-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-5-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-5-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-6-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "sift10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/sift10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/sift10k-6-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-prepare.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-0-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-0-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-1-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-1-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-2-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-2-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-3-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-3-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-4-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-4-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-5-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-5-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-6-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist10k-6-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-prepare.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-0-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-0-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-1-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-1-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-2-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-2-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-3-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-3-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-4-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-4-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-5-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-5-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-6-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "cohere10k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/cohere10k.snapshot",
+      "/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-10000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/cohere10k-6-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-prepare",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "0",
+      "1",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-prepare.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-0-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-0-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-0-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-0-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-0-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-1-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-1-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-1-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-1-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-1-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-2-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-2-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-2-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-2-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-2-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-3-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-3-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-3-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-3-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-3-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-4-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-4-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-4-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-4-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-4-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-5-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-5-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-5-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-5-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-5-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-5-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-6-control",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/control",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-6-control.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-6-control.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  },
+  {
+    "tag": "gist100k-6-candidate",
+    "argv": [
+      "taskset",
+      "-c",
+      "0",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/candidate",
+      "/dev/shm/vsag-fp16-best-reserve-csrsfmng/gist100k.snapshot",
+      "/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000/queries.fvecs",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-6-candidate.queries.csv",
+      "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/fp16-best-reserve-20261011/gist100k-6-candidate.neighbors.csv"
+    ],
+    "cwd": "/home/ubuntu/project/vsag-lite-baseline-v01",
+    "exit": 0
+  }
+]
