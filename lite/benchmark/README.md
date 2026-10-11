@@ -1935,3 +1935,5 @@ See [owned RaBitQ build adjacency](results/rabitq-owned-topology-20261011/README
 See [real100k owned RaBitQ acceptance slice](results/rabitq-owned-real100k-20261011/README.md) for GIST/Cohere memory gains and query/Save regressions; old Lite is NOT Full, long changed-value CRUD remains pending.
 
 See [RaBitQ bounded streamed Save](results/rabitq-stream-save-20261011/README.md) for real100k loaded-state Save/memory improvements and remaining query/CRUD/Full acceptance limits.
+
+See [rejected build-row capacity candidate](results/rabitq-row-capacity-20261011/README.md) for real100k fixed-budget evidence;production shrink/streamed Save remain unchanged.

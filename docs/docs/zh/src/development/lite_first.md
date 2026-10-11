@@ -332,3 +332,9 @@ RaBitQ反向连边排名的栈缓冲候选已撤回：每数据集三组固定�
 GIST960/Cohere768各100k，各7对独立进程交替保存，共28次，先Load再计时open/Save/close；CPU0/thread1/RAM暖缓存，非coldIO/fdatasync。Save中位52.819至45.774ms(-13.34%)、44.151至37.441(-15.20%)。保存后VmHWM151216至134964/132460至116216KiB，少16252/16244KiB，加载高水位可能遮蔽Save专项峰值。28次SHA与输入一致。
 
 Release6/SAN5/freshCov5/OFF4/format-tidy15通过，Lite2983/3125=95.456%非wholeFull。跨块、bulk/scalar、短写通过；首次命名lint失败计时前修复并保留日志。这是已加载状态Save优化，不是上轮建图后Save同协议复测；查询退化、长期CRUD质量和Full验收仍待完成。
+
+## 构建邻接行容量候选未采用（2026-10-11）
+
+[隔离实验](../../../../../lite/benchmark/results/rabitq-row-capacity-20261011/README.md)仅在候选适配器取消构建邻接行shrink_to_fit；两边共享bf50173生产头文件、对象和流式Save，未改业务源码、公开选项、图边或参数。GIST960/Cohere768各100k/100已观察query，degree16/build128/query512/CPU0/thread1，三对交替，共12builders/36独立warmload。六对快照SHA和有序结果一致，Recall .859/.937不变。
+
+查询P50中位数GIST1081.373至1084.913us（+0.33%）、Cohere1100.393至1146.963（+4.23%），P99分别+3.46%/+0.94%；构建+0.60%/+0.02%，整进程峰值+0.005%/0%，没有明确收益。Save/load小幅变化不视作稳定算法收益；保留构建容量不能据此解释为查询更快，也未证明此前退化根因。决定不接入生产，继续保留shrinking默认与流式Save。原始参数/源码/输入/延迟/GT/命令归档并独立复核。Fresh Release6通过；SAN/OFF/coverage只继承bf50173，未做候选消毒器或故障验收。不是Full、长期CRUD或盲P99验收，下一步优先路由工作区与堆分配诊断。
