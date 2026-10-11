@@ -1,6 +1,6 @@
 # Copyright 2024-present the vsag project
 # SPDX-License-Identifier: Apache-2.0
-"""Prepare reproducible real changed-vector CRUD inputs for two 100k datasets."""
+"""Prepare reproducible real changed-vector CRUD inputs for selected 100k datasets."""
 import argparse
 import hashlib
 import json
@@ -11,6 +11,8 @@ import numpy as np
 
 
 SOURCES = {
+    "sift100k100": Path("/home/ubuntu/project/vsag-lite-datasets/sift/"
+                       "prepared-10k-100k/scale-100000"),
     "gist100k100": Path("/home/ubuntu/project/vsag-lite-datasets/gist/"
                         "prepared-10k-100k/scale-100000"),
     "cohere100k100": Path("/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/"
@@ -113,11 +115,14 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--rounds", type=int, default=3)
     parser.add_argument("--crud-ops", type=int, default=10000)
+    parser.add_argument("--datasets", nargs="+", choices=list(SOURCES),
+                        default=["gist100k100", "cohere100k100"])
     args = parser.parse_args()
     assert args.rounds > 0 and 0 < args.crud_ops <= 100000
     args.output.mkdir(exist_ok=False)
-    for label, source in SOURCES.items():
-        prepare(args.output, label, source, args.rounds, args.crud_ops)
+    assert len(args.datasets) == len(set(args.datasets))
+    for label in args.datasets:
+        prepare(args.output, label, SOURCES[label], args.rounds, args.crud_ops)
 
 
 if __name__ == "__main__":

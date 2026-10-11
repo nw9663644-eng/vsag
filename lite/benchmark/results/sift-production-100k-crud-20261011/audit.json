@@ -1,0 +1,58 @@
+{
+  "audit": "pass",
+  "operations": 270000,
+  "truth_query_states": 600,
+  "summary": {
+    "fp32": {
+      "api_mutations_per_second": 8332.071438028092,
+      "operation_us": {
+        "update": {
+          "p50": 210.245,
+          "p99": 283.903
+        },
+        "remove": {
+          "p50": 15.729,
+          "p99": 29.079
+        },
+        "add": {
+          "p50": 129.597,
+          "p99": 200.734
+        }
+      }
+    },
+    "fp16": {
+      "api_mutations_per_second": 9635.964690800964,
+      "operation_us": {
+        "update": {
+          "p50": 196.325,
+          "p99": 265.923
+        },
+        "remove": {
+          "p50": 14.438,
+          "p99": 27.229
+        },
+        "add": {
+          "p50": 93.498,
+          "p99": 155.536
+        }
+      }
+    },
+    "rabitq8": {
+      "api_mutations_per_second": 7175.794072389365,
+      "operation_us": {
+        "update": {
+          "p50": 252.323,
+          "p99": 368.641
+        },
+        "remove": {
+          "p50": 27.06,
+          "p99": 42.338
+        },
+        "add": {
+          "p50": 133.046,
+          "p99": 181.446
+        }
+      }
+    }
+  }
+}

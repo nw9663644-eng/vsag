@@ -1,0 +1,30 @@
+{
+  "head": "a126a531da52a45c037b6d51e7fafc693505ed00",
+  "library_sha256": "0f729af8fd98323988f398d65ac75a9d67431889f2e4f87d05ed227aeba9374a",
+  "builder_sha256": "c7f35c588449316bb9e3ed5f77345ccee1c305c727b2d3e6a7131fa0fcd5e5b1",
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "9512de2dc183080e438cd6b0201dfe0696ed78fe20e1be444779c98597608111",
+    "src/lite/rabitq_backend.cpp": "6052e313a16ac9744d918e571c03f5e12ddfd72b9c76d7f1816cd2338be85949",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d",
+    "lite/benchmark/graph_crud_quality.cpp": "145e3ff4058705ce8a072acc05502e7d82097264d5dd9017f31511d95faa27b2",
+    "lite/benchmark/prepare_persistent_crud_100k.py": "5ff929c2ccf471dea88a3867cabbe0faf28d495a905d2878e8860021f9869905"
+  },
+  "configuration": {
+    "count": 100000,
+    "queries": 100,
+    "rounds": 3,
+    "replacements": 30000,
+    "api_calls_per_mode": 90000,
+    "degree": 16,
+    "build_ef": 128,
+    "query_ef": 512,
+    "k": 10,
+    "cpu": 0,
+    "trials": 1,
+    "order": [
+      "fp32",
+      "fp16",
+      "rabitq8"
+    ]
+  }
+}

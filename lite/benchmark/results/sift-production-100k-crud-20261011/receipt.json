@@ -1,0 +1,36 @@
+{
+  "label": "sift100k100",
+  "source": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000",
+  "base_count": 100000,
+  "query_count": 100,
+  "dim": 128,
+  "rounds": 3,
+  "crud_ops_per_round": 10000,
+  "metric": "squared_l2",
+  "schedule": "(round*65537+operation*8191)%N",
+  "recipe": "FP32 .875*current+.125*original donor; donor=(id+7919*(round+1))%N; Cohere FP64 renorm to FP32",
+  "truth": "FP64 direct differences/einsum; distance then ID lexsort top10",
+  "numpy_version": "2.2.6",
+  "files": {
+    "base.fvecs": {
+      "bytes": 51600000,
+      "sha256": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba"
+    },
+    "queries.fvecs": {
+      "bytes": 51600,
+      "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+    },
+    "groundtruth.ivecs": {
+      "bytes": 4400,
+      "sha256": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54"
+    },
+    "changed-groundtruth.ivecs": {
+      "bytes": 4400,
+      "sha256": "dbcc68ebf4558b284c3ea568f87adf8151633e992b7b903c5cc826339bccd224"
+    },
+    "replacement.fvecs": {
+      "bytes": 15480000,
+      "sha256": "36db6304a6077d798940c5716f6cfa8853ddcb70d613eaa1f0cf27c71fc538d2"
+    }
+  }
+}

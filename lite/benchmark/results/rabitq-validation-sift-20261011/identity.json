@@ -1,0 +1,38 @@
+{
+  "parent": "109d554f70c1ea46cecf05a232a18515fa766ce5",
+  "trials": 5,
+  "cpu": 0,
+  "threads": 1,
+  "snapshots": {
+    "sift100k": {
+      "bytes": 29600672,
+      "sha256": "40cf0d83af89cdc3dd0e04145925e09429a2dc573cc5fd6841fceca5d599d565"
+    }
+  },
+  "inputs": {
+    "sift100k": {
+      "base.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/base.fvecs",
+        "sha256": "7145bedfe09fe8d1afcc9ad743eb6ba6218dc766b77c4b0bbe82d22b78e265ba"
+      },
+      "queries.fvecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/queries.fvecs",
+        "sha256": "095af38bda2741be721447ba97e9286fa918ece946be92a9ae133276eddc1a10"
+      },
+      "groundtruth.ivecs": {
+        "path": "/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000/groundtruth.ivecs",
+        "sha256": "0116501935a2bba2c5dbadb21994beeeeb3cf4804f71c65a4478c745ec4fae54"
+      }
+    }
+  },
+  "sources": {
+    "src/lite/rabitq_graph_state.h": "9512de2dc183080e438cd6b0201dfe0696ed78fe20e1be444779c98597608111",
+    "src/lite/rabitq_backend_test.cpp": "6785b1a5e74f71e541a31897ed1f8aa0765bbdec2eb0dc640bf05065be2ad584",
+    "src/lite/rabitq_backend.cpp": "6052e313a16ac9744d918e571c03f5e12ddfd72b9c76d7f1816cd2338be85949",
+    "src/lite/rabitq_snapshot.h": "035574726724ed6dfef6e77fc76d034b8de3f85698b4c75091e4afa48113f40d"
+  },
+  "libraries": {
+    "control": "094bee5176b582bca7b69d3b34ab41b07174c09facf8a03b4275ce28950dc12d",
+    "candidate": "0f729af8fd98323988f398d65ac75a9d67431889f2e4f87d05ed227aeba9374a"
+  }
+}

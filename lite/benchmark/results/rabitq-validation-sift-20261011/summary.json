@@ -1,0 +1,34 @@
+{
+  "sift100k": {
+    "load:load_ms": {
+      "control": 64.788783,
+      "candidate": 57.913798,
+      "change_percent": -10.611381602892578
+    },
+    "load:loaded_rss_kib": {
+      "control": 50728.0,
+      "candidate": 50432.0,
+      "change_percent": -0.5835041791515505
+    },
+    "load:process_peak_rss_kib": {
+      "control": 74508.0,
+      "candidate": 71376.0,
+      "change_percent": -4.203575454984698
+    },
+    "save:save_ms": {
+      "control": 37.750331,
+      "candidate": 31.653745,
+      "change_percent": -16.14975508426668
+    },
+    "save:before_rss_kib": {
+      "control": 58832.0,
+      "candidate": 51844.0,
+      "change_percent": -11.877889583899915
+    },
+    "save:after_hwm_kib": {
+      "control": 74440.0,
+      "candidate": 71220.0,
+      "change_percent": -4.325631380977968
+    }
+  }
+}

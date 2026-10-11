@@ -2,7 +2,9 @@
 # Copyright 2024-present the vsag project
 # SPDX-License-Identifier: Apache-2.0
 """Paired warm Load and loaded-state Save; no Full/query/CRUD speed claim."""
+import argparse
 import csv
+import gzip
 import hashlib
 import io
 import json
@@ -14,7 +16,20 @@ import tempfile
 
 REPO = Path('/home/ubuntu/project/vsag-lite-baseline-v01')
 BUILD = REPO / 'build-lite-fp16-simd-release'
-OUT = REPO / 'lite/benchmark/results/rabitq-validation-scratch-20261011'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--datasets', nargs='+', choices=['sift100k', 'gist100k', 'cohere100k'],
+                    default=['gist100k', 'cohere100k'])
+parser.add_argument('--output', type=Path,
+                    default=REPO / 'lite/benchmark/results/rabitq-validation-scratch-20261011')
+args = parser.parse_args()
+if len(args.datasets) != len(set(args.datasets)):
+    parser.error('datasets must be distinct')
+OUT = args.output
+DATASETS = {
+    'sift100k': (128, '/home/ubuntu/project/vsag-lite-datasets/sift/prepared-10k-100k/scale-100000'),
+    'gist100k': (960, '/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000'),
+    'cohere100k': (768, '/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000'),
+}
 CONTROL = Path('/home/ubuntu/project/vsag-validate-control-20261011')
 OUT.mkdir(exist_ok=False)
 COMMANDS = []
@@ -46,9 +61,9 @@ for relative in ['src/lite/rabitq_graph_state.h', 'src/lite/rabitq_backend_test.
     path = REPO / relative
     identity['sources'][relative] = sha(path)
     (OUT / ('source-' + path.name)).write_bytes(path.read_bytes())
-(OUT / 'candidate.patch').write_bytes(subprocess.check_output(
-    ['git', 'diff', '--', 'src/lite/rabitq_graph_state.h', 'src/lite/rabitq_backend_test.cpp'],
-    cwd=REPO))
+patch = subprocess.check_output(['git', 'diff', identity['parent'], 'HEAD', '--',
+    'src/lite/rabitq_graph_state.h', 'src/lite/rabitq_backend_test.cpp'], cwd=REPO)
+(OUT / 'candidate.patch.gz').write_bytes(gzip.compress(patch, mtime=0))
 (OUT / 'control-rabitq_graph_state.h').write_bytes(subprocess.check_output(
     ['git', 'show', identity['parent'] + ':src/lite/rabitq_graph_state.h'], cwd=REPO))
 rows = []
@@ -58,9 +73,8 @@ with tempfile.TemporaryDirectory(prefix='vsag-validation-', dir='/dev/shm') as d
     run('compile-save-probe', ['/usr/bin/c++', '-O3', '-DNDEBUG', '-std=c++17',
         '-I' + str(REPO / 'include'), REPO / 'lite/benchmark/rabitq_save_probe.cpp',
         '-L' + str(BUILD), '-Wl,-rpath,' + str(BUILD), '-lvsag-lite', '-o', probe])
-    for label, dim, root in [
-        ('gist100k', 960, '/home/ubuntu/project/vsag-lite-datasets/gist/prepared-10k-100k/scale-100000'),
-        ('cohere100k', 768, '/home/ubuntu/project/vsag-lite-cohere-normalized-20261006/prepared/scale-100000')]:
+    for label in args.datasets:
+        dim, root = DATASETS[label]
         root = Path(root)
         snapshot = scratch / (label + '.snapshot')
         env = dict(os.environ, OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1',
@@ -91,15 +105,18 @@ with tempfile.TemporaryDirectory(prefix='vsag-validation-', dir='/dev/shm') as d
                                if operation == 'load' else [probe, snapshot, target])
                     output = run(tag, ['taskset', '-c', '0'] + command, selected)
                     metrics = next(csv.DictReader(io.StringIO(output)))
+                    saved_digest = None
                     if operation == 'save':
-                        assert sha(target) == digest
+                        saved_digest = sha(target)
+                        assert saved_digest == digest
                         target.unlink()
                     rows.append(dict(dataset=label, trial=trial, variant=name,
-                                     operation=operation, metrics=metrics))
+                                     operation=operation, metrics=metrics,
+                                     saved_sha256=saved_digest))
                     (OUT / 'rows.json').write_text(json.dumps(rows, indent=2) + '\n')
         print(label + ' five pairs complete', flush=True)
 summary = {}
-for label in ['gist100k', 'cohere100k']:
+for label in args.datasets:
     summary[label] = {}
     for operation, metric in [('load', 'load_ms'), ('load', 'loaded_rss_kib'),
                               ('load', 'process_peak_rss_kib'), ('save', 'save_ms'),

@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/usr/bin/time",
+    "-f",
+    "%M",
+    "-o",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/sift-production-100k-crud-20261011/rabitq8.peak_kib",
+    "taskset",
+    "-c",
+    "0",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release/lite_graph_crud_quality",
+    "/dev/shm/vsag-sift-crud-b1c61atg/inputs/sift100k100",
+    "/dev/shm/vsag-sift-crud-b1c61atg/rabitq8.snapshot",
+    "3",
+    "10000",
+    "/home/ubuntu/project/vsag-lite-baseline-v01/lite/benchmark/results/sift-production-100k-crud-20261011/rabitq8.queries.csv"
+  ],
+  "environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "LD_LIBRARY_PATH": "/home/ubuntu/project/vsag-lite-baseline-v01/build-lite-fp16-simd-release",
+    "VSAG_GRAPH_STORAGE": "rabitq8",
+    "VSAG_GRAPH_DEGREE": "16",
+    "VSAG_GRAPH_EF": "128",
+    "VSAG_GRAPH_QUERY_EF": "512",
+    "VSAG_GRAPH_CRUD_MODE": "all",
+    "VSAG_GRAPH_REPLACEMENTS": "/dev/shm/vsag-sift-crud-b1c61atg/inputs/sift100k100/replacement.fvecs"
+  }
+}
