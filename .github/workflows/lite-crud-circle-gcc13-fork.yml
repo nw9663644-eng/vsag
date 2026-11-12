@@ -1,0 +1,41 @@
+name: Lite CRUD GCC 13 fixture follow-up
+on:
+  push:
+    branches: [verify/lite-crud-circle-gcc13-fork-20261112]
+
+permissions:
+  contents: read
+
+jobs:
+  linux-circle-with-sindi-fixture-fix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      CANDIDATE_SHA: 1f364198b14fdef04af85d14f6a1f5227685711b
+      SINDI_BLOB: 2038f90f0d276bfb58c15c196483d4b55607f328
+      SINDI_PATCH_B64: ZGlmZiAtLWdpdCBhL3NyYy9hbGdvcml0aG0vc2luZGkvc2luZGlfcGFyYW1ldGVyX3Rlc3QuY3BwIGIvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKaW5kZXggNWFkZWEyMC4uMjAzOGY5MCAxMDA2NDQKLS0tIGEvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKKysrIGIvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKQEAgLTUwNSw5ICs1MDUsOSBAQCBURVNUX0NBU0UoIlNJTkRJIHdvcmtlciBwYXJhbWV0ZXJzIHJlcXVpcmUgYm91bmRlZCBKU09OIGludGVnZXJzIiwgIlt1dF1bU0lORElQYQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICIxODQ0Njc0NDA3MzcwOTU1MTYxNiJ9KSB7CiAgICAgICAgICAgICBDQVBUVVJFKGtleSwgdmFsdWUpOwogICAgICAgICAgICAgU0lORElTZWFyY2hQYXJhbWV0ZXIgcGFyYW1ldGVyOwotICAgICAgICAgICAgUkVRVUlSRV9USFJPV1NfQVMocGFyYW1ldGVyLkZyb21Kc29uKEpzb25UeXBlOjpQYXJzZShzdGQ6OnN0cmluZygie1wic2luZGlcIjp7XCIiKSArCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGtleSArICJcIjoiICsgdmFsdWUgKyAifX0iKSksCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBWc2FnRXhjZXB0aW9uKTsKKyAgICAgICAgICAgIHN0ZDo6c3RyaW5nIHBheWxvYWQoIntcInNpbmRpXCI6e1wiIik7CisgICAgICAgICAgICBwYXlsb2FkLmFwcGVuZChrZXkpLmFwcGVuZCgiXCI6IikuYXBwZW5kKHZhbHVlKS5hcHBlbmQoIn19Iik7CisgICAgICAgICAgICBSRVFVSVJFX1RIUk9XU19BUyhwYXJhbWV0ZXIuRnJvbUpzb24oSnNvblR5cGU6OlBhcnNlKHBheWxvYWQpKSwgVnNhZ0V4Y2VwdGlvbik7CiAgICAgICAgIH0KICAgICAgICAgYXV0byBqc29uID0gSnNvblR5cGU6OlBhcnNlKCJ7XCJzaW5kaVwiOnt9fSIpOwogICAgICAgICBqc29uWyJzaW5kaSJdW2tleV0uU2V0SW50KDEpOwo=
+      VSAG_TEST_SEED: '424242'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Verify and apply the independent SINDI test candidate
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          printf '%s' "$SINDI_PATCH_B64" | base64 -d > "$RUNNER_TEMP/sindi.patch"
+          git apply --check "$RUNNER_TEMP/sindi.patch"
+          git apply "$RUNNER_TEMP/sindi.patch"
+          git diff --check
+          test "$(git diff --name-only)" = src/algorithm/sindi/sindi_parameter_test.cpp
+          test "$(git hash-object src/algorithm/sindi/sindi_parameter_test.cpp)" = "$SINDI_BLOB"
+          git diff --stat
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash scripts/deps/install_toolchain_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y gfortran python3-dev libomp-20-dev gcc make cmake g++ lcov libaio-dev libcurl4-openssl-dev ninja-build libopenblas-dev liblapacke-dev
+      - name: Run CircleCI Linux test command
+        run: |
+          export CMAKE_GENERATOR=Ninja VSAG_ENABLE_INTEL_MKL=OFF EXTRA_DEFINED="-DUSE_SYSTEM_OPENBLAS=ON" COMPILE_JOBS=4
+          make test_parallel
