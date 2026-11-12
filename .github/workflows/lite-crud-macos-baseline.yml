@@ -1,0 +1,53 @@
+name: Diagnose upstream Lite macOS after type-only build fix
+on:
+  push:
+    branches: [verify/lite-crud-macos-baseline-20261112]
+
+permissions:
+  contents: read
+
+jobs:
+  macos-clean-base-diagnosis:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d7fd163d8fddde2bc7c7aa5eaaabee7605aa7018
+          persist-credentials: false
+      - name: Match std::min operand types on macOS
+        run: |
+          test "$(git rev-parse HEAD)" = d7fd163d8fddde2bc7c7aa5eaaabee7605aa7018
+          python3 - <<'PY'
+          from pathlib import Path
+          for name in ('graph_backend.cpp', 'rabitq_graph_state.h'):
+              p = Path('src/lite') / name
+              text = p.read_text()
+              old = 'std::min(needed, ranked.size())'
+              assert text.count(old) == 1
+              p.write_text(text.replace(old, 'std::min<uint64_t>(needed, ranked.size())'))
+          PY
+          git diff --check
+          git diff --stat
+      - name: Configure and build standalone Lite with sanitizers
+        run: |
+          test "$(uname -m)" = arm64
+          cmake -S lite -B build-lite -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite --parallel 3
+      - name: Record the outcome after the type-only build fix
+        run: |
+          set +e
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite --output-on-failure -R 'lite_graph_allocation|lite_rabitq_api' > "$RUNNER_TEMP/upstream-macos.log" 2>&1
+          result=$?
+          cat "$RUNNER_TEMP/upstream-macos.log"
+          printf 'ctest exit=%s\n' "$result"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: upstream-macos-diagnostic
+          path: ${{ runner.temp }}/upstream-macos.log
+
+
