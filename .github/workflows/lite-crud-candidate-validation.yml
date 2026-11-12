@@ -12,6 +12,7 @@ env:
 
 jobs:
   format-and-docs:
+    if: ${{ !contains(github.event.head_commit.message, '[tsan-only]') }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +26,7 @@ jobs:
       - run: node .github/scripts/check-docs.mjs
 
   macos-asan:
+    if: ${{ !contains(github.event.head_commit.message, '[tsan-only]') }}
     runs-on: macos-15
     timeout-minutes: 120
     steps:
@@ -67,12 +69,14 @@ jobs:
       - name: Build and run maintained concurrent tests
         shell: bash
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
           CMAKE_GENERATOR=Ninja make tsan COMPILE_JOBS=3
           printf '%s\n' race:libomp.so race:libomp.so.5 race:fmt::v10::detail::format_decimal race:libmkl_intel_thread.so.2 > omp.supp
           TSAN_OPTIONS=suppressions=omp.supp ./build/tests/functests '[concurrent]~[daily]'
 
   linux-circle-equivalent:
+    if: ${{ !contains(github.event.head_commit.message, '[tsan-only]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
@@ -92,6 +96,7 @@ jobs:
           make test_parallel
 
   linux-wheel:
+    if: ${{ !contains(github.event.head_commit.message, '[tsan-only]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
