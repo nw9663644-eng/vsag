@@ -7,10 +7,24 @@ permissions:
   contents: read
 
 env:
-  CANDIDATE_SHA: c078950852033dc6e0604efe5d0fd449f9b156ed
+  CANDIDATE_SHA: ab8ce46203c4181e9384a2a1f3ac40f39c26e8d5
   VSAG_TEST_SEED: '424242'
 
 jobs:
+  format-and-docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - run: test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+      - uses: ./.github/actions/check-format
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node .github/scripts/check-docs.mjs
+
   linux-lite:
     runs-on: ubuntu-24.04
     steps:
