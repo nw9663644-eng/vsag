@@ -1,0 +1,91 @@
+name: Diagnose Lite allocation and scalar rounding on macOS
+on:
+  push:
+    branches: [verify/lite-crud-macos-portability-20261112]
+
+permissions:
+  contents: read
+
+jobs:
+  macos-clean-base-diagnosis:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: d7fd163d8fddde2bc7c7aa5eaaabee7605aa7018
+          persist-credentials: false
+      - name: Configure and build standalone Lite with sanitizers
+        run: |
+          test "$(uname -m)" = arm64
+          cmake -S lite -B build-lite -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite --parallel 3
+      - name: Record the outcome on unmodified upstream main
+        run: |
+          set +e
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite --output-on-failure -R 'lite_graph_allocation|lite_rabitq_api' > "$RUNNER_TEMP/upstream-macos.log" 2>&1
+          result=$?
+          cat "$RUNNER_TEMP/upstream-macos.log"
+          printf 'ctest exit=%s\n' "$result"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: upstream-macos-diagnostic
+          path: ${{ runner.temp }}/upstream-macos.log
+
+  macos-portability-candidate:
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      CANDIDATE_SHA: 1f364198b14fdef04af85d14f6a1f5227685711b
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Prepare the minimal Lite portability candidate on the runner
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('lite/CMakeLists.txt')
+          text = p.read_text()
+          floating = '''        "${VSAG_ROOT}/src/lite/rabitq_filter_ip.cpp")
+              if(VSAG_LITE_HAS_X86_SIMD)'''
+          updated = '''        "${VSAG_ROOT}/src/lite/rabitq_filter_ip.cpp")
+              if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+                  # Match the scalar reference's separately rounded multiply and add.
+                  set_source_files_properties(
+                      "${VSAG_ROOT}/src/lite/rabitq_filter_ip.cpp"
+                      "${VSAG_ROOT}/src/lite/rabitq_backend_test.cpp"
+                      PROPERTIES COMPILE_OPTIONS "-ffp-contract=off")
+              endif()
+              if(VSAG_LITE_HAS_X86_SIMD)'''
+          link = '    target_link_libraries(lite_graph_allocation_tests PRIVATE vsag::lite Catch2::Catch2WithMain)'
+          static = '''    # Link the production objects into the executable so its replacement
+              # operator new can inject failures on platforms without shared-library interposition.
+              target_link_libraries(lite_graph_allocation_tests PRIVATE vsag_lite_static Catch2::Catch2WithMain)'''
+          assert text.count(floating) == 1 and text.count(link) == 1
+          p.write_text(text.replace(floating, updated).replace(link, static))
+          PY
+          git diff --check
+          test "$(git diff --name-only)" = lite/CMakeLists.txt
+          git diff --binary > "$RUNNER_TEMP/lite-portability-candidate.patch"
+          cat "$RUNNER_TEMP/lite-portability-candidate.patch"
+      - name: Build and verify the portability candidate with sanitizers
+        run: |
+          test "$(uname -m)" = arm64
+          cmake -S lite -B build-lite -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite --parallel 3
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite --output-on-failure
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: lite-macos-portability-candidate
+          path: ${{ runner.temp }}/lite-portability-candidate.patch
