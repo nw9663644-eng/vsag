@@ -1,0 +1,118 @@
+name: Lite CRUD candidate preflight
+on:
+  push:
+    branches: [verify/lite-crud-neighbor-repair-20261112]
+
+permissions:
+  contents: read
+
+env:
+  CANDIDATE_SHA: 1f364198b14fdef04af85d14f6a1f5227685711b
+  VSAG_TEST_SEED: '424242'
+
+jobs:
+  format-and-docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/check-format
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node .github/scripts/check-docs.mjs
+
+  macos-asan:
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Verify architecture and candidate
+        run: |
+          test "$(uname -m)" = arm64
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+      - name: Prepare maintained dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: '1'
+        run: bash ./scripts/deps/install_deps.sh
+      - name: Build Full ASan
+        run: CMAKE_GENERATOR=Ninja CMAKE_EXPORT_COMPILE_COMMANDS=ON make asan VSAG_ENABLE_EXAMPLES=ON COMPILE_JOBS=3
+      - name: Build and test standalone Lite ASan
+        run: |
+          cmake -S lite -B build-lite-preflight -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite-preflight --parallel 3
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite-preflight --output-on-failure
+
+  linux-tsan:
+    runs-on: ubuntu-24.04
+    container: vsaglib/vsag:ci-main-openblas
+    timeout-minutes: 120
+    env:
+      EXTRA_DEFINED: -DVSAG_USE_SYSTEM_OPENBLAS=ON
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Build and run maintained concurrent tests
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          CMAKE_GENERATOR=Ninja make tsan COMPILE_JOBS=3
+          printf '%s\n' race:libomp.so race:libomp.so.5 race:fmt::v10::detail::format_decimal race:libmkl_intel_thread.so.2 > omp.supp
+          TSAN_OPTIONS=suppressions=omp.supp ./build/tests/functests '[concurrent]~[daily]'
+
+  linux-circle-equivalent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash scripts/deps/install_toolchain_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y gfortran python3-dev libomp-20-dev gcc make cmake g++ lcov libaio-dev libcurl4-openssl-dev ninja-build libopenblas-dev liblapacke-dev
+      - name: Run CircleCI Linux test command
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          export CMAKE_GENERATOR=Ninja VSAG_ENABLE_INTEL_MKL=OFF EXTRA_DEFINED="-DUSE_SYSTEM_OPENBLAS=ON" COMPILE_JOBS=4
+          make test_parallel
+
+  linux-wheel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash ./scripts/deps/install_deps_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Build and test fresh wheel
+        run: |
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          export CMAKE_GENERATOR=Ninja VSAG_OPENBLAS_TARGET=GENERIC CIBW_ENVIRONMENT="VSAG_OPENBLAS_TARGET=GENERIC"
+          make pyvsag PY_VERSION=3.10
+          python -m venv "$RUNNER_TEMP/lite-crud-wheel"
+          . "$RUNNER_TEMP/lite-crud-wheel/bin/activate"
+          python -m pip install wheelhouse/*.whl numpy pyjson pytest
+          python -m pytest tests/python -v --tb=short
