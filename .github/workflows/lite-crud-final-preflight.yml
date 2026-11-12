@@ -1,0 +1,313 @@
+name: Lite CRUD final candidate preflight
+on:
+  push:
+    branches: [verify/lite-crud-final-preflight-20261112]
+
+permissions:
+  contents: read
+
+env:
+  CANDIDATE_SHA: 1f364198b14fdef04af85d14f6a1f5227685711b
+  VSAG_TEST_SEED: '424242'
+
+jobs:
+  assemble:
+    runs-on: ubuntu-24.04
+    outputs:
+      sha: ${{ steps.freeze.outputs.sha }}
+    env:
+      HUMAN_NAME: "Nannan Wang"
+      HUMAN_EMAIL: "1794949109@qq.com"
+      MAC_PATCH: ZGlmZiAtLWdpdCBhL2xpdGUvQ01ha2VMaXN0cy50eHQgYi9saXRlL0NNYWtlTGlzdHMudHh0CmluZGV4IGJiOWZlMGYuLjJlMTVhZTUgMTAwNjQ0Ci0tLSBhL2xpdGUvQ01ha2VMaXN0cy50eHQKKysrIGIvbGl0ZS9DTWFrZUxpc3RzLnR4dApAQCAtNDcsNiArNDcsMTMgQEAgaWYoRU5BQkxFX1JBQklUUV9MSVRFX0JBQ0tFTkQpCiAgICAgbGlzdChBUFBFTkQgVlNBR19MSVRFX1NPVVJDRVMKICAgICAgICAgIiR7VlNBR19ST09UfS9zcmMvbGl0ZS9yYWJpdHFfYmFja2VuZC5jcHAiCiAgICAgICAgICIke1ZTQUdfUk9PVH0vc3JjL2xpdGUvcmFiaXRxX2ZpbHRlcl9pcC5jcHAiKQorICAgIGlmKENNQUtFX0NYWF9DT01QSUxFUl9JRCBNQVRDSEVTICJHTlV8Q2xhbmciKQorICAgICAgICAjIE1hdGNoIHRoZSBzY2FsYXIgcmVmZXJlbmNlJ3Mgc2VwYXJhdGVseSByb3VuZGVkIG11bHRpcGx5IGFuZCBhZGQuCisgICAgICAgIHNldF9zb3VyY2VfZmlsZXNfcHJvcGVydGllcygKKyAgICAgICAgICAgICIke1ZTQUdfUk9PVH0vc3JjL2xpdGUvcmFiaXRxX2ZpbHRlcl9pcC5jcHAiCisgICAgICAgICAgICAiJHtWU0FHX1JPT1R9L3NyYy9saXRlL3JhYml0cV9iYWNrZW5kX3Rlc3QuY3BwIgorICAgICAgICAgICAgUFJPUEVSVElFUyBDT01QSUxFX09QVElPTlMgIi1mZnAtY29udHJhY3Q9b2ZmIikKKyAgICBlbmRpZigpCiAgICAgaWYoVlNBR19MSVRFX0hBU19YODZfU0lNRCkKICAgICAgICAgbGlzdChBUFBFTkQgVlNBR19MSVRFX1NPVVJDRVMKICAgICAgICAgICAgICIke1ZTQUdfUk9PVH0vc3JjL2xpdGUvcmFiaXRxX2ZpbHRlcl9pcF9hdngyLmNwcCIKQEAgLTEwMCw3ICsxMDcsOSBAQCBpZihFTkFCTEVfVEVTVFMpCiAgICAgYWRkX2V4ZWN1dGFibGUobGl0ZV9ncmFwaF90ZXN0cyAiJHtWU0FHX1JPT1R9L3NyYy9saXRlL2dyYXBoX2JhY2tlbmRfdGVzdC5jcHAiKQogICAgIGFkZF9leGVjdXRhYmxlKGxpdGVfZ3JhcGhfYWxsb2NhdGlvbl90ZXN0cyAiJHtWU0FHX1JPT1R9L3NyYy9saXRlL2dyYXBoX2FsbG9jYXRpb25fdGVzdC5jcHAiKQogICAgIHRhcmdldF9pbmNsdWRlX2RpcmVjdG9yaWVzKGxpdGVfZ3JhcGhfYWxsb2NhdGlvbl90ZXN0cyBQUklWQVRFICIke1ZTQUdfUk9PVH0vc3JjIikKLSAgICB0YXJnZXRfbGlua19saWJyYXJpZXMobGl0ZV9ncmFwaF9hbGxvY2F0aW9uX3Rlc3RzIFBSSVZBVEUgdnNhZzo6bGl0ZSBDYXRjaDI6OkNhdGNoMldpdGhNYWluKQorICAgICMgTGluayB0aGUgcHJvZHVjdGlvbiBvYmplY3RzIGludG8gdGhlIGV4ZWN1dGFibGUgc28gaXRzIHJlcGxhY2VtZW50CisgICAgIyBvcGVyYXRvciBuZXcgY2FuIGluamVjdCBmYWlsdXJlcyBvbiBwbGF0Zm9ybXMgd2l0aG91dCBzaGFyZWQtbGlicmFyeSBpbnRlcnBvc2l0aW9uLgorICAgIHRhcmdldF9saW5rX2xpYnJhcmllcyhsaXRlX2dyYXBoX2FsbG9jYXRpb25fdGVzdHMgUFJJVkFURSB2c2FnX2xpdGVfc3RhdGljIENhdGNoMjo6Q2F0Y2gyV2l0aE1haW4pCiAgICAgaWYoRU5BQkxFX1JBQklUUV9MSVRFX0JBQ0tFTkQpCiAgICAgICAgIHRhcmdldF9jb21waWxlX2RlZmluaXRpb25zKGxpdGVfZ3JhcGhfYWxsb2NhdGlvbl90ZXN0cyBQUklWQVRFIFZTQUdfTElURV9IQVNfUkFCSVRRX0JBQ0tFTkQpCiAgICAgZW5kaWYoKQo=
+      SINDI_PATCH: ZGlmZiAtLWdpdCBhL3NyYy9hbGdvcml0aG0vc2luZGkvc2luZGlfcGFyYW1ldGVyX3Rlc3QuY3BwIGIvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKaW5kZXggNWFkZWEyMC4uMjAzOGY5MCAxMDA2NDQKLS0tIGEvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKKysrIGIvc3JjL2FsZ29yaXRobS9zaW5kaS9zaW5kaV9wYXJhbWV0ZXJfdGVzdC5jcHAKQEAgLTUwNSw5ICs1MDUsOSBAQCBURVNUX0NBU0UoIlNJTkRJIHdvcmtlciBwYXJhbWV0ZXJzIHJlcXVpcmUgYm91bmRlZCBKU09OIGludGVnZXJzIiwgIlt1dF1bU0lORElQYQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICIxODQ0Njc0NDA3MzcwOTU1MTYxNiJ9KSB7CiAgICAgICAgICAgICBDQVBUVVJFKGtleSwgdmFsdWUpOwogICAgICAgICAgICAgU0lORElTZWFyY2hQYXJhbWV0ZXIgcGFyYW1ldGVyOwotICAgICAgICAgICAgUkVRVUlSRV9USFJPV1NfQVMocGFyYW1ldGVyLkZyb21Kc29uKEpzb25UeXBlOjpQYXJzZShzdGQ6OnN0cmluZygie1wic2luZGlcIjp7XCIiKSArCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGtleSArICJcIjoiICsgdmFsdWUgKyAifX0iKSksCi0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBWc2FnRXhjZXB0aW9uKTsKKyAgICAgICAgICAgIHN0ZDo6c3RyaW5nIHBheWxvYWQoIntcInNpbmRpXCI6e1wiIik7CisgICAgICAgICAgICBwYXlsb2FkLmFwcGVuZChrZXkpLmFwcGVuZCgiXCI6IikuYXBwZW5kKHZhbHVlKS5hcHBlbmQoIn19Iik7CisgICAgICAgICAgICBSRVFVSVJFX1RIUk9XU19BUyhwYXJhbWV0ZXIuRnJvbUpzb24oSnNvblR5cGU6OlBhcnNlKHBheWxvYWQpKSwgVnNhZ0V4Y2VwdGlvbik7CiAgICAgICAgIH0KICAgICAgICAgYXV0byBqc29uID0gSnNvblR5cGU6OlBhcnNlKCJ7XCJzaW5kaVwiOnt9fSIpOwogICAgICAgICBqc29uWyJzaW5kaSJdW2tleV0uU2V0SW50KDEpOwo=
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Assemble the independently verified fixes in the remote worktree
+        id: freeze
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          git config user.name "$HUMAN_NAME"
+          git config user.email "$HUMAN_EMAIL"
+          git switch -c staged/lite-crud-neighbor-repair
+          printf '%s' "$MAC_PATCH" | base64 -d > "$RUNNER_TEMP/lite-macos.patch"
+          printf '%s' "$SINDI_PATCH" | base64 -d > "$RUNNER_TEMP/sindi.patch"
+          git apply --index "$RUNNER_TEMP/lite-macos.patch"
+          test "$(git diff --cached --name-only)" = lite/CMakeLists.txt
+          test "$(git hash-object lite/CMakeLists.txt | cut -c1-7)" = 2e15ae5
+          git diff --cached --check
+          printf 'fix(lite): make standalone validation portable on macOS\n\nKeep scalar multiply and add rounding explicit and link allocation injection into the test executable.\n\nSigned-off-by: %s <%s>\nAssisted-by: Codex:GPT-6\n' "$HUMAN_NAME" "$HUMAN_EMAIL" > "$RUNNER_TEMP/commit.txt"
+          git commit -F "$RUNNER_TEMP/commit.txt"
+          git apply --index "$RUNNER_TEMP/sindi.patch"
+          test "$(git diff --cached --name-only)" = src/algorithm/sindi/sindi_parameter_test.cpp
+          test "$(git hash-object src/algorithm/sindi/sindi_parameter_test.cpp)" = 2038f90f0d276bfb58c15c196483d4b55607f328
+          git diff --cached --check
+          printf 'test(sindi): avoid GCC 13 warning in parameter JSON fixture\n\nBuild the same invalid JSON values without moving intermediate strings.\n\nSigned-off-by: %s <%s>\nAssisted-by: Codex:GPT-6\n' "$HUMAN_NAME" "$HUMAN_EMAIL" > "$RUNNER_TEMP/commit.txt"
+          git commit -F "$RUNNER_TEMP/commit.txt"
+          test -z "$(git status --porcelain)"
+          final=$(git rev-parse HEAD)
+          printf 'sha=%s\n' "$final" >> "$GITHUB_OUTPUT"
+          mkdir "$RUNNER_TEMP/final-candidate"
+          git bundle create "$RUNNER_TEMP/final-candidate/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair "^$CANDIDATE_SHA"
+          git bundle verify "$RUNNER_TEMP/final-candidate/candidate.bundle"
+          printf '%s\n' "$final" > "$RUNNER_TEMP/final-candidate/candidate-sha.txt"
+          git diff --binary "$CANDIDATE_SHA" HEAD > "$RUNNER_TEMP/final-candidate/followup.patch"
+      - uses: actions/upload-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/final-candidate
+          retention-days: 7
+
+  linux-lite:
+    needs: assemble
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - name: Run standalone Release, sanitizer and coverage checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          build_and_test() {
+            folder=$1
+            shift
+            cmake -S lite -B "$folder" -G Ninja -DCMAKE_CXX_COMPILER=g++-13 \
+              -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTS=ON "$@"
+            cmake --build "$folder" --parallel 2
+            ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+              ctest --test-dir "$folder" --output-on-failure
+          }
+          build_and_test build-lite-release -DCMAKE_BUILD_TYPE=Release -DENABLE_RABITQ_LITE_BACKEND=ON
+          build_and_test build-lite-release-off -DCMAKE_BUILD_TYPE=Release -DENABLE_RABITQ_LITE_BACKEND=OFF
+          build_and_test build-lite-coverage -DCMAKE_BUILD_TYPE=Debug -DENABLE_RABITQ_LITE_BACKEND=ON -DENABLE_COVERAGE=ON
+          python3 lite/tools/collect_coverage.py --root "$PWD" --build "$PWD/build-lite-coverage" \
+            --output "$RUNNER_TEMP/lite-coverage.json" --fail-under 90
+          build_and_test build-lite-asan -DCMAKE_BUILD_TYPE=Debug -DENABLE_RABITQ_LITE_BACKEND=ON \
+            '-DCMAKE_CXX_FLAGS=-O1 -fsanitize=address,undefined -fno-omit-frame-pointer' \
+            '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=address,undefined -no-pie' \
+            '-DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=address,undefined'
+      - name: Verify x86 production scalar code is byte-identical with the original compiler flags
+        run: |
+          python3 - <<'PY'
+          import json, shlex, subprocess, tempfile
+          from pathlib import Path
+          rows = json.loads(Path('build-lite-release/compile_commands.json').read_text())
+          row = next(r for r in rows if r['file'].endswith('/rabitq_filter_ip.cpp'))
+          args = shlex.split(row['command'])
+          assert args.count('-ffp-contract=off') == 1
+          dst = args[args.index('-o')+1]
+          if not Path(dst).is_absolute():
+              dst = str(Path(row['directory']) / dst)
+          with tempfile.TemporaryDirectory() as scratch:
+              directory = Path(scratch)
+              old = directory / 'old-flags.o'
+              args[args.index('-o')+1] = str(old)
+              args.remove('-ffp-contract=off')
+              subprocess.run(args, cwd=row['directory'], check=True)
+              def code(p, name):
+                  out = directory / name
+                  subprocess.run(['objcopy','--only-section=.text','-O','binary',p,out],check=True)
+                  return out.read_bytes()
+              original = code(old,'original.text')
+              final = code(dst,'final.text')
+              assert original and original == final
+              print('PASS x86 scalar kernel text identical',len(final),'bytes')
+          PY
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: exact-lite-crud-linux-coverage
+          path: ${{ runner.temp }}/lite-coverage.json
+
+  format-and-docs:
+    needs: assemble
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - uses: ./.github/actions/check-format
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node .github/scripts/check-docs.mjs
+
+  macos-asan:
+    needs: assemble
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - name: Verify architecture and candidate
+        run: |
+          test "$(uname -m)" = arm64
+      - name: Prepare maintained dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: '1'
+        run: bash ./scripts/deps/install_deps.sh
+      - name: Build Full ASan
+        run: CMAKE_GENERATOR=Ninja CMAKE_EXPORT_COMPILE_COMMANDS=ON make asan VSAG_ENABLE_EXAMPLES=ON COMPILE_JOBS=3
+      - name: Build and test standalone Lite ASan
+        run: |
+          cmake -S lite -B build-lite-preflight -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite-preflight --parallel 3
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite-preflight --output-on-failure
+
+  linux-tsan:
+    needs: assemble
+    runs-on: ubuntu-24.04
+    container: vsaglib/vsag:ci-main-openblas
+    timeout-minutes: 120
+    env:
+      EXTRA_DEFINED: -DVSAG_USE_SYSTEM_OPENBLAS=ON
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - name: Build and run maintained concurrent tests
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          CMAKE_GENERATOR=Ninja make tsan COMPILE_JOBS=3
+          printf '%s\n' race:libomp.so race:libomp.so.5 race:fmt::v10::detail::format_decimal race:libmkl_intel_thread.so.2 > omp.supp
+          TSAN_OPTIONS=suppressions=omp.supp ./build/tests/functests '[concurrent]~[daily]'
+
+  linux-circle-equivalent:
+    needs: assemble
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash scripts/deps/install_toolchain_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y gfortran python3-dev libomp-20-dev gcc make cmake g++ lcov libaio-dev libcurl4-openssl-dev ninja-build libopenblas-dev liblapacke-dev
+      - name: Run CircleCI Linux test command
+        run: |
+          export CMAKE_GENERATOR=Ninja VSAG_ENABLE_INTEL_MKL=OFF EXTRA_DEFINED="-DUSE_SYSTEM_OPENBLAS=ON" COMPILE_JOBS=4
+          make test_parallel
+
+  linux-wheel:
+    needs: assemble
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v5
+        with:
+          name: exact-lite-crud-final-candidate
+          path: ${{ runner.temp }}/candidate-source
+      - name: Check out the exact final candidate
+        shell: bash
+        env:
+          FINAL_SHA: ${{ needs.assemble.outputs.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch "$RUNNER_TEMP/candidate-source/candidate.bundle" refs/heads/staged/lite-crud-neighbor-repair
+          git checkout --detach "$FINAL_SHA"
+          test "$(git rev-parse HEAD)" = "$FINAL_SHA"
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash ./scripts/deps/install_deps_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Build and test fresh wheel
+        run: |
+          export CMAKE_GENERATOR=Ninja VSAG_OPENBLAS_TARGET=GENERIC CIBW_ENVIRONMENT="VSAG_OPENBLAS_TARGET=GENERIC"
+          make pyvsag PY_VERSION=3.10
+          python -m venv "$RUNNER_TEMP/lite-crud-wheel"
+          . "$RUNNER_TEMP/lite-crud-wheel/bin/activate"
+          python -m pip install wheelhouse/*.whl numpy pyjson pytest
+          python -m pytest tests/python -v --tb=short
