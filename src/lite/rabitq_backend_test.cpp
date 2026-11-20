@@ -1666,3 +1666,77 @@ TEST_CASE("RaBitQ repair reselects full affected rows after removal", "[lite-rab
     std::sort(neighbors.begin(), neighbors.end());
     REQUIRE(neighbors == std::vector<int64_t>{10, 20});
 }
+
+TEST_CASE("RaBitQ removal guards protection of displaced targets", "[lite-rabitq]") {
+    namespace codec = vsag::lite::detail::rabitq;
+    constexpr uint64_t dim = 128;
+    const std::vector<float> coordinates{0, 0, 1, 0, 2, 0, 0, 2, 10, 10};
+    const std::vector<std::vector<uint64_t>> original{{4, 2}, {0, 3}, {1, 3}, {0, 1}, {1, 3}};
+    for (const bool compact : {false, true}) {
+        std::array<uint64_t, 5> slots{0, 1, 2, 3, 4};
+        if (compact) {
+            std::swap(slots[2], slots[4]);
+        }
+        std::vector<float> vectors(5 * dim);
+        std::vector<int64_t> ids(5);
+        codec::OwnedGraphAdjacency links;
+        links.rows.resize(5);
+        for (uint64_t slot = 0; slot < 5; ++slot) {
+            ids[slots[slot]] = static_cast<int64_t>(slot * 10);
+            for (uint64_t d = 0; d < dim; ++d) {
+                vectors[slots[slot] * dim + d] = coordinates[slot * 2 + d % 2];
+            }
+            for (const uint64_t target : original[slot]) {
+                links.rows[slots[slot]].push_back(slots[target]);
+            }
+        }
+        const auto model = codec::train(vectors, 5, dim, 47);
+        codec::EncodedRecords codes(dim);
+        for (uint64_t slot = 0; slot < 5; ++slot) {
+            codes.Append(codec::encode(model, vectors.data() + slot * dim));
+        }
+        for (const bool reverse : {false, true}) {
+            for (const bool transactional : {false, true}) {
+                for (const bool protect : {false, true}) {
+                    for (const auto mode :
+                         {codec::IncomingProtection::RECOUNT, codec::IncomingProtection::CACHED}) {
+                        codec::MutableGraphState state(
+                            links, model, codes, ids, 2, 128, false, reverse);
+                        // The last flag matches the public backend; it must not enable
+                        // removal protection or initialize a cold cache by itself.
+                        state.ConfigureIncomingProtection(
+                            mode, false, protect, false, mode == codec::IncomingProtection::CACHED);
+                        const auto incoming = [&state](int64_t target) {
+                            const auto& current_ids = state.GetIds();
+                            const auto found =
+                                std::find(current_ids.begin(), current_ids.end(), target);
+                            REQUIRE(found != current_ids.end());
+                            const uint64_t slot =
+                                static_cast<uint64_t>(std::distance(current_ids.begin(), found));
+                            const auto graph = state.GetGraph();
+                            return std::count(graph.neighbors.begin(), graph.neighbors.end(), slot);
+                        };
+                        REQUIRE(incoming(20) == 1);
+                        REQUIRE((transactional ? state.RemoveTransactional(40) : state.Remove(40)));
+                        REQUIRE_NOTHROW(state.Validate());
+                        REQUIRE(state.Size() == 4);
+                        REQUIRE_FALSE(state.Contains(40));
+                        REQUIRE(incoming(20) == (protect ? 1 : 0));
+                        if (mode == codec::IncomingProtection::CACHED) {
+                            REQUIRE(state.IncomingCountRebuilds() == (protect ? 1 : 0));
+                            if (not protect) {
+                                REQUIRE(state.IncomingCountBytes() == 0);
+                            }
+                        }
+                        std::stringstream snapshot;
+                        codec::save_mutable_snapshot(snapshot, state);
+                        auto restored = codec::load_mutable_snapshot(snapshot);
+                        REQUIRE_NOTHROW(restored.Validate());
+                        REQUIRE(restored.GetIds() == state.GetIds());
+                        REQUIRE(restored.GetGraph().neighbors == state.GetGraph().neighbors);
+                    }
+                }
+            }
+        }
+    }
+}

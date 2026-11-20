@@ -71,8 +71,11 @@ After a physical deletion or a changed-vector update, affected adjacency rows
 are reselected from their current neighbors and the previous neighbors of the
 changed record. Reselection includes rows that are already at their degree cap.
 It uses a diversity pass, then fills any remaining capacity by distance.
-Incoming-edge protection still applies. RaBitQ uses the existing encoded
-distance estimates for this process.
+Incoming-edge protection follows the existing mutation policy. RaBitQ Update
+protects displaced targets; Remove does so only when its internal removal guard
+is enabled. The public backend keeps that guard disabled, so a cold-cache
+Remove does not initialize full-graph incoming counts. RaBitQ uses its existing
+encoded distance estimates for reselection.
 
 This helps preserve navigability under repeated mutations. It adds work to
 Delete and Update, and recall still depends on the workload and search budget.

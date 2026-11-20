@@ -1199,7 +1199,7 @@ public:
         for (uint64_t neighbor : neighbors) {
             link(neighbor, slot);
         }
-        repair(std::move(affected_nodes), old_neighbors);
+        repair(std::move(affected_nodes), old_neighbors, true);
         if (incoming_protection_ != IncomingProtection::NONE) {
             auto targets = old_neighbors;
             targets.push_back(slot);
@@ -1416,10 +1416,10 @@ public:
                 affected_nodes.erase(std::unique(affected_nodes.begin(), affected_nodes.end()),
                                      affected_nodes.end());
                 const auto targets = affected_nodes;
-                repair(std::move(affected_nodes), repair_candidates);
+                repair(std::move(affected_nodes), repair_candidates, protect_removed_incoming_);
                 protect_incoming(targets);
             } else {
-                repair(std::move(affected_nodes), repair_candidates);
+                repair(std::move(affected_nodes), repair_candidates, protect_removed_incoming_);
             }
             return true;
         } catch (...) {
@@ -1947,7 +1947,8 @@ private:
 
     void
     repair(std::vector<uint64_t> affected_nodes,
-           const std::vector<uint64_t>& additional_candidates) {
+           const std::vector<uint64_t>& additional_candidates,
+           bool protect_displaced) {
         std::sort(affected_nodes.begin(), affected_nodes.end());
         affected_nodes.erase(std::unique(affected_nodes.begin(), affected_nodes.end()),
                              affected_nodes.end());
@@ -2002,16 +2003,18 @@ private:
                     selected.push_back(candidate.id);
                 }
             }
-            for (const uint64_t target : old_neighbors) {
-                if (std::find(selected.begin(), selected.end(), target) == selected.end()) {
-                    displaced_targets.push_back(target);
+            if (protect_displaced and incoming_protection_ != IncomingProtection::NONE) {
+                for (const uint64_t target : old_neighbors) {
+                    if (std::find(selected.begin(), selected.end(), target) == selected.end()) {
+                        displaced_targets.push_back(target);
+                    }
                 }
             }
             replace_neighbors(source, selected);
         }
-        // Protect only targets displaced by this new reselection. Existing Add/
-        // Remove guard flags retain their meanings; no new persistent state.
-        if (incoming_protection_ != IncomingProtection::NONE) {
+        // Update always protects displaced targets. Remove follows its existing
+        // guard, including the cold-cache copy isolation in RemoveTransactional.
+        if (protect_displaced and incoming_protection_ != IncomingProtection::NONE) {
             std::sort(displaced_targets.begin(), displaced_targets.end());
             displaced_targets.erase(std::unique(displaced_targets.begin(), displaced_targets.end()),
                                     displaced_targets.end());
