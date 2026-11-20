@@ -1,0 +1,175 @@
+name: PR3325 exact-source preflight
+on:
+  push:
+    branches: [verify/pr3325-review-preflight-20261120]
+permissions:
+  contents: read
+env:
+  CANDIDATE_SHA: f7fac8147670552c1225adce098640288e7a928d
+  VSAG_TEST_SEED: '424242'
+jobs:
+  linux-lite:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Run standalone Release, sanitizer and coverage checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          build_and_test() {
+            folder=$1
+            shift
+            cmake -S lite -B "$folder" -G Ninja -DCMAKE_CXX_COMPILER=g++-13 \
+              -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DENABLE_TESTS=ON "$@"
+            cmake --build "$folder" --parallel 2
+            ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+              ctest --test-dir "$folder" --output-on-failure
+          }
+          build_and_test build-lite-release -DCMAKE_BUILD_TYPE=Release -DENABLE_RABITQ_LITE_BACKEND=ON
+          build_and_test build-lite-release-off -DCMAKE_BUILD_TYPE=Release -DENABLE_RABITQ_LITE_BACKEND=OFF
+          build_and_test build-lite-coverage -DCMAKE_BUILD_TYPE=Debug -DENABLE_RABITQ_LITE_BACKEND=ON -DENABLE_COVERAGE=ON
+          python3 lite/tools/collect_coverage.py --root "$PWD" --build "$PWD/build-lite-coverage" \
+            --output "$RUNNER_TEMP/lite-coverage.json" --fail-under 90
+          build_and_test build-lite-asan -DCMAKE_BUILD_TYPE=Debug -DENABLE_RABITQ_LITE_BACKEND=ON \
+            '-DCMAKE_CXX_FLAGS=-O1 -fsanitize=address,undefined -fno-omit-frame-pointer' \
+            '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=address,undefined -no-pie' \
+            '-DCMAKE_SHARED_LINKER_FLAGS=-fsanitize=address,undefined'
+      - name: Verify x86 production scalar code is byte-identical with the original compiler flags
+        run: |
+          python3 - <<'PY'
+          import json, shlex, subprocess, tempfile
+          from pathlib import Path
+          rows = json.loads(Path('build-lite-release/compile_commands.json').read_text())
+          row = next(r for r in rows if r['file'].endswith('/rabitq_filter_ip.cpp'))
+          args = shlex.split(row['command'])
+          assert args.count('-ffp-contract=off') == 1
+          dst = args[args.index('-o')+1]
+          if not Path(dst).is_absolute():
+              dst = str(Path(row['directory']) / dst)
+          with tempfile.TemporaryDirectory() as scratch:
+              directory = Path(scratch)
+              old = directory / 'old-flags.o'
+              args[args.index('-o')+1] = str(old)
+              args.remove('-ffp-contract=off')
+              subprocess.run(args, cwd=row['directory'], check=True)
+              def code(p, name):
+                  out = directory / name
+                  subprocess.run(['objcopy','--only-section=.text','-O','binary',p,out],check=True)
+                  return out.read_bytes()
+              original = code(old,'original.text')
+              final = code(dst,'final.text')
+              assert original and original == final
+              print('PASS x86 scalar kernel text identical',len(final),'bytes')
+          PY
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: exact-lite-crud-linux-coverage
+          path: ${{ runner.temp }}/lite-coverage.json
+
+  format-and-docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - uses: ./.github/actions/check-format
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node .github/scripts/check-docs.mjs
+
+  macos-asan:
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Verify architecture and candidate
+        run: |
+          test "$(uname -m)" = arm64
+      - name: Prepare maintained dependencies
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: '1'
+        run: bash ./scripts/deps/install_deps.sh
+      - name: Build Full ASan
+        run: CMAKE_GENERATOR=Ninja CMAKE_EXPORT_COMPILE_COMMANDS=ON make asan VSAG_ENABLE_EXAMPLES=ON COMPILE_JOBS=3
+      - name: Build and test standalone Lite ASan
+        run: |
+          cmake -S lite -B build-lite-preflight -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+            -DENABLE_TESTS=ON -DENABLE_RABITQ_LITE_BACKEND=ON \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-lite-preflight --parallel 3
+          ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 \
+            ctest --test-dir build-lite-preflight --output-on-failure
+
+  linux-tsan:
+    runs-on: ubuntu-24.04
+    container: ghcr.io/antgroup/vsag:ci-main-openblas
+    timeout-minutes: 120
+    env:
+      EXTRA_DEFINED: -DVSAG_USE_SYSTEM_OPENBLAS=ON
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Build and run maintained concurrent tests
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          CMAKE_GENERATOR=Ninja make tsan COMPILE_JOBS=3
+          printf '%s\n' race:libomp.so race:libomp.so.5 race:fmt::v10::detail::format_decimal race:libmkl_intel_thread.so.2 > omp.supp
+          TSAN_OPTIONS=suppressions=omp.supp ./build/tests/functests '[concurrent]~[daily]'
+
+  linux-circle-equivalent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash scripts/deps/install_toolchain_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y gfortran python3-dev libomp-20-dev gcc make cmake g++ lcov libaio-dev libcurl4-openssl-dev ninja-build libopenblas-dev liblapacke-dev
+      - name: Run CircleCI Linux test command
+        run: |
+          export CMAKE_GENERATOR=Ninja VSAG_ENABLE_INTEL_MKL=OFF EXTRA_DEFINED="-DUSE_SYSTEM_OPENBLAS=ON" COMPILE_JOBS=4
+          make test_parallel
+
+  linux-wheel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.CANDIDATE_SHA }}
+          persist-credentials: false
+      - name: Prepare maintained dependencies
+        run: |
+          sudo bash ./scripts/deps/install_deps_ubuntu.sh
+          sudo apt-get update
+          sudo apt-get install -y python3-venv
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Build and test fresh wheel
+        run: |
+          export CMAKE_GENERATOR=Ninja VSAG_OPENBLAS_TARGET=GENERIC CIBW_ENVIRONMENT="VSAG_OPENBLAS_TARGET=GENERIC"
+          make pyvsag PY_VERSION=3.10
+          python -m venv "$RUNNER_TEMP/lite-crud-wheel"
+          . "$RUNNER_TEMP/lite-crud-wheel/bin/activate"
+          python -m pip install wheelhouse/*.whl numpy pyjson pytest
+          python -m pytest tests/python -v --tb=short
